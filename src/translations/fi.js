@@ -9,6 +9,9 @@ export const fi = {
     question_finance: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet taloudelliseen tilanteesi',
     question_strengths: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet omien vahvuuksiesi kehittämiseen (esim. harrastamalla mieluisia asioita)',
     question_self_esteem: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet itsetuntoosi',
-    question_life_as_whole: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet elämääsi kokonaisuutena'
+    question_life_as_whole: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet elämääsi kokonaisuutena',
+    question_desc_placeholder: 'Voit halutessasi tarkentaa vastaustasi...',
+    next: 'Seuraava',
+    previous: 'Edellinen'
   }
 }
