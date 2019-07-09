@@ -157,8 +157,8 @@
             </div>
           </div>
           <div class="buttons">
-            <button class="btn btn-primary" @click="saveQuestions">Lähetä</button>
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">Palaa kyselyyn</button>
+            <button class="btn btn-primary" @click="saveQuestions">{{ $t('message.send')}}</button>
+            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.return')}}</button>
           </div>
           <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>

@@ -1,5 +1,7 @@
 export const fi = {
   message: {
+    welcome: 'Tervetuloa 3X10D elämäntilannemittariin',
+    begin: 'Aloita',
     question_health: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet terveydentilaasi?',
     question_overcoming: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet kykyysi voittaa elämässä eteen tulevia vaikeuksia?',
     question_living: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet asumisoloihisi?',
@@ -13,6 +15,8 @@ export const fi = {
     question_desc_placeholder: 'Voit halutessasi tarkentaa vastaustasi...',
     next: 'Seuraava',
     previous: 'Edellinen',
-    cancel: 'Keskeytä'
+    cancel: 'Keskeytä',
+    send: 'Lähetä',
+    return: 'Palaa kyselyyn'
   }
 }
