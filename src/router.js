@@ -15,14 +15,15 @@ export default new Router({
       component: Home
     },
     {
-      path: '/questionnaire',
+      path: '/questionnaire/',
       name: 'questionnaire',
       component: Questionnaire
     },
     {
-      path: '/results',
+      path: '/results/:resultId',
       name: 'results',
-      component: Results
+      component: Results,
+      props: true
     }
   ]
 })

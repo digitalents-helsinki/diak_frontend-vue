@@ -201,7 +201,7 @@ export default {
       })
       .then(res => {
         if (res.data.status === 'ok') {
-          this.$router.push({ path: 'results' })
+          this.$router.push({ path: `/results/${res.data.resultId}` })
         }
       })
       .catch(err => {
