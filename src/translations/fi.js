@@ -17,6 +17,8 @@ export const fi = {
     previous: 'Edellinen',
     cancel: 'Keskeytä',
     send: 'Lähetä',
-    return: 'Palaa kyselyyn'
+    return: 'Palaa kyselyyn',
+    help_text_1: 'Lue ensin kysymys ja arvioi sen jälkeen jokaiselta kohdalta arvioitava asia ja valitse mielestäsi sopivin numero (0-10).',
+    help_text_2: 'Nolla tarkoittaa, että olet erittäin tyytymätön ja kymmenen erittäin tyytyväinen. Numeron viisi kohdalla et ole tyytymätön tai tyytyväinen.'
   }
 }
