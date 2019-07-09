@@ -1,6 +1,12 @@
 <template>
   <div class="background">
-    <button class="btn help-button">Ohjeet</button>
+    <button @click="toggleHelp" class="btn help-button">Ohjeet</button>
+    <div @click="toggleHelp" class="help-background" v-show="help_visible">
+      <div class="help-container">
+        <p>{{ $t('message.help_text_1') }}</p>
+        <p>{{ $t('message.help_text_2') }}</p>
+      </div>
+    </div>
     <div class="questionnaire container col-md-8 text-center">
       <form v-on:submit.prevent="saveQuestions">
         <div class="question" v-show="questionnum == 0">
@@ -195,7 +201,8 @@ export default {
         self_esteem_desc: null,
         life_as_whole_desc: null
       },
-      questionnum: 0
+      questionnum: 0,
+      help_visible: false
     }
   },
   methods: {
@@ -218,6 +225,9 @@ export default {
       })
       .catch(err => {
       })
+    },
+    toggleHelp() {
+      this.help_visible = !this.help_visible
     }
   }
 }
@@ -280,6 +290,35 @@ textarea {
   div {
     span:nth-child(even) {
       float: right;
+    }
+  }
+}
+
+.help-background {
+  position: absolute;
+  z-index: 5;
+  background-color: rgba(0, 0, 0, 0.7);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+
+  .help-container {
+    background-color: white;
+    height: 60vh;
+    border-radius: 15px;
+    width: 100vw;
+    padding-left: 5vh;
+    padding-right: 5vh;
+
+    p:nth-of-type(1) {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid lightgray;
+    }
+
+    p:nth-of-type(2) {
+      padding-top: 3rem;
     }
   }
 }
