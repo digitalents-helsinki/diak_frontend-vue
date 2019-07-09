@@ -91,8 +91,6 @@ export default {
       display: flex;
       justify-content: space-between;
 
-      span:nth-child(even) {
-      }
       span:nth-child(odd) {
         flex-basis: 80%;
       }

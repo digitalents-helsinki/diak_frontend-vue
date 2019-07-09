@@ -224,9 +224,6 @@ export default {
   border-radius: 15px;
 }
 
-.question {
-}
-
 .results {
   display: flex;
   flex-flow: column;
@@ -235,9 +232,6 @@ export default {
   div {
     span:nth-child(even) {
       float: right;
-    }
-    span:nth-child(odd) {
-
     }
   }
 }
