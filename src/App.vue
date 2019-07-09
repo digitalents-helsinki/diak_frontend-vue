@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <main>
+    <main :style="appStyle">
       <router-view></router-view>
     </main>
   </div>
@@ -8,15 +8,32 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  data() {
+    return {
+      vh: 0
+    }
+  },
+  computed: {
+    appStyle() {
+      return {
+        height: `calc(${this.$data.vh} * 100px`
+      }
+    }
+  },
+  created: function() {
+    window.addEventListener('resize', () => {
+      this.$data.vh = window.innerHeight * 0.01
+    })
+  },
+
+  mounted() {
+    this.$data.vh = window.innreHeight * 0.01
+  }
 }
 </script>
 
 <style lang="scss">
 @import 'node_modules/bootstrap/scss/bootstrap';
 @import 'node_modules/bootstrap-vue/src/index.scss';
-
-main {
-  height: 100vh;
-}
 </style>
