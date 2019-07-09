@@ -235,7 +235,7 @@ export default {
 <style lang="scss" scoped>
 .background {
   background: linear-gradient(to right, #0078f0, #80bfff);
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-end;
@@ -252,14 +252,14 @@ export default {
   background-color: white;
   padding: 5vh;
   border-radius: 15px 15px 0 0;
-  height: 85vh;
+  height: 85%;
 }
 
 .question {
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-between;
-  height: 70vh;
+  height: 75vh;
 }
 
 .buttons {
@@ -298,14 +298,14 @@ textarea {
   position: absolute;
   z-index: 5;
   background-color: rgba(0, 0, 0, 0.7);
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   display: flex;
   align-items: center;
 
   .help-container {
     background-color: white;
-    height: 60vh;
+    height: 60%;
     border-radius: 15px;
     width: 100vw;
     padding-left: 5vh;

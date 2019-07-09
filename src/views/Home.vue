@@ -22,7 +22,7 @@ export default {
 
 .home {
   background: linear-gradient(to right, #0078f0, #80bfff);
-  height: 100vh;
+  height: 100%;
   padding-bottom: 5vh;
 
   h1 {

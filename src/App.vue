@@ -28,7 +28,7 @@ export default {
   },
 
   mounted() {
-    this.$data.vh = window.innreHeight * 0.01
+    this.$data.vh = window.innerHeight * 0.01
   }
 }
 </script>
