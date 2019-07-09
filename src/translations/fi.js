@@ -12,6 +12,7 @@ export const fi = {
     question_life_as_whole: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet elämääsi kokonaisuutena',
     question_desc_placeholder: 'Voit halutessasi tarkentaa vastaustasi...',
     next: 'Seuraava',
-    previous: 'Edellinen'
+    previous: 'Edellinen',
+    cancel: 'Keskeytä'
   }
 }

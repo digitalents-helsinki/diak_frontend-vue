@@ -1,5 +1,6 @@
 <template>
   <div class="background">
+    <button class="btn help-button">Ohjeet</button>
     <div class="questionnaire container col-md-8 text-center">
       <form v-on:submit.prevent="saveQuestions">
         <div class="question" v-show="questionnum == 0">
@@ -10,16 +11,18 @@
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
+          <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
         <div class="question" v-show="questionnum == 1">
           <p>2. {{ $t('message.question_overcoming') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.overcoming" />
           <p>{{questiondata.overcoming}}</p>
           <textarea v-model="questiondata.overcoming_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
-          <div class="text-center">
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+          <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
+          <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
         <div class="question" v-show="questionnum == 2">
           <p>3. {{ $t('message.question_living') }}</p>
@@ -30,6 +33,7 @@
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
+          <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
         <div class="question" v-show="questionnum == 3">
           <p>4. {{ $t('message.question_coping') }}</p>
@@ -40,6 +44,7 @@
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
+          <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
         <div class="question" v-show="questionnum == 4">
           <p>5. {{ $t('message.question_family') }}</p>
@@ -50,6 +55,7 @@
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
+          <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
         <div class="question" v-show="questionnum == 5">
           <p>6. {{ $t('message.question_friends') }}</p>
@@ -60,16 +66,18 @@
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
+          <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
         <div class="question" v-show="questionnum == 6">
-            <p>{{ $t('message.question_finance') }}</p>
-            <b-form-input type="range" min="0" max="10" v-model="questiondata.finance" />
-            <p>{{questiondata.finance}}</p>
-            <textarea v-model="questiondata.finance_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
-            <div class="text-center">
-              <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
-              <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            </div>
+          <p>{{ $t('message.question_finance') }}</p>
+          <b-form-input type="range" min="0" max="10" v-model="questiondata.finance" />
+          <p>{{questiondata.finance}}</p>
+          <textarea v-model="questiondata.finance_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
+          <div class="text-center">
+            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+          </div>
+          <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
         <div class="question" v-show="questionnum == 7">
           <p>{{ $t('message.question_strengths') }}</p>
@@ -80,6 +88,7 @@
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
+          <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
         <div class="question" v-show="questionnum == 8">
           <p>{{ $t('message.question_self_esteem') }}</p>
@@ -90,6 +99,7 @@
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
+          <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
         <div class="question" v-show="questionnum == 9">
           <p>{{ $t('message.question_life_as_whole') }}</p>
@@ -100,6 +110,7 @@
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
+          <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
         <div class="review" v-show="questionnum == 10">
           <h3>Kooste vastauksistasi</h3>
@@ -149,6 +160,7 @@
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">Palaa kyselyyn</button>
             <button class="btn btn-primary" @click="saveQuestions">Lähetä</button>
           </div>
+          <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
       </form>
     </div>
@@ -212,16 +224,52 @@ export default {
 </script>
 <style lang="scss" scoped>
 .background {
-  background-color: gray;
+  background: linear-gradient(to right, #0078f0, #80bfff);
   height: 100vh;
   display: flex;
-  align-items: center;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
+
+  .help-button {
+    color: white;
+    align-self: flex-start;
+    padding-bottom: 5vh;
+    padding-left: 5vh;
+  }
 }
 
 .questionnaire {
   background-color: white;
   padding: 5vh;
-  border-radius: 15px;
+  border-radius: 15px 15px 0 0;
+  height: 85vh;
+}
+
+.question {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  height: 70vh;
+}
+
+.buttons {
+  button {
+    border-radius: 50px;
+    box-shadow: 0 5px 5px gray;
+    line-height: 2;
+    width: 8rem;
+  }
+
+  button:nth-child(1) {
+    float: right;
+  }
+  button:nth-child(0) {
+    float: left;
+  }
+}
+
+textarea {
+  width: 100%;
 }
 
 .results {
