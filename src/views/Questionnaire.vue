@@ -46,7 +46,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
+          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 2">
           <div class="question_text">
@@ -61,7 +61,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
+          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 3">
           <div class="question_text">
@@ -76,7 +76,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
+          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 4">
           <div class="question_text">
@@ -91,7 +91,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
+          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 5">
           <div class="question_text">
@@ -106,7 +106,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
+          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 6">
           <div class="question_text">
@@ -121,7 +121,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
+          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 7">
           <div class="question_text">
@@ -136,7 +136,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
+          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 8">
           <div class="question_text">
@@ -151,7 +151,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
+          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 9">
           <div class="question_text">
@@ -166,7 +166,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
+          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="review" v-show="questionnum == 10">
           <h3>Kooste vastauksistasi</h3>
@@ -216,7 +216,7 @@
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.return')}}</button>
             <button class="btn btn-primary" @click="saveQuestions">{{ $t('message.send')}}</button>
           </div>
-          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
+          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
       </form>
     </div>
@@ -395,8 +395,8 @@ textarea {
     }
   }
 
-  a {
-    padding-bottom: 2rem;
+  .cancel-button {
+    color: lightskyblue;
   }
 }
 
