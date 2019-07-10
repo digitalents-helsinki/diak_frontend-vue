@@ -202,9 +202,9 @@
               <p>{{questiondata.life_as_whole_desc}}</p>
             </div>
           </div>
-          <div class="buttons">
-            <button class="btn btn-primary" @click="saveQuestions">{{ $t('message.send')}}</button>
+          <div class="review-buttons">
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.return')}}</button>
+            <button class="btn btn-primary" @click="saveQuestions">{{ $t('message.send')}}</button>
           </div>
           <router-link to="/">{{ $t('message.cancel')}}</router-link>
         </div>
@@ -339,17 +339,44 @@ textarea {
   width: 100%;
 }
 
-.results {
-  display: flex;
-  flex-flow: column;
-  text-align: start;
+.review {
+  .results {
+    display: flex;
+    flex-flow: column;
+    text-align: start;
 
-  div {
-    span:nth-child(even) {
-      float: right;
+    div {
+      border: 1px solid lightgray;
+      padding: 0.7rem;
+      margin: 0.6rem;
+
+      span:nth-child(even) {
+        float: right;
+      }
     }
   }
+
+  .review-buttons {
+    margin: 1.8rem 0;
+
+    button {
+      border-radius: 50px;
+      box-shadow: 0 5px 5px gray;
+      line-height: 2;
+      width: 8rem;
+    }
+
+    button:nth-of-type(2) {
+      padding: 1.3rem;
+      margin-left: 1rem;
+    }
+  }
+
+  a {
+    padding-bottom: 2rem;
+  }
 }
+
 
 .help-background {
   position: absolute;
