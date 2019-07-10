@@ -1,10 +1,20 @@
 <template>
   <div class="background">
     <button @click="toggleHelp" class="btn help-button">Ohjeet</button>
-    <div @click="toggleHelp" class="help-background" v-show="help_visible">
+    <div @click="toggleHelp" class="dim-background" v-show="help_visible">
       <div class="help-container">
         <p>{{ $t('message.help_text_1') }}</p>
         <p>{{ $t('message.help_text_2') }}</p>
+      </div>
+    </div>
+    <div @click="toggleCancel" class="dim-background" v-show="cancel_visible">
+      <div class="cancel-container">
+        <div>
+          <button class="btn btn-primary">{{ $t('message.cancel_save') }}</button>
+        </div>
+        <div>
+          <button @click.prevent="moveHome" class="btn btn-primary">{{ $t('message.cancel_discard') }}</button>
+        </div>
       </div>
     </div>
     <div class="questionnaire container col-md-8 text-center">
@@ -21,7 +31,7 @@
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
-          <router-link to="/">{{ $t('message.cancel')}}</router-link>
+          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 1">
           <div class="question_text">
@@ -36,7 +46,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <router-link to="/">{{ $t('message.cancel')}}</router-link>
+          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 2">
           <div class="question_text">
@@ -51,7 +61,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <router-link to="/">{{ $t('message.cancel')}}</router-link>
+          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 3">
           <div class="question_text">
@@ -66,7 +76,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <router-link to="/">{{ $t('message.cancel')}}</router-link>
+          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 4">
           <div class="question_text">
@@ -81,7 +91,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <router-link to="/">{{ $t('message.cancel')}}</router-link>
+          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 5">
           <div class="question_text">
@@ -96,7 +106,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <router-link to="/">{{ $t('message.cancel')}}</router-link>
+          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 6">
           <div class="question_text">
@@ -111,7 +121,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <router-link to="/">{{ $t('message.cancel')}}</router-link>
+          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 7">
           <div class="question_text">
@@ -126,7 +136,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <router-link to="/">{{ $t('message.cancel')}}</router-link>
+          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 8">
           <div class="question_text">
@@ -141,7 +151,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <router-link to="/">{{ $t('message.cancel')}}</router-link>
+          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 9">
           <div class="question_text">
@@ -156,7 +166,7 @@
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
-          <router-link to="/">{{ $t('message.cancel')}}</router-link>
+          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
         </div>
         <div class="review" v-show="questionnum == 10">
           <h3>Kooste vastauksistasi</h3>
@@ -206,7 +216,7 @@
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.return')}}</button>
             <button class="btn btn-primary" @click="saveQuestions">{{ $t('message.send')}}</button>
           </div>
-          <router-link to="/">{{ $t('message.cancel')}}</router-link>
+          <button @click.prevent="toggleCancel" class="btn">{{ $t('message.cancel')}}</button>
         </div>
       </form>
     </div>
@@ -243,7 +253,8 @@ export default {
       },
       questionnum: 0,
       help_visible: false,
-      help_text_visible: ''
+      help_text_visible: '',
+      cancel_visible: false
     }
   },
   methods: {
@@ -276,6 +287,12 @@ export default {
       } else {
         this.help_text_visible = question
       }
+    },
+    toggleCancel() {
+      this.cancel_visible = !this.cancel_visible
+    },
+    moveHome() {
+      this.$router.push({ path: '/'})
     }
   }
 }
@@ -308,14 +325,20 @@ export default {
   flex-flow: column nowrap;
   justify-content: space-between;
   height: 75vh;
+
   .question_text {
     display: flex;
     flex-flow: row nowrap;
+
     .help_button {
       background-color: lightblue;
       width: 2rem;
       height: 2rem;
     }
+  }
+
+  .cancel-button {
+    color: lightskyblue;
   }
 }
 
@@ -378,7 +401,7 @@ textarea {
 }
 
 
-.help-background {
+.dim-background {
   position: absolute;
   z-index: 5;
   background-color: rgba(0, 0, 0, 0.7);
@@ -386,6 +409,7 @@ textarea {
   width: 100vw;
   display: flex;
   align-items: center;
+  justify-content: center;
 
   .help-container {
     background-color: white;
@@ -403,6 +427,31 @@ textarea {
 
     p:nth-of-type(2) {
       padding-top: 3rem;
+    }
+  }
+
+  .cancel-container {
+    background-color: white;
+    height: 40%;
+    border-radius: 15px;
+    width: 80vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
+
+    div {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: center;
+      height: 50%;
+
+      button {
+        border-radius: 50px;
+        box-shadow: 0 5px 5px gray;
+      }
+    }
+
+    div:nth-of-type(1) {
+      border-bottom: 1px solid lightgray;
     }
   }
 }

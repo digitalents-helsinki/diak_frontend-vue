@@ -8,6 +8,8 @@ export const fi = {
     cancel: 'Keskeytä',
     send: 'Lähetä',
     return: 'Palaa kyselyyn',
+    cancel_save: 'Tallenna ja jatka myöhemmin',
+    cancel_discard: 'Hylkää',
     question_health: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet terveydentilaasi?',
     question_overcoming: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet kykyysi voittaa elämässä eteen tulevia vaikeuksia?',
     question_living: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet asumisoloihisi?',
