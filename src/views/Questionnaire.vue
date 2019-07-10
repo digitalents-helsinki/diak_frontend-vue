@@ -22,7 +22,7 @@
         <div class="question" v-show="questionnum == 0">
          <div class="question_text buttonz">
             <p>1. {{ $t('message.question_health') }}</p> 
-            <button class="btn help_button buttonHelp" style="align-self: flex-end" @click.prevent="toggleQuestionHelp('health')">?</button>
+            <button class="btn help_button buttonHelp"  @click.prevent="toggleQuestionHelp('health')">?</button>
           </div>
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.health" />
@@ -471,7 +471,7 @@ textarea {
 @media screen and (min-width: 575px) {
   .buttonHelp{
     position: relative;
-    top: -48%;    
+    top: -8%;    
     left:8%;
   }
 }
@@ -479,7 +479,7 @@ textarea {
   .buttonHelp{
     position: relative;
     top: -38%; 
-    left:18%;
+    left:6%;
   }
 }
 @media screen and (min-width: 1030px) {
