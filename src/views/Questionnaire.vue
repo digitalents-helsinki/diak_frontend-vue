@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div class="questionnaire container col-md-8 text-center">
+    <div class="questionnaire container text-center">
       <form v-on:submit.prevent="saveQuestions">
         <div class="question" v-show="questionnum == 0">
           <div class="question_text">
@@ -304,6 +304,7 @@ export default {
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-end;
+  overflow: hidden;
 
   .help-button {
     color: white;
@@ -318,43 +319,49 @@ export default {
   padding: 5vh;
   border-radius: 15px 15px 0 0;
   height: 85%;
-}
+  overflow: auto;
 
-.question {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-  height: 75vh;
+  @media screen and (min-width: 1024px) {
+    width: 30vw;
+    margin-bottom: 5vh;
+    border-radius: 15px;
+  }
 
-  .question_text {
-    display: flex;
-    flex-flow: row nowrap;
+  form {
+    .question {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-between;
+      height: 75vh;
 
-    .help_button {
-      background-color: lightblue;
-      width: 2rem;
-      height: 2rem;
+      .question_text {
+        display: flex;
+        flex-flow: row nowrap;
+
+        .help_button {
+          background-color: lightblue;
+          width: 2rem;
+          height: 2rem;
+        }
+      }
+
+      .buttons {
+        display: flex;
+        flex-flow: row-reverse nowrap;
+        justify-content: space-between;
+
+        button {
+          border-radius: 50px;
+          box-shadow: 0 5px 5px gray;
+          line-height: 2;
+          width: 8rem;
+        }
+      }
+
+      .cancel-button {
+        color: lightskyblue;
+      }
     }
-  }
-
-  .cancel-button {
-    color: lightskyblue;
-  }
-}
-
-.buttons {
-  button {
-    border-radius: 50px;
-    box-shadow: 0 5px 5px gray;
-    line-height: 2;
-    width: 8rem;
-  }
-
-  button:nth-child(1) {
-    float: right;
-  }
-  button:nth-child(0) {
-    float: left;
   }
 }
 
@@ -363,6 +370,7 @@ textarea {
 }
 
 .review {
+
   .results {
     display: flex;
     flex-flow: column;
