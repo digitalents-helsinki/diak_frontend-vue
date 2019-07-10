@@ -322,7 +322,7 @@ export default {
   overflow: auto;
 
   @media screen and (min-width: 1024px) {
-    width: 30vw;
+    width: 60vw;
     margin-bottom: 5vh;
     border-radius: 15px;
   }
