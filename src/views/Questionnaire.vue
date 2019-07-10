@@ -464,22 +464,29 @@ textarea {
   }
 }
 .buttonHelp{
- position: absolute;
-  top: 19%;    
-  right:1%;
-  }
-@media screen and (min-width: 576px) {
-.buttonHelp{
- position: absolute;
+  position: absolute;
   top: 20%;    
-  right:6%;
+  right:1%;
 }
+@media screen and (min-width: 575px) {
+  .buttonHelp{
+    position: relative;
+    top: -48%;    
+    left:8%;
+  }
 }
-@media screen and (min-width: 1100px) {
-.buttonHelp{
- position: absolute;
-  top: 14%;    
-  right:21%;
+@media screen and (min-width: 768px) {
+  .buttonHelp{
+    position: relative;
+    top: -38%; 
+    left:18%;
+  }
 }
+@media screen and (min-width: 1030px) {
+  .buttonHelp{
+    position: absolute !important;
+    top: 14%;    
+    left:76%;
+  }
 }
 </style>
