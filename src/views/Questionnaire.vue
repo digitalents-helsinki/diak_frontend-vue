@@ -20,9 +20,9 @@
     <div class="questionnaire container text-center">
       <form v-on:submit.prevent="saveQuestions">
         <div class="question" v-show="questionnum == 0">
-          <div class="question_text">
-            <p>1. {{ $t('message.question_health') }}</p>
-            <button class="btn help_button" @click.prevent="toggleQuestionHelp('health')">?</button>
+         <div class="question_text buttonz">
+            <p>1. {{ $t('message.question_health') }}</p> 
+            <button class="btn help_button buttonHelp" style="align-self: flex-end" @click.prevent="toggleQuestionHelp('health')">?</button>
           </div>
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.health" />
@@ -34,9 +34,9 @@
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 1">
-          <div class="question_text">
+          <div class="question_text buttonz">
             <p>2. {{ $t('message.question_overcoming') }}</p>
-            <button class="btn help_button" @click.prevent="toggleQuestionHelp('overcoming')">?</button>
+            <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('overcoming')">?</button>
           </div>
           <p v-if="help_text_visible === 'overcoming'">{{ $t('message.help_text_overcoming') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.overcoming" />
@@ -49,9 +49,9 @@
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 2">
-          <div class="question_text">
+          <div class="question_text buttonz">
             <p>3. {{ $t('message.question_living') }}</p>
-            <button class="btn help_button" @click.prevent="toggleQuestionHelp('living')">?</button>
+            <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('living')">?</button>
           </div>
           <p v-if="help_text_visible === 'living'">{{ $t('message.help_text_living') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.living" />
@@ -66,7 +66,7 @@
         <div class="question" v-show="questionnum == 3">
           <div class="question_text">
             <p>4. {{ $t('message.question_coping') }}</p>
-            <button class="btn help_button" @click.prevent="toggleQuestionHelp('coping')">?</button>
+            <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('coping')">?</button>
           </div>
           <p v-if="help_text_visible === 'coping'">{{ $t('message.help_text_coping') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.coping" />
@@ -81,7 +81,7 @@
         <div class="question" v-show="questionnum == 4">
           <div class="question_text">
             <p>5. {{ $t('message.question_family') }}</p>
-            <button class="btn help_button" @click.prevent="toggleQuestionHelp('family')">?</button>
+            <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('family')">?</button>
           </div>
           <p v-if="help_text_visible === 'family'">{{ $t('message.help_text_family') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.family" />
@@ -96,7 +96,7 @@
         <div class="question" v-show="questionnum == 5">
           <div class="question_text">
             <p>6. {{ $t('message.question_friends') }}</p>
-            <button class="btn help_button" @click.prevent="toggleQuestionHelp('friends')">?</button>
+            <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('friends')">?</button>
           </div>
           <p v-if="help_text_visible === 'friends'">{{ $t('message.help_text_friends') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.friends" />
@@ -111,7 +111,7 @@
         <div class="question" v-show="questionnum == 6">
           <div class="question_text">
             <p>7. {{ $t('message.question_finance') }}</p>
-            <button class="btn help_button" @click.prevent="toggleQuestionHelp('finance')">?</button>
+            <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('finance')">?</button>
           </div>
           <p v-if="help_text_visible === 'finance'">{{ $t('message.help_text_finance') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.finance" />
@@ -126,7 +126,7 @@
         <div class="question" v-show="questionnum == 7">
           <div class="question_text">
             <p>8. {{ $t('message.question_strengths') }}</p>
-            <button class="btn help_button" @click.prevent="toggleQuestionHelp('strengths')">?</button>
+            <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('strengths')">?</button>
           </div>
           <p v-if="help_text_visible === 'strengths'">{{ $t('message.help_text_strengths') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.strengths" />
@@ -141,7 +141,7 @@
         <div class="question" v-show="questionnum == 8">
           <div class="question_text">
             <p>9. {{ $t('message.question_self_esteem') }}</p>
-            <button class="btn help_button" @click.prevent="toggleQuestionHelp('self_esteem')">?</button>
+            <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('self_esteem')">?</button>
           </div>
           <p v-if="help_text_visible === 'self_esteem'">{{ $t('message.help_text_self_esteem') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.self_esteem" />
@@ -156,7 +156,7 @@
         <div class="question" v-show="questionnum == 9">
           <div class="question_text">
             <p>10. {{ $t('message.question_life_as_whole') }}</p>
-            <button class="btn help_button" @click.prevent="toggleQuestionHelp('life_as_whole')">?</button>
+            <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('life_as_whole')">?</button>
           </div>
           <p v-if="help_text_visible === 'life_as_whole'">{{ $t('message.help_text_life_as_whole') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.life_as_whole" />
@@ -341,7 +341,7 @@ export default {
         .help_button {
           background-color: lightblue;
           width: 2rem;
-          height: 2rem;
+         height: 2rem;
         }
       }
 
@@ -463,5 +463,23 @@ textarea {
     }
   }
 }
-
+.buttonHelp{
+ position: absolute;
+  top: 19%;    
+  right:1%;
+  }
+@media screen and (min-width: 576px) {
+.buttonHelp{
+ position: absolute;
+  top: 20%;    
+  right:6%;
+}
+}
+@media screen and (min-width: 1100px) {
+.buttonHelp{
+ position: absolute;
+  top: 14%;    
+  right:21%;
+}
+}
 </style>
