@@ -8,7 +8,7 @@
       </div>
     </div>
     <div @click="toggleCancel" class="dim-background" v-show="cancel_visible">
-      <div class="cancel-container col-10 col-sm-8 col-lg-6">
+      <div class="cancel-container">
         <div>
           <button class="btn btn-primary">{{ $t('message.cancel_save') }}</button>
         </div>
@@ -407,8 +407,6 @@ textarea {
     color: lightskyblue;
   }
 }
-
-
 .dim-background {
   position: absolute;
   z-index: 5;
@@ -442,7 +440,7 @@ textarea {
     background-color: white;
     height: 40%;
     border-radius: 15px;
-    width: 80vw;
+    //width: 80vw;
     padding-left: 5vw;
     padding-right: 5vw;
 
@@ -489,11 +487,14 @@ textarea {
     left:77%;
   }
 }
-@media screen and (min-width: 1400px) and (max-width: 1900px){
+@media screen and (min-width: 1400px){
   .buttonHelp{
     position: absolute !important;
     top: 14%;    
     left:77.6%;
+  }
+  .cancel-container{
+    width:30vw !important;
   }
 }
 </style>
