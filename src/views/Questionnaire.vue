@@ -8,7 +8,7 @@
       </div>
     </div>
     <div @click="toggleCancel" class="dim-background" v-show="cancel_visible">
-      <div class="cancel-container">
+      <div class="cancel-container col-10 col-sm-8 col-lg-6">
         <div>
           <button class="btn btn-primary">{{ $t('message.cancel_save') }}</button>
         </div>
@@ -486,7 +486,14 @@ textarea {
   .buttonHelp{
     position: absolute !important;
     top: 14%;    
-    left:76%;
+    left:77%;
+  }
+}
+@media screen and (min-width: 1400px) and (max-width: 1900px){
+  .buttonHelp{
+    position: absolute !important;
+    top: 14%;    
+    left:77.6%;
   }
 }
 </style>
