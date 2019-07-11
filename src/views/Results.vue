@@ -63,9 +63,6 @@ export default {
       .then(res => {
         this.resultData = res.data[0]
       })
-      .catch(err => {
-
-      })
     }
   },
   mounted() {
