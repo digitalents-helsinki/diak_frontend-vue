@@ -20,12 +20,27 @@
     <div class="questionnaire container text-center">
       <form v-on:submit.prevent="saveQuestions">
         <div class="question" v-show="questionnum == 0">
-         <div class="question_text buttonz">
+         <div class="question_text">
             <p>1. {{ $t('message.question_health') }}</p> 
             <button class="btn help_button buttonHelp"  @click.prevent="toggleQuestionHelp('health')">?</button>
           </div>
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
-          <b-form-input type="range" min="0" max="10" v-model="questiondata.health" />
+          <div>
+            <b-form-input type="range" min="0" max="10" class="" v-model="questiondata.health" />
+            <div class="d-flex flex-row justify-content-between rangeLabel">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+              </div>
+          </div>
           <p>{{questiondata.health}}</p>
           <textarea v-model="questiondata.health_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -34,12 +49,27 @@
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 1">
-          <div class="question_text buttonz">
+          <div class="question_text">
             <p>2. {{ $t('message.question_overcoming') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('overcoming')">?</button>
           </div>
           <p v-if="help_text_visible === 'overcoming'">{{ $t('message.help_text_overcoming') }}</p>
-          <b-form-input type="range" min="0" max="10" v-model="questiondata.overcoming" />
+          <div>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.overcoming" />
+            <div class="d-flex flex-row justify-content-between rangeLabel">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+              </div>
+          </div>
           <p>{{questiondata.overcoming}}</p>
           <textarea v-model="questiondata.overcoming_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -49,12 +79,27 @@
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 2">
-          <div class="question_text buttonz">
+          <div class="question_text">
             <p>3. {{ $t('message.question_living') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('living')">?</button>
           </div>
           <p v-if="help_text_visible === 'living'">{{ $t('message.help_text_living') }}</p>
-          <b-form-input type="range" min="0" max="10" v-model="questiondata.living" />
+          <div>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.living" />
+            <div class="d-flex flex-row justify-content-between rangeLabel">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+              </div>
+          </div>
           <p>{{questiondata.living}}</p>
           <textarea v-model="questiondata.living_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -69,7 +114,22 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('coping')">?</button>
           </div>
           <p v-if="help_text_visible === 'coping'">{{ $t('message.help_text_coping') }}</p>
-          <b-form-input type="range" min="0" max="10" v-model="questiondata.coping" />
+          <div>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.coping" />
+            <div class="d-flex flex-row justify-content-between rangeLabel">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+            </div>
+          </div>
           <p>{{questiondata.coping}}</p>
           <textarea v-model="questiondata.coping_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -84,7 +144,22 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('family')">?</button>
           </div>
           <p v-if="help_text_visible === 'family'">{{ $t('message.help_text_family') }}</p>
-          <b-form-input type="range" min="0" max="10" v-model="questiondata.family" />
+          <div>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.family" />
+            <div class="d-flex flex-row justify-content-between rangeLabel">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+              </div>
+          </div>
           <p>{{questiondata.family}}</p>
           <textarea v-model="questiondata.family_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -98,8 +173,24 @@
             <p>6. {{ $t('message.question_friends') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('friends')">?</button>
           </div>
+          
           <p v-if="help_text_visible === 'friends'">{{ $t('message.help_text_friends') }}</p>
-          <b-form-input type="range" min="0" max="10" v-model="questiondata.friends" />
+          <div>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.friends" />
+            <div class="d-flex flex-row justify-content-between rangeLabel">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+            </div>
+          </div>
           <p>{{questiondata.friends}}</p>
           <textarea v-model="questiondata.friends_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -113,8 +204,23 @@
             <p>7. {{ $t('message.question_finance') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('finance')">?</button>
           </div>
+          <div>
           <p v-if="help_text_visible === 'finance'">{{ $t('message.help_text_finance') }}</p>
           <b-form-input type="range" min="0" max="10" v-model="questiondata.finance" />
+          <div class="d-flex flex-row justify-content-between rangeLabel">
+                  <div>0</div>
+                  <div>1</div>
+                  <div>2</div>
+                  <div>3</div>
+                  <div>4</div>
+                  <div>5</div>
+                  <div>6</div>
+                  <div>7</div>
+                  <div>8</div>
+                  <div>9</div>
+                  <div>10</div>
+              </div>
+          </div>
           <p>{{questiondata.finance}}</p>
           <textarea v-model="questiondata.finance_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -129,7 +235,22 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('strengths')">?</button>
           </div>
           <p v-if="help_text_visible === 'strengths'">{{ $t('message.help_text_strengths') }}</p>
-          <b-form-input type="range" min="0" max="10" v-model="questiondata.strengths" />
+          <div>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.strengths" />
+            <div class="d-flex flex-row justify-content-between rangeLabel">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+              </div>
+          </div>
           <p>{{questiondata.strengths}}</p>
           <textarea v-model="questiondata.strengths_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -144,7 +265,22 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('self_esteem')">?</button>
           </div>
           <p v-if="help_text_visible === 'self_esteem'">{{ $t('message.help_text_self_esteem') }}</p>
-          <b-form-input type="range" min="0" max="10" v-model="questiondata.self_esteem" />
+          <div>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.self_esteem" />
+            <div class="d-flex flex-row justify-content-between rangeLabel">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+                </div>
+          </div>
           <p>{{questiondata.self_esteem}}</p>
           <textarea v-model="questiondata.self_esteem_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -159,7 +295,22 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('life_as_whole')">?</button>
           </div>
           <p v-if="help_text_visible === 'life_as_whole'">{{ $t('message.help_text_life_as_whole') }}</p>
-          <b-form-input type="range" min="0" max="10" v-model="questiondata.life_as_whole" />
+          <div>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.life_as_whole" />
+            <div class="d-flex flex-row justify-content-between rangeLabel">
+              <div>0</div>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>10</div>
+            </div>
+          </div>
           <p>{{questiondata.life_as_whole}}</p>
           <textarea v-model="questiondata.life_as_whole_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -460,6 +611,19 @@ textarea {
       border-bottom: 1px solid lightgray;
     }
   }
+}
+.rangeLabel {
+  padding: 0 10px;
+}
+.rangeLabel div {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 1px;
+  height: 10px;
+  background:#000000;
+  font-weight: bold;
+  line-height: 37px;
 }
 .buttonHelp{
   position: absolute;
