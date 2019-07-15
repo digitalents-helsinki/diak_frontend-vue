@@ -15,6 +15,9 @@ export default {
               min: 0,
               max: 10
             }
+          }],
+          xAxes: [{
+            display: false
           }]
         }
       },
@@ -25,6 +28,7 @@ export default {
             label: 'Vastaajaryhmän vastauksien keskiarvot',
             data: this.avgdata,
             backgroundColor: 'lightgreen',
+            borderColor: 'green',
             errorBars: {
               'Terveydentila': {plus: this.dvddata[0], minus: this.dvddata[0]},
               'Kyky voittaa...': {plus: this.dvddata[1], minus: this.dvddata[1]},

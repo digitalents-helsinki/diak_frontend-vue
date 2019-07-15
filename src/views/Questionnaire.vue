@@ -268,18 +268,18 @@
           <div>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.self_esteem" />
             <div class="d-flex flex-row justify-content-between rangeLabel">
-                <div>0</div>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>
-                <div>7</div>
-                <div>8</div>
-                <div>9</div>
-                <div>10</div>
-                </div>
+              <div>0</div>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>10</div>
+            </div>
           </div>
           <p>{{questiondata.self_esteem}}</p>
           <textarea v-model="questiondata.self_esteem_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>

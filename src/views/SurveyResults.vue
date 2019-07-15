@@ -107,11 +107,10 @@ export default {
 </script>
 <style lang="scss">
 .SurveyResults {
-  height: 100%;
 
   .chart-container {
     position: relative;
-    height: 50%;
+    height: 100%;
     width: 100vw;
   }
 }
