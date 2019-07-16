@@ -1,10 +1,23 @@
 <template>
   <div class="home">
-    <h1>{{ $t('message.welcome')}}</h1>
     <div class="container">
-      <p>{{ $t('message.help_text_1') }}</p>
-      <p>{{ $t('message.help_text_2') }}</p>
-      <button @click="moveQuestionnaire" class="btn btn-primary">{{ $t('message.begin') }}</button>
+      <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+      <h1>{{ $t('message.welcome')}}</h1>
+      <div class="text-container">
+        <div>
+          <img src="../images/diak-meter.svg" alt="" />
+          <p>{{ $t('message.help_text_1') }}</p>
+        </div>
+        <div>
+          <img src="../images/DiakThumbs.svg" alt="" />
+          <p>{{ $t('message.help_text_2') }}</p>
+        </div>
+        <div>
+          <img src="../images/diak-balance.svg" alt="" />
+          <p>{{ $t('message.help_text_3') }}</p>
+        </div>
+        <button @click="moveQuestionnaire" class="btn btn-primary">{{ $t('message.begin') }}</button>
+      </div>
     </div>
   </div>
 </template>
@@ -21,40 +34,66 @@ export default {
 <style lang="scss" scoped>
 
 .home {
-  background: linear-gradient(to right, #0078f0, #80bfff);
+  background-color: #80bfff;
   height: 100%;
-  padding-bottom: 5vh;
-
-  h1 {
-    font-size: 24px;
-    font-weight: 700;
-    color: white;
-    padding-left: 5vw;
-    padding-top: 5vh;
-    padding-bottom: 5vh;
-  }
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
 
   .container {
     display: flex;
     flex-flow: column nowrap;
-    justify-content: space-between;
     background-color: white;
-    height: 80%;
+    height: 90%;
     padding-bottom: 5vh;
-    border-radius: 15px;
+    align-items: center;
+    text-align: center;
 
-    p:nth-of-type(1) {
-      padding-top: 5rem;
-      padding-bottom: 5rem;
-      border-bottom: 1px solid lightgray;
+    img {
+      height: 70px;
     }
 
-    button {
-      border-radius: 50px;
-      box-shadow: 0 5px 5px gray;
-      line-height: 2;
-      width: 8rem;
-      align-self: flex-end;
+    h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #350E7E;
+      width: 60vw;
+      margin-bottom: 2rem;
+    }
+
+    .text-container {
+      background-color: #F7F6F6;
+      padding: 2rem;
+      border-radius: 4px;
+      display: flex;
+      flex-flow: column nowrap;
+
+      div {
+        display: flex;
+        flex-flow: row nowrap;
+
+        img {
+          height: 25px;
+          flex-basis: 20%;
+        }
+
+        p {
+          font-size: 14px;
+          margin-left: 2rem;
+          text-align: start;
+          flex-basis: 80%;
+        }
+      }
+
+      button {
+        margin-top: 2rem;
+        border-radius: 50px;
+        box-shadow: 0 5px 5px gray;
+        line-height: 2;
+        width: 8rem;
+        align-self: center;
+        background-color: #350E7E;
+      }
     }
   }
 }

@@ -31,7 +31,8 @@ export const fi = {
     help_text_strengths: 'Omien vahvuuksien kehittämisellä tarkoitetaan sellaista tekemistä mistä saa mielihyvää, esimerkiksi harrastamista.',
     help_text_self_esteem: 'Itsetunto kertoo siitä millaiseksi koet itsesi.',
     help_text_life_as_whole: 'Elämä kokonaisuutena sisältää kaiken, kuinka nautittavaa elämä on.',
-    help_text_1: 'Lue ensin kysymys ja arvioi sen jälkeen jokaiselta kohdalta arvioitava asia ja valitse mielestäsi sopivin numero (0-10).',
-    help_text_2: 'Nolla tarkoittaa, että olet erittäin tyytymätön ja kymmenen erittäin tyytyväinen. Numeron viisi kohdalla et ole tyytymätön tai tyytyväinen.'
+    help_text_1: 'Lue ensin kysymys ja arvioi asteikolta 0-10 mielestäsi sopivin numero.',
+    help_text_2: '0 tarkoittaa, että olet erittäin tyytymätön ja 10 erittäin tyytyväinen.',
+    help_text_3: '5 tarkoittaa, että et ole kumpaakaan.'
   }
 }
