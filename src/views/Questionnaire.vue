@@ -48,7 +48,7 @@
               </div>
            <textarea v-model="questiondata.health_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
-            <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -81,8 +81,8 @@
             </div>
           <textarea v-model="questiondata.overcoming_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
-            <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -115,8 +115,8 @@
           </div>
           <textarea v-model="questiondata.living_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
-            <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -149,8 +149,8 @@
           </div>
           <textarea v-model="questiondata.coping_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
-            <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -183,8 +183,8 @@
           </div>
           <textarea v-model="questiondata.family_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
-            <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -217,8 +217,8 @@
           </div>
           <textarea v-model="questiondata.friends_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
-            <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -251,8 +251,8 @@
           </div>
           <textarea v-model="questiondata.finance_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
-            <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -285,8 +285,8 @@
           </div>
           <textarea v-model="questiondata.strengths_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
-            <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -319,8 +319,8 @@
           </div>
           <textarea v-model="questiondata.self_esteem_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
-            <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -353,8 +353,8 @@
           </div>
           <textarea v-model="questiondata.life_as_whole_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
-            <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -512,6 +512,7 @@ export default {
   border-radius: 15px 15px 0 0;
   height: 85%;
   overflow: auto;
+  border-radius:14px;
 
   @media screen and (min-width: 1024px) {
     width: 60vw;
@@ -548,10 +549,18 @@ export default {
           line-height: 2;
           width: 8rem;
         }
+        .button-next{
+        background-color:#353535;
+        color:#FFFFFF;
+        }
+        .button-previous{
+        background-color:#353535;
+        color:#FFFFFF;
+        }
       }
-
       .cancel-button {
-        color: lightskyblue;
+        color: #350E7E;
+        opacity: 70%;
       }
     }
   }
@@ -559,6 +568,12 @@ export default {
 
 textarea {
   width: 100%;
+  border-radius: 4px;
+}
+
+textarea::placeholder {
+  opacity: 40%;
+  color:#353535;
 }
 
 .review {
@@ -596,7 +611,7 @@ textarea {
   }
 
   .cancel-button {
-    color: lightskyblue;
+    color:lightskyblue;
   }
 }
 .dim-background {
@@ -653,6 +668,9 @@ textarea {
     }
   }
 }
+.question_text > p {
+  color:#353535;
+}
 .rangeSpan{
 display: -webkit-flex;
 display: flex;
@@ -673,6 +691,7 @@ display: none;
   top: 20%;    
   right:1%;
 }
+
 @media screen and (min-width: 575px) {
   .buttonHelp{
     position: relative;
