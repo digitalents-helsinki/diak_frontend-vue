@@ -1,18 +1,20 @@
 <template>
   <div class="home">
+    <div class="container-fluid" id="home-top">
+    </div>
     <div class="container">
       <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
       <h1>{{ $t('message.welcome')}}</h1>
       <div class="text-container">
-        <div>
+        <div class="text-container-content">
           <img src="../images/diak-meter.svg" alt="" />
           <p>{{ $t('message.help_text_1') }}</p>
         </div>
-        <div>
+        <div class="text-container-content">
           <img src="../images/DiakThumbs.svg" alt="" />
           <p>{{ $t('message.help_text_2') }}</p>
         </div>
-        <div>
+        <div class="text-container-content">
           <img src="../images/diak-balance.svg" alt="" />
           <p>{{ $t('message.help_text_3') }}</p>
         </div>
@@ -34,11 +36,18 @@ export default {
 <style lang="scss" scoped>
 
 .home {
-  background-color: #80CDE6;
+  background-color: #FFFFFF;
   height: 100%;
   display: flex;
   flex-flow: column nowrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  overflow: hidden;
+
+  #home-top{
+    background-color:#80CDE6;
+    height:16vh;
+    margin-bottom:1rem;
+  }
 
   .container {
     display: flex;
@@ -66,11 +75,13 @@ export default {
       border-radius: 4px;
       display: flex;
       flex-flow: column nowrap;
-      box-shadow: 0 2px 2px lightgray;
+      box-shadow: 0 2px 2px lightgray; 
 
+   
       div {
         display: flex;
         flex-flow: row nowrap;
+        margin:1rem;
 
         img {
           height: 25px;
@@ -82,6 +93,9 @@ export default {
           margin-left: 2rem;
           text-align: start;
           flex-basis: 80%;
+          font-weight: bold;
+          color:#353535;
+          
         }
       }
 
