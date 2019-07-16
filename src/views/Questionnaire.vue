@@ -330,6 +330,7 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('life_as_whole')">?</button>
           </div>
           <p v-if="help_text_visible === 'life_as_whole'">{{ $t('message.help_text_life_as_whole') }}</p>
+          <p>{{questiondata.life_as_whole}}</p>
           <div>
             <span class="rangeSpan">
              <span class="rangeLower">0</span>
