@@ -34,7 +34,7 @@ export default {
 <style lang="scss" scoped>
 
 .home {
-  background-color: #80bfff;
+  background-color: #80CDE6;
   height: 100%;
   display: flex;
   flex-flow: column nowrap;
@@ -44,7 +44,6 @@ export default {
     display: flex;
     flex-flow: column nowrap;
     background-color: white;
-    height: 90%;
     padding-bottom: 5vh;
     align-items: center;
     text-align: center;
@@ -67,6 +66,7 @@ export default {
       border-radius: 4px;
       display: flex;
       flex-flow: column nowrap;
+      box-shadow: 0 2px 2px lightgray;
 
       div {
         display: flex;
