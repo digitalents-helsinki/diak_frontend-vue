@@ -25,6 +25,7 @@
             <button class="btn help_button buttonHelp"  @click.prevent="toggleQuestionHelp('health')">?</button>
           </div>
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
+          <p>{{questiondata.health}}</p>
           <div>
             <span class="rangeSpan">
              <span class="rangeLower">0</span>
@@ -45,7 +46,6 @@
                     <div>10</div>
                   </div>
               </div>
-          <p>{{questiondata.health}}</p>
            <textarea v-model="questiondata.health_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -58,6 +58,7 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('overcoming')">?</button>
           </div>
           <p v-if="help_text_visible === 'overcoming'">{{ $t('message.help_text_overcoming') }}</p>
+          <p>{{questiondata.overcoming}}</p>
           <div>
             <span class="rangeSpan">
               <span class="rangeLower">0</span>
@@ -78,7 +79,6 @@
                 <div>10</div>
               </div>
             </div>
-          <p>{{questiondata.overcoming}}</p>
           <textarea v-model="questiondata.overcoming_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -92,6 +92,7 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('living')">?</button>
           </div>
           <p v-if="help_text_visible === 'living'">{{ $t('message.help_text_living') }}</p>
+          <p>{{questiondata.living}}</p>
           <div>
             <span class="rangeSpan">
               <span class="rangeLower">0</span>
@@ -112,7 +113,6 @@
                 <div>10</div>
               </div>
           </div>
-          <p>{{questiondata.living}}</p>
           <textarea v-model="questiondata.living_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -126,6 +126,7 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('coping')">?</button>
           </div>
           <p v-if="help_text_visible === 'coping'">{{ $t('message.help_text_coping') }}</p>
+          <p>{{questiondata.coping}}</p>
           <div>
             <span class="rangeSpan">
               <span class="rangeLower">0</span>
@@ -146,7 +147,6 @@
                 <div>10</div>
             </div>
           </div>
-          <p>{{questiondata.coping}}</p>
           <textarea v-model="questiondata.coping_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -160,6 +160,7 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('family')">?</button>
           </div>
           <p v-if="help_text_visible === 'family'">{{ $t('message.help_text_family') }}</p>
+          <p>{{questiondata.family}}</p>
           <div>
             <span class="rangeSpan">
               <span class="rangeLower">0</span>
@@ -180,7 +181,6 @@
                 <div>10</div>
               </div>
           </div>
-          <p>{{questiondata.family}}</p>
           <textarea v-model="questiondata.family_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -194,6 +194,7 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('friends')">?</button>
           </div>
           <p v-if="help_text_visible === 'friends'">{{ $t('message.help_text_friends') }}</p>
+          <p>{{questiondata.friends}}</p>
           <div>
             <span class="rangeSpan">
               <span class="rangeLower">0</span>
@@ -214,7 +215,6 @@
                 <div>10</div>
             </div>
           </div>
-          <p>{{questiondata.friends}}</p>
           <textarea v-model="questiondata.friends_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -228,6 +228,7 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('finance')">?</button>
           </div>
           <p v-if="help_text_visible === 'finance'">{{ $t('message.help_text_finance') }}</p>
+          <p>{{questiondata.finance}}</p>
           <div>
             <span class="rangeSpan">
               <span class="rangeLower">0</span>
@@ -248,7 +249,6 @@
                   <div>10</div>
               </div>
           </div>
-          <p>{{questiondata.finance}}</p>
           <textarea v-model="questiondata.finance_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -262,6 +262,7 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('strengths')">?</button>
           </div>
           <p v-if="help_text_visible === 'strengths'">{{ $t('message.help_text_strengths') }}</p>
+          <p>{{questiondata.strengths}}</p>
           <div>
             <span class="rangeSpan">
               <span class="rangeLower">0</span>
@@ -282,7 +283,6 @@
                 <div>10</div>
               </div>
           </div>
-          <p>{{questiondata.strengths}}</p>
           <textarea v-model="questiondata.strengths_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -296,6 +296,7 @@
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('self_esteem')">?</button>
           </div>
           <p v-if="help_text_visible === 'self_esteem'">{{ $t('message.help_text_self_esteem') }}</p>
+          <p>{{questiondata.self_esteem}}</p>
           <div>
             <span class="rangeSpan">
              <span class="rangeLower">0</span>
@@ -316,7 +317,6 @@
               <div>10</div>
             </div>
           </div>
-          <p>{{questiondata.self_esteem}}</p>
           <textarea v-model="questiondata.self_esteem_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -350,7 +350,6 @@
               <div>10</div>
             </div>
           </div>
-          <p>{{questiondata.life_as_whole}}</p>
           <textarea v-model="questiondata.life_as_whole_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn btn-primary" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
