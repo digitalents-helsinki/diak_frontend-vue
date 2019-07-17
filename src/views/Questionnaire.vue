@@ -27,25 +27,25 @@
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
           <p>{{questiondata.health}}</p>
           <div>
-            <span class="rangeSpan">
-             <span class="rangeLower">0</span>
-              <b-form-input type="range" min="0" max="10" v-model="questiondata.health" />
-              <span class="rangeHigher">10</span>
-            </span>
-                <div class="rangeLabel">
-                    <div>0</div>
-                    <div>1</div>
-                    <div>2</div>
-                    <div>3</div>
-                    <div>4</div>
-                    <div>5</div>
-                    <div>6</div>
-                    <div>7</div>
-                    <div>8</div>
-                    <div>9</div>
-                    <div>10</div>
-                  </div>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.health" />
+              <div class="rangeLabel-mobile">
+                <div>0</div>
+                <div>10</div>
               </div>
+              <div class="rangeLabel">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+              </div>
+            </div>
            <textarea v-model="questiondata.health_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -60,25 +60,25 @@
           <p v-if="help_text_visible === 'overcoming'">{{ $t('message.help_text_overcoming') }}</p>
           <p>{{questiondata.overcoming}}</p>
           <div>
-            <span class="rangeSpan">
-              <span class="rangeLower">0</span>
-              <b-form-input type="range" min="0" max="10" v-model="questiondata.overcoming" />
-              <span class="rangeHigher">10</span>
-            </span>
-            <div class="rangeLabel">
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.overcoming" />
+            <div class="rangeLabel-mobile">
                 <div>0</div>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>
-                <div>7</div>
-                <div>8</div>
-                <div>9</div>
                 <div>10</div>
-              </div>
             </div>
+            <div class="rangeLabel">
+              <div>0</div>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>10</div>
+            </div>
+          </div>
           <textarea v-model="questiondata.overcoming_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -94,24 +94,24 @@
           <p v-if="help_text_visible === 'living'">{{ $t('message.help_text_living') }}</p>
           <p>{{questiondata.living}}</p>
           <div>
-            <span class="rangeSpan">
-              <span class="rangeLower">0</span>
-              <b-form-input type="range" min="0" max="10" v-model="questiondata.living" />
-              <span class="rangeHigher">10</span>
-            </span>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.living" />
+            <div class="rangeLabel-mobile">
+              <div>0</div>
+              <div>10</div>
+            </div>
             <div class="rangeLabel">
-                <div>0</div>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>
-                <div>7</div>
-                <div>8</div>
-                <div>9</div>
-                <div>10</div>
-              </div>
+               <div>0</div>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>10</div>
+            </div>
           </div>
           <textarea v-model="questiondata.living_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -128,11 +128,11 @@
           <p v-if="help_text_visible === 'coping'">{{ $t('message.help_text_coping') }}</p>
           <p>{{questiondata.coping}}</p>
           <div>
-            <span class="rangeSpan">
-              <span class="rangeLower">0</span>
-              <b-form-input type="range" min="0" max="10" v-model="questiondata.coping" />
-              <span class="rangeHigher">10</span>
-            </span>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.coping" />
+            <div class="rangeLabel-mobile">
+              <div>0</div>
+              <div>10</div>
+            </div>
             <div class="rangeLabel">
                 <div>0</div>
                 <div>1</div>
@@ -162,24 +162,24 @@
           <p v-if="help_text_visible === 'family'">{{ $t('message.help_text_family') }}</p>
           <p>{{questiondata.family}}</p>
           <div>
-            <span class="rangeSpan">
-              <span class="rangeLower">0</span>
-              <b-form-input type="range" min="0" max="10" v-model="questiondata.family" />
-              <span class="rangeHigher">10</span>
-            </span>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.family" />
+            <div class="rangeLabel-mobile">
+              <div>0</div>
+              <div>10</div>
+            </div>
             <div class="rangeLabel">
-                <div>0</div>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>
-                <div>7</div>
-                <div>8</div>
-                <div>9</div>
-                <div>10</div>
-              </div>
+              <div>0</div>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>10</div>
+            </div>
           </div>
           <textarea v-model="questiondata.family_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -196,11 +196,11 @@
           <p v-if="help_text_visible === 'friends'">{{ $t('message.help_text_friends') }}</p>
           <p>{{questiondata.friends}}</p>
           <div>
-            <span class="rangeSpan">
-              <span class="rangeLower">0</span>
-              <b-form-input type="range" min="0" max="10" v-model="questiondata.friends" />
-              <span class="rangeHigher">10</span>
-            </span>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.friends" />
+            <div class="rangeLabel-mobile">
+              <div>0</div>
+              <div>10</div>
+            </div>
             <div class="rangeLabel">
                 <div>0</div>
                 <div>1</div>
@@ -230,25 +230,25 @@
           <p v-if="help_text_visible === 'finance'">{{ $t('message.help_text_finance') }}</p>
           <p>{{questiondata.finance}}</p>
           <div>
-            <span class="rangeSpan">
-              <span class="rangeLower">0</span>
-              <b-form-input type="range" min="0" max="10" v-model="questiondata.finance" />
-              <span class="rangeHigher">10</span>
-            </span>
-          <div class="rangeLabel">
-                  <div>0</div>
-                  <div>1</div>
-                  <div>2</div>
-                  <div>3</div>
-                  <div>4</div>
-                  <div>5</div>
-                  <div>6</div>
-                  <div>7</div>
-                  <div>8</div>
-                  <div>9</div>
-                  <div>10</div>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.finance" />
+            <div class="rangeLabel-mobile">
+              <div>0</div>
+              <div>10</div>
+            </div>
+             <div class="rangeLabel">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
               </div>
-          </div>
+            </div>
           <textarea v-model="questiondata.finance_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -264,11 +264,11 @@
           <p v-if="help_text_visible === 'strengths'">{{ $t('message.help_text_strengths') }}</p>
           <p>{{questiondata.strengths}}</p>
           <div>
-            <span class="rangeSpan">
-              <span class="rangeLower">0</span>
-              <b-form-input type="range" min="0" max="10" v-model="questiondata.strengths" />
-              <span class="rangeHigher">10</span>
-            </span>
+            <b-form-input type="range" min="0" max="10" v-model="questiondata.strengths" />
+            <div class="rangeLabel-mobile">
+              <div>0</div>
+              <div>10</div>
+            </div>
             <div class="rangeLabel">
                 <div>0</div>
                 <div>1</div>
@@ -298,11 +298,11 @@
           <p v-if="help_text_visible === 'self_esteem'">{{ $t('message.help_text_self_esteem') }}</p>
           <p>{{questiondata.self_esteem}}</p>
           <div>
-            <span class="rangeSpan">
-             <span class="rangeLower">0</span>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.self_esteem" />
-            <span class="rangeHigher">10</span>
-            </span>
+            <div class="rangeLabel-mobile">
+                <div>0</div>
+                <div>10</div>
+            </div>
             <div class="rangeLabel">
               <div>0</div>
               <div>1</div>
@@ -332,11 +332,11 @@
           <p v-if="help_text_visible === 'life_as_whole'">{{ $t('message.help_text_life_as_whole') }}</p>
           <p>{{questiondata.life_as_whole}}</p>
           <div>
-            <span class="rangeSpan">
-             <span class="rangeLower">0</span>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.life_as_whole" />
-            <span class="rangeHigher">10</span>
-            </span>
+            <div class="rangeLabel-mobile">
+                <div>0</div>
+                <div>10</div>
+            </div>
             <div class="rangeLabel">
               <div>0</div>
               <div>1</div>
@@ -671,9 +671,11 @@ textarea::placeholder {
 .question_text > p {
   color:#353535;
 }
-.rangeSpan{
+.rangeLabel-mobile{
 display: -webkit-flex;
 display: flex;
+justify-content:space-between;
+font-weight: bold;
 }
 .rangeLower{
 font-size:1.1rem;
@@ -705,10 +707,7 @@ display: none;
     top: -38%; 
     left:6%;
   }
-  .rangeLower{
-    display: none;
-  }
-  .rangeHigher{
+  .rangeLabel-mobile{
     display: none;
   }
   .rangeLabel  {
@@ -718,6 +717,7 @@ display: none;
     justify-content: space-between;
     padding: 0 0.30rem;
   }
+
   .rangeLabel > div {
     height: 0.6875rem;
     width: 0.0625rem;
