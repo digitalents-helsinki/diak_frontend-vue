@@ -26,12 +26,13 @@
           </div>
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
           <p>{{questiondata.health}}</p>
-          <div>
+          <div class="range-input">
             <b-form-input type="range" min="0" max="10" v-model="questiondata.health" />
               <div class="rangeLabel-mobile">
                 <div>0</div>
                 <div>10</div>
               </div>
+              <transition name="slide-fade">
               <div class="rangeLabel">
                 <div>0</div>
                 <div>1</div>
@@ -45,6 +46,7 @@
                 <div>9</div>
                 <div>10</div>
               </div>
+              </transition>
             </div>
            <textarea v-model="questiondata.health_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -59,7 +61,7 @@
           </div>
           <p v-if="help_text_visible === 'overcoming'">{{ $t('message.help_text_overcoming') }}</p>
           <p>{{questiondata.overcoming}}</p>
-          <div>
+          <div class="range-input">
             <b-form-input type="range" min="0" max="10" v-model="questiondata.overcoming" />
             <div class="rangeLabel-mobile">
                 <div>0</div>
@@ -93,7 +95,7 @@
           </div>
           <p v-if="help_text_visible === 'living'">{{ $t('message.help_text_living') }}</p>
           <p>{{questiondata.living}}</p>
-          <div>
+          <div class="range-input">
             <b-form-input type="range" min="0" max="10" v-model="questiondata.living" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -127,7 +129,7 @@
           </div>
           <p v-if="help_text_visible === 'coping'">{{ $t('message.help_text_coping') }}</p>
           <p>{{questiondata.coping}}</p>
-          <div>
+          <div class="range-input">
             <b-form-input type="range" min="0" max="10" v-model="questiondata.coping" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -161,7 +163,7 @@
           </div>
           <p v-if="help_text_visible === 'family'">{{ $t('message.help_text_family') }}</p>
           <p>{{questiondata.family}}</p>
-          <div>
+          <div class="range-input">
             <b-form-input type="range" min="0" max="10" v-model="questiondata.family" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -195,7 +197,7 @@
           </div>
           <p v-if="help_text_visible === 'friends'">{{ $t('message.help_text_friends') }}</p>
           <p>{{questiondata.friends}}</p>
-          <div>
+          <div class="range-input">
             <b-form-input type="range" min="0" max="10" v-model="questiondata.friends" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -229,7 +231,7 @@
           </div>
           <p v-if="help_text_visible === 'finance'">{{ $t('message.help_text_finance') }}</p>
           <p>{{questiondata.finance}}</p>
-          <div>
+          <div class="range-input">
             <b-form-input type="range" min="0" max="10" v-model="questiondata.finance" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -263,7 +265,7 @@
           </div>
           <p v-if="help_text_visible === 'strengths'">{{ $t('message.help_text_strengths') }}</p>
           <p>{{questiondata.strengths}}</p>
-          <div>
+          <div class="range-input">
             <b-form-input type="range" min="0" max="10" v-model="questiondata.strengths" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -297,7 +299,7 @@
           </div>
           <p v-if="help_text_visible === 'self_esteem'">{{ $t('message.help_text_self_esteem') }}</p>
           <p>{{questiondata.self_esteem}}</p>
-          <div>
+          <div class="range-input">
             <b-form-input type="range" min="0" max="10" v-model="questiondata.self_esteem" />
             <div class="rangeLabel-mobile">
                 <div>0</div>
@@ -331,7 +333,7 @@
           </div>
           <p v-if="help_text_visible === 'life_as_whole'">{{ $t('message.help_text_life_as_whole') }}</p>
           <p>{{questiondata.life_as_whole}}</p>
-          <div>
+          <div class="range-input">
             <b-form-input type="range" min="0" max="10" v-model="questiondata.life_as_whole" />
             <div class="rangeLabel-mobile">
                 <div>0</div>
@@ -444,7 +446,8 @@ export default {
       questionnum: 0,
       help_visible: false,
       help_text_visible: '',
-      cancel_visible: false
+      cancel_visible: false,
+      show:false
     }
   },
   methods: {
@@ -484,8 +487,7 @@ export default {
     moveHome() {
       this.$router.push({ path: '/'})
     }
-  }
-  
+}
 }
 
 </script>
@@ -694,6 +696,7 @@ display: none;
   right:1%;
 }
 
+
 @media screen and (min-width: 575px) {
   .buttonHelp{
     position: relative;
@@ -707,6 +710,9 @@ display: none;
     top: -38%; 
     left:6%;
   }
+  .one {
+     position:relative;
+  }
   .rangeLabel-mobile{
     display: none;
   }
@@ -716,8 +722,8 @@ display: none;
     display: flex;
     justify-content: space-between;
     padding: 0 0.30rem;
+   
   }
-
   .rangeLabel > div {
     height: 0.6875rem;
     width: 0.0625rem;
@@ -728,7 +734,9 @@ display: none;
     display: flex;
     justify-content: center;
   }
+  input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
 }
+
 @media screen and (min-width: 1030px) {
   .buttonHelp{
     position: absolute !important;
