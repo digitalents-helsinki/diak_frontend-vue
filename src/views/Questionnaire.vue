@@ -696,7 +696,6 @@ display: none;
   right:1%;
 }
 
-
 @media screen and (min-width: 575px) {
   .buttonHelp{
     position: relative;
