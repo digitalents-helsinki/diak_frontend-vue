@@ -1,6 +1,8 @@
 <template>
   <div class="background">
-    <button @click="toggleHelp" class="btn help-button">Ohjeet</button>
+  <div class="container-fluid" id="questionnaire-top">
+  <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+  </div>
     <div @click="toggleHelp" class="dim-background" v-show="help_visible">
       <div class="help-container">
         <p>{{ $t('message.help_text_1') }}</p>
@@ -18,6 +20,7 @@
       </div>
     </div>
     <div class="questionnaire container text-center">
+      <button @click="toggleHelp" class="btn buttonOhjeet" >Ohjeet</button>
       <form v-on:submit.prevent="saveQuestions">
         <div class="question" v-show="questionnum == 0">
          <div class="question_text">
@@ -497,14 +500,11 @@ export default {
     }
 }
 }
-function QuestionContent(str, convert){
-    var rep = new RegExp(convert, 'terveydentilaasi?');
-    return str.replace(rep, '<b>'+convert+'</b>');
-}
 </script>
 <style lang="scss" scoped>
 .background {
-  background: linear-gradient(to right, #0078f0, #80bfff);
+  //background: linear-gradient(to right, #0078f0, #80bfff);
+  background:#FFFFFF;
   height: 100%;
   display: flex;
   flex-flow: column nowrap;
@@ -512,6 +512,21 @@ function QuestionContent(str, convert){
   overflow: hidden;
   font-size:1rem;
 
+  #questionnaire-top{
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    background-color:#80CDE6;
+    font-size:10rem;
+    height:16vh;
+    overflow: hidden;
+    margin-bottom:1rem;
+
+  img {
+      height: 70px;
+    }
+  }
+  
   .help-button {
     color: white;
     align-self: flex-start;
@@ -522,11 +537,24 @@ function QuestionContent(str, convert){
 
 .questionnaire {
   background-color: white;
-  padding: 5vh;
+  padding: 0 5vh;
   border-radius: 15px 15px 0 0;
   height: 85%;
   overflow: auto;
   border-radius:14px;
+  box-shadow: 1px 1px 1px 1px #888888;
+
+  .buttonOhjeet{
+    border-radius:8px 1px;
+    position: relative !important;
+    top: 15%;    
+    right:52%;
+    background-color:#80CDE6;
+    color:#FFFFFF;
+    padding:0.6rem 1.8rem;
+    font-size:1rem;
+    font-weight:bold;text-align:center;
+    } 
 
   @media screen and (min-width: 1024px) {
     width: 60vw;
@@ -691,34 +719,34 @@ textarea::placeholder {
   color:#353535;
 }
 .question_text p:nth-of-type(1) {
-    font-weight: bold;
-    font-size:1.125em;   
-    color:#350E7E;
+  font-weight: bold;
+  font-size:1.125em;   
+  color:#350E7E;
 }
 .question_text p:nth-of-type(2) {
     font-size:1.125em;
   }
 .buttonHelp{
   position: absolute;
-  top: 19%;    
+  top: 21%;    
   right:1%;
 }
 .rangeLabel-mobile{
-display: -webkit-flex;
-display: flex;
-justify-content:space-between;
-font-weight: bold;
+  display: -webkit-flex;
+  display: flex;
+  justify-content:space-between;
+  font-weight: bold;
 }
 .rangeLower{
-font-size:1.1rem;
-font-weight: bold;
+  font-size:1.1rem;
+  font-weight: bold;
 }
 .rangeHigher{
-font-size:1.1rem;
-font-weight: bold;
+  font-size:1.1rem;
+  font-weight: bold;
 }
 .rangeLabel  {
-display: none;
+  display: none;
 }
 
 @media screen and (min-width: 575px) {
@@ -730,10 +758,6 @@ display: none;
     top:-80%;    
     left:100%;
   }
- /* .help-button{
-    justify-content:center;
-    text-align:center;
-  }*/
 }
 @media screen and (min-width: 768px) {
   .question_text p:nth-of-type(2) {
@@ -743,9 +767,6 @@ display: none;
     position: relative;
     top: -80%; 
     left:100%;
-  }
-  .one {
-     position:relative;
   }
   .rangeLabel-mobile{
     display: none;
@@ -767,7 +788,7 @@ display: none;
     display: flex;
     justify-content: center;
   }
-  input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
+  //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
 }
 
 .custom-range {
@@ -805,7 +826,7 @@ display: none;
 }
   .buttonHelp{
     position: absolute !important;
-    top: 14%;    
+    top: 21%;    
     left:76%;
   }
 }
@@ -815,7 +836,7 @@ display: none;
 }
   .buttonHelp{
     position: absolute !important;
-    top: 14%;    
+    top: 21%;    
     left:70%;
   }
   .cancel-container{
