@@ -21,18 +21,18 @@
       <form v-on:submit.prevent="saveQuestions">
         <div class="question" v-show="questionnum == 0">
          <div class="question_text">
-            <p>1. {{ $t('message.question_health') }}</p> 
+            <p>Kysymys 1.</p>
+            <p v-html="$t('message.question_health')"></p> 
             <button class="btn help_button buttonHelp"  @click.prevent="toggleQuestionHelp('health')">?</button>
           </div>
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
-          <p>{{questiondata.health}}</p>
           <div class="range-input">
+          <p class="rangeQuestiondata">{{questiondata.health}}</p>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.health" />
               <div class="rangeLabel-mobile">
                 <div>0</div>
                 <div>10</div>
               </div>
-              <transition name="slide-fade">
               <div class="rangeLabel">
                 <div>0</div>
                 <div>1</div>
@@ -46,7 +46,6 @@
                 <div>9</div>
                 <div>10</div>
               </div>
-              </transition>
             </div>
            <textarea v-model="questiondata.health_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
           <div class="buttons">
@@ -56,12 +55,13 @@
         </div>
         <div class="question" v-show="questionnum == 1">
           <div class="question_text">
-            <p>2. {{ $t('message.question_overcoming') }}</p>
+            <p>Kysymys 2.</p>
+            <p>{{ $t('message.question_overcoming') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('overcoming')">?</button>
           </div>
           <p v-if="help_text_visible === 'overcoming'">{{ $t('message.help_text_overcoming') }}</p>
-          <p>{{questiondata.overcoming}}</p>
           <div class="range-input">
+            <p class="rangeQuestiondata">{{questiondata.overcoming}}</p>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.overcoming" />
             <div class="rangeLabel-mobile">
                 <div>0</div>
@@ -90,12 +90,13 @@
         </div>
         <div class="question" v-show="questionnum == 2">
           <div class="question_text">
-            <p>3. {{ $t('message.question_living') }}</p>
+            <p>Kysymys 3.</p>
+            <p>{{ $t('message.question_living') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('living')">?</button>
           </div>
           <p v-if="help_text_visible === 'living'">{{ $t('message.help_text_living') }}</p>
-          <p>{{questiondata.living}}</p>
           <div class="range-input">
+            <p class="rangeQuestiondata">{{questiondata.living}}</p>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.living" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -124,12 +125,13 @@
         </div>
         <div class="question" v-show="questionnum == 3">
           <div class="question_text">
-            <p>4. {{ $t('message.question_coping') }}</p>
+            <p>Kysymys 4.</p>
+            <p>{{ $t('message.question_coping') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('coping')">?</button>
           </div>
           <p v-if="help_text_visible === 'coping'">{{ $t('message.help_text_coping') }}</p>
-          <p>{{questiondata.coping}}</p>
           <div class="range-input">
+            <p class="rangeQuestiondata">{{questiondata.coping}}</p>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.coping" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -158,12 +160,13 @@
         </div>
         <div class="question" v-show="questionnum == 4">
           <div class="question_text">
-            <p>5. {{ $t('message.question_family') }}</p>
+            <p>Kysymys 5.</p>
+            <p>{{ $t('message.question_family') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('family')">?</button>
           </div>
           <p v-if="help_text_visible === 'family'">{{ $t('message.help_text_family') }}</p>
-          <p>{{questiondata.family}}</p>
           <div class="range-input">
+            <p class="rangeQuestiondata">{{questiondata.family}}</p>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.family" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -192,12 +195,13 @@
         </div>
         <div class="question" v-show="questionnum == 5">
           <div class="question_text">
-            <p>6. {{ $t('message.question_friends') }}</p>
+            <p>Kysymys 6.</p>
+            <p>{{ $t('message.question_friends') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('friends')">?</button>
           </div>
           <p v-if="help_text_visible === 'friends'">{{ $t('message.help_text_friends') }}</p>
-          <p>{{questiondata.friends}}</p>
           <div class="range-input">
+            <p class="rangeQuestiondata">{{questiondata.friends}}</p>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.friends" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -226,12 +230,13 @@
         </div>
         <div class="question" v-show="questionnum == 6">
           <div class="question_text">
-            <p>7. {{ $t('message.question_finance') }}</p>
+            <p>Kysymys 7.</p>
+            <p>{{ $t('message.question_finance') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('finance')">?</button>
           </div>
           <p v-if="help_text_visible === 'finance'">{{ $t('message.help_text_finance') }}</p>
-          <p>{{questiondata.finance}}</p>
           <div class="range-input">
+            <p class="rangeQuestiondata">{{questiondata.finance}}</p>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.finance" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -260,12 +265,13 @@
         </div>
         <div class="question" v-show="questionnum == 7">
           <div class="question_text">
-            <p>8. {{ $t('message.question_strengths') }}</p>
+            <p>Kysymys 8.</p>
+            <p>{{ $t('message.question_strengths') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('strengths')">?</button>
           </div>
           <p v-if="help_text_visible === 'strengths'">{{ $t('message.help_text_strengths') }}</p>
-          <p>{{questiondata.strengths}}</p>
           <div class="range-input">
+            <p class="rangeQuestiondata">{{questiondata.strengths}}</p>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.strengths" />
             <div class="rangeLabel-mobile">
               <div>0</div>
@@ -294,12 +300,13 @@
         </div>
         <div class="question" v-show="questionnum == 8">
           <div class="question_text">
-            <p>9. {{ $t('message.question_self_esteem') }}</p>
+            <p>Kysymys 9.</p>
+            <p>{{ $t('message.question_self_esteem') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('self_esteem')">?</button>
           </div>
           <p v-if="help_text_visible === 'self_esteem'">{{ $t('message.help_text_self_esteem') }}</p>
-          <p>{{questiondata.self_esteem}}</p>
           <div class="range-input">
+            <p class="rangeQuestiondata">{{questiondata.self_esteem}}</p>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.self_esteem" />
             <div class="rangeLabel-mobile">
                 <div>0</div>
@@ -328,12 +335,13 @@
         </div>
         <div class="question" v-show="questionnum == 9">
           <div class="question_text">
-            <p>10. {{ $t('message.question_life_as_whole') }}</p>
+            <p>Kysymys 10.</p>
+            <p>{{ $t('message.question_life_as_whole') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('life_as_whole')">?</button>
           </div>
           <p v-if="help_text_visible === 'life_as_whole'">{{ $t('message.help_text_life_as_whole') }}</p>
-          <p>{{questiondata.life_as_whole}}</p>
-          <div class="range-input">
+         <div class="range-input">
+            <p class="rangeQuestiondata">{{questiondata.life_as_whole}}</p>
             <b-form-input type="range" min="0" max="10" v-model="questiondata.life_as_whole" />
             <div class="rangeLabel-mobile">
                 <div>0</div>
@@ -489,7 +497,10 @@ export default {
     }
 }
 }
-
+function QuestionContent(str, convert){
+    var rep = new RegExp(convert, 'terveydentilaasi?');
+    return str.replace(rep, '<b>'+convert+'</b>');
+}
 </script>
 <style lang="scss" scoped>
 .background {
@@ -499,6 +510,7 @@ export default {
   flex-flow: column nowrap;
   justify-content: flex-end;
   overflow: hidden;
+  font-size:1rem;
 
   .help-button {
     color: white;
@@ -531,12 +543,16 @@ export default {
 
       .question_text {
         display: flex;
-        flex-flow: row nowrap;
+        flex-flow: column nowrap;
 
         .help_button {
           background-color: lightblue;
-          width: 2rem;
-         height: 2rem;
+          width: 2.5rem;
+          height: 2.5rem;
+          padding:0rem;
+          font-size:1.1rem;
+          font-weight:bold;
+          align-items:center;
         }
       }
 
@@ -670,8 +686,22 @@ textarea::placeholder {
     }
   }
 }
+
 .question_text > p {
   color:#353535;
+}
+.question_text p:nth-of-type(1) {
+    font-weight: bold;
+    font-size:1.125em;   
+    color:#350E7E;
+}
+.question_text p:nth-of-type(2) {
+    font-size:1.125em;
+  }
+.buttonHelp{
+  position: absolute;
+  top: 19%;    
+  right:1%;
 }
 .rangeLabel-mobile{
 display: -webkit-flex;
@@ -690,24 +720,29 @@ font-weight: bold;
 .rangeLabel  {
 display: none;
 }
-.buttonHelp{
-  position: absolute;
-  top: 20%;    
-  right:1%;
-}
 
 @media screen and (min-width: 575px) {
+  .question_text p:nth-of-type(1) {
+    font-size:1.25em;   
+}
   .buttonHelp{
     position: relative;
-    top: -8%;    
-    left:8%;
+    top:-80%;    
+    left:100%;
   }
+ /* .help-button{
+    justify-content:center;
+    text-align:center;
+  }*/
 }
 @media screen and (min-width: 768px) {
+  .question_text p:nth-of-type(2) {
+    font-size:1.2em;
+  }
   .buttonHelp{
     position: relative;
-    top: -38%; 
-    left:6%;
+    top: -80%; 
+    left:100%;
   }
   .one {
      position:relative;
@@ -721,7 +756,6 @@ display: none;
     display: flex;
     justify-content: space-between;
     padding: 0 0.30rem;
-   
   }
   .rangeLabel > div {
     height: 0.6875rem;
@@ -736,18 +770,25 @@ display: none;
   input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
 }
 
-@media screen and (min-width: 1030px) {
+@media screen and (min-width: 1025px) {
+  .question_text p:nth-of-type(2) {
+  font-size:1.3em;
+  
+}
   .buttonHelp{
     position: absolute !important;
     top: 14%;    
-    left:77%;
+    left:76%;
   }
 }
 @media screen and (min-width: 1400px){
+  .question_text p:nth-of-type(2) {
+  padding:0 5rem;
+}
   .buttonHelp{
     position: absolute !important;
     top: 14%;    
-    left:77.6%;
+    left:70%;
   }
   .cancel-container{
     width:30vw !important;

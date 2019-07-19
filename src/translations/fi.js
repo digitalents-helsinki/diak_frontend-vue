@@ -10,7 +10,7 @@ export const fi = {
     return: 'Palaa kyselyyn',
     cancel_save: 'Tallenna ja jatka myöhemmin',
     cancel_discard: 'Hylkää',
-    question_health: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet terveydentilaasi?',
+    question_health: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet <b>terveydentilaasi</b>?',
     question_overcoming: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet kykyysi voittaa elämässä eteen tulevia vaikeuksia?',
     question_living: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet asumisoloihisi?',
     question_coping: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet päivittäiseen pärjäämiseesi?',
