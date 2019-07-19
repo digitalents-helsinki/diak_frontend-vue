@@ -28,7 +28,7 @@
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
           <div class="range-input">
           <p class="rangeQuestiondata">{{questiondata.health}}</p>
-            <b-form-input type="range" min="0" max="10" v-model="questiondata.health" />
+            <b-form-input v-bind:class="{activeRange: questiondata.health}" type="range" min="0" max="10" v-model="questiondata.health" />
               <div class="rangeLabel-mobile">
                 <div>0</div>
                 <div>10</div>
@@ -430,16 +430,16 @@ export default {
   data() {
     return {
       questiondata: {
-        health: 5,
-        overcoming: 5,
-        living: 5,
-        coping: 5,
-        family: 5,
-        friends: 5,
-        finance: 5,
-        strengths: 5,
-        self_esteem: 5,
-        life_as_whole: 5,
+        health: null,
+        overcoming: null,
+        living: null,
+        coping: null,
+        family: null,
+        friends: null,
+        finance: null,
+        strengths: null,
+        self_esteem: null,
+        life_as_whole: null,
         health_desc: null,
         overcoming_desc: null,
         living_desc: null,
@@ -455,7 +455,7 @@ export default {
       help_visible: false,
       help_text_visible: '',
       cancel_visible: false,
-      show:false
+      show: false
     }
   },
   methods: {
@@ -768,6 +768,34 @@ display: none;
     justify-content: center;
   }
   input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
+}
+
+.custom-range {
+  &::-webkit-slider-thumb {
+    background: gray;
+  }
+
+  &::-moz-range-thumb {
+    background: gray;
+  }
+
+  &::-ms-thumb {
+    background: gray;
+  }
+}
+
+.activeRange {
+  &::-webkit-slider-thumb {
+    background: blue;
+  }
+
+  &::-moz-range-thumb {
+    background: blue;
+  }
+
+  &::-ms-thumb {
+    background: blue;
+  }
 }
 
 @media screen and (min-width: 1025px) {
