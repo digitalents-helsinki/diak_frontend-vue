@@ -44,10 +44,10 @@ export default {
       const res = await axios.get('http://localhost:3000/results')
       this.results = res.data
       this.avg_array = this.values.map((value) => {
-        return this.results.reduce((acc, result) => acc + result[value], 0) / this.results.length
+        return this.results.filter(result => result !== null).reduce((acc, result) => acc + result[value], 0) / this.results.filter(result => result !== null).length
       })
       this.dvd_array = this.values.map((value) => {
-        return this.standardDeviation(this.results.map(result => result[value]))
+        return this.standardDeviation(this.results.filter(result => result !== null).map(result => result[value]))
       })
       this.respondent_size = this.results.length
       this.loaded = true

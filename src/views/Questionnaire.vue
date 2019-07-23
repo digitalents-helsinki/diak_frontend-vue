@@ -21,7 +21,7 @@
     </div>
     <div class="questionnaire container text-center">
       <button @click="toggleHelp" class="btn buttonOhjeet" >Ohjeet</button>
-      <form v-on:submit.prevent="saveQuestions">
+      <form>
         <div class="question" v-show="questionnum == 0">
          <div class="question_text">
             <p>Kysymys 1.</p>
@@ -417,7 +417,7 @@
           </div>
           <div class="review-buttons">
             <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.return')}}</button>
-            <button class="btn btn-primary" @click="saveQuestions">{{ $t('message.send')}}</button>
+            <button class="btn btn-primary" @click.prevent="saveQuestions">{{ $t('message.send')}}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>

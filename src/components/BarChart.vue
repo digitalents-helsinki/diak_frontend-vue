@@ -15,9 +15,6 @@ export default {
               min: 0,
               max: 10
             }
-          }],
-          xAxes: [{
-            display: false
           }]
         }
       },
