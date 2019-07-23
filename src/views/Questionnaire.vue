@@ -1,7 +1,8 @@
 <template>
   <div class="background">
   <div class="container-fluid" id="questionnaire-top">
-  <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+  <img class="logo" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+  <button @click="toggleHelp" class="btn buttonOhjeet-Ohjeet">Ohjeet</button>
   </div>
     <div @click="toggleHelp" class="dim-background" v-show="help_visible">
       <div class="help-container">
@@ -19,14 +20,14 @@
         </div>
       </div>
     </div>
-    <div class="questionnaire container text-center">
+    <div class="questionnaire container text-center shadow-lg">
       <button @click="toggleHelp" class="btn buttonOhjeet" >Ohjeet</button>
       <form>
         <div class="question" v-show="questionnum == 0">
          <div class="question_text">
+            <button class="btn help_button buttonHelp"  @click.prevent="toggleQuestionHelp('health')">?</button>
             <p>Kysymys 1.</p>
             <p v-html="$t('message.question_health')"></p> 
-            <button class="btn help_button buttonHelp"  @click.prevent="toggleQuestionHelp('health')">?</button>
           </div>
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
           <div class="range-input">
@@ -58,9 +59,9 @@
         </div>
         <div class="question" v-show="questionnum == 1">
           <div class="question_text">
-            <p>Kysymys 2.</p>
-            <p>{{ $t('message.question_overcoming') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('overcoming')">?</button>
+            <p>Kysymys 2.</p>
+            <p v-html="$t('message.question_overcoming')"></p>
           </div>
           <p v-if="help_text_visible === 'overcoming'">{{ $t('message.help_text_overcoming') }}</p>
           <div class="range-input">
@@ -93,9 +94,9 @@
         </div>
         <div class="question" v-show="questionnum == 2">
           <div class="question_text">
-            <p>Kysymys 3.</p>
-            <p>{{ $t('message.question_living') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('living')">?</button>
+            <p>Kysymys 3.</p>
+            <p v-html="$t('message.question_living')"></p>
           </div>
           <p v-if="help_text_visible === 'living'">{{ $t('message.help_text_living') }}</p>
           <div class="range-input">
@@ -128,9 +129,9 @@
         </div>
         <div class="question" v-show="questionnum == 3">
           <div class="question_text">
-            <p>Kysymys 4.</p>
-            <p>{{ $t('message.question_coping') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('coping')">?</button>
+            <p>Kysymys 4.</p>
+            <p v-html="$t('message.question_coping')"></p>
           </div>
           <p v-if="help_text_visible === 'coping'">{{ $t('message.help_text_coping') }}</p>
           <div class="range-input">
@@ -163,9 +164,9 @@
         </div>
         <div class="question" v-show="questionnum == 4">
           <div class="question_text">
-            <p>Kysymys 5.</p>
-            <p>{{ $t('message.question_family') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('family')">?</button>
+            <p>Kysymys 5.</p>
+            <p v-html="$t('message.question_family')"></p>
           </div>
           <p v-if="help_text_visible === 'family'">{{ $t('message.help_text_family') }}</p>
           <div class="range-input">
@@ -198,9 +199,9 @@
         </div>
         <div class="question" v-show="questionnum == 5">
           <div class="question_text">
+          <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('friends')">?</button>
             <p>Kysymys 6.</p>
-            <p>{{ $t('message.question_friends') }}</p>
-            <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('friends')">?</button>
+            <p v-html="$t('message.question_friends')"></p>
           </div>
           <p v-if="help_text_visible === 'friends'">{{ $t('message.help_text_friends') }}</p>
           <div class="range-input">
@@ -233,9 +234,9 @@
         </div>
         <div class="question" v-show="questionnum == 6">
           <div class="question_text">
-            <p>Kysymys 7.</p>
-            <p>{{ $t('message.question_finance') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('finance')">?</button>
+            <p>Kysymys 7.</p>
+            <p v-html="$t('message.question_finance')"></p> 
           </div>
           <p v-if="help_text_visible === 'finance'">{{ $t('message.help_text_finance') }}</p>
           <div class="range-input">
@@ -268,9 +269,9 @@
         </div>
         <div class="question" v-show="questionnum == 7">
           <div class="question_text">
-            <p>Kysymys 8.</p>
-            <p>{{ $t('message.question_strengths') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('strengths')">?</button>
+            <p>Kysymys 8.</p>
+            <p v-html="$t('message.question_strengths')"></p>
           </div>
           <p v-if="help_text_visible === 'strengths'">{{ $t('message.help_text_strengths') }}</p>
           <div class="range-input">
@@ -303,9 +304,9 @@
         </div>
         <div class="question" v-show="questionnum == 8">
           <div class="question_text">
-            <p>Kysymys 9.</p>
-            <p>{{ $t('message.question_self_esteem') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('self_esteem')">?</button>
+            <p>Kysymys 9.</p>
+            <p v-html="$t('message.question_self_esteem')"></p>
           </div>
           <p v-if="help_text_visible === 'self_esteem'">{{ $t('message.help_text_self_esteem') }}</p>
           <div class="range-input">
@@ -338,9 +339,9 @@
         </div>
         <div class="question" v-show="questionnum == 9">
           <div class="question_text">
-            <p>Kysymys 10.</p>
-            <p>{{ $t('message.question_life_as_whole') }}</p>
             <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('life_as_whole')">?</button>
+            <p>Kysymys 10.</p>
+            <p v-html="$t('message.question_life_as_whole')"></p>
           </div>
           <p v-if="help_text_visible === 'life_as_whole'">{{ $t('message.help_text_life_as_whole') }}</p>
          <div class="range-input">
@@ -514,7 +515,7 @@ export default {
 
   #questionnaire-top{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items:center;
     background-color:#80CDE6;
     font-size:10rem;
@@ -522,9 +523,19 @@ export default {
     overflow: hidden;
     margin-bottom:1rem;
 
-  img {
-      height: 70px;
+  .logo {
+      height: 60px;
     }
+
+  .buttonOhjeet-Ohjeet{
+    border-radius:8px 1px;
+    background-color:#80CDE6;
+    color:#FFFFFF;
+    padding:0.6rem 1.8rem;
+    font-size:1.1rem;
+    font-weight:bold;
+    text-align:center;
+    } 
   }
   
   .help-button {
@@ -542,19 +553,10 @@ export default {
   height: 85%;
   overflow: auto;
   border-radius:14px;
-  box-shadow: 1px 1px 1px 1px #888888;
 
   .buttonOhjeet{
-    border-radius:8px 1px;
-    position: relative !important;
-    top: 15%;    
-    right:52%;
-    background-color:#80CDE6;
-    color:#FFFFFF;
-    padding:0.6rem 1.8rem;
-    font-size:1rem;
-    font-weight:bold;text-align:center;
-    } 
+    display:none;
+  } 
 
   @media screen and (min-width: 1024px) {
     width: 60vw;
@@ -574,13 +576,15 @@ export default {
         flex-flow: column nowrap;
 
         .help_button {
-          background-color: lightblue;
-          width: 2.5rem;
+          background-color:#80CDE6;
+          width: 6rem;
           height: 2.5rem;
           padding:0rem;
           font-size:1.1rem;
           font-weight:bold;
           align-items:center;
+          color:#FFFFFF;
+          align-self: flex-end;
         }
       }
 
@@ -607,6 +611,7 @@ export default {
       .cancel-button {
         color: #350E7E;
         opacity: 70%;
+        font-size:1.3em;
       }
     }
   }
@@ -669,6 +674,7 @@ textarea::placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size:1.1rem;
 
   .help-container {
     background-color: white;
@@ -718,33 +724,25 @@ textarea::placeholder {
 .question_text > p {
   color:#353535;
 }
+
 .question_text p:nth-of-type(1) {
+  margin-top:2rem;
   font-weight: bold;
   font-size:1.125em;   
   color:#350E7E;
 }
+
 .question_text p:nth-of-type(2) {
     font-size:1.125em;
   }
-.buttonHelp{
-  position: absolute;
-  top: 21%;    
-  right:1%;
-}
+
 .rangeLabel-mobile{
   display: -webkit-flex;
   display: flex;
   justify-content:space-between;
   font-weight: bold;
 }
-.rangeLower{
-  font-size:1.1rem;
-  font-weight: bold;
-}
-.rangeHigher{
-  font-size:1.1rem;
-  font-weight: bold;
-}
+
 .rangeLabel  {
   display: none;
 }
@@ -752,25 +750,26 @@ textarea::placeholder {
 @media screen and (min-width: 575px) {
   .question_text p:nth-of-type(1) {
     font-size:1.25em;   
-}
-  .buttonHelp{
-    position: relative;
-    top:-80%;    
-    left:100%;
   }
 }
 @media screen and (min-width: 768px) {
+
+  #questionnaire-top > img {
+    height: 70px !important;
+  }
+
+  .dim-background {
+    text-align: center;
+  }
+
   .question_text p:nth-of-type(2) {
     font-size:1.2em;
   }
-  .buttonHelp{
-    position: relative;
-    top: -80%; 
-    left:100%;
-  }
+
   .rangeLabel-mobile{
     display: none;
   }
+
   .rangeLabel  {
     display: block;
     display: -webkit-flex;
@@ -778,6 +777,7 @@ textarea::placeholder {
     justify-content: space-between;
     padding: 0 0.30rem;
   }
+
   .rangeLabel > div {
     height: 0.6875rem;
     width: 0.0625rem;
@@ -820,25 +820,41 @@ textarea::placeholder {
 }
 
 @media screen and (min-width: 1025px) {
+  
+  #questionnaire-top{
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  .buttonOhjeet-Ohjeet{
+    display:none !important;
+  }
+
+  .buttonOhjeet{
+    display:block !important;
+    position:absolute !important;
+    top:16%;
+    left:20%;
+    border-radius:8px 1px;
+    background-color:#80CDE6;
+    color:#FFFFFF;
+    padding:0.6rem 1.8rem;
+    font-size:1rem;
+    font-weight:bold;
+    text-align:center;
+  }
+
   .question_text p:nth-of-type(2) {
   font-size:1.3em;
-  
-}
-  .buttonHelp{
-    position: absolute !important;
-    top: 21%;    
-    left:76%;
   }
 }
+
 @media screen and (min-width: 1400px){
+
   .question_text p:nth-of-type(2) {
   padding:0 5rem;
-}
-  .buttonHelp{
-    position: absolute !important;
-    top: 21%;    
-    left:70%;
   }
+
   .cancel-container{
     width:30vw !important;
   }
