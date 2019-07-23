@@ -1,11 +1,18 @@
 <template>
-  <div class="SurveyResults">
-    <div class="chart-container">
-    <bar-chart v-if="loaded" :avgdata="avg_array" :dvddata="dvd_array"></bar-chart>
+  <div>
+    <div class="Login" v-if="!login_token">
+      <input type="text" v-model="login.user" />
+      <input type="text" v-model="login.pass" />
+      <button @click.prevent="postLogin">Kirjaudu sisään</button>
     </div>
-    <div class="text-center">
-      <p>Vastaajien lukumäärä {{respondent_size}}</p>
-      <downloadexcel class="btn btn-primary" :data="results" :fields="excel_fields" name="tulokset.xls">Lataa tiedosto</downloadexcel>
+    <div class="SurveyResults" v-if="login_token">
+      <div class="chart-container">
+        <bar-chart v-if="loaded" :avgdata="avg_array" :dvddata="dvd_array"></bar-chart>
+      </div>
+      <div class="text-center">
+        <p>Vastaajien lukumäärä {{respondent_size}}</p>
+        <downloadexcel class="btn btn-primary" :data="results" :fields="excel_fields" name="tulokset.xls">Lataa tiedosto</downloadexcel>
+      </div>
     </div>
   </div>
 </template>
@@ -36,7 +43,13 @@ export default {
         'Vahvuudet': 'strengths',
         'Itsetunto': 'self_esteem',
         'Elämän kokonaisuus': 'life_as_whole'
-      }
+      },
+      loggedIn: false,
+      login: {
+        user: undefined,
+        pass: undefined
+      },
+      login_token: undefined
     }
   },
   methods: {
@@ -73,10 +86,19 @@ export default {
 
       const stdDev = Math.sqrt(avgSquareDiff);
       return stdDev;
+    },
+    postLogin() {
+      axios
+        .post('http://localhost:3000/login', {
+          user: this.login.user,
+          pass: this.login.pass
+        })
+        .then(res => {
+          this.login_token = res.data.token
+          axios.defaults.headers.common['authorization'] = this.login_token
+          this.getResults()
+        })
     }
-  },
-  mounted() {
-    this.getResults()
   },
   components: {
     BarChart,
