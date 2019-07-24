@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     async getResults() {
-      const res = await axios.get('http://localhost:3000/results')
+      const res = await axios.get(process.env.VUE_APP_BACKEND + '/results')
       this.results = res.data
       this.avg_array = this.values.map((value) => {
         return this.results.filter(result => result !== null).reduce((acc, result) => acc + result[value], 0) / this.results.filter(result => result !== null).length
@@ -89,7 +89,7 @@ export default {
     },
     postLogin() {
       axios
-        .post('http://localhost:3000/login', {
+        .post(process.env.VUE_APP_BACKEND + '/login', {
           user: this.login.user,
           pass: this.login.pass
         })

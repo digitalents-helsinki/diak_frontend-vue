@@ -59,7 +59,7 @@ export default {
   methods: {
     getResults() {
       axios
-      .get('http://localhost:3000/result/' + this.$route.params.resultId)
+      .get(process.env.VUE_APP_BACKEND + '/result/' + this.$route.params.resultId)
       .then(res => {
         this.resultData = res.data[0]
       })

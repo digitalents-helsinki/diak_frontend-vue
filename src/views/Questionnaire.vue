@@ -472,7 +472,7 @@ export default {
     saveQuestions() {
       axios({
         method: 'POST',
-        url: 'http://localhost:3000/result',
+        url: process.env.VUE_APP_BACKEND + '/result',
         data: { ...this.questiondata }
       })
       .then(res => {
