@@ -1,22 +1,28 @@
 <template>
   <div class="home">
-    <div class="container-fluid" id="home-top">
-    </div>
-    <div class="container">
-      <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
-      <h1>{{ $t('message.welcome')}}</h1>
-      <div class="text-container">
-        <div class="text-container-content">
-          <img src="../images/diak-meter.svg" alt="" />
-          <p>{{ $t('message.help_text_1') }}</p>
+    <div class="container main">
+      <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="logo" />
+      <div class="textContainer">
+        <div class="container-fluid" id="textContainer-top">
+          <p class="welcomeMessage">{{ $t('message.home') }}</p>
         </div>
-        <div class="text-container-content">
-          <img src="../images/DiakThumbs.svg" alt="" />
-          <p>{{ $t('message.help_text_2') }}</p>
-        </div>
-        <div class="text-container-content">
-          <img src="../images/diak-balance.svg" alt="" />
-          <p>{{ $t('message.help_text_3') }}</p>
+        <div class="text-container">
+          <div class="text-container-content">
+            <img src="../images/diak-meter.svg" alt="" />
+            <p>{{ $t('message.help_text_1') }}</p>
+          </div>
+          <div class="text-container-content">
+            <img src="../images/DiakThumbs.svg" alt="" />
+            <p>{{ $t('message.help_text_2') }}</p>
+          </div>
+          <div class="text-container-content">
+            <img src="../images/diak-balance.svg" alt="" />
+            <p>{{ $t('message.help_text_3') }}</p>
+          </div>
+          <div class="text-container-content">
+            <img src="../images/Diak-null.svg" alt="" />
+            <p>{{ $t('message.help_text_4') }}</p>
+          </div>
         </div>
         <button @click="moveQuestionnaire" class="btn btn-primary">{{ $t('message.begin') }}</button>
       </div>
@@ -41,43 +47,44 @@ export default {
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
-  overflow: hidden;
+  //overflow: hidden;
 
-  #home-top{
-    background-color:#80CDE6;
-    height:16vh;
-    margin-bottom:1rem;
-  }
-
-  .container {
+  .main {
     display: flex;
-    flex-flow: column nowrap;
+    flex-direction: column;
     background-color: white;
     padding-bottom: 5vh;
     align-items: center;
     text-align: center;
+    margin-top:2rem;
 
-    img {
-      height: 70px;
+    #logo {
+    width:80%;
     }
 
-    h1 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #350E7E;
-      width: 60vw;
-      margin-bottom: 2rem;
-    }
+    .textContainer{
+      display: flex;
+      flex-direction: column;
+      margin-top:2rem;
+        
+      #textContainer-top{
+        background-color:#80CDE6;
+        color:#FFFFFF;
+        padding: 2vh;
+        
+        .welcomeMessage {
+          font-size:1.1em;
+          font-weight:bold;
+        }
+     }
 
     .text-container {
       background-color: #F7F6F6;
-      padding: 2rem;
-      border-radius: 4px;
       display: flex;
-      flex-flow: column nowrap;
-      box-shadow: 0 2px 2px lightgray; 
+      flex-direction: column;
+      box-shadow: 0 2px 2px lightgray;
+      font-size:1rem;
 
-   
       div {
         display: flex;
         flex-flow: row nowrap;
@@ -95,21 +102,51 @@ export default {
           flex-basis: 80%;
           font-weight: bold;
           color:#353535;
-          
         }
       }
-
+    }
       button {
         margin-top: 2rem;
         border-radius: 50px;
         box-shadow: 0 5px 5px gray;
         line-height: 2;
-        width: 8rem;
         align-self: center;
         background-color: #350E7E;
+        font-weight:bold;
+        color:#FFFFFF;
+        padding:1rem 3rem;
+        font-size:1.1rem;
       }
     }
   }
 }
+@media screen and (min-width: 575px) { 
 
+    .welcomeMessage {
+      font-size: 1.1em !important;
+    }
+
+    .text-container p {
+      font-size: 1em !important;
+    }
+
+    button {
+     padding:1rem 7rem !important;
+    font-size:1.1rem !important;
+    } 
+  }
+
+  @media screen and (min-width: 768px) { 
+
+    #logo {
+      width:78% !important;
+    }
+  }
+
+  @media screen and (min-width: 1000px) { 
+
+    #logo {
+      width:57% !important;
+    }
+  }
 </style>

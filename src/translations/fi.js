@@ -1,6 +1,7 @@
 export const fi = {
   message: {
     welcome: 'Tervetuloa 3X10D elämäntilannemittariin',
+    home:'Tervetuloa 3X10D kyselylomakkeeseemme',
     begin: 'Aloita',
     help: 'Ohjeet',
     next: 'Seuraava',
@@ -33,6 +34,7 @@ export const fi = {
     help_text_life_as_whole: 'Elämä kokonaisuutena sisältää kaiken, kuinka nautittavaa elämä on.',
     help_text_1: 'Lue ensin kysymys ja arvioi asteikolta 0-10 mielestäsi sopivin numero.',
     help_text_2: '0 tarkoittaa, että olet erittäin tyytymätön ja 10 erittäin tyytyväinen.',
-    help_text_3: '5 tarkoittaa, että et ole kumpaakaan.'
+    help_text_3: '5 tarkoittaa, että et ole kumpaakaan.',
+    help_text_4: 'Voit myös jättää kysymyksen vastaamatta.'
   }
 }
