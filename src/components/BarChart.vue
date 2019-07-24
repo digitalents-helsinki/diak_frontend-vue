@@ -15,6 +15,11 @@ export default {
               min: 0,
               max: 10
             }
+          }],
+          xAxes: [{
+            gridLines: {
+              display: false
+            }
           }]
         }
       },
@@ -27,16 +32,16 @@ export default {
             backgroundColor: 'lightgreen',
             borderColor: 'green',
             errorBars: {
-              'Terveydentila': {plus: this.dvddata[0], minus: this.dvddata[0]},
-              'Kyky voittaa...': {plus: this.dvddata[1], minus: this.dvddata[1]},
-              'Asumisolot': {plus: this.dvddata[2], minus: this.dvddata[2]},
-              'Päivittäinen pärjääminen': {plus: this.dvddata[3], minus: this.dvddata[3]},
-              'Perhe': {plus: this.dvddata[4], minus: this.dvddata[4]},
-              'Ystävät': {plus: this.dvddata[5], minus: this.dvddata[5]},
-              'Taloudellinen tilanne': {plus: this.dvddata[6], minus: this.dvddata[6]},
-              'Vahvuudet': {plus: this.dvddata[7], minus: this.dvddata[7]},
-              'Itsetunto': {plus: this.dvddata[8], minus: this.dvddata[8]},
-              'Elämän kokonaisuus': {plus: this.dvddata[9], minus: this.dvddata[9]}
+              'Terveydentila': {plus: this.dvddata[0], minus: this.checkBelowZero(this.dvddata[0], this.avgdata[0])},
+              'Kyky voittaa...': {plus: this.dvddata[1], minus: this.checkBelowZero(this.dvddata[1], this.avgdata[1])},
+              'Asumisolot': {plus: this.dvddata[2], minus: this.checkBelowZero(this.dvddata[2], this.avgdata[2])},
+              'Päivittäinen pärjääminen': {plus: this.dvddata[3], minus: this.checkBelowZero(this.dvddata[3], this.avgdata[3])},
+              'Perhe': {plus: this.dvddata[4], minus: this.checkBelowZero(this.dvddata[4], this.avgdata[4])},
+              'Ystävät': {plus: this.dvddata[5], minus: this.checkBelowZero(this.dvddata[5], this.avgdata[5])},
+              'Taloudellinen tilanne': {plus: this.dvddata[6], minus: this.checkBelowZero(this.dvddata[6], this.avgdata[6])},
+              'Vahvuudet': {plus: this.dvddata[7], minus: this.checkBelowZero(this.dvddata[7], this.avgdata[7])},
+              'Itsetunto': {plus: this.dvddata[8], minus: this.checkBelowZero(this.dvddata[8], this.avgdata[8])},
+              'Elämän kokonaisuus': {plus: this.dvddata[9], minus: this.checkBelowZero(this.dvddata[9], this.avgdata[9])}
             }
           }
         ]
@@ -45,6 +50,15 @@ export default {
   },
   mounted() {
     this.renderChart(this.data, this.options)
+  },
+  methods: {
+    checkBelowZero: (dvd, avg) => {
+      if (avg - dvd < 0) {
+        return avg
+      } else {
+        return dvd
+      }
+    }
   },
   props: ['avgdata', 'dvddata']
 }
