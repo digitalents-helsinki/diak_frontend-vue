@@ -666,7 +666,6 @@ export default {
 textarea {
   width: 100%;
   border-radius: 4px;
-  margin-top:2rem;
 }
 
 textarea::placeholder {
