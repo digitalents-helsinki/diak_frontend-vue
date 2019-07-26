@@ -66,7 +66,7 @@
           <p v-if="help_text_visible === 'overcoming'">{{ $t('message.help_text_overcoming') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.overcoming}}</p>
-            <b-form-input type="range" min="0" max="10" v-model="questiondata.overcoming" />
+            <b-form-input v-bind:class="{activeRange: questiondata.overcoming}" type="range" min="0" max="10" v-model="questiondata.overcoming" />
             <div class="rangeLabel-mobile">
                 <div>0</div>
                 <div>10</div>
@@ -101,7 +101,7 @@
           <p v-if="help_text_visible === 'living'">{{ $t('message.help_text_living') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.living}}</p>
-            <b-form-input type="range" min="0" max="10" v-model="questiondata.living" />
+            <b-form-input v-bind:class="{activeRange: questiondata.living}" type="range" min="0" max="10" v-model="questiondata.living" />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -136,7 +136,7 @@
           <p v-if="help_text_visible === 'coping'">{{ $t('message.help_text_coping') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.coping}}</p>
-            <b-form-input type="range" min="0" max="10" v-model="questiondata.coping" />
+            <b-form-input v-bind:class="{activeRange: questiondata.coping}" type="range" min="0" max="10" v-model="questiondata.coping" />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -171,7 +171,7 @@
           <p v-if="help_text_visible === 'family'">{{ $t('message.help_text_family') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.family}}</p>
-            <b-form-input type="range" min="0" max="10" v-model="questiondata.family" />
+            <b-form-input v-bind:class="{activeRange: questiondata.family}" type="range" min="0" max="10" v-model="questiondata.family" />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -206,7 +206,7 @@
           <p v-if="help_text_visible === 'friends'">{{ $t('message.help_text_friends') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.friends}}</p>
-            <b-form-input type="range" min="0" max="10" v-model="questiondata.friends" />
+            <b-form-input v-bind:class="{activeRange: questiondata.friends}" type="range" min="0" max="10" v-model="questiondata.friends" />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -241,7 +241,7 @@
           <p v-if="help_text_visible === 'finance'">{{ $t('message.help_text_finance') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.finance}}</p>
-            <b-form-input type="range" min="0" max="10" v-model="questiondata.finance" />
+            <b-form-input v-bind:class="{activeRange: questiondata.finance}" type="range" min="0" max="10" v-model="questiondata.finance" />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -276,7 +276,7 @@
           <p v-if="help_text_visible === 'strengths'">{{ $t('message.help_text_strengths') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.strengths}}</p>
-            <b-form-input type="range" min="0" max="10" v-model="questiondata.strengths" />
+            <b-form-input v-bind:class="{activeRange: questiondata.strengths}" type="range" min="0" max="10" v-model="questiondata.strengths" />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -311,7 +311,7 @@
           <p v-if="help_text_visible === 'self_esteem'">{{ $t('message.help_text_self_esteem') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.self_esteem}}</p>
-            <b-form-input type="range" min="0" max="10" v-model="questiondata.self_esteem" />
+            <b-form-input v-bind:class="{activeRange: questiondata.self_esteem}" type="range" min="0" max="10" v-model="questiondata.self_esteem" />
             <div class="rangeLabel-mobile">
                 <div>0</div>
                 <div>10</div>
@@ -346,7 +346,7 @@
           <p v-if="help_text_visible === 'life_as_whole'">{{ $t('message.help_text_life_as_whole') }}</p>
          <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.life_as_whole}}</p>
-            <b-form-input type="range" min="0" max="10" v-model="questiondata.life_as_whole" />
+            <b-form-input v-bind:class="{activeRange: questiondata.life_as_whole}" type="range" min="0" max="10" v-model="questiondata.life_as_whole" />
             <div class="rangeLabel-mobile">
                 <div>0</div>
                 <div>10</div>
@@ -604,6 +604,11 @@ export default {
       }
 
       .range-input{
+
+        .rangeQuestiondata{
+          font-size:1.8em;
+        }
+        
         .rangeLabel-mobile{
           display: -webkit-flex;
           display: flex;
@@ -613,6 +618,19 @@ export default {
 
         .rangeLabel  {
           display: none;
+        }
+        .activeRange {
+          &::-webkit-slider-thumb {
+            background: #350E7E;
+          }
+
+          &::-moz-range-thumb {
+            background: #350E7E;
+          }
+
+          &::-ms-thumb {
+            background: #350E7E;
+          }
         }
       }
 
@@ -648,7 +666,7 @@ export default {
 textarea {
   width: 100%;
   border-radius: 4px;
-  margin-top:1.8rem;
+  margin-top:2rem;
 }
 
 textarea::placeholder {
@@ -849,19 +867,7 @@ textarea::placeholder {
   }
 }
 
-.activeRange {
-  &::-webkit-slider-thumb {
-    background: blue;
-  }
 
-  &::-moz-range-thumb {
-    background: blue;
-  }
-
-  &::-ms-thumb {
-    background: blue;
-  }
-}
 
 @media screen and (min-width: 1025px) {
   
@@ -890,6 +896,10 @@ textarea::placeholder {
 
   .question_text p:nth-of-type(2) {
     font-size:1.3em !important;
+  }
+  
+  textarea {
+  margin-top:2rem;
   }
 }
 
