@@ -1,9 +1,9 @@
 <template>
   <div class="background">
-  <div class="container-fluid" id="questionnaire-top">
-  <img class="logo" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
-  <button @click="toggleHelp" class="btn buttonOhjeet-Ohjeet">Ohjeet</button>
-  </div>
+    <div class="container-fluid" id="questionnaire-top">
+      <img class="logo" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+      <button @click="toggleHelp" class="btn buttonOhjeet-Ohjeet">Ohjeet</button>
+    </div>
     <div @click="toggleHelp" class="dim-background" v-show="help_visible">
       <div class="help-container">
         <p>{{ $t('message.help_text_1') }}</p>
@@ -16,7 +16,10 @@
           <button class="btn btn-primary">{{ $t('message.cancel_save') }}</button>
         </div>
         <div>
-          <button @click.prevent="moveHome" class="btn btn-primary">{{ $t('message.cancel_discard') }}</button>
+          <button
+            @click.prevent="moveHome"
+            class="btn btn-primary"
+          >{{ $t('message.cancel_discard') }}</button>
         </div>
       </div>
     </div>
@@ -25,35 +28,48 @@
       <form>
         <div class="question" v-show="questionnum == 0">
           <div class="question_text">
-            <div class="questionHelp_button"> 
+            <div class="questionHelp_button">
               <p>Kysymys 1.</p>
-              <button class="btn help_button buttonHelp"  @click.prevent="toggleQuestionHelp('health')">?</button>
-          </div>
+              <button
+                class="btn help_button buttonHelp"
+                @click.prevent="toggleQuestionHelp('health')"
+              >?</button>
+            </div>
             <p v-html="$t('message.question_health')"></p>
           </div>
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
           <div class="range-input">
-          <p class="rangeQuestiondata">{{questiondata.health}}</p>
-            <b-form-input v-bind:class="{activeRange: questiondata.health}" type="range" min="0" max="10" v-model="questiondata.health" />
-              <div class="rangeLabel-mobile">
-                <div>0</div>
-                <div>10</div>
-              </div>
-              <div class="rangeLabel">
-                <div>0</div>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>
-                <div>7</div>
-                <div>8</div>
-                <div>9</div>
-                <div>10</div>
-              </div>
+            <p class="rangeQuestiondata">{{questiondata.health}}</p>
+            <b-form-input
+              v-bind:class="{activeRange: questiondata.health}"
+              type="range"
+              min="0"
+              max="10"
+              v-model="questiondata.health"
+            />
+            <div class="rangeLabel-mobile">
+              <div>0</div>
+              <div>10</div>
             </div>
-           <textarea v-model="questiondata.health_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
+            <div class="rangeLabel">
+              <div>0</div>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>10</div>
+            </div>
+          </div>
+          <textarea
+            v-model="questiondata.health_desc"
+            rows="3"
+            v-bind:placeholder="$t('message.question_desc_placeholder')"
+          ></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
@@ -63,17 +79,26 @@
           <div class="question_text">
             <div class="questionHelp_button">
               <p>Kysymys 2.</p>
-              <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('overcoming')">?</button>
+              <button
+                class="btn help_button buttonHelp"
+                @click.prevent="toggleQuestionHelp('overcoming')"
+              >?</button>
             </div>
             <p v-html="$t('message.question_overcoming')"></p>
           </div>
           <p v-if="help_text_visible === 'overcoming'">{{ $t('message.help_text_overcoming') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.overcoming}}</p>
-            <b-form-input v-bind:class="{activeRange: questiondata.overcoming}" type="range" min="0" max="10" v-model="questiondata.overcoming" />
+            <b-form-input
+              v-bind:class="{activeRange: questiondata.overcoming}"
+              type="range"
+              min="0"
+              max="10"
+              v-model="questiondata.overcoming"
+            />
             <div class="rangeLabel-mobile">
-                <div>0</div>
-                <div>10</div>
+              <div>0</div>
+              <div>10</div>
             </div>
             <div class="rangeLabel">
               <div>0</div>
@@ -89,10 +114,17 @@
               <div>10</div>
             </div>
           </div>
-          <textarea v-model="questiondata.overcoming_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
+          <textarea
+            v-model="questiondata.overcoming_desc"
+            rows="3"
+            v-bind:placeholder="$t('message.question_desc_placeholder')"
+          ></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button
+              class="btn button-previous"
+              @click.prevent="toPreviousQuestion"
+            >{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -100,20 +132,29 @@
           <div class="question_text">
             <div class="questionHelp_button">
               <p>Kysymys 3.</p>
-              <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('living')">?</button>
+              <button
+                class="btn help_button buttonHelp"
+                @click.prevent="toggleQuestionHelp('living')"
+              >?</button>
             </div>
             <p v-html="$t('message.question_living')"></p>
           </div>
           <p v-if="help_text_visible === 'living'">{{ $t('message.help_text_living') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.living}}</p>
-            <b-form-input v-bind:class="{activeRange: questiondata.living}" type="range" min="0" max="10" v-model="questiondata.living" />
+            <b-form-input
+              v-bind:class="{activeRange: questiondata.living}"
+              type="range"
+              min="0"
+              max="10"
+              v-model="questiondata.living"
+            />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
             </div>
             <div class="rangeLabel">
-               <div>0</div>
+              <div>0</div>
               <div>1</div>
               <div>2</div>
               <div>3</div>
@@ -126,10 +167,17 @@
               <div>10</div>
             </div>
           </div>
-          <textarea v-model="questiondata.living_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
+          <textarea
+            v-model="questiondata.living_desc"
+            rows="3"
+            v-bind:placeholder="$t('message.question_desc_placeholder')"
+          ></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button
+              class="btn button-previous"
+              @click.prevent="toPreviousQuestion"
+            >{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -137,36 +185,52 @@
           <div class="question_text">
             <div class="questionHelp_button">
               <p>Kysymys 4.</p>
-              <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('coping')">?</button>
+              <button
+                class="btn help_button buttonHelp"
+                @click.prevent="toggleQuestionHelp('coping')"
+              >?</button>
             </div>
             <p v-html="$t('message.question_coping')"></p>
           </div>
           <p v-if="help_text_visible === 'coping'">{{ $t('message.help_text_coping') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.coping}}</p>
-            <b-form-input v-bind:class="{activeRange: questiondata.coping}" type="range" min="0" max="10" v-model="questiondata.coping" />
+            <b-form-input
+              v-bind:class="{activeRange: questiondata.coping}"
+              type="range"
+              min="0"
+              max="10"
+              v-model="questiondata.coping"
+            />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
             </div>
             <div class="rangeLabel">
-                <div>0</div>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>
-                <div>7</div>
-                <div>8</div>
-                <div>9</div>
-                <div>10</div>
+              <div>0</div>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>10</div>
             </div>
           </div>
-          <textarea v-model="questiondata.coping_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
+          <textarea
+            v-model="questiondata.coping_desc"
+            rows="3"
+            v-bind:placeholder="$t('message.question_desc_placeholder')"
+          ></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button
+              class="btn button-previous"
+              @click.prevent="toPreviousQuestion"
+            >{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -174,14 +238,23 @@
           <div class="question_text">
             <div class="questionHelp_button">
               <p>Kysymys 5.</p>
-              <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('family')">?</button>
+              <button
+                class="btn help_button buttonHelp"
+                @click.prevent="toggleQuestionHelp('family')"
+              >?</button>
             </div>
             <p v-html="$t('message.question_family')"></p>
           </div>
           <p v-if="help_text_visible === 'family'">{{ $t('message.help_text_family') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.family}}</p>
-            <b-form-input v-bind:class="{activeRange: questiondata.family}" type="range" min="0" max="10" v-model="questiondata.family" />
+            <b-form-input
+              v-bind:class="{activeRange: questiondata.family}"
+              type="range"
+              min="0"
+              max="10"
+              v-model="questiondata.family"
+            />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -200,10 +273,17 @@
               <div>10</div>
             </div>
           </div>
-          <textarea v-model="questiondata.family_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
+          <textarea
+            v-model="questiondata.family_desc"
+            rows="3"
+            v-bind:placeholder="$t('message.question_desc_placeholder')"
+          ></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button
+              class="btn button-previous"
+              @click.prevent="toPreviousQuestion"
+            >{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -211,36 +291,52 @@
           <div class="question_text">
             <div class="questionHelp_button">
               <p>Kysymys 6.</p>
-              <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('friends')">?</button>
+              <button
+                class="btn help_button buttonHelp"
+                @click.prevent="toggleQuestionHelp('friends')"
+              >?</button>
             </div>
             <p v-html="$t('message.question_friends')"></p>
           </div>
           <p v-if="help_text_visible === 'friends'">{{ $t('message.help_text_friends') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.friends}}</p>
-            <b-form-input v-bind:class="{activeRange: questiondata.friends}" type="range" min="0" max="10" v-model="questiondata.friends" />
+            <b-form-input
+              v-bind:class="{activeRange: questiondata.friends}"
+              type="range"
+              min="0"
+              max="10"
+              v-model="questiondata.friends"
+            />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
             </div>
             <div class="rangeLabel">
-                <div>0</div>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>
-                <div>7</div>
-                <div>8</div>
-                <div>9</div>
-                <div>10</div>
+              <div>0</div>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>10</div>
             </div>
           </div>
-          <textarea v-model="questiondata.friends_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
+          <textarea
+            v-model="questiondata.friends_desc"
+            rows="3"
+            v-bind:placeholder="$t('message.question_desc_placeholder')"
+          ></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button
+              class="btn button-previous"
+              @click.prevent="toPreviousQuestion"
+            >{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -248,36 +344,52 @@
           <div class="question_text">
             <div class="questionHelp_button">
               <p>Kysymys 7.</p>
-              <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('finance')">?</button>
+              <button
+                class="btn help_button buttonHelp"
+                @click.prevent="toggleQuestionHelp('finance')"
+              >?</button>
             </div>
             <p v-html="$t('message.question_finance')"></p>
           </div>
           <p v-if="help_text_visible === 'finance'">{{ $t('message.help_text_finance') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.finance}}</p>
-            <b-form-input v-bind:class="{activeRange: questiondata.finance}" type="range" min="0" max="10" v-model="questiondata.finance" />
+            <b-form-input
+              v-bind:class="{activeRange: questiondata.finance}"
+              type="range"
+              min="0"
+              max="10"
+              v-model="questiondata.finance"
+            />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
             </div>
-             <div class="rangeLabel">
-                <div>0</div>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>
-                <div>7</div>
-                <div>8</div>
-                <div>9</div>
-                <div>10</div>
-              </div>
+            <div class="rangeLabel">
+              <div>0</div>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>10</div>
             </div>
-          <textarea v-model="questiondata.finance_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
+          </div>
+          <textarea
+            v-model="questiondata.finance_desc"
+            rows="3"
+            v-bind:placeholder="$t('message.question_desc_placeholder')"
+          ></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button
+              class="btn button-previous"
+              @click.prevent="toPreviousQuestion"
+            >{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -285,36 +397,52 @@
           <div class="question_text">
             <div class="questionHelp_button">
               <p>Kysymys 8.</p>
-              <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('strengths')">?</button>
+              <button
+                class="btn help_button buttonHelp"
+                @click.prevent="toggleQuestionHelp('strengths')"
+              >?</button>
             </div>
             <p v-html="$t('message.question_strengths')"></p>
           </div>
           <p v-if="help_text_visible === 'strengths'">{{ $t('message.help_text_strengths') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.strengths}}</p>
-            <b-form-input v-bind:class="{activeRange: questiondata.strengths}" type="range" min="0" max="10" v-model="questiondata.strengths" />
+            <b-form-input
+              v-bind:class="{activeRange: questiondata.strengths}"
+              type="range"
+              min="0"
+              max="10"
+              v-model="questiondata.strengths"
+            />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
             </div>
             <div class="rangeLabel">
-                <div>0</div>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>
-                <div>7</div>
-                <div>8</div>
-                <div>9</div>
-                <div>10</div>
-              </div>
+              <div>0</div>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>10</div>
+            </div>
           </div>
-          <textarea v-model="questiondata.strengths_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
+          <textarea
+            v-model="questiondata.strengths_desc"
+            rows="3"
+            v-bind:placeholder="$t('message.question_desc_placeholder')"
+          ></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button
+              class="btn button-previous"
+              @click.prevent="toPreviousQuestion"
+            >{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -322,17 +450,26 @@
           <div class="question_text">
             <div class="questionHelp_button">
               <p>Kysymys 9.</p>
-              <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('self_esteem')">?</button>
+              <button
+                class="btn help_button buttonHelp"
+                @click.prevent="toggleQuestionHelp('self_esteem')"
+              >?</button>
             </div>
             <p v-html="$t('message.question_self_esteem')"></p>
           </div>
           <p v-if="help_text_visible === 'self_esteem'">{{ $t('message.help_text_self_esteem') }}</p>
           <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.self_esteem}}</p>
-            <b-form-input v-bind:class="{activeRange: questiondata.self_esteem}" type="range" min="0" max="10" v-model="questiondata.self_esteem" />
+            <b-form-input
+              v-bind:class="{activeRange: questiondata.self_esteem}"
+              type="range"
+              min="0"
+              max="10"
+              v-model="questiondata.self_esteem"
+            />
             <div class="rangeLabel-mobile">
-                <div>0</div>
-                <div>10</div>
+              <div>0</div>
+              <div>10</div>
             </div>
             <div class="rangeLabel">
               <div>0</div>
@@ -348,10 +485,17 @@
               <div>10</div>
             </div>
           </div>
-          <textarea v-model="questiondata.self_esteem_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
+          <textarea
+            v-model="questiondata.self_esteem_desc"
+            rows="3"
+            v-bind:placeholder="$t('message.question_desc_placeholder')"
+          ></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button
+              class="btn button-previous"
+              @click.prevent="toPreviousQuestion"
+            >{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -359,17 +503,28 @@
           <div class="question_text">
             <div class="questionHelp_button">
               <p>Kysymys 10.</p>
-              <button class="btn help_button buttonHelp" @click.prevent="toggleQuestionHelp('life_as_whole')">?</button>
+              <button
+                class="btn help_button buttonHelp"
+                @click.prevent="toggleQuestionHelp('life_as_whole')"
+              >?</button>
             </div>
             <p v-html="$t('message.question_life_as_whole')"></p>
           </div>
-          <p v-if="help_text_visible === 'life_as_whole'">{{ $t('message.help_text_life_as_whole') }}</p>
-         <div class="range-input">
+          <p
+            v-if="help_text_visible === 'life_as_whole'"
+          >{{ $t('message.help_text_life_as_whole') }}</p>
+          <div class="range-input">
             <p class="rangeQuestiondata">{{questiondata.life_as_whole}}</p>
-            <b-form-input v-bind:class="{activeRange: questiondata.life_as_whole}" type="range" min="0" max="10" v-model="questiondata.life_as_whole" />
+            <b-form-input
+              v-bind:class="{activeRange: questiondata.life_as_whole}"
+              type="range"
+              min="0"
+              max="10"
+              v-model="questiondata.life_as_whole"
+            />
             <div class="rangeLabel-mobile">
-                <div>0</div>
-                <div>10</div>
+              <div>0</div>
+              <div>10</div>
             </div>
             <div class="rangeLabel">
               <div>0</div>
@@ -385,10 +540,17 @@
               <div>10</div>
             </div>
           </div>
-          <textarea v-model="questiondata.life_as_whole_desc" rows="3" v-bind:placeholder="$t('message.question_desc_placeholder')"></textarea>
+          <textarea
+            v-model="questiondata.life_as_whole_desc"
+            rows="3"
+            v-bind:placeholder="$t('message.question_desc_placeholder')"
+          ></textarea>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
-            <button class="btn button-previous" @click.prevent="toPreviousQuestion">{{ $t('message.previous') }}</button>
+            <button
+              class="btn button-previous"
+              @click.prevent="toPreviousQuestion"
+            >{{ $t('message.previous') }}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
@@ -396,48 +558,61 @@
           <h3>Kooste vastauksistasi</h3>
           <div class="results">
             <div>
-              <span>terveydentilaasi</span><span>{{questiondata.health}}</span>
+              <span>terveydentilaasi</span>
+              <span v-bind:class="{notAnswered : !questiondata.health}">{{questiondata.health ? questiondata.health : 'ei vastattu'}}</span>
               <p>{{questiondata.health_desc}}</p>
             </div>
             <div>
-              <span>kykyysi voittaa elämässä eteen tulevia vaikeuksia</span><span>{{questiondata.overcoming}}</span>
+              <span>kykyysi voittaa elämässä eteen tulevia vaikeuksia</span>
+              <span>{{questiondata.overcoming}}</span>
               <p>{{questiondata.overcoming_desc}}</p>
             </div>
             <div>
-              <span>asumisoloihisi</span><span>{{questiondata.living}}</span>
+              <span>asumisoloihisi</span>
+              <span>{{questiondata.living}}</span>
               <p>{{questiondata.living_desc}}</p>
             </div>
             <div>
-              <span>päivittäiseen pärjäämiseesi</span><span>{{questiondata.coping}}</span>
+              <span>päivittäiseen pärjäämiseesi</span>
+              <span>{{questiondata.coping}}</span>
               <p>{{questiondata.coping_desc}}</p>
             </div>
             <div>
-              <span>perheeseesi ja läheisiisi</span><span>{{questiondata.family}}</span>
+              <span>perheeseesi ja läheisiisi</span>
+              <span>{{questiondata.family}}</span>
               <p>{{questiondata.family_desc}}</p>
             </div>
             <div>
-              <span>luotettavien ystävien määrään</span><span>{{questiondata.friends}}</span>
+              <span>luotettavien ystävien määrään</span>
+              <span>{{questiondata.friends}}</span>
               <p>{{questiondata.friends_desc}}</p>
             </div>
             <div>
-              <span>taloudelliseen tilanteeseesi</span><span>{{questiondata.finance}}</span>
+              <span>taloudelliseen tilanteeseesi</span>
+              <span>{{questiondata.finance}}</span>
               <p>{{questiondata.finance_desc}}</p>
             </div>
             <div>
-              <span>omien vahvuuksien kehittämiseen (esim. harrastamalla mieluisia asioita)</span><span>{{questiondata.strengths}}</span>
+              <span>omien vahvuuksien kehittämiseen (esim. harrastamalla mieluisia asioita)</span>
+              <span>{{questiondata.strengths}}</span>
               <p>{{questiondata.strengths_desc}}</p>
             </div>
             <div>
-              <span>itsetuntoosi</span><span>{{questiondata.self_esteem}}</span>
+              <span>itsetuntoosi</span>
+              <span>{{questiondata.self_esteem}}</span>
               <p>{{questiondata.self_esteem_desc}}</p>
             </div>
             <div>
-              <span>elämääsi kokonaisuutena</span><span>{{questiondata.life_as_whole}}</span>
+              <span>elämääsi kokonaisuutena</span>
+              <span>{{questiondata.life_as_whole}}</span>
               <p>{{questiondata.life_as_whole_desc}}</p>
             </div>
           </div>
           <div class="review-buttons">
-            <button class="btn btn-primary" @click.prevent="toPreviousQuestion">{{ $t('message.return')}}</button>
+            <button
+              class="btn btn-primary"
+              @click.prevent="toPreviousQuestion"
+            >{{ $t('message.return')}}</button>
             <button class="btn btn-primary" @click.prevent="saveQuestions">{{ $t('message.send')}}</button>
           </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
@@ -447,10 +622,10 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import axios from "axios";
 
 export default {
-  name: 'Questionnaire',
+  name: "Questionnaire",
   data() {
     return {
       questiondata: {
@@ -477,87 +652,90 @@ export default {
       },
       questionnum: 0,
       help_visible: false,
-      help_text_visible: '',
+      help_text_visible: "",
       cancel_visible: false,
       show: false
-    }
+    };
   },
   methods: {
     toNextQuestion() {
-      this.questionnum++
+      this.questionnum++;
     },
     toPreviousQuestion() {
-      this.questionnum--
+      this.questionnum--;
     },
     saveQuestions() {
       axios({
-        method: 'POST',
-        url: process.env.VUE_APP_BACKEND + '/result',
+        method: "POST",
+        url: process.env.VUE_APP_BACKEND + "/result",
         data: { ...this.questiondata }
       })
-      .then(res => {
-        if (res.data.status === 'ok') {
-          this.$router.push({ path: `/results/${res.data.resultId}` })
-        }
-      })
-      .catch(err => {
-      })
+        .then(res => {
+          if (res.data.status === "ok") {
+            this.$router.push({ path: `/results/${res.data.resultId}` });
+          }
+        })
+        .catch(err => {});
     },
     toggleHelp() {
-      this.help_visible = !this.help_visible
+      this.help_visible = !this.help_visible;
     },
     toggleQuestionHelp(question) {
       if (this.help_text_visible === question) {
-        this.help_text_visible = ''
+        this.help_text_visible = "";
       } else {
-        this.help_text_visible = question
+        this.help_text_visible = question;
       }
     },
     toggleCancel() {
-      this.cancel_visible = !this.cancel_visible
+      this.cancel_visible = !this.cancel_visible;
     },
     moveHome() {
-      this.$router.push({ path: '/'})
+      this.$router.push({ path: "/" });
     }
-}
-}
+  }
+};
 </script>
 <style lang="scss" scoped>
+.notAnswered {
+  color: red;
+}
+
 .background {
   //background: linear-gradient(to right, #0078f0, #80bfff);
-  background:#FFFFFF;
+  background: #ffffff;
   height: 100%;
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-end;
   overflow: hidden;
-  font-size:1rem;
+  font-size: 1rem;
 
-  #questionnaire-top{
+  #questionnaire-top {
     display: flex;
     justify-content: space-between;
-    align-items:center;
-    background-color:#80CDE6;
-    font-size:10rem;
-    height:16vh;
+    align-items: center;
+    background-color: #80cde6;
+    font-size: 10rem;
+    height: 16vh;
     overflow: hidden;
-    margin-bottom:1rem;
+    margin-bottom: 1rem;
 
-  .logo {
+    .logo {
       height: 60px;
     }
 
-  .buttonOhjeet-Ohjeet{
-    border-radius:8px 1px;
-    background-color:#80CDE6;
-    color:#FFFFFF;
-    padding:0.6rem 1.8rem;
-    font-size:1.1rem;
-    font-weight:bold;
-    text-align:center;
-    } 
+    .buttonOhjeet-Ohjeet {
+      border-radius: 8px 1px;
+      background-color: #80cde6;
+      color: #ffffff;
+      padding: 0.6rem 1.8rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-align: center;
+    }
   }
-  
+
   .help-button {
     color: white;
     align-self: flex-start;
@@ -572,11 +750,11 @@ export default {
   border-radius: 15px 15px 0 0;
   height: 85%;
   overflow: auto;
-  border-radius:14px;
+  border-radius: 14px;
 
-  .buttonOhjeet{
-    display:none;
-  } 
+  .buttonOhjeet {
+    display: none;
+  }
 
   @media screen and (min-width: 1024px) {
     width: 60vw;
@@ -594,65 +772,64 @@ export default {
       .question_text {
         display: flex;
         flex-flow: column nowrap;
-      
-        .questionHelp_button{
-          display: flex;
-          justify-content:center;
-           margin:2rem 0;
 
-          p:nth-of-type(1)  {
+        .questionHelp_button {
+          display: flex;
+          justify-content: center;
+          margin: 2rem 0;
+
+          p:nth-of-type(1) {
             font-weight: bold;
-            font-size:1.125em;   
-            color:#350E7E !important;
-           }
+            font-size: 1.125em;
+            color: #350e7e !important;
+          }
         }
 
         .help_button {
-          background-color:#350E7E;
+          background-color: #350e7e;
           width: 2rem;
           height: 2rem;
-          padding:0rem;
-          font-size:1.1rem;
-          font-weight:bold;
-          align-items:center;
-          color:#FFFFFF;
-          margin-left:2rem;
+          padding: 0rem;
+          font-size: 1.1rem;
+          font-weight: bold;
+          align-items: center;
+          color: #ffffff;
+          margin-left: 2rem;
           //align-self: flex-end;
         }
       }
 
       .question_text p:nth-of-type(1) {
-        font-size:1.125em;
-        color:#353535;
+        font-size: 1.125em;
+        color: #353535;
       }
 
-      .range-input{
-
-        .rangeQuestiondata{
-          font-size:1.8em;
+      .range-input {
+        .rangeQuestiondata {
+          font-size: 1.8em;
         }
-        
-        .rangeLabel-mobile{
+
+        .rangeLabel-mobile {
           display: -webkit-flex;
           display: flex;
-          justify-content:space-between;
+          justify-content: space-between;
           font-weight: bold;
         }
 
-        .rangeLabel  {
+        .rangeLabel {
           display: none;
         }
         .activeRange {
           &::-webkit-slider-thumb {
-            background: #350E7E;
+            background: #350e7e;
           }
 
           &::-moz-range-thumb {
-            background: #350E7E;
+            background: #350e7e;
           }
 
           &::-ms-thumb {
-            background: #350E7E;
+            background: #350e7e;
           }
         }
       }
@@ -668,19 +845,19 @@ export default {
           line-height: 2;
           width: 8rem;
         }
-        .button-next{
-        background-color:#353535;
-        color:#FFFFFF;
+        .button-next {
+          background-color: #353535;
+          color: #ffffff;
         }
-        .button-previous{
-        background-color:#353535;
-        color:#FFFFFF;
+        .button-previous {
+          background-color: #353535;
+          color: #ffffff;
         }
       }
       .cancel-button {
-        color: #350E7E;
+        color: #350e7e;
         opacity: 70%;
-        font-size:1.3em;
+        font-size: 1.3em;
       }
     }
   }
@@ -693,11 +870,10 @@ textarea {
 
 textarea::placeholder {
   opacity: 40%;
-  color:#353535;
+  color: #353535;
 }
 
 .review {
-
   .results {
     display: flex;
     flex-flow: column;
@@ -731,7 +907,7 @@ textarea::placeholder {
   }
 
   .cancel-button {
-    color:lightskyblue;
+    color: lightskyblue;
   }
 }
 .dim-background {
@@ -743,7 +919,7 @@ textarea::placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size:1.1rem;
+  font-size: 1.1rem;
 
   .help-container {
     background-color: white;
@@ -792,55 +968,51 @@ textarea::placeholder {
 
 //iPhone 4 Portrait
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
-
- textarea {
-  width: 100%;
-  border-radius: 4px;
-  margin:1rem 0;
-  padding-bottom:5rem;
+  textarea {
+    width: 100%;
+    border-radius: 4px;
+    margin: 1rem 0;
+    padding-bottom: 5rem;
   }
 
   textarea::placeholder {
     opacity: 40%;
-    color:#353535;
-    font-size:1rem;
-    }
+    color: #353535;
+    font-size: 1rem;
+  }
 
   .cancel-button {
-    margin:1rem 0;
+    margin: 1rem 0;
   }
 }
 
 //iPhone 5 Portrait
 @media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
-  
   textarea {
     width: 100%;
     border-radius: 4px;
-    margin:1rem 0;
-    padding-bottom:5rem;
-    }
+    margin: 1rem 0;
+    padding-bottom: 5rem;
+  }
 
   textarea::placeholder {
     opacity: 40%;
-    color:#353535;
-    font-size:1rem;
-    }
+    color: #353535;
+    font-size: 1rem;
+  }
 
   .cancel-button {
-    margin:1rem 0;
+    margin: 1rem 0;
   }
 }
 
 @media only screen and (min-width: 575px) {
-  
-  .questionHelp_button p{
-    font-size:1.25em !important;   
+  .questionHelp_button p {
+    font-size: 1.25em !important;
   }
 }
 
 @media only screen and (min-width: 768px) {
-
   #questionnaire-top > img {
     height: 70px !important;
   }
@@ -850,25 +1022,25 @@ textarea::placeholder {
   }
 
   .question_text p:nth-of-type(1) {
-    font-size:1.2em !important;
+    font-size: 1.2em !important;
   }
 
-  .rangeLabel-mobile{
+  .rangeLabel-mobile {
     display: none !important;
   }
 
-  .rangeLabel  {
+  .rangeLabel {
     display: block !important;
     display: -webkit-flex !important;
     display: flex !important;
     justify-content: space-between !important;
-    padding: 0 0.30rem !important;
+    padding: 0 0.3rem !important;
   }
 
   .rangeLabel > div {
     height: 0.6875rem;
     width: 0.0625rem;
-    background:#000000;
+    background: #000000;
     font-weight: bold;
     line-height: 2.875rem;
     display: -webkit-flex;
@@ -893,65 +1065,62 @@ textarea::placeholder {
 }
 
 @media only screen and (min-width: 1025px) {
-  
-  #questionnaire-top{
+  #questionnaire-top {
     display: flex !important;
     justify-content: center !important;
   }
 
-  .buttonOhjeet-Ohjeet{
-    display:none !important;
+  .buttonOhjeet-Ohjeet {
+    display: none !important;
   }
 
-  .buttonOhjeet{
-    display:block !important;
-    position:absolute !important;
-    top:16%;
-    left:20%;
-    border-radius:8px 1px;
-    background-color:#80CDE6;
-    color:#FFFFFF;
-    padding:0.6rem 1.8rem;
-    font-size:1rem;
-    font-weight:bold;
-    text-align:center;
+  .buttonOhjeet {
+    display: block !important;
+    position: absolute !important;
+    top: 16%;
+    left: 20%;
+    border-radius: 8px 1px;
+    background-color: #80cde6;
+    color: #ffffff;
+    padding: 0.6rem 1.8rem;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
   }
 
   .question_text p:nth-of-type(1) {
-    font-size:1.3em !important;
+    font-size: 1.3em !important;
   }
 
   textarea {
-    margin-top:3rem;
-    margin-bottom:1rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
   }
 }
 
-@media only screen and (min-width: 1400px){
-
+@media only screen and (min-width: 1400px) {
   .question_text p:nth-of-type(1) {
-    padding:0 5rem !important;
+    padding: 0 5rem !important;
   }
 
-  .cancel-container{
-    width:30vw !important;
+  .cancel-container {
+    width: 30vw !important;
   }
 }
 
-@media only screen and (min-width: 1900px){
-  
+@media only screen and (min-width: 1900px) {
   .questionnaire {
     height: 100%;
   }
-  
-  .buttonOhjeet{
-    position:relative !important;
-    top:0%;
-    left:-5%;
+
+  .buttonOhjeet {
+    position: relative !important;
+    top: 0%;
+    left: -5%;
   }
 
-  .questionHelp_button{
-    margin-top:0rem !important;
+  .questionHelp_button {
+    margin-top: 0rem !important;
   }
 }
 </style>

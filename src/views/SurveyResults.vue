@@ -11,108 +11,185 @@
       </div>
       <div class="text-center">
         <p>Vastaajien lukumäärä {{respondent_size}}</p>
-        <downloadexcel class="btn btn-primary" :data="results" :fields="excel_fields" name="tulokset.xls">Lataa tiedosto</downloadexcel>
+      </div>
+      <div class="values">
+        <div class="labels">
+          <h4>Values</h4>
+          <p>Terveys</p>
+          <p>Resilienssi</p>
+          <p>Asuminen</p>
+          <p>Pärjääminen</p>
+          <p>Perhesuhteet</p>
+          <p>Ystävyyssuhteet</p>
+          <p>Talous</p>
+          <p>Itsensä kehittäminen</p>
+          <p>Itsetunto</p>
+          <p>Elämään tyytyväisyys</p>
+        </div>
+        <div class="averages">
+          <h4>Keskiarvot</h4>
+          <p v-for="value of avg_array">{{value.toFixed(2)}}</p>
+        </div>
+        <div class="stds">
+          <h4>Keskihajonnat</h4>
+          <p v-for="value of dvd_array">{{value.toFixed(2)}}</p>
+        </div>
+        <div class="ns">
+          <h4>Lukumäärä</h4>
+          <p v-for="value of n_array">{{value}}</p>
+        </div>
+      </div>
+      <div class="text-center">
+        <downloadexcel
+          class="btn btn-primary"
+          :data="results"
+          :fields="excel_fields"
+          name="tulokset.xls"
+        >Lataa tiedosto</downloadexcel>
       </div>
     </div>
   </div>
 </template>
 <script>
-import axios from 'axios'
-import BarChart from '../components/BarChart.vue'
-import ErrorBars from 'chartjs-plugin-error-bars'
-import downloadexcel from 'vue-json-excel'
+import axios from "axios";
+import BarChart from "../components/BarChart.vue";
+import ErrorBars from "chartjs-plugin-error-bars";
+import downloadexcel from "vue-json-excel";
+import Annotation from 'chartjs-plugin-annotation';
 
 export default {
-  name: 'SurveyResults',
+  name: "SurveyResults",
   data() {
     return {
-      values:  ['health', 'overcoming', 'living', 'coping', 'family', 'friends', 'finance', 'strengths', 'self_esteem', 'life_as_whole'],
+      values: [
+        "health",
+        "overcoming",
+        "living",
+        "coping",
+        "family",
+        "friends",
+        "finance",
+        "strengths",
+        "self_esteem",
+        "life_as_whole"
+      ],
       results: undefined,
       avg_array: [],
       dvd_array: [],
       loaded: false,
       respondent_size: NaN,
       excel_fields: {
-        'Terveys': 'health',
-        'Ylitsepääseminen': 'overcoming',
-        'Asuminen': 'living',
-        'Pärjääminen': 'coping',
-        'Perhe': 'family',
-        'Ystävät': 'friends',
-        'Talous': 'finance',
-        'Vahvuudet': 'strengths',
-        'Itsetunto': 'self_esteem',
-        'Elämän kokonaisuus': 'life_as_whole'
+        Terveys: "health",
+        Ylitsepääseminen: "overcoming",
+        Asuminen: "living",
+        Pärjääminen: "coping",
+        Perhe: "family",
+        Ystävät: "friends",
+        Talous: "finance",
+        Vahvuudet: "strengths",
+        Itsetunto: "self_esteem",
+        "Elämän kokonaisuus": "life_as_whole"
       },
       loggedIn: false,
       login: {
         user: undefined,
         pass: undefined
       },
-      login_token: undefined
-    }
+      login_token: undefined,
+      items: [],
+      fields: [],
+      n_array: []
+    };
   },
   methods: {
     async getResults() {
-      const res = await axios.get(process.env.VUE_APP_BACKEND + '/results')
-      this.results = res.data
-      this.avg_array = this.values.map((value) => {
-        return this.results.filter(result => result !== null).reduce((acc, result) => acc + result[value], 0) / this.results.filter(result => result !== null).length
-      })
-      this.dvd_array = this.values.map((value) => {
-        return this.standardDeviation(this.results.filter(result => result !== null).map(result => result[value]))
-      })
-      this.respondent_size = this.results.length
-      this.loaded = true
+      const res = await axios.get(process.env.VUE_APP_BACKEND + "/results");
+      this.results = res.data;
+      this.avg_array = this.values.map(value => {
+        return(
+          this.results
+            .filter(result => result[value])
+            .reduce((acc, result) => acc + result[value], 0) /
+          this.results.filter(result => result[value]).length
+        );
+      });
+      this.dvd_array = this.values.map(value => {
+        return this.standardDeviation(
+          this.results
+            .filter(result => result[value])
+            .map(result => result[value])
+        );
+      });
+      this.n_array = this.values.map(value => {
+        return this.results.filter(result => result[value])
+          .reduce((acc, result) => acc + 1, 0)
+      });
+      this.respondent_size = this.results.length;
+      this.loaded = true;
     },
-    average(data){
-      const sum = data.reduce(function(sum, value){
+    average(data) {
+      const sum = data.reduce(function(sum, value) {
         return sum + value;
       }, 0);
 
       const avg = sum / data.length;
       return avg;
     },
-    standardDeviation(values){
+    standardDeviation(values) {
       const avg = this.average(values);
-      
-      const squareDiffs = values.map(function(value){
+
+      const squareDiffs = values.map(function(value) {
         const diff = value - avg;
         const sqrDiff = diff * diff;
         return sqrDiff;
       });
-      
+
       const avgSquareDiff = this.average(squareDiffs);
 
       const stdDev = Math.sqrt(avgSquareDiff);
       return stdDev;
     },
     postLogin() {
+      const data = JSON.stringify({
+        user: this.login.user,
+        pass: this.login.pass
+      });
       axios
-        .post(process.env.VUE_APP_BACKEND + '/login', {
-          user: this.login.user,
-          pass: this.login.pass
+        .post(process.env.VUE_APP_BACKEND + "/login", data, {
+          headers: {
+            "Content-Type": "application/json"
+          }
         })
         .then(res => {
-          this.login_token = res.data.token
-          axios.defaults.headers.common['authorization'] = this.login_token
-          this.getResults()
-        })
+          this.login_token = res.data.token;
+          axios.defaults.headers.common["authorization"] = this.login_token;
+          this.getResults();
+        });
     }
   },
   components: {
     BarChart,
     downloadexcel
   }
-}
+};
 </script>
 <style lang="scss">
 .SurveyResults {
-
   .chart-container {
     position: relative;
     height: 100%;
     width: 100vw;
+  }
+
+  .values {
+    display: flex;
+    justify-content: space-around;
+
+    .labels {
+      h4 {
+        color: white;
+      }
+    }
   }
 }
 </style>
