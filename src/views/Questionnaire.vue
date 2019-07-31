@@ -546,7 +546,7 @@
             v-bind:placeholder="$t('message.question_desc_placeholder')"
           ></textarea>
           <div class="buttons">
-            <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
+            <button class="btn button-complete" @click.prevent="toNextQuestion">{{ $t('message.complete') }}</button>
             <button
               class="btn button-previous"
               @click.prevent="toPreviousQuestion"
@@ -629,13 +629,13 @@
             </div>
           </div>
           <div class="review-buttons">
+            <button class="btn send-button" @click.prevent="saveQuestions">{{ $t('message.send')}}</button>
             <button
-              class="btn btn-primary"
+               class="btn return-button" 
               @click.prevent="toPreviousQuestion"
             >{{ $t('message.return')}}</button>
-            <button class="btn btn-primary" @click.prevent="saveQuestions">{{ $t('message.send')}}</button>
-          </div>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
+        </div>
         </div>
       </form>
     </div>
@@ -868,10 +868,17 @@ export default {
         .button-next {
           background-color: #353535;
           color: #ffffff;
+          font-weight:bold;
         }
         .button-previous {
           background-color: #353535;
           color: #ffffff;
+          font-weight:bold;
+        }
+        .button-complete{
+          background-color:#350E7E;
+          color:#FFFFFF;
+          font-weight:bold;
         }
       }
       .cancel-button {
@@ -886,18 +893,18 @@ export default {
 textarea {
   width: 100%;
   border-radius: 4px;
-}
 
 textarea::placeholder {
   opacity: 40%;
   color: #353535;
+  } 
 }
 
 .review {
 
-    h3{
-      margin:3rem;
-    }
+  h3{
+    margin:3rem;
+  }
 
   .results {
     display: flex;
@@ -905,7 +912,7 @@ textarea::placeholder {
     text-align: start;
 
     .notanswered{
-      color:red;
+      color:#A1318A;
       font-size:1.1em !important;
     }
 
@@ -940,27 +947,39 @@ textarea::placeholder {
       }
      .up{
        transform: rotate(180deg);
-    }}
+      }
+    }
   }
 
   .review-buttons {
-    margin: 1.8rem 0;
+    //margin: 1.8rem 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin:2rem 0;
 
-    button {
+    .send-button {
       border-radius: 50px;
       box-shadow: 0 5px 5px gray;
       line-height: 2;
-      width: 8rem;
+      width: 16rem;
+      padding: 1rem 2rem;
+      background-color:#350E7E;
+      color:#FFFFFF;
+      font-weight:bold;
+      margin:1rem;
+      font-size:1rem;
     }
 
-    button:nth-of-type(2) {
-      padding: 1.3rem;
-      margin-left: 1rem;
+    .return-button{
+      color:#350E7E;
+      font-size:1.1rem;
     }
-  }
 
-  .cancel-button {
-    color: lightskyblue;
+    .cancel-button {
+      color:#350E7E;
+      font-size:1.1rem;
+    }
   }
 }
 .dim-background {
