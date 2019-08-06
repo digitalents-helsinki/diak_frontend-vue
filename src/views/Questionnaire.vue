@@ -39,7 +39,11 @@
           </div>
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
           <div class="range-input">
-            <p class="rangeQuestiondata">{{questiondata.health}}</p>
+            <div class="rangeQuestiondata-icon">
+              <p class="rangeQuestiondata">{{questiondata.health}}</p>
+              <div v-show="questiondata.health" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.health = undefined"/></div>
+              <div v-show="questiondata.health"><button class="remove-button" @click.prevent="questiondata.health = undefined">Poista Vastaus</button></div>
+            </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.health}"
               type="range"
@@ -65,14 +69,19 @@
               <div>10</div>
             </div>
           </div>
-          <textarea
-            v-model="questiondata.health_desc"
-            rows="3"
-            v-bind:placeholder="$t('message.question_desc_placeholder')"
-          ></textarea>
+          <div>
+            <textarea
+              v-model="questiondata.health_desc"
+              rows="3" 
+              maxlength="2000"
+              v-bind:placeholder="$t('message.question_desc_placeholder')"
+            ></textarea>
+            <p>{{questiondata.health_desc ? questiondata.health_desc.length : '0'}}/2000</p>
+          </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
           </div>
+          <p class="page-number"  style="align-self: center"><span class="current">1</span><span class="total">/10</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 1">
@@ -88,7 +97,11 @@
           </div>
           <p v-if="help_text_visible === 'overcoming'">{{ $t('message.help_text_overcoming') }}</p>
           <div class="range-input">
-            <p class="rangeQuestiondata">{{questiondata.overcoming}}</p>
+            <div class="rangeQuestiondata-icon">
+              <p class="rangeQuestiondata">{{questiondata.overcoming}}</p>
+              <div v-show="questiondata.overcoming" class="remove-icon" @click.prevent="questiondata.overcoming = undefined"><font-awesome-icon icon="times-circle"/></div>
+              <div v-show="questiondata.health"><button class="remove-button" @click.prevent="questiondata.overcoming = undefined">Poista Vastaus</button></div>
+            </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.overcoming}"
               type="range"
@@ -114,11 +127,15 @@
               <div>10</div>
             </div>
           </div>
-          <textarea
-            v-model="questiondata.overcoming_desc"
-            rows="3"
-            v-bind:placeholder="$t('message.question_desc_placeholder')"
-          ></textarea>
+          <div>
+            <textarea
+              v-model="questiondata.overcoming_desc"
+              rows="3"
+              maxlength="2000"
+              v-bind:placeholder="$t('message.question_desc_placeholder')"
+            ></textarea>
+            <p>{{questiondata.overcoming_desc ? questiondata.overcoming_desc.length : '0'}}/2000</p>
+          </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button
@@ -126,6 +143,7 @@
               @click.prevent="toPreviousQuestion"
             >{{ $t('message.previous') }}</button>
           </div>
+          <p class="page-number"><span class="current">2</span><span class="total">/10</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 2">
@@ -141,7 +159,11 @@
           </div>
           <p v-if="help_text_visible === 'living'">{{ $t('message.help_text_living') }}</p>
           <div class="range-input">
-            <p class="rangeQuestiondata">{{questiondata.living}}</p>
+            <div class="rangeQuestiondata-icon">
+              <p class="rangeQuestiondata">{{questiondata.living}}</p>
+              <div v-show="questiondata.living" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.living = undefined" title="Poista numero"/></div>
+              <div v-show="questiondata.living"> <button class="remove-button" @click.prevent="questiondata.living = undefined">Poista Vastaus</button></div>
+            </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.living}"
               type="range"
@@ -167,11 +189,15 @@
               <div>10</div>
             </div>
           </div>
-          <textarea
-            v-model="questiondata.living_desc"
-            rows="3"
-            v-bind:placeholder="$t('message.question_desc_placeholder')"
-          ></textarea>
+          <div>
+            <textarea
+              v-model="questiondata.living_desc"
+              rows="3"
+              maxlength="2000"
+              v-bind:placeholder="$t('message.question_desc_placeholder')"
+            ></textarea>
+            <p>{{questiondata.living_desc ? questiondata.living_desc.length : '0'}}/2000</p>
+          </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button
@@ -179,6 +205,7 @@
               @click.prevent="toPreviousQuestion"
             >{{ $t('message.previous') }}</button>
           </div>
+          <p class="page-number"><span class="current">3</span><span class="total">/10</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 3">
@@ -194,7 +221,11 @@
           </div>
           <p v-if="help_text_visible === 'coping'">{{ $t('message.help_text_coping') }}</p>
           <div class="range-input">
-            <p class="rangeQuestiondata">{{questiondata.coping}}</p>
+            <div class="rangeQuestiondata-icon">
+              <p class="rangeQuestiondata">{{questiondata.coping}}</p>
+              <div v-show="questiondata.coping" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.coping = undefined"/></div>
+              <div v-show="questiondata.coping"><button class="remove-button" @click.prevent="questiondata.coping = undefined">Poista Vastaus</button></div>
+            </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.coping}"
               type="range"
@@ -220,11 +251,15 @@
               <div>10</div>
             </div>
           </div>
-          <textarea
-            v-model="questiondata.coping_desc"
-            rows="3"
-            v-bind:placeholder="$t('message.question_desc_placeholder')"
-          ></textarea>
+          <div>
+            <textarea
+              v-model="questiondata.coping_desc"
+              rows="3"
+              maxlength="2000"
+              v-bind:placeholder="$t('message.question_desc_placeholder')"
+            ></textarea>
+            <p>{{questiondata.coping_desc ? questiondata.coping_desc.length : '0'}}/2000</p>
+          </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button
@@ -232,6 +267,7 @@
               @click.prevent="toPreviousQuestion"
             >{{ $t('message.previous') }}</button>
           </div>
+          <p class="page-number"><span class="current">4</span><span class="total">/10</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 4">
@@ -247,7 +283,11 @@
           </div>
           <p v-if="help_text_visible === 'family'">{{ $t('message.help_text_family') }}</p>
           <div class="range-input">
-            <p class="rangeQuestiondata">{{questiondata.family}}</p>
+            <div class="rangeQuestiondata-icon">
+              <p class="rangeQuestiondata">{{questiondata.family}}</p>
+              <div v-show="questiondata.family" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.family = undefined"/></div>
+              <div v-show="questiondata.family"><button class="remove-button" @click.prevent="questiondata.family = undefined">Poista Vastaus</button></div>
+            </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.family}"
               type="range"
@@ -273,11 +313,15 @@
               <div>10</div>
             </div>
           </div>
-          <textarea
-            v-model="questiondata.family_desc"
-            rows="3"
-            v-bind:placeholder="$t('message.question_desc_placeholder')"
-          ></textarea>
+          <div>
+            <textarea
+              v-model="questiondata.family_desc"
+              rows="3"
+              maxlength="2000"
+              v-bind:placeholder="$t('message.question_desc_placeholder')"
+            ></textarea>
+            <p>{{questiondata.family_desc ? questiondata.family_desc.length : '0'}}/2000</p>
+          </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button
@@ -285,6 +329,7 @@
               @click.prevent="toPreviousQuestion"
             >{{ $t('message.previous') }}</button>
           </div>
+          <p class="page-number"><span class="current">5</span><span class="total">/10</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 5">
@@ -300,7 +345,11 @@
           </div>
           <p v-if="help_text_visible === 'friends'">{{ $t('message.help_text_friends') }}</p>
           <div class="range-input">
-            <p class="rangeQuestiondata">{{questiondata.friends}}</p>
+            <div class="rangeQuestiondata-icon">
+              <p class="rangeQuestiondata">{{questiondata.friends}}</p>
+              <div v-show="questiondata.friends" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.friends = undefined" title="Poista numero"/></div>
+              <div v-show="questiondata.friends"><button class="remove-button" @click.prevent="questiondata.friends = undefined">Poista Vastaus</button></div>
+            </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.friends}"
               type="range"
@@ -326,11 +375,15 @@
               <div>10</div>
             </div>
           </div>
-          <textarea
-            v-model="questiondata.friends_desc"
-            rows="3"
-            v-bind:placeholder="$t('message.question_desc_placeholder')"
-          ></textarea>
+          <div>
+            <textarea
+              v-model="questiondata.friends_desc"
+              rows="3"
+              maxlength="2000"
+              v-bind:placeholder="$t('message.question_desc_placeholder')"
+            ></textarea>
+            <p>{{questiondata.friends_desc ? questiondata.friends_desc.length : '0'}}/2000</p>
+          </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button
@@ -338,6 +391,7 @@
               @click.prevent="toPreviousQuestion"
             >{{ $t('message.previous') }}</button>
           </div>
+          <p class="page-number"><span class="current">6</span><span class="total">/10</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 6">
@@ -353,7 +407,11 @@
           </div>
           <p v-if="help_text_visible === 'finance'">{{ $t('message.help_text_finance') }}</p>
           <div class="range-input">
-            <p class="rangeQuestiondata">{{questiondata.finance}}</p>
+            <div class="rangeQuestiondata-icon">
+              <p class="rangeQuestiondata">{{questiondata.finance}}</p>
+              <div v-show="questiondata.finance" class="remove-icon" ><font-awesome-icon icon="times-circle" @click.prevent="questiondata.finance = undefined"/></div>
+              <div v-show="questiondata.finance" ><button class="remove-button" @click.prevent="questiondata.finance = undefined">Poista Vastaus</button></div>
+            </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.finance}"
               type="range"
@@ -379,11 +437,15 @@
               <div>10</div>
             </div>
           </div>
-          <textarea
-            v-model="questiondata.finance_desc"
-            rows="3"
-            v-bind:placeholder="$t('message.question_desc_placeholder')"
-          ></textarea>
+          <div>
+            <textarea
+              v-model="questiondata.finance_desc"
+              rows="3"
+              maxlength="2000"
+              v-bind:placeholder="$t('message.question_desc_placeholder')"
+            ></textarea>
+            <p>{{questiondata.finance_desc ? questiondata.finance_desc.length : '0'}}/2000</p>
+          </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button
@@ -391,6 +453,7 @@
               @click.prevent="toPreviousQuestion"
             >{{ $t('message.previous') }}</button>
           </div>
+          <p class="page-number"><span class="current">7</span><span class="total">/10</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 7">
@@ -406,7 +469,11 @@
           </div>
           <p v-if="help_text_visible === 'strengths'">{{ $t('message.help_text_strengths') }}</p>
           <div class="range-input">
-            <p class="rangeQuestiondata">{{questiondata.strengths}}</p>
+            <div class="rangeQuestiondata-icon">
+              <p class="rangeQuestiondata">{{questiondata.strengths}}</p>
+              <div v-show="questiondata.strengths" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.strengths = undefined"/></div>
+              <div v-show="questiondata.strengths"><button class="remove-button" @click.prevent="questiondata.strengths = undefined">Poista Vastaus</button></div>
+            </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.strengths}"
               type="range"
@@ -432,11 +499,15 @@
               <div>10</div>
             </div>
           </div>
-          <textarea
-            v-model="questiondata.strengths_desc"
-            rows="3"
-            v-bind:placeholder="$t('message.question_desc_placeholder')"
-          ></textarea>
+          <div>
+            <textarea
+              v-model="questiondata.strengths_desc"
+              rows="3"
+              maxlength="2000"
+              v-bind:placeholder="$t('message.question_desc_placeholder')"
+            ></textarea>
+            <p>{{questiondata.strengths_desc ? questiondata.strengths_desc.length : '0'}}/2000</p>
+          </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button
@@ -444,6 +515,7 @@
               @click.prevent="toPreviousQuestion"
             >{{ $t('message.previous') }}</button>
           </div>
+          <p class="page-number"><span class="current">8</span><span class="total">/10</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 8">
@@ -459,7 +531,11 @@
           </div>
           <p v-if="help_text_visible === 'self_esteem'">{{ $t('message.help_text_self_esteem') }}</p>
           <div class="range-input">
-            <p class="rangeQuestiondata">{{questiondata.self_esteem}}</p>
+            <div class="rangeQuestiondata-icon">
+              <p class="rangeQuestiondata">{{questiondata.self_esteem}}</p>
+              <div v-show="questiondata.self_esteem" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.self_esteem = undefined"/></div>
+              <div v-show="questiondata.self_esteem"><button class="remove-button" @click.prevent="questiondata.self_esteem = undefined">Poista Vastaus</button></div>
+            </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.self_esteem}"
               type="range"
@@ -485,11 +561,15 @@
               <div>10</div>
             </div>
           </div>
-          <textarea
-            v-model="questiondata.self_esteem_desc"
-            rows="3"
-            v-bind:placeholder="$t('message.question_desc_placeholder')"
-          ></textarea>
+          <div>
+            <textarea
+              v-model="questiondata.self_esteem_desc"
+              rows="3"
+              maxlength="2000"
+              v-bind:placeholder="$t('message.question_desc_placeholder')"
+            ></textarea>
+            <p>{{questiondata.self_esteem_desc ? questiondata.self_esteem_desc.length : '0'}}/2000</p>
+          </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
             <button
@@ -497,6 +577,7 @@
               @click.prevent="toPreviousQuestion"
             >{{ $t('message.previous') }}</button>
           </div>
+          <p class="page-number"><span class="current">9</span><span class="total">/10</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="question" v-show="questionnum == 9">
@@ -514,7 +595,11 @@
             v-if="help_text_visible === 'life_as_whole'"
           >{{ $t('message.help_text_life_as_whole') }}</p>
           <div class="range-input">
-            <p class="rangeQuestiondata">{{questiondata.life_as_whole}}</p>
+            <div class="rangeQuestiondata-icon">
+              <p class="rangeQuestiondata">{{questiondata.life_as_whole}}</p>
+              <div v-show="questiondata.life_as_whole" class="remove-icon" ><font-awesome-icon icon="times-circle" @click.prevent="questiondata.life_as_whole = undefined"/></div>
+              <div v-show="questiondata.life_as_whole" ><button class="remove-button" @click.prevent="questiondata.life_as_whole = undefined">Poista Vastaus</button></div>
+            </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.life_as_whole}"
               type="range"
@@ -540,11 +625,15 @@
               <div>10</div>
             </div>
           </div>
-          <textarea
-            v-model="questiondata.life_as_whole_desc"
-            rows="3"
-            v-bind:placeholder="$t('message.question_desc_placeholder')"
-          ></textarea>
+          <div>
+            <textarea
+              v-model="questiondata.life_as_whole_desc"
+              rows="3" 
+              maxlength="2000"
+              v-bind:placeholder="$t('message.question_desc_placeholder')"
+            ></textarea>
+            <p>{{questiondata.life_as_whole_desc ? questiondata.life_as_whole_desc.length : '0'}}/2000</p>
+          </div>
           <div class="buttons">
             <button class="btn button-complete" @click.prevent="toNextQuestion">{{ $t('message.complete') }}</button>
             <button
@@ -552,6 +641,7 @@
               @click.prevent="toPreviousQuestion"
             >{{ $t('message.previous') }}</button>
           </div>
+          <p class="page-number"><span class="current">10</span><span class="total">/10</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
         <div class="review" v-show="questionnum == 10">
@@ -559,70 +649,70 @@
           <div class="results">
             <div>
               <span>Kysymys 1.</span><span v-bind:class="{notanswered :!questiondata.health}">{{questiondata.health ? questiondata.health : "Ei vastattu"}}</span>
-              <b-button v-b-toggle.collapse-health class="textarea-collapse up">^</b-button>
+              <b-button v-b-toggle.collapse-health class="textarea-collapse pointer"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-health">
                 <p>{{questiondata.health_desc ? questiondata.health_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 2.</span><span v-bind:class="{notanswered :!questiondata.overcoming}">{{questiondata.overcoming ? questiondata.overcoming :"Ei vastattu"}}</span>
-              <b-button v-b-toggle.collapse-overcoming class="textarea-collapse up">^</b-button>
+              <b-button v-b-toggle.collapse-overcoming class="textarea-collapse pointer"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-overcoming">
                 <p>{{questiondata.overcoming_desc ? questiondata.overcoming_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 3.</span><span v-bind:class="{notanswered :!questiondata.living}">{{questiondata.living ? questiondata.living :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-living class="textarea-collapse up">^</b-button>
+              <b-button v-b-toggle.collapse-living class="textarea-collapse pointer"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-living">
                 <p>{{questiondata.living_desc ? questiondata.living_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 4.</span><span v-bind:class="{notanswered :!questiondata.coping}">{{questiondata.coping ? questiondata.coping :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-coping class="textarea-collapse up">^</b-button>
+              <b-button v-b-toggle.collapse-coping class="textarea-collapse pointer"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-coping">
                 <p>{{questiondata.coping_desc ? questiondata.coping_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 5.</span><span v-bind:class="{notanswered :!questiondata.family}">{{questiondata.family ? questiondata.family :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-family class="textarea-collapse up">^</b-button>
+              <b-button v-b-toggle.collapse-family class="textarea-collapse pointer"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-family">
                 <p>{{questiondata.family_desc ? questiondata.family_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 6.</span><span v-bind:class="{notanswered :!questiondata.friends}">{{questiondata.friends ? questiondata.friends :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-friends class="textarea-collapse up">^</b-button>
+              <b-button v-b-toggle.collapse-friends class="textarea-collapse pointer"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-friends">
                 <p>{{questiondata.friends_desc ? questiondata.friends_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 7.</span><span v-bind:class="{notanswered :!questiondata.finance}">{{questiondata.finance ? questiondata.finance :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-finance class="textarea-collapse up">^</b-button>
+              <b-button v-b-toggle.collapse-finance class="textarea-collapse pointer"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-finance">
                 <p>{{questiondata.finance_desc ? questiondata.finance_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 8.</span><span v-bind:class="{notanswered :!questiondata.overcoming}">{{questiondata.strengths ? questiondata.strengths :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-strengths class="textarea-collapse up">^</b-button>
+              <b-button v-b-toggle.collapse-strengths class="textarea-collapse pointer"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-strengths">
                 <p>{{questiondata.strengths_desc ? questiondata.strengths_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 9.</span><span v-bind:class="{notanswered :!questiondata.self_esteem}">{{questiondata.self_esteem ? questiondata.self_esteem :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-selfesteem class="textarea-collapse up">^</b-button>
+              <b-button v-b-toggle.collapse-selfesteem class="textarea-collapse pointer"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-selfesteem">
                 <p>{{questiondata.self_esteem_desc ? questiondata.self_esteem_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 10.</span><span v-bind:class="{notanswered :!questiondata.life_as_whole}">{{questiondata.life_as_whole ? questiondata.life_as_whole :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-lifeaswhole class="textarea-collapse up">^</b-button>
+              <b-button v-b-toggle.collapse-lifeaswhole class="textarea-collapse pointer"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-lifeaswhole">
                 <p>{{questiondata.life_as_whole_desc ? questiondata.life_as_whole_desc :"Ei vastattu" }}</p>
               </b-collapse>
@@ -825,10 +915,33 @@ export default {
       }
 
       .range-input {
-        .rangeQuestiondata {
-          font-size: 1.8em;
+        .rangeQuestiondata-icon{
+          position: relative;
+          display: flex;
+          left: calc(50% - 30px);
+          margin-bottom: 1rem;
+          width: 50%;
+          
+          .rangeQuestiondata {
+            font-size: 1.8em;
+            width:60px;
+            height:60px;
+            border:1px solid lightgrey;
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            //margin-left:3rem;
+          }
+          .remove-icon{
+            font-size:2rem;
+            color:#353535;
+            display:flex;
+          }
+          .remove-button{
+            display:none;
+          }
         }
-
+        
         .rangeLabel-mobile {
           display: -webkit-flex;
           display: flex;
@@ -858,6 +971,7 @@ export default {
         display: flex;
         flex-flow: row-reverse nowrap;
         justify-content: space-between;
+        text-align:center;
 
         button {
           border-radius: 50px;
@@ -881,6 +995,20 @@ export default {
           font-weight:bold;
         }
       }
+
+    .page-number{
+      font-size:1.1em;
+      margin-top:0;
+      margin-bottom:0;
+
+      .current{
+        padding:0.1rem;
+      }
+      .total{
+        padding:0.1rem;
+      }
+    }
+    
       .cancel-button {
         color: #350e7e;
         opacity: 70%;
@@ -943,9 +1071,8 @@ textarea::placeholder {
         font-size:1.1rem;
         font-weight:bold;
         margin-left:1rem;
-        font-weight:bold;
       }
-     .up{
+     .pointer.collapsed{
        transform: rotate(180deg);
       }
     }
@@ -1037,7 +1164,6 @@ textarea::placeholder {
     }
   }
 }
-
 //iPhone 4 Portrait
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
   textarea {
@@ -1167,6 +1293,23 @@ textarea::placeholder {
   textarea {
     margin-top: 3rem;
     margin-bottom: 1rem;
+  }
+
+  .rangeQuestiondata-icon .remove-icon{
+     display:none !important;
+    }
+
+  .rangeQuestiondata-icon .remove-button{
+     display:block !important;
+     border-radius: 50px;
+     box-shadow: 0 5px 5px gray;
+     line-height: 2;
+     width: 10rem;
+     background-color: #353535;
+     color: #ffffff;
+     padding:0.1rem 0;
+     margin:0.6rem 0 0 1rem;
+     Outline: none;
   }
 }
 
