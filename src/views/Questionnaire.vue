@@ -69,14 +69,14 @@
               <div>10</div>
             </div>
           </div>
-          <div>
+          <div class="textarea-wordCount">
             <textarea
               v-model="questiondata.health_desc"
               rows="3" 
               maxlength="2000"
               v-bind:placeholder="$t('message.question_desc_placeholder')"
             ></textarea>
-            <p>{{questiondata.health_desc ? questiondata.health_desc.length : '0'}}/2000</p>
+            <p>{{ $t('message.length') }}{{questiondata.health_desc ? questiondata.health_desc.length : '0'}}/2000</p>
           </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -100,7 +100,7 @@
             <div class="rangeQuestiondata-icon">
               <p class="rangeQuestiondata">{{questiondata.overcoming}}</p>
               <div v-show="questiondata.overcoming" class="remove-icon" @click.prevent="questiondata.overcoming = undefined"><font-awesome-icon icon="times-circle"/></div>
-              <div v-show="questiondata.health"><button class="remove-button" @click.prevent="questiondata.overcoming = undefined">Poista Vastaus</button></div>
+              <div v-show="questiondata.overcoming"><button class="remove-button" @click.prevent="questiondata.overcoming = undefined">Poista Vastaus</button></div>
             </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.overcoming}"
@@ -127,14 +127,14 @@
               <div>10</div>
             </div>
           </div>
-          <div>
+          <div class="textarea-wordCount">
             <textarea
               v-model="questiondata.overcoming_desc"
               rows="3"
               maxlength="2000"
               v-bind:placeholder="$t('message.question_desc_placeholder')"
             ></textarea>
-            <p>{{questiondata.overcoming_desc ? questiondata.overcoming_desc.length : '0'}}/2000</p>
+            <p>{{ $t('message.length') }}{{questiondata.overcoming_desc ? questiondata.overcoming_desc.length : '0'}}/2000</p>
           </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -189,14 +189,14 @@
               <div>10</div>
             </div>
           </div>
-          <div>
+          <div class="textarea-wordCount">
             <textarea
               v-model="questiondata.living_desc"
               rows="3"
               maxlength="2000"
               v-bind:placeholder="$t('message.question_desc_placeholder')"
             ></textarea>
-            <p>{{questiondata.living_desc ? questiondata.living_desc.length : '0'}}/2000</p>
+            <p>{{ $t('message.length') }}{{questiondata.living_desc ? questiondata.living_desc.length : '0'}}/2000</p>
           </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -251,14 +251,14 @@
               <div>10</div>
             </div>
           </div>
-          <div>
+          <div class="textarea-wordCount">
             <textarea
               v-model="questiondata.coping_desc"
               rows="3"
               maxlength="2000"
               v-bind:placeholder="$t('message.question_desc_placeholder')"
             ></textarea>
-            <p>{{questiondata.coping_desc ? questiondata.coping_desc.length : '0'}}/2000</p>
+            <p>{{ $t('message.length') }}{{questiondata.coping_desc ? questiondata.coping_desc.length : '0'}}/2000</p>
           </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -313,14 +313,14 @@
               <div>10</div>
             </div>
           </div>
-          <div>
+          <div class="textarea-wordCount">
             <textarea
               v-model="questiondata.family_desc"
               rows="3"
               maxlength="2000"
               v-bind:placeholder="$t('message.question_desc_placeholder')"
             ></textarea>
-            <p>{{questiondata.family_desc ? questiondata.family_desc.length : '0'}}/2000</p>
+            <p>{{ $t('message.length') }}{{questiondata.family_desc ? questiondata.family_desc.length : '0'}}/2000</p>
           </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -375,14 +375,14 @@
               <div>10</div>
             </div>
           </div>
-          <div>
+          <div class="textarea-wordCount">
             <textarea
               v-model="questiondata.friends_desc"
               rows="3"
               maxlength="2000"
               v-bind:placeholder="$t('message.question_desc_placeholder')"
             ></textarea>
-            <p>{{questiondata.friends_desc ? questiondata.friends_desc.length : '0'}}/2000</p>
+            <p>{{ $t('message.length') }}{{questiondata.friends_desc ? questiondata.friends_desc.length : '0'}}/2000</p>
           </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -437,14 +437,14 @@
               <div>10</div>
             </div>
           </div>
-          <div>
+          <div class="textarea-wordCount">
             <textarea
               v-model="questiondata.finance_desc"
               rows="3"
               maxlength="2000"
               v-bind:placeholder="$t('message.question_desc_placeholder')"
             ></textarea>
-            <p>{{questiondata.finance_desc ? questiondata.finance_desc.length : '0'}}/2000</p>
+            <p>{{ $t('message.length') }}{{questiondata.finance_desc ? questiondata.finance_desc.length : '0'}}/2000</p>
           </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -499,14 +499,14 @@
               <div>10</div>
             </div>
           </div>
-          <div>
+          <div class="textarea-wordCount">
             <textarea
               v-model="questiondata.strengths_desc"
               rows="3"
               maxlength="2000"
               v-bind:placeholder="$t('message.question_desc_placeholder')"
             ></textarea>
-            <p>{{questiondata.strengths_desc ? questiondata.strengths_desc.length : '0'}}/2000</p>
+            <p>{{ $t('message.length') }}{{questiondata.strengths_desc ? questiondata.strengths_desc.length : '0'}}/2000</p>
           </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -561,14 +561,14 @@
               <div>10</div>
             </div>
           </div>
-          <div>
+          <div class="textarea-wordCount">
             <textarea
               v-model="questiondata.self_esteem_desc"
               rows="3"
               maxlength="2000"
               v-bind:placeholder="$t('message.question_desc_placeholder')"
             ></textarea>
-            <p>{{questiondata.self_esteem_desc ? questiondata.self_esteem_desc.length : '0'}}/2000</p>
+            <p>{{ $t('message.length') }}{{questiondata.self_esteem_desc ? questiondata.self_esteem_desc.length : '0'}}/2000</p>
           </div>
           <div class="buttons">
             <button class="btn button-next" @click.prevent="toNextQuestion">{{ $t('message.next') }}</button>
@@ -625,14 +625,14 @@
               <div>10</div>
             </div>
           </div>
-          <div>
+          <div class="textarea-wordCount">
             <textarea
               v-model="questiondata.life_as_whole_desc"
               rows="3" 
               maxlength="2000"
               v-bind:placeholder="$t('message.question_desc_placeholder')"
             ></textarea>
-            <p>{{questiondata.life_as_whole_desc ? questiondata.life_as_whole_desc.length : '0'}}/2000</p>
+            <p>{{ $t('message.length') }}{{questiondata.life_as_whole_desc ? questiondata.life_as_whole_desc.length : '0'}}/2000</p>
           </div>
           <div class="buttons">
             <button class="btn button-complete" @click.prevent="toNextQuestion">{{ $t('message.complete') }}</button>
@@ -930,7 +930,6 @@ export default {
             display: flex;
             justify-content:center;
             align-items:center;
-            //margin-left:3rem;
           }
           .remove-icon{
             font-size:2rem;
@@ -998,7 +997,7 @@ export default {
 
     .page-number{
       font-size:1.1em;
-      margin-top:0;
+      margin-top:1rem;
       margin-bottom:0;
 
       .current{
@@ -1017,15 +1016,20 @@ export default {
     }
   }
 }
-
-textarea {
-  width: 100%;
-  border-radius: 4px;
-
-textarea::placeholder {
-  opacity: 40%;
-  color: #353535;
-  } 
+.textarea-wordCount{
+  textarea {
+    width: 100%;
+    border-radius: 4px;
+  }
+  textarea::placeholder {
+    opacity: 40%;
+    color: #353535;
+  }
+  p{
+    display:flex;
+    justify-content:flex-end;
+    font-size:1.1em;
+  }
 }
 
 .review {
@@ -1165,7 +1169,7 @@ textarea::placeholder {
   }
 }
 //iPhone 4 Portrait
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+/*@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
   textarea {
     width: 100%;
     border-radius: 4px;
@@ -1182,10 +1186,9 @@ textarea::placeholder {
   .cancel-button {
     margin: 1rem 0;
   }
-}
-
+}*/
 //iPhone 5 Portrait
-@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+/*@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
   textarea {
     width: 100%;
     border-radius: 4px;
@@ -1202,7 +1205,7 @@ textarea::placeholder {
   .cancel-button {
     margin: 1rem 0;
   }
-}
+}*/
 
 @media only screen and (min-width: 575px) {
   .questionHelp_button p {
@@ -1244,6 +1247,9 @@ textarea::placeholder {
     display: -webkit-flex;
     display: flex;
     justify-content: center;
+  }
+  .page-number{
+    margin-top:0rem !important;
   }
   //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
 }
@@ -1292,7 +1298,6 @@ textarea::placeholder {
 
   textarea {
     margin-top: 3rem;
-    margin-bottom: 1rem;
   }
 
   .rangeQuestiondata-icon .remove-icon{

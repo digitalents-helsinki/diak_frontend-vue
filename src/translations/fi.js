@@ -4,6 +4,7 @@ export const fi = {
     home:'Tervetuloa 3X10D kyselylomakkeeseemme',
     begin: 'Aloita',
     help: 'Ohjeet',
+    length: 'Maksimi kirjanmerkki: ',
     next: 'Seuraava',
     previous: 'Edellinen',
     complete:'Valmis',
