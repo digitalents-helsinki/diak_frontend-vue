@@ -651,70 +651,70 @@
               <span>Kysymys 1.</span><span v-bind:class="{notanswered :!questiondata.health}">{{questiondata.health ? questiondata.health : "Ei vastattu"}}</span>
               <b-button v-b-toggle.collapse-health class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-health">
-                <p>{{questiondata.health_desc ? questiondata.health_desc :"Ei vastattu" }}</p>
+                <p class="text-review">{{questiondata.health_desc ? questiondata.health_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 2.</span><span v-bind:class="{notanswered :!questiondata.overcoming}">{{questiondata.overcoming ? questiondata.overcoming :"Ei vastattu"}}</span>
               <b-button v-b-toggle.collapse-overcoming class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-overcoming">
-                <p>{{questiondata.overcoming_desc ? questiondata.overcoming_desc :"Ei vastattu" }}</p>
+                <p class="text-review">{{questiondata.overcoming_desc ? questiondata.overcoming_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 3.</span><span v-bind:class="{notanswered :!questiondata.living}">{{questiondata.living ? questiondata.living :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-living class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-living">
-                <p>{{questiondata.living_desc ? questiondata.living_desc :"Ei vastattu" }}</p>
+                <p class="text-review">{{questiondata.living_desc ? questiondata.living_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 4.</span><span v-bind:class="{notanswered :!questiondata.coping}">{{questiondata.coping ? questiondata.coping :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-coping class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-coping">
-                <p>{{questiondata.coping_desc ? questiondata.coping_desc :"Ei vastattu" }}</p>
+                <p class="text-review">{{questiondata.coping_desc ? questiondata.coping_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 5.</span><span v-bind:class="{notanswered :!questiondata.family}">{{questiondata.family ? questiondata.family :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-family class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-family">
-                <p>{{questiondata.family_desc ? questiondata.family_desc :"Ei vastattu" }}</p>
+                <p class="text-review">{{questiondata.family_desc ? questiondata.family_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 6.</span><span v-bind:class="{notanswered :!questiondata.friends}">{{questiondata.friends ? questiondata.friends :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-friends class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-friends">
-                <p>{{questiondata.friends_desc ? questiondata.friends_desc :"Ei vastattu" }}</p>
+                <p class="text-review">{{questiondata.friends_desc ? questiondata.friends_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 7.</span><span v-bind:class="{notanswered :!questiondata.finance}">{{questiondata.finance ? questiondata.finance :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-finance class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-finance">
-                <p>{{questiondata.finance_desc ? questiondata.finance_desc :"Ei vastattu" }}</p>
+                <p class="text-review">{{questiondata.finance_desc ? questiondata.finance_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 8.</span><span v-bind:class="{notanswered :!questiondata.overcoming}">{{questiondata.strengths ? questiondata.strengths :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-strengths class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-strengths">
-                <p>{{questiondata.strengths_desc ? questiondata.strengths_desc :"Ei vastattu" }}</p>
+                <p class="text-review">{{questiondata.strengths_desc ? questiondata.strengths_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 9.</span><span v-bind:class="{notanswered :!questiondata.self_esteem}">{{questiondata.self_esteem ? questiondata.self_esteem :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-selfesteem class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-selfesteem">
-                <p>{{questiondata.self_esteem_desc ? questiondata.self_esteem_desc :"Ei vastattu" }}</p>
+                <p class="text-review">{{questiondata.self_esteem_desc ? questiondata.self_esteem_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>Kysymys 10.</span><span v-bind:class="{notanswered :!questiondata.life_as_whole}">{{questiondata.life_as_whole ? questiondata.life_as_whole :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-lifeaswhole class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-lifeaswhole">
-                <p>{{questiondata.life_as_whole_desc ? questiondata.life_as_whole_desc :"Ei vastattu" }}</p>
+                <p class="text-review">{{questiondata.life_as_whole_desc ? questiondata.life_as_whole_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
           </div>
@@ -1076,6 +1076,11 @@ export default {
         font-weight:bold;
         margin-left:1rem;
       }
+       .text-review{
+         white-space: pre-wrap;
+         word-wrap:break-word;
+        }
+        
      .pointer.collapsed{
        transform: rotate(180deg);
       }
