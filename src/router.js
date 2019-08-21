@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Questionnaire from './views/Questionnaire.vue'
 import Results from './views/Results.vue'
 import SurveyResults from './views/SurveyResults.vue'
+import Admin from './views/admin.vue'
 
 Vue.use(Router)
 
@@ -30,6 +31,12 @@ export default new Router({
       path: '/surveyresults/',
       name: 'surveyresults',
       component: SurveyResults
+    },
+    {
+    path: '/admin/',
+    name: 'admin',
+    component: Admin
     }
   ]
+  
 })

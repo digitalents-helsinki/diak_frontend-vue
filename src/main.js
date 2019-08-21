@@ -7,6 +7,10 @@ import { messages } from './translation'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
+import { faPencilAlt} from '@fortawesome/free-solid-svg-icons'
+import { faPlus} from '@fortawesome/free-solid-svg-icons'
+import { faUsers} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.config.productionTip = false
@@ -15,6 +19,10 @@ Vue.use(VueI18n)
 
 library.add(faTimesCircle)
 library.add(faAngleUp)
+library.add(faCalendarAlt)
+library.add(faPencilAlt)
+library.add(faPlus)
+library.add(faUsers)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
