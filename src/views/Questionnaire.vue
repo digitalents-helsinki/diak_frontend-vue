@@ -44,7 +44,7 @@
             <div class="rangeQuestiondata-icon">
               <p class="rangeQuestiondata">{{questiondata.health}}</p>
               <div v-show="questiondata.health" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.health = undefined"/></div>
-              <div v-show="questiondata.health"><button class="remove-button" @click.prevent="questiondata.health = undefined">Poista Vastaus</button></div>
+              <div v-show="questiondata.health"><button class="btn remove-button" @click.prevent="questiondata.health = undefined">Poista Vastaus</button></div>
             </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.health}"
@@ -102,7 +102,7 @@
             <div class="rangeQuestiondata-icon">
               <p class="rangeQuestiondata">{{questiondata.overcoming}}</p>
               <div v-show="questiondata.overcoming" class="remove-icon" @click.prevent="questiondata.overcoming = undefined"><font-awesome-icon icon="times-circle"/></div>
-              <div v-show="questiondata.overcoming"><button class="remove-button" @click.prevent="questiondata.overcoming = undefined">Poista Vastaus</button></div>
+              <div v-show="questiondata.overcoming"><button class="btn remove-button" @click.prevent="questiondata.overcoming = undefined">Poista Vastaus</button></div>
             </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.overcoming}"
@@ -164,7 +164,7 @@
             <div class="rangeQuestiondata-icon">
               <p class="rangeQuestiondata">{{questiondata.living}}</p>
               <div v-show="questiondata.living" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.living = undefined" title="Poista numero"/></div>
-              <div v-show="questiondata.living"> <button class="remove-button" @click.prevent="questiondata.living = undefined">Poista Vastaus</button></div>
+              <div v-show="questiondata.living"> <button class="btn remove-button" @click.prevent="questiondata.living = undefined">Poista Vastaus</button></div>
             </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.living}"
@@ -226,7 +226,7 @@
             <div class="rangeQuestiondata-icon">
               <p class="rangeQuestiondata">{{questiondata.coping}}</p>
               <div v-show="questiondata.coping" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.coping = undefined"/></div>
-              <div v-show="questiondata.coping"><button class="remove-button" @click.prevent="questiondata.coping = undefined">Poista Vastaus</button></div>
+              <div v-show="questiondata.coping"><button class="btn remove-button" @click.prevent="questiondata.coping = undefined">Poista Vastaus</button></div>
             </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.coping}"
@@ -288,7 +288,7 @@
             <div class="rangeQuestiondata-icon">
               <p class="rangeQuestiondata">{{questiondata.family}}</p>
               <div v-show="questiondata.family" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.family = undefined"/></div>
-              <div v-show="questiondata.family"><button class="remove-button" @click.prevent="questiondata.family = undefined">Poista Vastaus</button></div>
+              <div v-show="questiondata.family"><button class="btn remove-button" @click.prevent="questiondata.family = undefined">Poista Vastaus</button></div>
             </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.family}"
@@ -350,7 +350,7 @@
             <div class="rangeQuestiondata-icon">
               <p class="rangeQuestiondata">{{questiondata.friends}}</p>
               <div v-show="questiondata.friends" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.friends = undefined" title="Poista numero"/></div>
-              <div v-show="questiondata.friends"><button class="remove-button" @click.prevent="questiondata.friends = undefined">Poista Vastaus</button></div>
+              <div v-show="questiondata.friends"><button class="btn remove-button" @click.prevent="questiondata.friends = undefined">Poista Vastaus</button></div>
             </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.friends}"
@@ -412,7 +412,7 @@
             <div class="rangeQuestiondata-icon">
               <p class="rangeQuestiondata">{{questiondata.finance}}</p>
               <div v-show="questiondata.finance" class="remove-icon" ><font-awesome-icon icon="times-circle" @click.prevent="questiondata.finance = undefined"/></div>
-              <div v-show="questiondata.finance" ><button class="remove-button" @click.prevent="questiondata.finance = undefined">Poista Vastaus</button></div>
+              <div v-show="questiondata.finance" ><button class="btn remove-button" @click.prevent="questiondata.finance = undefined">Poista Vastaus</button></div>
             </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.finance}"
@@ -474,7 +474,7 @@
             <div class="rangeQuestiondata-icon">
               <p class="rangeQuestiondata">{{questiondata.strengths}}</p>
               <div v-show="questiondata.strengths" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.strengths = undefined"/></div>
-              <div v-show="questiondata.strengths"><button class="remove-button" @click.prevent="questiondata.strengths = undefined">Poista Vastaus</button></div>
+              <div v-show="questiondata.strengths"><button class="btn remove-button" @click.prevent="questiondata.strengths = undefined">Poista Vastaus</button></div>
             </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.strengths}"
@@ -536,7 +536,7 @@
             <div class="rangeQuestiondata-icon">
               <p class="rangeQuestiondata">{{questiondata.self_esteem}}</p>
               <div v-show="questiondata.self_esteem" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.self_esteem = undefined"/></div>
-              <div v-show="questiondata.self_esteem"><button class="remove-button" @click.prevent="questiondata.self_esteem = undefined">Poista Vastaus</button></div>
+              <div v-show="questiondata.self_esteem"><button class="btn remove-button" @click.prevent="questiondata.self_esteem = undefined">Poista Vastaus</button></div>
             </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.self_esteem}"
@@ -600,7 +600,7 @@
             <div class="rangeQuestiondata-icon">
               <p class="rangeQuestiondata">{{questiondata.life_as_whole}}</p>
               <div v-show="questiondata.life_as_whole" class="remove-icon" ><font-awesome-icon icon="times-circle" @click.prevent="questiondata.life_as_whole = undefined"/></div>
-              <div v-show="questiondata.life_as_whole" ><button class="remove-button" @click.prevent="questiondata.life_as_whole = undefined">Poista Vastaus</button></div>
+              <div v-show="questiondata.life_as_whole" ><button class="btn remove-button" @click.prevent="questiondata.life_as_whole = undefined">Poista Vastaus</button></div>
             </div>
             <b-form-input
               v-bind:class="{activeRange: questiondata.life_as_whole}"
@@ -699,7 +699,7 @@
               </b-collapse>
             </div>
             <div>
-              <span>Kysymys 8.</span><span v-bind:class="{notanswered :!questiondata.overcoming}">{{questiondata.strengths ? questiondata.strengths :"Ei vastattu" }}</span>
+              <span>Kysymys 8.</span><span v-bind:class="{notanswered :!questiondata.strengths}">{{questiondata.strengths ? questiondata.strengths :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-strengths class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-strengths">
                 <p class="text-review">{{questiondata.strengths_desc ? questiondata.strengths_desc :"Ei vastattu" }}</p>
