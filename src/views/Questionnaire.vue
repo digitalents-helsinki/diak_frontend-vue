@@ -3,6 +3,8 @@
     <div class="container-fluid" id="questionnaire-top">
       <img class="logo" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
       <button @click="toggleHelp" class="btn buttonOhjeet-Ohjeet">Ohjeet</button>
+      <span v-if="user">{{user}}</span>
+      <span v-if="!user">anonyymi kysely {{surveyId}}</span>
     </div>
     <div @click="toggleHelp" class="dim-background" v-show="help_visible">
       <div class="help-container">
@@ -29,7 +31,7 @@
         <div class="question" v-show="questionnum == 0">
           <div class="question_text">
             <div class="questionHelp_button">
-              <p>Kysymys 1.</p>
+              <p>1. Terveys</p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('health')"
@@ -736,6 +738,7 @@ import axios from "axios";
 
 export default {
   name: "Questionnaire",
+  props: ['user'],
   data() {
     return {
       questiondata: {
@@ -764,7 +767,8 @@ export default {
       help_visible: false,
       help_text_visible: "",
       cancel_visible: false,
-      show: false
+      show: false,
+      surveyId: this.$route.params.surveyId
     };
   },
   methods: {
@@ -843,6 +847,13 @@ export default {
       font-size: 1.1rem;
       font-weight: bold;
       text-align: center;
+    }
+
+    span {
+      color: white;
+      font-size: 18px;
+      position: absolute;
+      left: 90vw;
     }
   }
 

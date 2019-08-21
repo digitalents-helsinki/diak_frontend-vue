@@ -16,6 +16,14 @@ Vue.use(VueI18n)
 library.add(faTimesCircle)
 library.add(faAngleUp)
 
+import GAuth from 'vue-google-oauth2'
+const gauthOption = {
+  clientId: '572605107934-5ocqqhnnq8ilgfiekbmplhiqbn8vmoec.apps.googleusercontent.com',
+  scope: 'profile email',
+  prompt: 'select_account'
+}
+Vue.use(GAuth, gauthOption)
+
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 
