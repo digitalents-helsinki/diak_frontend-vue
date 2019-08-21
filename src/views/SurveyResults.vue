@@ -80,15 +80,25 @@ export default {
       respondent_size: NaN,
       excel_fields: {
         Terveys: "health",
+        "Terveys teksti": "health_desc",
         Ylitsepääseminen: "overcoming",
+        "Ylitsepääseminen teksti": "overcoming_desc",
         Asuminen: "living",
+        "Asuminen teksti": "living_desc",
         Pärjääminen: "coping",
+        "Pärjääminen teksti": "coping_desc",
         Perhe: "family",
+        "Perhe teksti": "family_desc",
         Ystävät: "friends",
+        "Ystävät teksti": "friends_desc",
         Talous: "finance",
+        "Talous teksti": "finance_desc",
         Vahvuudet: "strengths",
+        "Vahvuudet teksti": "strengths_desc",
         Itsetunto: "self_esteem",
-        "Elämän kokonaisuus": "life_as_whole"
+        "Itsetunto teksti": "self_esteem_desc",
+        "Elämän kokonaisuus": "life_as_whole",
+        "Elämän kokonaisuus teksti": "life_as_whole_desc"
       },
       loggedIn: false,
       login: {
