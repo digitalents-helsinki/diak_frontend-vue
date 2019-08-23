@@ -1141,10 +1141,13 @@ export default {
   font-size: 1.1rem;
 
   .help-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
     background-color: white;
-    height: 60%;
+    height: 30vh;
     border-radius: 15px;
-    width: 100vw;
+    width: 40vw;
     padding-left: 5vh;
     padding-right: 5vh;
 
