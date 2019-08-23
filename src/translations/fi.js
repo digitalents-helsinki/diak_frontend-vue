@@ -40,7 +40,7 @@ export const fi = {
     help_text_4: 'Voit myös jättää kysymyksen vastaamatta.',
     adminName:'Admin Valvonen',
     adminEmail:'adminvalvonen@gmail.com',
-    Inquiry:'LUO UUSI KYSELY',
+    Survey:'LUO UUSI KYSELY',
     newInquery:'Luo uusi kysely',
     manageSurveys:'Hallinnoi kyselyjä',
     produceReport:'Tuota reportti',
@@ -58,13 +58,17 @@ export const fi = {
     questionsParagraph:'4. Muokkaa kysymyksia.',
     defaultQuestions:'Oletuskysymykset',
     questionsModify:'Muokka',
-    moreQuestionsparagraph:'Lisäkysymykset',
-    moreQuestions:'Lisää',
+    questionPlaceholder:'Voit halutessasi tarkentaa kysymyistä',
+    addQuestionsparagraph:'Lisäkysymykset',
+    addQuestions:'Lisää',
     emailParagraph:'5. Lähetä kysely.',
     emailtopparagrapgh:'Vastaanottajat:',
     moreEmail:'Lisää vastaanjottaja ryhmä',
     insertmoreEmail:'Lisää',
-    emailPlaceholder:'Kirjoita tähän vastaanottajan sähköpostiosoite...'
+    emailPlaceholder:'Kirjoita tähän vastaanottajan sähköpostiosoite...',
+    addMessage:'Lisää vietsi',
+    sendSurvey:'Lähetä kysely'
+
 
   }
 }

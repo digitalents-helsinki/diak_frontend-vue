@@ -11,6 +11,8 @@ import { faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
 import { faPencilAlt} from '@fortawesome/free-solid-svg-icons'
 import { faPlus} from '@fortawesome/free-solid-svg-icons'
 import { faUsers} from '@fortawesome/free-solid-svg-icons'
+import { faPaperclip} from '@fortawesome/free-solid-svg-icons'
+import { faPaperPlane} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.config.productionTip = false
@@ -23,6 +25,8 @@ library.add(faCalendarAlt)
 library.add(faPencilAlt)
 library.add(faPlus)
 library.add(faUsers)
+library.add(faPaperclip)
+library.add(faPaperPlane)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false

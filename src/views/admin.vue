@@ -26,7 +26,7 @@
     </div>
     <div class="rightSide  ">
         <div class="rightSide-top">
-            <p>{{ $t('message.Inquiry') }}</p>
+            <p>{{ $t('message.Survey') }}</p>
         </div>
         <div class="top-buttons">
             <button class="btn savecontinueButton">{{ $t('message.saveContinue') }}</button>
@@ -75,11 +75,28 @@
                     <p class=""> {{ $t('message.defaultQuestions') }} </p>
                     <button class="btn questionsModify-button">{{ $t('message.questionsModify') }}<font-awesome-icon icon="pencil-alt" class="iconButton-pencil"/></button>
                 </div>
-                <div id="insertedQuestionsview">  </div>
-                <div class="moreQuestions-div"> 
-                    <p class=""> {{ $t('message.moreQuestionsparagraph') }} </p>
-                    <button class="btn moreQuestions-button">{{ $t('message.moreQuestions') }}<font-awesome-icon icon="plus" class="iconButton-plus"/></button>
-                </div>
+                <div id="insertedQuestionsview">
+                    <div class="questionInsert">
+                        <textarea 
+                            v-model="question" 
+                            rows="3"
+                            v-bind:placeholder="$t('message.questionPlaceholder')"
+                            class="writeinQuestion">
+                        </textarea>
+                    </div>
+                    <div class="moreQuestions-div"> 
+                        <p class=""> {{ $t('message.addQuestionsparagraph') }} </p>
+                        <button  @click="addQuestion" class="btn moreQuestions-button">{{ $t('message.addQuestions') }}<font-awesome-icon icon="plus" class="iconButton-plus"/></button>
+                     </div>
+                    <div class="questionlistDiv">
+                         <ul class="questionList">
+                            <li v-for="(question, index) in questions" v-bind:key="index">
+                                <div class="questionMention"><span class="questionTitle"> Question </span><button @click="removeQuestion(index)">X</button></div>
+                                <span>{{question}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                 </div>  
             </div>
             <hr class="borderLine">
             <div class="adminaddEmail">
@@ -104,6 +121,13 @@
                         </ul>
                     </div>
                 </div>
+                <div  class="putMessagediv">
+                    <button class="btn putMessage"><font-awesome-icon icon="paperclip" class="putMessageicon"/>{{ $t('message.addMessage') }}</button>
+                </div> 
+                <div class="bottom-buttons">
+                    <button class="btn savecontinueBottom">{{ $t('message.saveContinue') }}</button>
+                    <button class="btn sendsurveyButton">{{ $t('message.sendSurvey') }}<font-awesome-icon icon="paper-plane" class="putMessageicon"/></button>
+                </div>
             </div>
         </div>
     </div>
@@ -126,6 +150,8 @@ export default {
                 to: new Date()
             },
             fi: fi,
+            questions: [],
+            question:null,
             emails: [],
             email: null
         }
@@ -134,6 +160,13 @@ export default {
         Datepicker
     },
     methods: {
+        addQuestion() {
+            this.$data.questions.push(this.$data.question)
+            this.$data.question = null
+        },
+        removeQuestion(index) {
+            this.$data.questions.pop(index)
+        },
         addEmail() {
             this.$data.emails.push(this.$data.email)
             this.$data.email = null
@@ -148,19 +181,16 @@ export default {
 .adminPage{
     background-color:#F9F9FB;
     width:100%;
-    height: 100%;
-    display: -webkit-flex; 
     display: flex;
     flex-direction: row;
     font-size: 1rem;
     justify-content:center;
-    font-family:Roboto;
+    font-family:Roboto, Arial;
     font-style:normal;
 
     .leftSide{
         background-color:#F9F9FB;
         width:16vw;
-        height: 100vh;
         
         .leftSide-top{
             background-color:#35CDE6;
@@ -214,13 +244,13 @@ export default {
                 }
 
                 .inquery-open {
-                    border-radius: 10px;
-                    box-shadow: 0 5px 5px gray;
-                    height:auto;
                     background-color: #353535;
                     color: #ffffff;
-                    font-weight:bold;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 5px gray;
                     width:11rem;
+                    height:auto;
+                    font-weight:bold;
                     margin-top:2.5rem;
                     margin-right:1rem;
                     margin-left:1rem;
@@ -234,13 +264,13 @@ export default {
                 }
 
                 .manageSurveys-open {
-                    border-radius: 10px;
-                    box-shadow: 0 5px 5px gray;
-                    height:auto;
                     background-color: #353535;
                     color: #ffffff;
-                    font-weight:bold;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 5px gray;
                     width:11rem;
+                    height:auto;
+                    font-weight:bold;
                     margin-top:2.5rem;
                     margin-right:1rem;
                     margin-left:1rem;
@@ -254,13 +284,13 @@ export default {
                 }
 
                 .produceReport-open {
-                    border-radius: 10px;
-                    box-shadow: 0 5px 5px gray;
-                    height:auto;
                     background-color: #353535;
                     color: #ffffff;
-                    font-weight:bold;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 5px gray;
                     width:11rem;
+                    height:auto;
+                    font-weight:bold;
                     margin-top:2.5rem;
                     margin-right:1rem;
                     margin-left:1rem;
@@ -313,25 +343,22 @@ export default {
             margin-right:3rem;
 
             .savecontinueButton{
-                border-radius: 6px;
-                box-shadow: 0 5px 5px gray;
-                height:auto;
                 background-color: #353535;
                 color: #ffffff;
-                font-weight:bold;
-                width:18rem;
-                height:auto;
-                
-            }
-            .discardButton{
                 border-radius: 6px;
                 box-shadow: 0 5px 5px gray;
+                width:18rem;
                 height:auto;
+                font-weight:bold;
+            }
+            .discardButton{
                 background-color: #A1318A;
                 color: #ffffff;
-                font-weight:bold;
+                border-radius: 6px;
+                box-shadow: 0 5px 5px gray;
                 width:10rem;
                 height:auto;
+                font-weight:bold;
                 margin-left:1rem;
             }
         }
@@ -409,16 +436,16 @@ export default {
                 .questionsModify-div{
                     display:flex;
                     flex-direction:row;
-                    margin:5rem 0 5rem 5rem;
+                    margin:5rem 0 1rem 5rem;
 
                     .questionsModify-button{
-                        border-radius: 10px;
-                        box-shadow: 0 5px 5px gray;
-                        height:auto;
                         background-color: #353535;
                         color: #ffffff;
-                        font-weight:bold;
+                        border-radius: 10px;
+                        box-shadow: 0 5px 5px gray;
                         width:10rem;
+                        height:auto;
+                        font-weight:bold;
                         margin-left:1.8rem;
 
                         .iconButton-pencil{
@@ -428,29 +455,73 @@ export default {
                 }
 
                 #insertedQuestionsview{
-                    border:1px solid lightgrey;
+                    background-color:#F9F9FB;
                     padding:1rem;
-                }
+                    margin-right:5rem;
+                    margin-left:5rem;
+                    margin-bottom:2rem;
 
-                .moreQuestions-div{
-                    display:flex;
-                    flex-direction:row;
-                    margin:5rem 0 5rem 5rem;
+                    .questionInsert{
+                        display:flex;
+                        flex-direction:row;
+                        justify-content:space-around;
+                        margin-bottom:2rem;
+                        background-color:#FFFFFF;
+                        padding-top:1rem;
+                        padding-bottom:1rem;
 
-                    .moreQuestions-button{
-                        border-radius: 10px;
-                        box-shadow: 0 5px 5px gray;
-                        height:auto;
-                        background-color: #353535;
-                        color: #ffffff;
-                        font-weight:bold;
-                        width:10rem;
-                        margin-left:1.8rem;
-                        
-                        .iconButton-plus{
-                            margin-left:1rem;
+                        .writeinQuestion{
+                                width:80rem;
+                            }
+                    }
+                    .moreQuestions-div{
+                        display:flex;
+                        justify-content:flex-end;
+                        margin:0rem 0 2rem 1rem;
+
+                        .moreQuestions-button{
+                            background-color: #353535;
+                            color: #ffffff;
+                            border-radius: 10px;
+                            box-shadow: 0 5px 5px gray;
+                            width:10rem;
+                            height:auto;
+                            font-weight:bold;
+                            margin-left:1.8rem;
+                            
+                            .iconButton-plus{
+                                margin-left:1rem;
+                            }
                         }
-                     }
+                }
+                    .questionlistDiv{
+                        
+                        .questionList{
+                            li{
+                                width:100%;;
+                                height:auto;
+                                border: 1px solid lightgrey;
+                                background-color:#FFFFFF;
+                                margin:1rem 0;
+                                padding:1rem 0;
+                                list-style-type:none;
+                                word-wrap:break-word;
+                                font-size:1.1em;
+
+                                .questionMention{
+                                    margin-bottom:0.6rem;
+
+                                    .questionTitle{
+                                        color:#350E7E;
+                                        font-size:1.1em;
+                                        font-weight:bold;
+                                        margin-bottom:0.1rem;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
 
@@ -480,19 +551,20 @@ export default {
                         margin-right:6rem;
 
                         .moreEmail-button{
-                            border-radius: 10px;
-                            box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.05);
-                            height:auto;
                             background-color: #FFFFFF;
                             color: #000000;
-                            width:16rem;
-                            margin-left:1.8rem;
                             border:1px solid lightgrey;
+                            border-radius: 10px;
+                            width:16rem;
+                            height:auto;
+                            box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.05);
+                            margin-left:1.8rem;
 
                             .iconmoreEmail{
                                 margin-right:1rem;
                             }
                         }
+
                         .roundedButton{
                             border-radius: 50%;
                             margin:0 1rem;
@@ -541,6 +613,56 @@ export default {
                         }
                     }
                 }
+                .putMessagediv{
+                    margin-left:3rem;
+                    margin-bottom:8rem;
+
+                    .putMessage{
+                        background-color: #FFFFFF;
+                        color: #000000;
+                        border:1px solid lightgrey;
+                        border-radius: 6px;
+                        box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.05);
+                        width:16rem;
+                        height:auto;
+                        margin-left:1.8rem;
+
+                        .putMessageicon{
+                            margin-right:1rem;
+                        }
+                    }
+                }
+                .bottom-buttons{
+                    display:flex;
+                    flex-direction:row;
+                    justify-content:space-between;
+                    margin:0 5rem 8rem 5rem;
+
+                    .savecontinueBottom{
+                        background-color: #353535;
+                        color: #ffffff;
+                        border-radius: 5px;
+                        box-shadow: 0 5px 5px gray;
+                        width:18rem;
+                        height:auto;
+                        padding:1rem 0;
+                        font-weight:bold;
+                    }
+                    .sendsurveyButton{
+                        background-color:#350E7E;
+                        color: #ffffff;
+                        border-radius: 5px;
+                        box-shadow: 0 5px 5px gray;
+                        width:16rem;
+                        height:auto;
+                        padding:1rem 0;
+                        font-weight:bold;
+
+                        .putMessageicon{
+                            margin-left:1rem;
+                        }
+                    }
+                }
             }
         }
     }
@@ -549,7 +671,6 @@ export default {
 @media only screen and (max-width: 1450px) {
     .leftSide{
         width:25vw !important;
-        height: 100vh;
     }
 
     .leftSide-top{
@@ -558,12 +679,11 @@ export default {
     }
 
     .leftSide-top > p:nth-of-type(2) {
-            margin-bottom:6rem;
+        margin-bottom:6rem;
     }
 
     .rightSide{
         width:72.8vw !important;
-        height: 100vh !important;
     }
 
     .rightSide-top{
@@ -574,7 +694,6 @@ export default {
 @media only screen and (max-width: 1000px) {
     .leftSide{
         width:30vw !important;
-        height: 100vh;
     }
 
     .leftSide-top{
@@ -584,12 +703,10 @@ export default {
 
     .rightSide{
         width:67.8vw !important;
-        height: 100vh;
     }
 
     .rightSide-top{
         width:67.8vw !important;
-        height: 100vh;
     }
 
     .adminaddEmail{
@@ -607,6 +724,36 @@ export default {
         flex-direction:column !important;
         align-items:flex-start;
     }
+    .bottom-buttons{
+       margin:0 1rem 8rem 1rem !important;
+    }
+    .savecontinueBottom{
+        margin-right:1rem;
+    }
 }
+@media only screen and (max-width: 767px) {
+    .adminPage{
+        display:flex !important;
+        flex-direction:column !important;
+    }
+    .leftSide{
+        width:100vw !important;
+        height:72vh;
+        margin-bottom:1rem;
+    }
 
+    .leftSide-top{
+        width:100vw !important;
+        height:38vh !important;
+    }
+
+    .rightSide{
+        width:100vw !important;
+    }
+
+    .rightSide-top{
+        width:100vw !important;
+    }
+
+}
 </style>
