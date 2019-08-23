@@ -26,7 +26,7 @@ library.add(faUsers)
 
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {
-  clientId: '572605107934-5ocqqhnnq8ilgfiekbmplhiqbn8vmoec.apps.googleusercontent.com',
+  clientId: process.env.VUE_APP_CLIENT_ID,
   scope: 'profile email',
   prompt: 'select_account'
 }
