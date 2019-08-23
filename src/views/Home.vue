@@ -34,7 +34,7 @@ export default {
   name: 'home',
   methods: {
     moveQuestionnaire() {
-      this.$router.push({ path: '/questionnaire/'})
+      this.$router.push({ path: '/questionnaire/testikysely'})
     }
   }
 }
@@ -76,7 +76,7 @@ export default {
           font-size:1.1em;
           font-weight:bold;
         }
-     }
+    }
 
     .text-container {
       background-color: #F7F6F6;

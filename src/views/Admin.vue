@@ -305,7 +305,7 @@ export default {
             }
         }
     }
-      
+
         .inquery-open:active + .inquerydiv{
             background-color::#350E7E;
         }
@@ -320,7 +320,7 @@ export default {
         background-color:#FFFFFF;
         width:81.8vw;
         margin:1rem 1rem 0rem 1rem;
-     
+
         .rightSide-top{
             background-color:#350E7E;
             width:81.8vw;
@@ -364,8 +364,8 @@ export default {
         }
         
         .adminForm{
-           margin-top:5rem;
-           font-size:1.1em;
+            margin-top:5rem;
+            font-size:1.1em;
 
             .nameInput-form{
                 color:#350E7E;
@@ -418,7 +418,8 @@ export default {
                     p{
                         margin-right:1.1rem;
                     }
-                     .calendarIcon{
+
+                    .calendarIcon{
                         font-size:1.6rem;
                         margin-left:1.8rem;
                     }
@@ -451,7 +452,7 @@ export default {
                         .iconButton-pencil{
                             margin-left:1rem;
                         }
-                     }
+                    }
                 }
 
                 #insertedQuestionsview{
@@ -520,7 +521,10 @@ export default {
                                 }
                             }
                         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 81d2e0872addb487f831bddec0b1791ca7de2f60
                     }
                 }
             }

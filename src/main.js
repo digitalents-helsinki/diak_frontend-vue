@@ -28,6 +28,14 @@ library.add(faUsers)
 library.add(faPaperclip)
 library.add(faPaperPlane)
 
+import GAuth from 'vue-google-oauth2'
+const gauthOption = {
+  clientId: process.env.VUE_APP_CLIENT_ID,
+  scope: 'profile email',
+  prompt: 'select_account'
+}
+Vue.use(GAuth, gauthOption)
+
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 
