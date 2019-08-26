@@ -139,7 +139,7 @@ export default {
             this.$data.email = null
         },
         removeEmail(index) {
-            this.$data.emails.pop(index)
+            this.$data.emails = this.$data.emails.splice(index, 1)
         }
     }
 }

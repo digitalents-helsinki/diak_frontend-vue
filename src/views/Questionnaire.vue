@@ -89,7 +89,7 @@
         <div class="question" v-show="questionnum == 1">
           <div class="question_text">
             <div class="questionHelp_button">
-              <p>Kysymys 2.</p>
+              <p>2. Resilienssi</p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('overcoming')"
@@ -151,7 +151,7 @@
         <div class="question" v-show="questionnum == 2">
           <div class="question_text">
             <div class="questionHelp_button">
-              <p>Kysymys 3.</p>
+              <p>3. Asuminen</p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('living')"
@@ -213,7 +213,7 @@
         <div class="question" v-show="questionnum == 3">
           <div class="question_text">
             <div class="questionHelp_button">
-              <p>Kysymys 4.</p>
+              <p>4. Pärjääminen</p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('coping')"
@@ -275,7 +275,7 @@
         <div class="question" v-show="questionnum == 4">
           <div class="question_text">
             <div class="questionHelp_button">
-              <p>Kysymys 5.</p>
+              <p>5. Perhesuhteet</p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('family')"
@@ -337,7 +337,7 @@
         <div class="question" v-show="questionnum == 5">
           <div class="question_text">
             <div class="questionHelp_button">
-              <p>Kysymys 6.</p>
+              <p>6. Ystävyyssuhteet</p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('friends')"
@@ -399,7 +399,7 @@
         <div class="question" v-show="questionnum == 6">
           <div class="question_text">
             <div class="questionHelp_button">
-              <p>Kysymys 7.</p>
+              <p>7. Talous</p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('finance')"
@@ -461,7 +461,7 @@
         <div class="question" v-show="questionnum == 7">
           <div class="question_text">
             <div class="questionHelp_button">
-              <p>Kysymys 8.</p>
+              <p>8. Itsensä kehittäminen</p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('strengths')"
@@ -523,7 +523,7 @@
         <div class="question" v-show="questionnum == 8">
           <div class="question_text">
             <div class="questionHelp_button">
-              <p>Kysymys 9.</p>
+              <p>9. Itsetunto</p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('self_esteem')"
@@ -585,7 +585,7 @@
         <div class="question" v-show="questionnum == 9">
           <div class="question_text">
             <div class="questionHelp_button">
-              <p>Kysymys 10.</p>
+              <p>10. Elämään tyytyväisyys</p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('life_as_whole')"
@@ -650,70 +650,70 @@
           <h3>Kooste vastauksistasi</h3>
           <div class="results">
             <div>
-              <span>Kysymys 1.</span><span v-bind:class="{notanswered :!questiondata.health}">{{questiondata.health ? questiondata.health : "Ei vastattu"}}</span>
+              <span>1. Terveys</span><span v-bind:class="{notanswered :!questiondata.health}">{{questiondata.health ? questiondata.health : "Ei vastattu"}}</span>
               <b-button v-b-toggle.collapse-health class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-health">
                 <p class="text-review">{{questiondata.health_desc ? questiondata.health_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>Kysymys 2.</span><span v-bind:class="{notanswered :!questiondata.overcoming}">{{questiondata.overcoming ? questiondata.overcoming :"Ei vastattu"}}</span>
+              <span>2. Resilienssi</span><span v-bind:class="{notanswered :!questiondata.overcoming}">{{questiondata.overcoming ? questiondata.overcoming :"Ei vastattu"}}</span>
               <b-button v-b-toggle.collapse-overcoming class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-overcoming">
                 <p class="text-review">{{questiondata.overcoming_desc ? questiondata.overcoming_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>Kysymys 3.</span><span v-bind:class="{notanswered :!questiondata.living}">{{questiondata.living ? questiondata.living :"Ei vastattu" }}</span>
+              <span>3. Asuminen</span><span v-bind:class="{notanswered :!questiondata.living}">{{questiondata.living ? questiondata.living :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-living class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-living">
                 <p class="text-review">{{questiondata.living_desc ? questiondata.living_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>Kysymys 4.</span><span v-bind:class="{notanswered :!questiondata.coping}">{{questiondata.coping ? questiondata.coping :"Ei vastattu" }}</span>
+              <span>4. Pärjääminen</span><span v-bind:class="{notanswered :!questiondata.coping}">{{questiondata.coping ? questiondata.coping :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-coping class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-coping">
                 <p class="text-review">{{questiondata.coping_desc ? questiondata.coping_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>Kysymys 5.</span><span v-bind:class="{notanswered :!questiondata.family}">{{questiondata.family ? questiondata.family :"Ei vastattu" }}</span>
+              <span>5. Perhesuhteet</span><span v-bind:class="{notanswered :!questiondata.family}">{{questiondata.family ? questiondata.family :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-family class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-family">
                 <p class="text-review">{{questiondata.family_desc ? questiondata.family_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>Kysymys 6.</span><span v-bind:class="{notanswered :!questiondata.friends}">{{questiondata.friends ? questiondata.friends :"Ei vastattu" }}</span>
+              <span>6. Ystävyyssuhteet</span><span v-bind:class="{notanswered :!questiondata.friends}">{{questiondata.friends ? questiondata.friends :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-friends class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-friends">
                 <p class="text-review">{{questiondata.friends_desc ? questiondata.friends_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>Kysymys 7.</span><span v-bind:class="{notanswered :!questiondata.finance}">{{questiondata.finance ? questiondata.finance :"Ei vastattu" }}</span>
+              <span>7. Talous</span><span v-bind:class="{notanswered :!questiondata.finance}">{{questiondata.finance ? questiondata.finance :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-finance class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-finance">
                 <p class="text-review">{{questiondata.finance_desc ? questiondata.finance_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>Kysymys 8.</span><span v-bind:class="{notanswered :!questiondata.strengths}">{{questiondata.strengths ? questiondata.strengths :"Ei vastattu" }}</span>
+              <span>8. Itsensä kehittäminen</span><span v-bind:class="{notanswered :!questiondata.strengths}">{{questiondata.strengths ? questiondata.strengths :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-strengths class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-strengths">
                 <p class="text-review">{{questiondata.strengths_desc ? questiondata.strengths_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>Kysymys 9.</span><span v-bind:class="{notanswered :!questiondata.self_esteem}">{{questiondata.self_esteem ? questiondata.self_esteem :"Ei vastattu" }}</span>
+              <span>9. Itsetunto</span><span v-bind:class="{notanswered :!questiondata.self_esteem}">{{questiondata.self_esteem ? questiondata.self_esteem :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-selfesteem class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-selfesteem">
                 <p class="text-review">{{questiondata.self_esteem_desc ? questiondata.self_esteem_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>Kysymys 10.</span><span v-bind:class="{notanswered :!questiondata.life_as_whole}">{{questiondata.life_as_whole ? questiondata.life_as_whole :"Ei vastattu" }}</span>
+              <span>10. Elämään tyytyväisyys</span><span v-bind:class="{notanswered :!questiondata.life_as_whole}">{{questiondata.life_as_whole ? questiondata.life_as_whole :"Ei vastattu" }}</span>
               <b-button v-b-toggle.collapse-lifeaswhole class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
               <b-collapse id="collapse-lifeaswhole">
                 <p class="text-review">{{questiondata.life_as_whole_desc ? questiondata.life_as_whole_desc :"Ei vastattu" }}</p>
@@ -1275,7 +1275,7 @@ export default {
 
 .custom-range {
   &::-webkit-slider-thumb {
-    background: gray;
+    background: lightgray;
   }
 
   &::-moz-range-thumb {
@@ -1284,6 +1284,10 @@ export default {
 
   &::-ms-thumb {
     background: gray;
+  }
+
+  &::-webkit-slider-runnable-track {
+    background: lightgray;
   }
 }
 
