@@ -46,30 +46,34 @@
               <div v-show="questiondata.health" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.health = undefined"/></div>
               <div v-show="questiondata.health"><button class="btn remove-button" @click.prevent="questiondata.health = undefined">Poista Vastaus</button></div>
             </div>
-            <b-form-input
-              v-bind:class="{activeRange: questiondata.health}"
-              type="range"
-              min="0"
-              max="10"
-              v-model="questiondata.health"
-            />
-            <div class="rangeLabel-mobile">
-              <div>0</div>
-              <div>10</div>
+            <div class="range">
+              <span>erittäin tyytymätön</span>
+              <b-form-input
+                v-bind:class="{activeRange: questiondata.health}"
+                type="range"
+                min="0"
+                max="10"
+                v-model="questiondata.health"
+              />
+              <span>erittäin tyytyväinen</span>
             </div>
-            <div class="rangeLabel">
-              <div>0</div>
-              <div>1</div>
-              <div>2</div>
-              <div>3</div>
-              <div>4</div>
-              <div>5</div>
-              <div>6</div>
-              <div>7</div>
-              <div>8</div>
-              <div>9</div>
-              <div>10</div>
-            </div>
+              <div class="rangeLabel-mobile">
+                <div>0</div>
+                <div>10</div>
+              </div>
+              <div class="rangeLabel">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+              </div>
           </div>
           <div class="textarea-wordCount">
             <textarea
@@ -723,7 +727,7 @@
           <div class="review-buttons">
             <button class="btn send-button" @click.prevent="saveQuestions">{{ $t('message.send')}}</button>
             <button
-               class="btn return-button" 
+              class="btn return-button" 
               @click.prevent="toPreviousQuestion"
             >{{ $t('message.return')}}</button>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
@@ -813,6 +817,12 @@ export default {
 <style lang="scss" scoped>
 .notAnswered {
   color: red;
+}
+
+.range {
+  display: flex;
+  width: 100%;
+  margin: auto;
 }
 
 .background {
@@ -926,6 +936,9 @@ export default {
       }
 
       .range-input {
+        display: flex;
+        flex-direction: column;
+
         .rangeQuestiondata-icon{
           position: relative;
           display: flex;
@@ -1255,6 +1268,8 @@ export default {
     display: flex !important;
     justify-content: space-between !important;
     padding: 0 0.3rem !important;
+    width: 80%;
+    margin: auto;
   }
 
   .rangeLabel > div {

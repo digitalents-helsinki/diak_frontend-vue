@@ -13,6 +13,8 @@ export const fi = {
     return: 'Palaa kyselyyn',
     cancel_save: 'Tallenna ja jatka myöhemmin',
     cancel_discard: 'Peruuta',
+    question_min: 'erittäin tyytymätön',
+    question_max: 'erittäin tyytyväinen',
     question_health: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet <b>terveydentilaasi</b>?',
     question_overcoming: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet <b>kykyysi voittaa elämässä eteen tulevia vaikeuksia?</b>',
     question_living: 'Kun ajattelet nykyhetkeä, niin kuinka tyytyväinen olet <b>asumisoloihisi?</b>',
