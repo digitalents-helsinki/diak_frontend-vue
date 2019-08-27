@@ -58,7 +58,6 @@ p {
     display: flex;
     flex-direction: column;
     background-color: white;
-    padding-bottom: 5vh;
     align-items: center;
     text-align: center;
     margin-top: 1rem;
@@ -71,7 +70,7 @@ p {
       display: flex;
       flex-direction: column;
       margin-top: 1rem;
-      height: 80vh;
+      height: 70vh;
 
       @media screen and (min-width: 1024px) {
         height: 60vh;
