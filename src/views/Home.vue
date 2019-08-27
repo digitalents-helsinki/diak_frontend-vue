@@ -132,8 +132,8 @@ p {
         background-color: #350E7E;
         font-weight:bold;
         color:#FFFFFF;
-        padding:1rem 3rem;
-        font-size:1.1rem;
+        padding: 0.5rem 3rem;
+        font-size: 1rem;
       }
     }
   }
