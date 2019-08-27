@@ -103,6 +103,7 @@ p {
         margin-right: 1rem;
         margin-bottom: 1rem;
         flex: 1;
+        align-items: center;
 
         &:first-child{
           margin-top: 1rem;
@@ -152,19 +153,5 @@ p {
      padding:1rem 7rem !important;
     font-size:1.1rem !important;
     } 
-  }
-
-  @media screen and (min-width: 768px) { 
-
-    #logo {
-      width:78% !important;
-    }
-  }
-
-  @media screen and (min-width: 1000px) { 
-
-    #logo {
-      width:57% !important;
-    }
   }
 </style>
