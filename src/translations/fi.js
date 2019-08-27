@@ -69,8 +69,7 @@ export const fi = {
     insertmoreEmail:'Lisää',
     emailPlaceholder:'Kirjoita tähän vastaanottajan sähköpostiosoite...',
     addMessage:'Lisää vietsi',
-    sendSurvey:'Lähetä kysely'
-
-
+    sendSurvey:'Lähetä kysely',
+    manageSurvey:'HALLINOI KYSELYJÄ'
   }
 }
