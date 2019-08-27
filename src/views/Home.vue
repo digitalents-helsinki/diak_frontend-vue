@@ -41,6 +41,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .home {
   background-color: #FFFFFF;
   height: 100%;
@@ -53,24 +58,28 @@ export default {
     display: flex;
     flex-direction: column;
     background-color: white;
-    padding-bottom: 5vh;
     align-items: center;
     text-align: center;
-    margin-top:2rem;
+    margin-top: 1rem;
 
     #logo {
-    width:80%;
+    width: 70%;
     }
 
     .textContainer{
       display: flex;
       flex-direction: column;
-      margin-top:2rem;
+      margin-top: 1rem;
+      height: 70vh;
+
+      @media screen and (min-width: 1024px) {
+        height: 60vh;
+      }
         
       #textContainer-top{
         background-color:#80CDE6;
         color:#FFFFFF;
-        padding: 2vh;
+        padding: 0.5rem;
         
         .welcomeMessage {
           font-size:1.1em;
@@ -84,11 +93,20 @@ export default {
       flex-direction: column;
       box-shadow: 0 2px 2px lightgray;
       font-size:1rem;
+      height: 100%;
 
       div {
         display: flex;
         flex-flow: row nowrap;
-        margin:1rem;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+        flex: 1;
+        align-items: center;
+
+        &:first-child{
+          margin-top: 1rem;
+        }
 
         img {
           height: 25px;
@@ -106,7 +124,7 @@ export default {
       }
     }
       button {
-        margin-top: 2rem;
+        margin-top: 1rem;
         border-radius: 50px;
         box-shadow: 0 5px 5px gray;
         line-height: 2;
@@ -114,8 +132,8 @@ export default {
         background-color: #350E7E;
         font-weight:bold;
         color:#FFFFFF;
-        padding:1rem 3rem;
-        font-size:1.1rem;
+        padding: 0.5rem 3rem;
+        font-size: 1rem;
       }
     }
   }
@@ -134,19 +152,5 @@ export default {
      padding:1rem 7rem !important;
     font-size:1.1rem !important;
     } 
-  }
-
-  @media screen and (min-width: 768px) { 
-
-    #logo {
-      width:78% !important;
-    }
-  }
-
-  @media screen and (min-width: 1000px) { 
-
-    #logo {
-      width:57% !important;
-    }
   }
 </style>
