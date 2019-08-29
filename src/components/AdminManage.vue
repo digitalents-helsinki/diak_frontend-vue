@@ -1,17 +1,37 @@
 <template>
     <div class="rightsideManage">
-        <div class="rightsideManage-top">
+      <div class="rightsideManage-top">
          <p>{{ $t('message.Survey') }}</p>
+      </div>
+    <div class="searchParagraph-div">
+      <div class="totalParagraph">
+         <p>{{ $t('message.total') }}</p>
+      </div>
+      <div class="searchbar-div">
+          <p class="paragraphTop">{{ $t('message.searchParagraph') }}</p>
+          <b-input-group size="md" class="search-bar">
+            <span> <font-awesome-icon icon="search" class="iconsearch"/> </span>
+            <b-form-input v-bind:placeholder="$t('message.searchPlaceholder')"></b-form-input>
+          </b-input-group>
+      </div>
+      </div>
+      <div class="tableandfilter">
+        <div class="buttonstotal">
+            <b-dropdown id="dropdown-1" variant="secondary" text="Kaikki kyselyt" class="m-md-2 dropdownButtons-top">
+              <b-dropdown-item>First Action</b-dropdown-item>
+              <b-dropdown-item>Second Action</b-dropdown-item>
+              <b-dropdown-item>Third Action</b-dropdown-item>
+            </b-dropdown>
+        </div>
+        <div class="tableDisplayfields">
+          <b-table hover responsive :items="items" :fields="fields" head-variant="light">
+                <!--<template slot="arkistoi_tai_poista_kysely" slot-scope="{ item: { arkistoi_tai_poista_kysely }}">
+                  <i :class="'fas ' + arkistoi_tai_poista_kysely"></i>
+                </template>-->
+          </b-table>
+        </div>
+      </div>
     </div>
-  
-    <div>
-        <b-table hover responsive :items="items" :fields="fields" head-variant="light" class="bzo">
-          <!--<template slot="arkistoi_tai_poista_kysely" slot-scope="{ item: { arkistoi_tai_poista_kysely }}">
-            <i :class="'fas ' + arkistoi_tai_poista_kysely"></i>
-          </template>-->
-        </b-table>
-  </div>
-  </div>
 </template>
 <script>
   export default {
@@ -83,7 +103,7 @@
 </script>
 <style lang="scss" scoped>
 .rightsideManage{
-    background-color:#FFFFFF;
+    background-color:#F9F9FB;
     width:81.8%;
     margin:1rem 1rem 0rem 1rem;
 
@@ -98,14 +118,60 @@
         justify-content:center;
         align-items:center;
         padding-top:1.1rem;
-        margin-bottom:3rem;
+        margin-bottom:1rem;
+    }
+    .searchParagraph-div{
+      margin-bottom:8rem;
+      background-color:#FFFFFF;
+      width:100%;
+      padding-bottom:1rem;
+
+      .totalParagraph{
+        font-size:1em;
+        color:grey;
+        margin-left:1rem;
+        margin-bottom:6rem;
+        }
+
+      .searchbar-div{
+        margin:1rem;
+        margin-left:1rem;
+
+        .paragraphTop{
+          font-size:1.6em;
+          font-weight:bold;
+        }
+        .search-bar{
+          width:50%;
+          
+          .iconsearch{
+            font-size:2rem;
+            color:grey;
+            margin-right:1rem;
+          }
+        }
+      }
+    }
+    .tableandfilter{
+      display:flex;
+      flex-direction:column;
+
+      .buttonstotal{
+        display:flex;
+        flex-direction:row;
+      }
+      
+      .tableDisplayfields{
+        background-color:#FFFFFF;
+      }
     }
 }
-@media only screen and (max-width: 1070px) {
+/*@media only screen and (max-width: 1070px) {
     .bzo{
       max-width: 60rem;
+      background-color:#FFFFFF;
     }
-}
+}*/
 
 </style>
 

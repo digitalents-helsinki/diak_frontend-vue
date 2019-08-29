@@ -1,12 +1,14 @@
 <template>
   <div class="background">
-    <div class="container-fluid" id="questionnaire-top">
-      <img class="logo" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
-      <button @click="toggleHelp" class="btn buttonOhjeet-Ohjeet">Ohjeet</button>
-      <span v-if="user">{{user}}</span>
-      <span v-if="!user">anonyymi kysely {{surveyId}}</span>
-    </div>
-    <div @click="toggleHelp" class="dim-background" v-show="help_visible">
+    <div class="container-fluid" id="questionnaire-main">
+      <div class="questionnaire-top">
+        <img class="logo" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+        <button @click="toggleHelp" class="btn buttonOhjeet-Ohjeet">Ohjeet</button>
+      </div>
+      <div class="questionnaire-bottom">
+        <span v-if="user">{{user}}</span>
+        <span v-if="!user">anonyymi kysely {{surveyId}}</span>
+        <div @click="toggleHelp" class="dim-background" v-show="help_visible">
       <div class="help-container">
         <p>{{ $t('message.help_text_1') }}</p>
         <p>{{ $t('message.help_text_2') }}</p>
@@ -24,6 +26,8 @@
           >{{ $t('message.cancel_discard') }}</button>
         </div>
       </div>
+    </div>
+    </div>
     </div>
     <div class="questionnaire container text-center shadow-lg">
       <button @click="toggleHelp" class="btn buttonOhjeet">Ohjeet</button>
@@ -47,7 +51,6 @@
               <div v-show="questiondata.health"><button class="btn remove-button" @click.prevent="questiondata.health = undefined">Poista Vastaus</button></div>
             </div>
             <div class="range">
-              <span>erittäin tyytymätön</span>
               <b-form-input
                 v-bind:class="{activeRange: questiondata.health}"
                 type="range"
@@ -55,7 +58,6 @@
                 max="10"
                 v-model="questiondata.health"
               />
-              <span>erittäin tyytyväinen</span>
             </div>
               <div class="rangeLabel-mobile">
                 <div>0</div>
@@ -74,6 +76,10 @@
                 <div>9</div>
                 <div>10</div>
               </div>
+              <div class="rangeLabel-words">
+                <span>{{ $t('message.dissatisfied') }}</span>
+                <span>{{ $t('message.satisfied') }}</span>
+            </div>
           </div>
           <div class="textarea-wordCount">
             <textarea
@@ -131,6 +137,10 @@
               <div>8</div>
               <div>9</div>
               <div>10</div>
+            </div>
+            <div class="rangeLabel-words">
+                <span>{{ $t('message.dissatisfied') }}</span>
+                <span>{{ $t('message.satisfied') }}</span>
             </div>
           </div>
           <div class="textarea-wordCount">
@@ -194,6 +204,10 @@
               <div>9</div>
               <div>10</div>
             </div>
+             <div class="rangeLabel-words">
+                <span>{{ $t('message.dissatisfied') }}</span>
+                <span>{{ $t('message.satisfied') }}</span>
+            </div>
           </div>
           <div class="textarea-wordCount">
             <textarea
@@ -255,6 +269,10 @@
               <div>8</div>
               <div>9</div>
               <div>10</div>
+            </div>
+             <div class="rangeLabel-words">
+                <span>{{ $t('message.dissatisfied') }}</span>
+                <span>{{ $t('message.satisfied') }}</span>
             </div>
           </div>
           <div class="textarea-wordCount">
@@ -318,6 +336,10 @@
               <div>9</div>
               <div>10</div>
             </div>
+             <div class="rangeLabel-words">
+                <span>{{ $t('message.dissatisfied') }}</span>
+                <span>{{ $t('message.satisfied') }}</span>
+            </div>
           </div>
           <div class="textarea-wordCount">
             <textarea
@@ -379,6 +401,10 @@
               <div>8</div>
               <div>9</div>
               <div>10</div>
+            </div>
+             <div class="rangeLabel-words">
+                <span>{{ $t('message.dissatisfied') }}</span>
+                <span>{{ $t('message.satisfied') }}</span>
             </div>
           </div>
           <div class="textarea-wordCount">
@@ -442,6 +468,10 @@
               <div>9</div>
               <div>10</div>
             </div>
+             <div class="rangeLabel-words">
+                <span>{{ $t('message.dissatisfied') }}</span>
+                <span>{{ $t('message.satisfied') }}</span>
+            </div>
           </div>
           <div class="textarea-wordCount">
             <textarea
@@ -504,6 +534,10 @@
               <div>9</div>
               <div>10</div>
             </div>
+             <div class="rangeLabel-words">
+                <span>{{ $t('message.dissatisfied') }}</span>
+                <span>{{ $t('message.satisfied') }}</span>
+            </div>
           </div>
           <div class="textarea-wordCount">
             <textarea
@@ -565,6 +599,10 @@
               <div>8</div>
               <div>9</div>
               <div>10</div>
+            </div>
+             <div class="rangeLabel-words">
+                <span>{{ $t('message.dissatisfied') }}</span>
+                <span>{{ $t('message.satisfied') }}</span>
             </div>
           </div>
           <div class="textarea-wordCount">
@@ -629,6 +667,10 @@
               <div>8</div>
               <div>9</div>
               <div>10</div>
+            </div>
+             <div class="rangeLabel-words">
+                <span>erittäin tyytymätön</span>
+                <span>erittäin tyytyväinen</span>
             </div>
           </div>
           <div class="textarea-wordCount">
@@ -835,15 +877,20 @@ export default {
   overflow: hidden;
   font-size: 1rem;
 
-  #questionnaire-top {
+  #questionnaire-main {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction:column;
     background-color: #80cde6;
     font-size: 10rem;
-    height: 16vh;
+    height: 26vh;
     overflow: hidden;
     margin-bottom: 1rem;
+
+    .questionnaire-top{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top:1rem;
 
     .logo {
       height: 60px;
@@ -857,14 +904,21 @@ export default {
       font-size: 1.1rem;
       font-weight: bold;
       text-align: center;
+      }
     }
+    .questionnaire-bottom{
+      display: flex;
+      justify-content:flex-end;
+      margin-top:1rem;
+      font-weight:bold;
 
-    span {
-      color: white;
-      font-size: 18px;
-      position: absolute;
-      left: 90vw;
-    }
+      span {
+        color: white;
+        font-size: 18px;
+        position: absolute;
+        
+        }
+      }
   }
 
   .help-button {
@@ -964,16 +1018,19 @@ export default {
             display:none;
           }
         }
-        
         .rangeLabel-mobile {
           display: -webkit-flex;
           display: flex;
           justify-content: space-between;
           font-weight: bold;
         }
-
         .rangeLabel {
           display: none;
+        }
+        .rangeLabel-words{
+          display: -webkit-flex;
+          display: flex;
+          justify-content: space-between;
         }
         .activeRange {
           &::-webkit-slider-thumb {
@@ -1246,7 +1303,11 @@ export default {
 }
 
 @media only screen and (min-width: 768px) {
-  #questionnaire-top > img {
+  #questionnaire-main {
+    height: 16vh !important;
+  }
+
+  .questionnaire-top > img {
     height: 70px !important;
   }
 
@@ -1257,7 +1318,7 @@ export default {
   .question_text p:nth-of-type(1) {
     font-size: 1.2em !important;
   }
-
+  
   .rangeLabel-mobile {
     display: none !important;
   }
@@ -1268,7 +1329,7 @@ export default {
     display: flex !important;
     justify-content: space-between !important;
     padding: 0 0.3rem !important;
-    width: 80%;
+    width: 100%;
     margin: auto;
   }
 
@@ -1282,6 +1343,10 @@ export default {
     display: flex;
     justify-content: center;
   }
+  .rangeLabel-words{
+      margin-top:2rem;
+  }
+
   .page-number{
     margin-top:0rem !important;
   }
@@ -1307,11 +1372,13 @@ export default {
 }
 
 @media only screen and (min-width: 1025px) {
-  #questionnaire-top {
+  .questionnaire-top {
     display: flex !important;
     justify-content: center !important;
   }
-
+.questionnaire-bottom{
+      margin-top:0 !important;
+}
   .buttonOhjeet-Ohjeet {
     display: none !important;
   }
@@ -1332,6 +1399,10 @@ export default {
 
   .question_text p:nth-of-type(1) {
     font-size: 1.3em !important;
+  }
+  
+  .rangeLabel-words{
+      margin-top:1.7rem;
   }
 
   textarea {
@@ -1361,6 +1432,10 @@ export default {
     padding: 0 5rem !important;
   }
 
+.rangeLabel-words{
+      margin-top:2rem;
+  }
+  
   .cancel-container {
     width: 30vw !important;
   }

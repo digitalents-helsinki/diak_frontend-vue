@@ -13,6 +13,7 @@ import { faPlus} from '@fortawesome/free-solid-svg-icons'
 import { faUsers} from '@fortawesome/free-solid-svg-icons'
 import { faPaperclip} from '@fortawesome/free-solid-svg-icons'
 import { faPaperPlane} from '@fortawesome/free-solid-svg-icons'
+import { faSearch} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.config.productionTip = false
@@ -27,6 +28,7 @@ library.add(faPlus)
 library.add(faUsers)
 library.add(faPaperclip)
 library.add(faPaperPlane)
+library.add(faSearch)
 
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {
