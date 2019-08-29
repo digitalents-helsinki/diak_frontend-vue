@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import VueI18n from 'vue-i18n'
+import VueMoment from 'vue-moment'
 import { messages } from './translation'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTimesCircle} from '@fortawesome/free-solid-svg-icons'
@@ -18,6 +19,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(VueI18n)
+Vue.use(VueMoment)
 
 library.add(faTimesCircle)
 library.add(faAngleUp)
