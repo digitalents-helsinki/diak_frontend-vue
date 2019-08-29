@@ -161,7 +161,8 @@ export default {
                         id: this.$data.surveyName, 
                         anon: this.$data.surveyAnon,
                         startDate: this.$data.startDate,
-                        endDate: this.$data.endDate
+                        endDate: this.$data.endDate,
+                        respondents_size: this.$data.emails.length
                     }
                 })
                 .then(res => {

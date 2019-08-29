@@ -37,6 +37,9 @@
             <div v-else-if="field.colType === 'endDate'">
               <span>{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
             </div>
+            <div v-else-if="field.colType === 'respondentsSize'">
+              <span>0/{{data.item.respondents_size}}</span>
+            </div>
             <div v-else-if="field.colType === 'modify'">
               <b-button>Modify</b-button>
             </div>
@@ -80,7 +83,8 @@ export default {
           },
           {
             key: 'respondents',
-            label: 'Vastanneita'
+            label: 'Vastanneita',
+            colType: 'respondentsSize'
           },
           {
             key: 'modify',
@@ -127,7 +131,15 @@ export default {
   }
 }  
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+.table {
+  tbody {
+    tr {
+      text-align: center;
+    }
+  }
+}
+
 .rightsideManage{
     background-color:#F9F9FB;
     width:81.8%;
@@ -192,12 +204,6 @@ export default {
       }
     }
 }
-/*@media only screen and (max-width: 1070px) {
-    .bzo{
-      max-width: 60rem;
-      background-color:#FFFFFF;
-    }
-}*/
 
 .surveyList {
   div {
