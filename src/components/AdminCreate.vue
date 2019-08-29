@@ -1,7 +1,7 @@
 <template>
 <div class="rightsideCreate">
     <div class="rightsideCreate-top">
-         <p>{{ $t('message.Survey') }}</p>
+         <p>{{ $t('message.surveyCreate') }}</p> 
     </div>
     <div class="top-buttons">
         <button class="btn savecontinueButton">{{ $t('message.saveContinue') }}</button>

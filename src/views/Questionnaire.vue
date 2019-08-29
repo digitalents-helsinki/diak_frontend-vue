@@ -8,6 +8,8 @@
       <div class="questionnaire-bottom">
         <span v-if="user">{{user}}</span>
         <span v-if="!user">anonyymi kysely {{surveyId}}</span>
+      </div>
+    </div>
         <div @click="toggleHelp" class="dim-background" v-show="help_visible">
       <div class="help-container">
         <p>{{ $t('message.help_text_1') }}</p>
@@ -26,8 +28,6 @@
           >{{ $t('message.cancel_discard') }}</button>
         </div>
       </div>
-    </div>
-    </div>
     </div>
     <div class="questionnaire container text-center shadow-lg">
       <button @click="toggleHelp" class="btn buttonOhjeet">Ohjeet</button>
@@ -1205,9 +1205,9 @@ export default {
     flex-flow: column nowrap;
     justify-content: center;
     background-color: white;
-    height: 30vh;
+    height: 70vh;
     border-radius: 15px;
-    width: 40vw;
+    width: 100vw;
     padding-left: 5vh;
     padding-right: 5vh;
 
@@ -1340,6 +1340,11 @@ export default {
   .page-number{
     margin-top:0rem !important;
   }
+
+  .help-container {
+    height: 60vh !important; 
+    width: 60vw !important;
+  }
   //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
 }
 
@@ -1366,9 +1371,11 @@ export default {
     display: flex !important;
     justify-content: center !important;
   }
-.questionnaire-bottom{
-      margin-top:0 !important;
-}
+
+  .questionnaire-bottom{
+        margin-top:0 !important;
+  }
+
   .buttonOhjeet-Ohjeet {
     display: none !important;
   }
@@ -1422,7 +1429,7 @@ export default {
     padding: 0 5rem !important;
   }
 
-.rangeLabel-words{
+  .rangeLabel-words{
       margin-top:2rem;
   }
   

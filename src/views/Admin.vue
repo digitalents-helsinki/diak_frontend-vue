@@ -10,17 +10,17 @@
             <div class="text-icons-content inquery">
                 <div v-if="activeComponent === 'adminCreate'" class="inquerydiv"> </div>
                 <img src="../images/note_add_24px_outlined.svg" alt="" />
-                <button @click="activeComponent = 'adminCreate'" class="btn inquery-open">{{ $t('message.newInquery') }}</button>
+                <button @click="activeComponent = 'adminCreate'" class="btn inquery-open">{{ $t('message.surveyCreatebutton') }}</button>
             </div>
             <div class="text-icons-content manage">
                 <div v-if="activeComponent === 'adminManage'" class="managediv"> </div>
                 <img src="../images/scatter_plot_24px_outlined.svg" alt="" />
-                <button @click="activeComponent = 'adminManage'" class="btn manageSurveys-open">{{ $t('message.manageSurveys') }}</button>
+                <button @click="activeComponent = 'adminManage'" class="btn manageSurveys-open">{{ $t('message.manageSurveysbutton') }}</button>
             </div>
             <div class="text-icons-content produce">
                 <div class="producediv"> </div>
                 <img src="../images/paste_24px_outlined.svg" alt="" />
-                <button class="btn produceReport-open">{{ $t('message.produceReport') }}</button>
+                <button class="btn produceReport-open">{{ $t('message.produceReportbutton') }}</button>
             </div>
         </div>
     </div>

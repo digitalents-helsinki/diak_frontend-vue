@@ -1,7 +1,7 @@
 <template>
     <div class="rightsideManage">
       <div class="rightsideManage-top">
-         <p>{{ $t('message.Survey') }}</p>
+         <p>{{ $t('message.manageSurveys') }}</p>
       </div>
     <div class="searchParagraph-div">
       <div class="totalParagraph">
