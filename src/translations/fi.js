@@ -70,6 +70,11 @@ export const fi = {
     emailPlaceholder:'Kirjoita tähän vastaanottajan sähköpostiosoite...',
     addMessage:'Lisää vietsi',
     sendSurvey:'Lähetä kysely',
-    manageSurvey:'HALLINOI KYSELYJÄ'
+    manageSurvey:'HALLINOI KYSELYJÄ',
+    dissatisfied:'erittäin tyytymätön',
+    satisfied:'erittäin tyytyväinen',
+    searchParagraph:'Etsi kyselyä',
+    searchPlaceholder:'Etsi kyselyä nimeltä...',
+    total:'Kyselyitä yhteensä'
   }
 }

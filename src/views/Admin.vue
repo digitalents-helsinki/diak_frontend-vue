@@ -201,24 +201,34 @@ export default {
         display:flex;
         flex-direction:column;
         align-items:center;
+    }
+
+    .leftSide-top{
+        height:13rem !important;
+    }
+
+    .leftSide-top > p:nth-of-type(1) {
+            margin-top:1rem !important;
         }
 
-        .text-icons{
-            width:100% !important;
-            display:flex !important;
-            flex-direction:row !important;
-            justify-content:center;
-            height:auto !important;
-            padding-bottom:2rem;
-        
+    .text-icons{
+        width:100% !important;
+        display:flex !important;
+        flex-direction:row !important;
+        justify-content:center;
+        height:auto !important;
+        padding-bottom:2rem;
     }
+
     .managediv{
         margin-left:0rem !important;
     }
+
     .rightsideCreate{
         width:100% !important;
         margin:0 !important;
     }
+
     .rightsideManage{
         width:100% !important;
         margin:0 !important;
