@@ -697,71 +697,61 @@
           <div class="results">
             <div>
               <span>1. Terveys</span><span v-bind:class="{notanswered :!questiondata.health}">{{questiondata.health ? questiondata.health : "Ei vastattu"}}</span>
-              <b-button v-b-toggle.collapse-health class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
-              <b-collapse id="collapse-health">
-                <p class="text-review">{{questiondata.health_desc ? questiondata.health_desc :"Ei vastattu" }}</p>
+              <b-collapse id="collapse-health" v-bind:visible="questiondata.health_desc">
+                <p class="text-review">{{questiondata.health_desc ? questiondata.health_desc : "Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>2. Resilienssi</span><span v-bind:class="{notanswered :!questiondata.overcoming}">{{questiondata.overcoming ? questiondata.overcoming :"Ei vastattu"}}</span>
-              <b-button v-b-toggle.collapse-overcoming class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
-              <b-collapse id="collapse-overcoming">
+              <b-collapse id="collapse-overcoming"  v-bind:visible="questiondata.overcoming_desc">
                 <p class="text-review">{{questiondata.overcoming_desc ? questiondata.overcoming_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>3. Asuminen</span><span v-bind:class="{notanswered :!questiondata.living}">{{questiondata.living ? questiondata.living :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-living class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
-              <b-collapse id="collapse-living">
+              <b-collapse id="collapse-living" v-bind:visible="questiondata.living_desc">
                 <p class="text-review">{{questiondata.living_desc ? questiondata.living_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>4. Pärjääminen</span><span v-bind:class="{notanswered :!questiondata.coping}">{{questiondata.coping ? questiondata.coping :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-coping class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
-              <b-collapse id="collapse-coping">
+              <b-collapse id="collapse-coping" v-bind:visible="questiondata.coping_desc">
                 <p class="text-review">{{questiondata.coping_desc ? questiondata.coping_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>5. Perhesuhteet</span><span v-bind:class="{notanswered :!questiondata.family}">{{questiondata.family ? questiondata.family :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-family class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
-              <b-collapse id="collapse-family">
+              <b-collapse id="collapse-family" v-bind:visible="questiondata.family_desc">
                 <p class="text-review">{{questiondata.family_desc ? questiondata.family_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>6. Ystävyyssuhteet</span><span v-bind:class="{notanswered :!questiondata.friends}">{{questiondata.friends ? questiondata.friends :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-friends class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
-              <b-collapse id="collapse-friends">
+              <b-collapse id="collapse-friends" v-bind:visible="questiondata.friends_desc">
                 <p class="text-review">{{questiondata.friends_desc ? questiondata.friends_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>7. Talous</span><span v-bind:class="{notanswered :!questiondata.finance}">{{questiondata.finance ? questiondata.finance :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-finance class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
-              <b-collapse id="collapse-finance">
+              <b-collapse id="collapse-finance" v-bind:visible="questiondata.finance_desc">
                 <p class="text-review">{{questiondata.finance_desc ? questiondata.finance_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>8. Itsensä kehittäminen</span><span v-bind:class="{notanswered :!questiondata.strengths}">{{questiondata.strengths ? questiondata.strengths :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-strengths class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
-              <b-collapse id="collapse-strengths">
+              <b-collapse id="collapse-strengths" v-bind:visible="questiondata.strengths_desc">
                 <p class="text-review">{{questiondata.strengths_desc ? questiondata.strengths_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>9. Itsetunto</span><span v-bind:class="{notanswered :!questiondata.self_esteem}">{{questiondata.self_esteem ? questiondata.self_esteem :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-selfesteem class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
-              <b-collapse id="collapse-selfesteem">
+              <b-collapse id="collapse-selfesteem" v-bind:visible="questiondata.selfesteem_desc">
                 <p class="text-review">{{questiondata.self_esteem_desc ? questiondata.self_esteem_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
               <span>10. Elämään tyytyväisyys</span><span v-bind:class="{notanswered :!questiondata.life_as_whole}">{{questiondata.life_as_whole ? questiondata.life_as_whole :"Ei vastattu" }}</span>
-              <b-button v-b-toggle.collapse-lifeaswhole class="textarea-collapse pointer btn-light"><font-awesome-icon icon="angle-up"/></b-button>
-              <b-collapse id="collapse-lifeaswhole">
+              <b-collapse id="collapse-lifeaswhole" v-bind:visible="questiondata.lifeaswhole_desc">
                 <p class="text-review">{{questiondata.life_as_whole_desc ? questiondata.life_as_whole_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
