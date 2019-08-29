@@ -16,7 +16,7 @@
             <b-form-input
                 id="forminputName"
                 class="col-lg-8 col-xl-5"
-                v-model="form.name"
+                v-model="surveyName"
                 type="name"
                 v-bind:placeholder="$t('message.namePlaceholder')">
             </b-form-input>
@@ -26,20 +26,20 @@
             v-bind:label="$t('message.radioOption')"
             class="optionValue"
             >
-            <b-form-radio v-model="authentication" name="choiceRadio" value="A" class="optionValue-form">{{ $t('message.authenticationRadio') }}</b-form-radio>
-            <b-form-radio v-model="authentication" name="choiceRadio" value="B" class="optionValue-form">{{ $t('message.anonymousRadio') }}</b-form-radio>
+            <b-form-radio v-model="surveyAnon" name="choiceRadio" value=false class="optionValue-form">{{ $t('message.authenticationRadio') }}</b-form-radio>
+            <b-form-radio v-model="surveyAnon" name="choiceRadio" value=true class="optionValue-form">{{ $t('message.anonymousRadio') }}</b-form-radio>
         </b-form-group>
         <hr class="borderLine">
         <div class="dateOption">
             <p class="date-paragraph">{{ $t('message.dateParagraph') }}</p>
             <div class="startdateOption">
                 <p> {{ $t('message.startDate') }}</p>
-                <datepicker  :language="fi" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+                <datepicker v-model="startDate" :language="fi" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
                 <div class="calendarIcon"><font-awesome-icon icon="calendar-alt"/></div>
             </div>
             <div class="enddateOption">
                 <p> {{ $t('message.endDate') }}</p>
-                <datepicker :language="fi" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+                <datepicker v-model="endDate" :language="fi" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
                 <div class="calendarIcon"><font-awesome-icon icon="calendar-alt"/></div>
             </div>
         </div>
@@ -101,13 +101,14 @@
             </div> 
             <div class="bottom-buttons">
                 <button class="btn savecontinueBottom">{{ $t('message.saveContinue') }}</button>
-                <button class="btn sendsurveyButton">{{ $t('message.sendSurvey') }}<font-awesome-icon icon="paper-plane" class="putMessageicon"/></button>
+                <button class="btn sendsurveyButton" @click="sendSurvey">{{ $t('message.sendSurvey') }}<font-awesome-icon icon="paper-plane" class="putMessageicon"/></button>
             </div>
         </div>
     </div>
 </div>
 </template>
 <script>
+import axios from 'axios'
 import Datepicker from 'vuejs-datepicker'
 import { fi } from 'vuejs-datepicker/dist/locale'
 
@@ -116,8 +117,7 @@ export default {
     data() {
         return {
             form: {
-                name: '',
-                authentication: ''
+
             },
             disabledDates: {
                 to: new Date()
@@ -126,7 +126,11 @@ export default {
             questions: [],
             question:null,
             emails: [],
-            email: null
+            email: null,
+            surveyName: null,
+            surveyAnon: true,
+            startDate: null,
+            endDate: null
         }
     },
     components: {
@@ -146,6 +150,27 @@ export default {
         },
         removeEmail(index) {
             this.$data.emails.splice(index, 1)
+        },
+        sendSurvey() {
+            if (this.$data.surveyName !== null) {
+                axios({
+                    method: "POST",
+                    url: process.env.VUE_APP_BACKEND + "/survey/create",
+                    data: { 
+                        to: this.$data.emails, 
+                        id: this.$data.surveyName, 
+                        anon: this.$data.surveyAnon,
+                        startDate: this.$data.startDate,
+                        endDate: this.$data.endDate,
+                        respondents_size: this.$data.emails.length
+                    }
+                })
+                .then(res => {
+                    console.log(res)
+                })
+            } else {
+                console.log('error')
+            }
         }
     }
 }

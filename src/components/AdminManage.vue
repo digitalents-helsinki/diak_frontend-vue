@@ -5,7 +5,7 @@
       </div>
     <div class="searchParagraph-div">
       <div class="totalParagraph">
-         <p>{{ $t('message.total') }}</p>
+        <p>{{ $t('message.total') }}</p>
       </div>
       <div class="searchbar-div">
           <p class="paragraphTop">{{ $t('message.searchParagraph') }}</p>
@@ -13,7 +13,6 @@
             <span> <font-awesome-icon icon="search" class="iconsearch"/> </span>
             <b-form-input v-bind:placeholder="$t('message.searchPlaceholder')"></b-form-input>
           </b-input-group>
-      </div>
       </div>
       <div class="tableandfilter">
         <div class="buttonstotal">
@@ -23,85 +22,124 @@
               <b-dropdown-item>Third Action</b-dropdown-item>
             </b-dropdown>
         </div>
-        <div class="tableDisplayfields">
-          <b-table hover responsive :items="items" :fields="fields" head-variant="light">
-                <!--<template slot="arkistoi_tai_poista_kysely" slot-scope="{ item: { arkistoi_tai_poista_kysely }}">
-                  <i :class="'fas ' + arkistoi_tai_poista_kysely"></i>
-                </template>-->
-          </b-table>
-        </div>
       </div>
     </div>
+    <div>
+      <b-table hover responsive :items="surveys" :fields="fields" head-variant="light" class="bzo">
+        <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
+          <div v-bind:key="field.key">
+            <div v-if="field.colType === 'name'">
+              <span>{{data.item.name}}</span>
+            </div>
+            <div v-else-if="field.colType === 'startDate'">
+              <span>{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
+            </div>
+            <div v-else-if="field.colType === 'endDate'">
+              <span>{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
+            </div>
+            <div v-else-if="field.colType === 'respondentsSize'">
+              <span>0/{{data.item.respondents_size}}</span>
+            </div>
+            <div v-else-if="field.colType === 'modify'">
+              <b-button>Modify</b-button>
+            </div>
+            <div v-else-if="field.colType === 'analyze'">
+              <b-button>Analysoi</b-button>
+            </div>
+            <div v-else-if="field.colType === 'delete'">
+              <b-button>Arkistoi</b-button><b-button @click="deleteSurvey(data.item.id)">Poista</b-button>
+            </div>
+          </div>
+        </template> 
+      </b-table>
+    </div>
+  </div>
 </template>
 <script>
-  export default {
-    data() {
-      return {
-        //url: '',
-          fields: [
+import axios from 'axios'
+
+export default {
+  name: 'admin-manage',
+  data() {
+    return {
+        fields: [
           {
-            key: 'kyselyn_nimi',
+            key: 'name',
             label: 'Kyselyn nimi',
-            //name: 'id',
             sortable: true,
-            //filterable: true,
-             tdClass: 'nameOfTheClass'
+            colType: 'name'
           },
           {
-            key: 'luoto',
-            label: 'Luoto',
-            sortable: true,
-          },
-          {
-            key: 'voimassaolo_alkaa',
+            key: 'startDate',
             label: 'Voimassaolo alkaa',
             sortable: true,
+            colType: 'startDate'
           },
           {
-            key: 'voimassaolo_päättyy',
-            label: 'Voimassaolo Päättyy',
+            key: 'endDate',
+            label: 'Voimassaolo päättyy',
             sortable: true,
-
+            colType: 'endDate'
           },
           {
-            key: 'vastanneita',
+            key: 'respondents',
             label: 'Vastanneita',
-            sortable: true,
-
+            colType: 'respondentsSize'
           },
-           {
-            key: 'muokkaa_kyselyä',
+          {
+            key: 'modify',
             label: 'Muokkaa kyselyä',
-            sortable: true,
-
+            colType: 'modify' 
           },
           {
-            key: 'analysoi',
+            key: 'control',
             label: 'Analysoi',
-            sortable: true,
-
+            colType: 'analyze'
           },
           {
-           key: 'arkistoi_tai_poista_kysely',
+            key: 'delete',
             label: 'Arkistoi tai poista kysely',
+            colType: 'delete'
           }
         ],
-        items: [
-          { arkistoi_tai_poista_kysely:'', analysoi:'', muokkaa_kyselyä:'', vastanneita:'18/18', voimassaolo_päättyy: '20/8/2019', voimassaolo_alkaa: '5/8/2019', luotu:'Luotu 5/8/2019', kyselyn_nimi:'Digitalents kysely'},
-          { arkistoi_tai_poista_kysely:'', analysoi:'', muokkaa_kyselyä:'', vastanneita:'0/22', voimassaolo_päättyy: '31/8/2019', voimassaolo_alkaa: '6/8/2019', luotu:'Luotu 8/8/2019',  kyselyn_nimi: 'Diak kysely' },
-          { arkistoi_tai_poista_kysely:'', analysoi:'', muokkaa_kyselyä:'', vastanneita:'1/30', voimassaolo_päättyy: '1/9/2019', voimassaolo_alkaa: '16/8/2019', luotu:'Luotu 10/8/2019',  kyselyn_nimi: 'Other kysely' },
-
-        ]
+        surveys: null,
+        loaded: false
+    }
+  },
+  methods: {
+    async getSurveys() {
+      const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/all")
+      this.$data.surveys = res.data
+      this.$data.loaded = true
+    },
+    deleteSurvey(surveyId) {
+      axios({
+        method: "POST",
+        url: process.env.VUE_APP_BACKEND + "/survey/delete",
+        data: {
+          id: surveyId
         }
-      }
-     /*methods: {
-            updateUrl(url) {
-                this.url = url;
-            }
-        },*/
-  }  
+      }).then(res => {
+        const index = this.surveys.findIndex(survey => survey.id === surveyId)
+        if (~index)
+          this.surveys.splice(index, 1)
+      })
+    }
+  },
+  mounted() {
+    this.getSurveys()
+  }
+}  
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+.table {
+  tbody {
+    tr {
+      text-align: center;
+    }
+  }
+}
+
 .rightsideManage{
     background-color:#F9F9FB;
     width:81.8%;
@@ -166,12 +204,14 @@
       }
     }
 }
-/*@media only screen and (max-width: 1070px) {
-    .bzo{
-      max-width: 60rem;
-      background-color:#FFFFFF;
-    }
-}*/
 
+.surveyList {
+  div {
+    display: flex;
+    width: 100%;
+    padding: 15px;
+    justify-content: space-between;
+  }
+}
 </style>
 
