@@ -4,8 +4,6 @@
 </div>
 </template>
 <script>
-import axios from 'axios'
-
 export default {
   name: 'login',
   methods: {
@@ -13,7 +11,7 @@ export default {
       this.$gAuth
         .signIn()
         .then(gUser => {
-          this.$router.push({ name: 'questionnaire', params: { user: gUser.w3.ig}})
+          this.$router.push({ name: 'profile', params: { user: gUser.w3 }})
         })
     }
   }

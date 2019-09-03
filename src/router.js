@@ -5,7 +5,6 @@ import Questionnaire from '@/views/Questionnaire.vue'
 import Results from '@/views/Results.vue'
 import SurveyResults from '@/views/SurveyResults.vue'
 import Admin from '@/views/Admin.vue'
-import AdminTest from '@/views/Admin-test.vue'
 import Login from '@/views/Login.vue'
 import Profile from '@/views/Profile.vue'
 
@@ -43,7 +42,8 @@ export default new Router({
     {
       path: '/user/profile',
       name: 'profile',
-      component: Profile
+      component: Profile,
+      props: true
     },
     {
       path: '/user/results/:resultId',
@@ -68,11 +68,6 @@ export default new Router({
         requiresAuth: true,
         is_admin: true
       }
-    },
-    {
-      path: '/admintest/',
-      name: 'admintest',
-      component: AdminTest
     }
   ]
 })
