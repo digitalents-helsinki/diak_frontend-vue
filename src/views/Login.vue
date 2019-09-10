@@ -14,7 +14,7 @@
           </div>
           <div id="registerandPassword">
               <p id="changePassword" @click="handlePasswordClick">{{ $t('message.newPassword') }}</p>
-              <p id="registeration" @click="handleRegisterClick">{{ $t('message.registerionLink') }}</p>
+              <p id="registeration" @click="handleRegisterClick">{{ $t('message.registrationLink') }}</p>
           </div>
           <p class="otherWay">{{ $t('message.loginwithother') }}</p>
           <div id="loginOtherway">

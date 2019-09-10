@@ -73,7 +73,8 @@ p {
       display: flex;
       flex-direction: column;
       margin-top: 1rem;
-      height: 70vh;
+      margin-bottom:1rem;
+      //height: 70vh;
 
       @media screen and (min-width: 1024px) {
         height: 60vh;
@@ -160,7 +161,6 @@ p {
   @media screen and (min-width: 768px) { 
     #logo{
       width:40rem !important;
-      margin-bottom:1rem;
     }
   }
 </style>

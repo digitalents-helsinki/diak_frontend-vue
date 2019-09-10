@@ -93,7 +93,7 @@ export const fi = {
     passwordPlaceholder:'Salasana',
     formsubmitButton:' Kirjaudu sisään',
     newPassword:'Unohditko salasanan?',
-    registerionLink:'Luo uusi käyttäjä?',
+    registrationLink:'Luo uusi käyttäjä?',
     loginwithother:'Tai kirjaudu sisään Facebook-tai Google-tunnuksilla',
     registerText:'Rekisteröinti',
     registerUsername:'Sähköpostiosoite',

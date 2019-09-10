@@ -76,12 +76,8 @@
                 <div>10</div>
               </div>
               <div class="rangeLabel-icons">
-                <span><font-awesome-icon icon="pencil-alt" class="iconButton-pencil"/></span>
-                <span><font-awesome-icon icon="pencil-alt" class="iconButton-pencil"/></span>
-            </div>
-              <div class="rangeLabel-words">
-                <span>{{ $t('message.dissatisfied') }}</span>
-                <span>{{ $t('message.satisfied') }}</span>
+                <span><font-awesome-icon icon="thumbs-down" style="font-size:1.6rem; color:grey;"/></span>
+                <span><font-awesome-icon icon="thumbs-up" style="font-size:1.6rem; color:grey;"/></span>
             </div>
           </div>
           <div class="textarea-wordCount">
@@ -1036,8 +1032,8 @@ export default {
           display: -webkit-flex;
           display: flex;
           justify-content: space-between;
-          margin-bottom:0.1rem;
-          font-size:0.8rem;
+          margin-bottom:0.2rem;
+          font-size:0.9rem;
         }
         .activeRange {
           &::-webkit-slider-thumb {
@@ -1367,7 +1363,7 @@ export default {
     justify-content: space-between !important;
     margin-bottom:0.1rem;
     margin-top:2rem;
-    font-size:0.9rem !important;
+    font-size:1rem !important;
   }
 
   .results .text-review{
