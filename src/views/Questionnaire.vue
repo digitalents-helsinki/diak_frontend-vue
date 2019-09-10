@@ -3,7 +3,7 @@
     <div class="container-fluid" id="questionnaire-main">
       <div class="questionnaire-top">
         <img class="logo" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
-        <button @click="toggleHelp" class="btn buttonOhjeet-Ohjeet">Ohjeet</button>
+        <button @click="toggleHelp" class="btn buttonOhjeet">Ohjeet</button>
       </div>
       <div class="questionnaire-bottom">
         <span v-if="user">{{user}}</span>
@@ -30,18 +30,17 @@
       </div>
     </div>
     <div class="questionnaire container text-center shadow-lg">
-      <button @click="toggleHelp" class="btn buttonOhjeet">Ohjeet</button>
       <form>
         <div class="question" v-show="questionnum == 0">
           <div class="question_text">
-            <div class="questionHelp_button">
-              <p>1. Terveys</p>
+            <div class="questionHelpbutton">
+              <p v-html="$t('message.health_title')"></p>
+              <p v-html="$t('message.question_health')"></p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('health')"
-              >?</button>
+              >{{ $t('message.questionHelp') }}</button>
             </div>
-            <p v-html="$t('message.question_health')"></p>
           </div>
           <p v-if="help_text_visible === 'health'">{{ $t('message.help_text_health') }}</p>
           <div class="range-input">
@@ -76,6 +75,10 @@
                 <div>9</div>
                 <div>10</div>
               </div>
+              <div class="rangeLabel-icons">
+                <span><font-awesome-icon icon="pencil-alt" class="iconButton-pencil"/></span>
+                <span><font-awesome-icon icon="pencil-alt" class="iconButton-pencil"/></span>
+            </div>
               <div class="rangeLabel-words">
                 <span>{{ $t('message.dissatisfied') }}</span>
                 <span>{{ $t('message.satisfied') }}</span>
@@ -98,14 +101,14 @@
         </div>
         <div class="question" v-show="questionnum == 1">
           <div class="question_text">
-            <div class="questionHelp_button">
-              <p>2. Resilienssi</p>
+            <div class="questionHelpbutton">
+              <p v-html="$t('message.overcoming_title')"></p>
+              <p v-html="$t('message.question_overcoming')"></p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('overcoming')"
-              >?</button>
+              >{{ $t('message.questionHelp') }}</button>
             </div>
-            <p v-html="$t('message.question_overcoming')"></p>
           </div>
           <p v-if="help_text_visible === 'overcoming'">{{ $t('message.help_text_overcoming') }}</p>
           <div class="range-input">
@@ -164,14 +167,14 @@
         </div>
         <div class="question" v-show="questionnum == 2">
           <div class="question_text">
-            <div class="questionHelp_button">
-              <p>3. Asuminen</p>
+            <div class="questionHelpbutton">
+              <p v-html="$t('message.living_title')"></p>
+              <p v-html="$t('message.question_living')"></p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('living')"
-              >?</button>
+              >{{ $t('message.questionHelp') }}</button>
             </div>
-            <p v-html="$t('message.question_living')"></p>
           </div>
           <p v-if="help_text_visible === 'living'">{{ $t('message.help_text_living') }}</p>
           <div class="range-input">
@@ -230,14 +233,14 @@
         </div>
         <div class="question" v-show="questionnum == 3">
           <div class="question_text">
-            <div class="questionHelp_button">
-              <p>4. Pärjääminen</p>
+            <div class="questionHelpbutton">
+              <p v-html="$t('message.coping_title')"></p>
+              <p v-html="$t('message.question_coping')"></p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('coping')"
-              >?</button>
+              >{{ $t('message.questionHelp') }}</button>
             </div>
-            <p v-html="$t('message.question_coping')"></p>
           </div>
           <p v-if="help_text_visible === 'coping'">{{ $t('message.help_text_coping') }}</p>
           <div class="range-input">
@@ -296,14 +299,14 @@
         </div>
         <div class="question" v-show="questionnum == 4">
           <div class="question_text">
-            <div class="questionHelp_button">
-              <p>5. Perhesuhteet</p>
+            <div class="questionHelpbutton">
+              <p v-html="$t('message.family_title')"></p>
+              <p v-html="$t('message.question_family')"></p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('family')"
-              >?</button>
+              >{{ $t('message.questionHelp') }}</button>
             </div>
-            <p v-html="$t('message.question_family')"></p>
           </div>
           <p v-if="help_text_visible === 'family'">{{ $t('message.help_text_family') }}</p>
           <div class="range-input">
@@ -362,14 +365,14 @@
         </div>
         <div class="question" v-show="questionnum == 5">
           <div class="question_text">
-            <div class="questionHelp_button">
-              <p>6. Ystävyyssuhteet</p>
+            <div class="questionHelpbutton">
+              <p v-html="$t('message.friends_title')"></p>
+              <p v-html="$t('message.question_friends')"></p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('friends')"
-              >?</button>
+              >{{ $t('message.questionHelp') }}</button>
             </div>
-            <p v-html="$t('message.question_friends')"></p>
           </div>
           <p v-if="help_text_visible === 'friends'">{{ $t('message.help_text_friends') }}</p>
           <div class="range-input">
@@ -428,14 +431,14 @@
         </div>
         <div class="question" v-show="questionnum == 6">
           <div class="question_text">
-            <div class="questionHelp_button">
-              <p>7. Talous</p>
+            <div class="questionHelpbutton">
+              <p v-html="$t('message.finance_title')"></p>
+              <p v-html="$t('message.question_finance')"></p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('finance')"
-              >?</button>
+              >{{ $t('message.questionHelp') }}</button>
             </div>
-            <p v-html="$t('message.question_finance')"></p>
           </div>
           <p v-if="help_text_visible === 'finance'">{{ $t('message.help_text_finance') }}</p>
           <div class="range-input">
@@ -494,14 +497,14 @@
         </div>
         <div class="question" v-show="questionnum == 7">
           <div class="question_text">
-            <div class="questionHelp_button">
-              <p>8. Itsensä kehittäminen</p>
+            <div class="questionHelpbutton">
+              <p v-html="$t('message.strengths_title')"></p>
+              <p v-html="$t('message.question_strengths')"></p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('strengths')"
-              >?</button>
+              >{{ $t('message.questionHelp') }}</button>
             </div>
-            <p v-html="$t('message.question_strengths')"></p>
           </div>
           <p v-if="help_text_visible === 'strengths'">{{ $t('message.help_text_strengths') }}</p>
           <div class="range-input">
@@ -560,14 +563,14 @@
         </div>
         <div class="question" v-show="questionnum == 8">
           <div class="question_text">
-            <div class="questionHelp_button">
-              <p>9. Itsetunto</p>
+            <div class="questionHelpbutton">
+              <p v-html="$t('message.self_esteem_title')"></p>
+              <p v-html="$t('message.question_self_esteem')"></p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('self_esteem')"
-              >?</button>
+              >{{ $t('message.questionHelp') }}</button>
             </div>
-            <p v-html="$t('message.question_self_esteem')"></p>
           </div>
           <p v-if="help_text_visible === 'self_esteem'">{{ $t('message.help_text_self_esteem') }}</p>
           <div class="range-input">
@@ -626,14 +629,14 @@
         </div>
         <div class="question" v-show="questionnum == 9">
           <div class="question_text">
-            <div class="questionHelp_button">
-              <p>10. Elämään tyytyväisyys</p>
+            <div class="questionHelpbutton">
+              <p v-html="$t('message.life_as_whole_title')"></p>
+              <p v-html="$t('message.question_life_as_whole')"></p>
               <button
                 class="btn help_button buttonHelp"
                 @click.prevent="toggleQuestionHelp('life_as_whole')"
-              >?</button>
+              >{{ $t('message.questionHelp') }}</button>
             </div>
-            <p v-html="$t('message.question_life_as_whole')"></p>
           </div>
           <p
             v-if="help_text_visible === 'life_as_whole'"
@@ -696,62 +699,62 @@
           <h3>Kooste vastauksistasi</h3>
           <div class="results">
             <div>
-              <span>1. Terveys</span><span v-bind:class="{notanswered :!questiondata.health}">{{questiondata.health ? questiondata.health : "Ei vastattu"}}</span>
+              <span v-html="$t('message.health_title')"></span><span v-bind:class="{notanswered :!questiondata.health}">{{questiondata.health ? questiondata.health : "Ei vastattu"}}</span>
               <b-collapse id="collapse-health" v-bind:visible="questiondata.health_desc">
                 <p class="text-review">{{questiondata.health_desc ? questiondata.health_desc : "Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>2. Resilienssi</span><span v-bind:class="{notanswered :!questiondata.overcoming}">{{questiondata.overcoming ? questiondata.overcoming :"Ei vastattu"}}</span>
+              <span v-html="$t('message.overcoming_title')"></span><span v-bind:class="{notanswered :!questiondata.overcoming}">{{questiondata.overcoming ? questiondata.overcoming :"Ei vastattu"}}</span>
               <b-collapse id="collapse-overcoming"  v-bind:visible="questiondata.overcoming_desc">
                 <p class="text-review">{{questiondata.overcoming_desc ? questiondata.overcoming_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>3. Asuminen</span><span v-bind:class="{notanswered :!questiondata.living}">{{questiondata.living ? questiondata.living :"Ei vastattu" }}</span>
+              <span v-html="$t('message.living_title')"></span><span v-bind:class="{notanswered :!questiondata.living}">{{questiondata.living ? questiondata.living :"Ei vastattu" }}</span>
               <b-collapse id="collapse-living" v-bind:visible="questiondata.living_desc">
                 <p class="text-review">{{questiondata.living_desc ? questiondata.living_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>4. Pärjääminen</span><span v-bind:class="{notanswered :!questiondata.coping}">{{questiondata.coping ? questiondata.coping :"Ei vastattu" }}</span>
+              <span v-html="$t('message.coping_title')"></span><span v-bind:class="{notanswered :!questiondata.coping}">{{questiondata.coping ? questiondata.coping :"Ei vastattu" }}</span>
               <b-collapse id="collapse-coping" v-bind:visible="questiondata.coping_desc">
                 <p class="text-review">{{questiondata.coping_desc ? questiondata.coping_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>5. Perhesuhteet</span><span v-bind:class="{notanswered :!questiondata.family}">{{questiondata.family ? questiondata.family :"Ei vastattu" }}</span>
+              <span v-html="$t('message.family_title')"></span><span v-bind:class="{notanswered :!questiondata.family}">{{questiondata.family ? questiondata.family :"Ei vastattu" }}</span>
               <b-collapse id="collapse-family" v-bind:visible="questiondata.family_desc">
                 <p class="text-review">{{questiondata.family_desc ? questiondata.family_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>6. Ystävyyssuhteet</span><span v-bind:class="{notanswered :!questiondata.friends}">{{questiondata.friends ? questiondata.friends :"Ei vastattu" }}</span>
+              <span v-html="$t('message.friends_title')"></span><span v-bind:class="{notanswered :!questiondata.friends}">{{questiondata.friends ? questiondata.friends :"Ei vastattu" }}</span>
               <b-collapse id="collapse-friends" v-bind:visible="questiondata.friends_desc">
                 <p class="text-review">{{questiondata.friends_desc ? questiondata.friends_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>7. Talous</span><span v-bind:class="{notanswered :!questiondata.finance}">{{questiondata.finance ? questiondata.finance :"Ei vastattu" }}</span>
+              <span v-html="$t('message.finance_title')"></span><span v-bind:class="{notanswered :!questiondata.finance}">{{questiondata.finance ? questiondata.finance :"Ei vastattu" }}</span>
               <b-collapse id="collapse-finance" v-bind:visible="questiondata.finance_desc">
                 <p class="text-review">{{questiondata.finance_desc ? questiondata.finance_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>8. Itsensä kehittäminen</span><span v-bind:class="{notanswered :!questiondata.strengths}">{{questiondata.strengths ? questiondata.strengths :"Ei vastattu" }}</span>
+              <span v-html="$t('message.strengths_title')"></span><span v-bind:class="{notanswered :!questiondata.strengths}">{{questiondata.strengths ? questiondata.strengths :"Ei vastattu" }}</span>
               <b-collapse id="collapse-strengths" v-bind:visible="questiondata.strengths_desc">
                 <p class="text-review">{{questiondata.strengths_desc ? questiondata.strengths_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>9. Itsetunto</span><span v-bind:class="{notanswered :!questiondata.self_esteem}">{{questiondata.self_esteem ? questiondata.self_esteem :"Ei vastattu" }}</span>
-              <b-collapse id="collapse-selfesteem" v-bind:visible="questiondata.selfesteem_desc">
+              <span v-html="$t('message.self_esteem_title')"></span><span v-bind:class="{notanswered :!questiondata.self_esteem}">{{questiondata.self_esteem ? questiondata.self_esteem :"Ei vastattu" }}</span>
+              <b-collapse id="collapse-selfesteem" v-bind:visible="questiondata.self_esteem_desc">
                 <p class="text-review">{{questiondata.self_esteem_desc ? questiondata.self_esteem_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
             <div>
-              <span>10. Elämään tyytyväisyys</span><span v-bind:class="{notanswered :!questiondata.life_as_whole}">{{questiondata.life_as_whole ? questiondata.life_as_whole :"Ei vastattu" }}</span>
-              <b-collapse id="collapse-lifeaswhole" v-bind:visible="questiondata.lifeaswhole_desc">
+              <span v-html="$t('message.life_as_whole_title')"></span><span v-bind:class="{notanswered :!questiondata.life_as_whole}">{{questiondata.life_as_whole ? questiondata.life_as_whole :"Ei vastattu" }}</span>
+              <b-collapse id="collapse-lifeaswhole" v-bind:visible="questiondata.life_as_whole_desc">
                 <p class="text-review">{{questiondata.life_as_whole_desc ? questiondata.life_as_whole_desc :"Ei vastattu" }}</p>
               </b-collapse>
             </div>
@@ -859,20 +862,22 @@ export default {
 
 .background {
   //background: linear-gradient(to right, #0078f0, #80bfff);
-  background: #ffffff;
+  background: #FFFFFF;
   height: 100%;
   display: flex;
   flex-flow: column nowrap;
-  justify-content: flex-end;
+  //justify-content: flex-end;
   overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style:normal;
   font-size: 1rem;
 
   #questionnaire-main {
     display: flex;
     flex-direction:column;
     background-color: #80cde6;
-    font-size: 10rem;
-    height: 26vh;
+    font-size: 1rem;
+    height:8rem;
     overflow: hidden;
     margin-bottom: 1rem;
 
@@ -886,12 +891,13 @@ export default {
       height: 60px;
     }
 
-    .buttonOhjeet-Ohjeet {
+    .buttonOhjeet {
       border-radius: 8px 1px;
-      background-color: #80cde6;
-      color: #ffffff;
-      padding: 0.6rem 1.8rem;
-      font-size: 1.1rem;
+      background-color: #353535;
+      //background-color: #80cde6;
+      color: #FFFFFF;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
       font-weight: bold;
       text-align: center;
       }
@@ -899,12 +905,12 @@ export default {
     .questionnaire-bottom{
       display: flex;
       justify-content:flex-end;
-      margin-top:1rem;
+      margin-top:0.1rem;
       font-weight:bold;
 
       span {
         color: white;
-        font-size: 18px;
+        font-size: 1rem;
         position: absolute;
         
         }
@@ -927,9 +933,9 @@ export default {
   overflow: auto;
   border-radius: 14px;
 
-  .buttonOhjeet {
+  /*.buttonOhjeet {
     display: none;
-  }
+  }*/
 
   @media screen and (min-width: 1024px) {
     width: 60vw;
@@ -948,35 +954,38 @@ export default {
         display: flex;
         flex-flow: column nowrap;
 
-        .questionHelp_button {
-          display: flex;
-          justify-content: center;
-          margin: 2rem 0;
+        .questionHelpbutton {
+          margin-top:1rem;
+          margin-bottom:1rem;
+          text-align: left;
+
+          p, button{
+            display:inline;
+          }
 
           p:nth-of-type(1) {
             font-weight: bold;
-            font-size: 1.125em;
-            color: #350e7e !important;
+            font-size: 1.1rem;
+            color: #350e7e;
+            margin-right: 1rem;
           }
-        }
 
-        .help_button {
-          background-color: #350e7e;
-          width: 2rem;
-          height: 2rem;
-          padding: 0rem;
-          font-size: 1.1rem;
-          font-weight: bold;
-          align-items: center;
-          color: #ffffff;
-          margin-left: 2rem;
-          //align-self: flex-end;
-        }
-      }
+          p:nth-of-type(2) {
+            font-size: 1.1rem;
+            color: #353535;
+            margin-right: 1rem;
+            }
 
-      .question_text p:nth-of-type(1) {
-        font-size: 1.125em;
-        color: #353535;
+          .help_button {
+            background-color: #350e7e;
+            padding: 0 0.6rem ;
+            font-size: 1.1rem;
+            font-weight: bold;
+            align-items: center;
+            color: #FFFFFF;
+            //align-self: flex-end;
+          }
+        } 
       }
 
       .range-input {
@@ -991,7 +1000,7 @@ export default {
           width: 50%;
           
           .rangeQuestiondata {
-            font-size: 1.8em;
+            font-size: 1.8rem;
             width:60px;
             height:60px;
             border:1px solid lightgrey;
@@ -1017,10 +1026,18 @@ export default {
         .rangeLabel {
           display: none;
         }
+        .rangeLabel-icons{
+          display: -webkit-flex;
+          display: flex;
+          justify-content: space-between;
+          margin-bottom:0.1rem;
+        }
         .rangeLabel-words{
           display: -webkit-flex;
           display: flex;
           justify-content: space-between;
+          margin-bottom:0.1rem;
+          font-size:0.8rem;
         }
         .activeRange {
           &::-webkit-slider-thumb {
@@ -1051,12 +1068,12 @@ export default {
         }
         .button-next {
           background-color: #353535;
-          color: #ffffff;
+          color: #FFFFFF;
           font-weight:bold;
         }
         .button-previous {
           background-color: #353535;
-          color: #ffffff;
+          color: #FFFFFF;
           font-weight:bold;
         }
         .button-complete{
@@ -1067,7 +1084,7 @@ export default {
       }
 
     .page-number{
-      font-size:1.1em;
+      font-size:1.1rem;
       margin-top:1rem;
       margin-bottom:0;
 
@@ -1099,14 +1116,14 @@ export default {
   p{
     display:flex;
     justify-content:flex-end;
-    font-size:1.1em;
+    font-size:1rem;
   }
 }
 
 .review {
 
   h3{
-    margin:3rem;
+    margin:2rem;
   }
 
   .results {
@@ -1116,7 +1133,7 @@ export default {
 
     .notanswered{
       color:#A1318A;
-      font-size:1.1em !important;
+      font-size:1rem !important;
     }
 
     div {
@@ -1126,13 +1143,13 @@ export default {
 
       span:nth-of-type(1) {
         font-weight: bold;
-        font-size:1.125em;   
+        font-size:1.125rem;   
         color:#350E7E;
       }
 
       span:nth-of-type(2) {
-        font-size:1.6em;
-        padding-right:1rem;   
+        font-size:1rem;
+        padding-right:1rem;
       }
 
       span:nth-child(even) {
@@ -1150,10 +1167,7 @@ export default {
        .text-review{
          white-space: pre-wrap;
          word-wrap:break-word;
-        }
-        
-     .pointer.collapsed{
-       transform: rotate(180deg);
+         padding-top:0.6rem;
       }
     }
   }
@@ -1287,14 +1301,18 @@ export default {
 }*/
 
 @media only screen and (min-width: 575px) {
-  .questionHelp_button p {
-    font-size: 1.25em !important;
+  .questionHelpbutton p:nth-of-type(1) {
+    font-size: 1.2rem !important;
+  }
+
+  .questionHelpbutton p:nth-of-type(2) {
+    font-size: 1.1rem !important;
   }
 }
 
 @media only screen and (min-width: 768px) {
   #questionnaire-main {
-    height: 16vh !important;
+    height: 9rem !important;
   }
 
   .questionnaire-top > img {
@@ -1305,8 +1323,12 @@ export default {
     text-align: center;
   }
 
-  .question_text p:nth-of-type(1) {
-    font-size: 1.2em !important;
+  .questionHelpbutton p:nth-of-type(1) {
+    font-size: 1.2rem !important;
+  }
+
+  .questionHelpbutton p:nth-of-type(2) {
+    font-size: 1.1rem !important;
   }
   
   .rangeLabel-mobile {
@@ -1333,8 +1355,23 @@ export default {
     display: flex;
     justify-content: center;
   }
+
+  .rangeLabel-icons{
+    display:none !important;
+  }
+
   .rangeLabel-words{
-      margin-top:2rem;
+    display:block !important;
+    display: -webkit-flex !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-bottom:0.1rem;
+    margin-top:2rem;
+    font-size:0.9rem !important;
+  }
+
+  .results .text-review{
+    padding-top:0rem !important;
   }
 
   .page-number{
@@ -1367,46 +1404,63 @@ export default {
 }
 
 @media only screen and (min-width: 1025px) {
+  #questionnaire-main {
+    height: 9rem !important;
+  }
+  
   .questionnaire-top {
     display: flex !important;
     justify-content: center !important;
   }
 
   .questionnaire-bottom{
-        margin-top:0 !important;
+    margin-top:0 !important;
   }
 
-  .buttonOhjeet-Ohjeet {
+  /*.buttonOhjeet-Ohjeet {
     display: none !important;
-  }
+  }*/
 
   .buttonOhjeet {
-    display: block !important;
-    position: absolute !important;
-    top: 16%;
-    left: 20%;
-    border-radius: 8px 1px;
-    background-color: #80cde6;
-    color: #ffffff;
-    padding: 0.6rem 1.8rem;
-    font-size: 1rem;
-    font-weight: bold;
-    text-align: center;
-  }
-
-  .question_text p:nth-of-type(1) {
-    font-size: 1.3em !important;
+    //display: block !important;
+    position: absolute;
+    top: 3%;
+    right: 1%;
+    //background-color: #353535 !important;
+    font-size: 1rem !important;
+    padding: 0.5rem 1.8rem !important;
+    //border-radius: 8px 1px;
+    //color: #FFFFFF;
+    //padding: 0.6rem 1.8rem;
+    //font-weight: bold;
+    //text-align: center;
   }
   
+  .questionHelpbutton {
+    margin-top:2rem !important;
+  }
+
+  .questionHelpbutton p:nth-of-type(1) {
+    font-size: 1.3rem !important;
+  }
+  
+  .questionHelpbutton p:nth-of-type(2) {
+    font-size: 1.2rem !important;
+  }
+
+  .help_button {
+    font-size: 1.3rem !important;
+  }
+
   .rangeLabel-words{
       margin-top:1.7rem;
   }
 
   textarea {
-    margin-top: 3rem;
+    margin-top: 2rem;
   }
 
-  .rangeQuestiondata-icon .remove-icon{
+  /*.rangeQuestiondata-icon .remove-icon{
      display:none !important;
     }
 
@@ -1421,12 +1475,22 @@ export default {
      padding:0.1rem 0;
      margin:0.6rem 0 0 1rem;
      Outline: none;
-  }
+  }*/
 }
 
 @media only screen and (min-width: 1400px) {
-  .question_text p:nth-of-type(1) {
-    padding: 0 5rem !important;
+  .questionHelpbutton {
+    margin-top:2.5rem !important;
+    margin:0 4rem;
+    text-align: center !important;
+  }
+
+  .questionHelpbutton p:nth-of-type(1) {
+    font-size: 1.375rem !important;
+  }
+  
+  .questionHelpbutton p:nth-of-type(2) {
+    font-size: 1.3rem !important;
   }
 
   .rangeLabel-words{
@@ -1443,18 +1507,27 @@ export default {
     height: 100%;
   }
 
-  .buttonOhjeet {
+  /*.buttonOhjeet {
     position: relative !important;
     top: 0%;
     left: -5%;
+  }*/
+
+  .questionHelpbutton {
+    margin-top: 2.5rem !important;
+    margin:0 4rem;
   }
 
-  .questionHelp_button {
-    margin-top: 0rem !important;
+  .questionHelpbutton p:nth-of-type(1) {
+    font-size: 1.375rem !important;
+  }
+
+  .questionHelpbutton p:nth-of-type(2) {
+    font-size: 1.3rem !important;
   }
 
   .review h3{
       margin:1rem 1rem 2rem 1rem;
-    }
+  }
 }
 </style>

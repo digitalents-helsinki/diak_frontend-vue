@@ -52,6 +52,9 @@ p {
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style:normal;
+  font-size: 1rem;
   //overflow: hidden;
 
   .main {
@@ -63,7 +66,7 @@ p {
     margin-top: 1rem;
 
     #logo {
-    width: 70%;
+      width: 100%;
     }
 
     .textContainer{
@@ -82,7 +85,7 @@ p {
         padding: 0.5rem;
         
         .welcomeMessage {
-          font-size:1.1em;
+          font-size:1.1rem;
           font-weight:bold;
         }
     }
@@ -141,16 +144,23 @@ p {
 @media screen and (min-width: 575px) { 
 
     .welcomeMessage {
-      font-size: 1.1em !important;
+      font-size: 1.1rem !important;
     }
 
     .text-container p {
-      font-size: 1em !important;
+      font-size: 1rem !important;
     }
 
     button {
      padding:1rem 7rem !important;
     font-size:1.1rem !important;
     } 
+  }
+
+  @media screen and (min-width: 768px) { 
+    #logo{
+      width:40rem !important;
+      margin-bottom:1rem;
+    }
   }
 </style>

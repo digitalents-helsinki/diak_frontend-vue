@@ -51,10 +51,10 @@ export default {
     width:100%;
     display: flex;
     flex-direction: row;
-    font-size: 1rem;
     justify-content:center;
-    font-family:Roboto, Arial;
+    font-family: Arial, Helvetica, sans-serif;
     font-style:normal;
+    font-size: 1rem;
 
     .leftSide{
         background-color:#F9F9FB;
@@ -115,7 +115,7 @@ export default {
 
                 .inquery-open {
                     background-color: #353535;
-                    color: #ffffff;
+                    color: #FFFFFF;
                     border-radius: 10px;
                     box-shadow: 0 5px 5px gray;
                     width:11rem;
@@ -136,7 +136,7 @@ export default {
 
                 .manageSurveys-open {
                     background-color: #353535;
-                    color: #ffffff;
+                    color: #FFFFFF;
                     border-radius: 10px;
                     box-shadow: 0 5px 5px gray;
                     width:11rem;
@@ -157,7 +157,7 @@ export default {
 
                 .produceReport-open {
                     background-color: #353535;
-                    color: #ffffff;
+                    color: #FFFFFF;
                     border-radius: 10px;
                     box-shadow: 0 5px 5px gray;
                     width:11rem;
@@ -235,15 +235,4 @@ export default {
     }
 }
 
-/*@media only screen and (max-width: 767px) {
-    .adminPage{
-        display:flex !important;
-        flex-direction:column !important;
-    }
-    .leftSide{
-        width:100% !important;
-        margin-bottom:1rem;
-    }
-
-}*/
 </style>

@@ -8,27 +8,22 @@
         <button class="btn discardButton">{{ $t('message.disCard') }}</button>
     </div>
     <div class="adminForm">
-        <b-form-group  
-            id="nameInput"
-            class="nameInput-form"
-            v-bind:label="$t('message.adminformName')"
-            label-for="forminputName">
-            <b-form-input
-                id="forminputName"
-                class="col-lg-8 col-xl-5"
-                v-model="surveyName"
-                type="name"
-                v-bind:placeholder="$t('message.namePlaceholder')">
-            </b-form-input>
-        </b-form-group>
-        <hr class="borderLine">
-        <b-form-group 
-            v-bind:label="$t('message.radioOption')"
-            class="optionValue"
+        <div class="nameInputsection">
+            <label for="forminputName" class="nameInputlabel">{{ $t('message.adminformName') }}</label>
+            <input 
+            id="surveyname"
+            v-model="surveyName"
+            type="text"
+            name="forminputName"
+            v-bind:placeholder="$t('message.namePlaceholder')"
             >
-            <b-form-radio v-model="surveyAnon" name="choiceRadio" value=false class="optionValue-form">{{ $t('message.authenticationRadio') }}</b-form-radio>
-            <b-form-radio v-model="surveyAnon" name="choiceRadio" value=true class="optionValue-form">{{ $t('message.anonymousRadio') }}</b-form-radio>
-        </b-form-group>
+        </div>
+        <hr class="borderLine">
+        <div class="optionValue">
+            <label for="choiceRadio" class="optionValuelabel">{{ $t('message.radioOption') }}</label>
+            <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" value=true ><span class="optionValueleft">{{ $t('message.anonymousRadio') }}</span></div>
+            <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" value=false ><span class="optionValueleft">{{ $t('message.authenticationRadio') }}</span></div>
+        </div>
         <hr class="borderLine">
         <div class="dateOption">
             <p class="date-paragraph">{{ $t('message.dateParagraph') }}</p>
@@ -225,29 +220,45 @@ export default {
     
     .adminForm{
         margin-top:5rem;
-        font-size:1.1em;
+        font-size:1.1rem;
 
-        .nameInput-form{
-            color:#350E7E;
-            font-weight:bold;
+        .nameInputsection{
+            display:flex;
+            flex-direction:column;
             margin-bottom:5rem;
             margin-left:5rem;
+            
+            .nameInputlabel{
+                color:#350E7E;
+                font-weight:bold;
+            }
+
+            #surveyname{
+                width:30rem;
+            }
         }
         .borderLine{
             margin:5rem 0;
         }
         .optionValue{
-            color:#350E7E;
-            font-weight:bold;
+            display:flex;
+            flex-direction:column;
             margin-left:5rem;
 
-            .optionValue-form{
-                color:black;
-                margin-top:1rem;
+            .optionValuelabel{
+                color:#350E7E;
+                font-weight:bold;
+                margin-bottom:1rem;
+            }
+
+            .optionValuediv{
                 margin-left:5rem;
-                font-weight: normal;
+            }
+            .optionValueleft{
+                margin-left:1rem;
             }
         }
+
         .dateOption{
             margin-left:5rem;
 
@@ -301,7 +312,7 @@ export default {
 
                 .questionsModify-button{
                     background-color: #353535;
-                    color: #ffffff;
+                    color: #FFFFFF;
                     border-radius: 10px;
                     box-shadow: 0 5px 5px gray;
                     width:10rem;
@@ -564,6 +575,9 @@ export default {
 @media only screen and (max-width: 767px) {
     .rightsideCreate{
         width:100% !important;
+    }
+    #surveyname{
+        width:18rem !important;
     }
 
 }

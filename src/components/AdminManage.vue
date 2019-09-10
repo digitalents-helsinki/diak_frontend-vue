@@ -14,6 +14,7 @@
             <b-form-input v-bind:placeholder="$t('message.searchPlaceholder')"></b-form-input>
           </b-input-group>
       </div>
+    </div>
       <div class="tableandfilter">
         <div class="buttonstotal">
             <b-dropdown id="dropdown-1" variant="secondary" text="Kaikki kyselyt" class="m-md-2 dropdownButtons-top">
@@ -22,37 +23,37 @@
               <b-dropdown-item>Third Action</b-dropdown-item>
             </b-dropdown>
         </div>
+        <div class="tableDisplayfields">
+          <b-table hover responsive :items="surveys" :fields="fields" head-variant="light">
+            <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
+              <div v-bind:key="field.key">
+                <div v-if="field.colType === 'name'">
+                  <span>{{data.item.name}}</span>
+                </div>
+                <div v-else-if="field.colType === 'startDate'">
+                  <span>{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
+                </div>
+                <div v-else-if="field.colType === 'endDate'">
+                  <span>{{data.item.endDate | moment('DD/MM/YYYY')}}</span>
+                </div>
+                <div v-else-if="field.colType === 'respondentsSize'">
+                  <span>0/{{data.item.respondents_size}}</span>
+                </div>
+                <div v-else-if="field.colType === 'modify'">
+                  <button> <font-awesome-icon icon="pencil-alt" style="font-size:1.5rem;"/></button>
+                </div>
+                <div v-else-if="field.colType === 'analyze'">
+                  <button> <img src="../images/assessment_24px.png" alt="" style="width:25px; height:25px;"/></button>
+                </div>
+                <div v-else-if="field.colType === 'delete'">
+                  <button> <font-awesome-icon icon="folder" style="font-size:1.6rem; color:grey;"/></button>
+                  <button class="iconButton-times" @click="deleteSurvey(data.item.id)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:red;"/> </button>
+                </div>
+              </div>
+            </template> 
+          </b-table>
+        </div>
       </div>
-    </div>
-    <div>
-      <b-table hover responsive :items="surveys" :fields="fields" head-variant="light" class="bzo">
-        <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
-          <div v-bind:key="field.key">
-            <div v-if="field.colType === 'name'">
-              <span>{{data.item.name}}</span>
-            </div>
-            <div v-else-if="field.colType === 'startDate'">
-              <span>{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
-            </div>
-            <div v-else-if="field.colType === 'endDate'">
-              <span>{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
-            </div>
-            <div v-else-if="field.colType === 'respondentsSize'">
-              <span>0/{{data.item.respondents_size}}</span>
-            </div>
-            <div v-else-if="field.colType === 'modify'">
-              <b-button>Modify</b-button>
-            </div>
-            <div v-else-if="field.colType === 'analyze'">
-              <b-button>Analysoi</b-button>
-            </div>
-            <div v-else-if="field.colType === 'delete'">
-              <b-button>Arkistoi</b-button><b-button @click="deleteSurvey(data.item.id)">Poista</b-button>
-            </div>
-          </div>
-        </template> 
-      </b-table>
-    </div>
   </div>
 </template>
 <script>
@@ -165,7 +166,7 @@ export default {
       padding-bottom:1rem;
 
       .totalParagraph{
-        font-size:1em;
+        font-size:1rem;
         color:grey;
         margin-left:1rem;
         margin-bottom:6rem;
@@ -201,7 +202,11 @@ export default {
       
       .tableDisplayfields{
         background-color:#FFFFFF;
-      }
+
+        .iconButton-times{
+          margin-left:1rem;
+        }
+      }  
     }
 }
 

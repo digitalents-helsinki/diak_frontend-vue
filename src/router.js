@@ -7,6 +7,8 @@ import SurveyResults from '@/views/SurveyResults.vue'
 import Admin from '@/views/Admin.vue'
 import AdminTest from '@/views/Admin-test.vue'
 import Login from '@/views/Login.vue'
+import Registration from '@/views/Registration.vue'
+import Password from '@/views/Password.vue'
 import Profile from '@/views/Profile.vue'
 
 Vue.use(Router)
@@ -26,6 +28,24 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login,
+      props: true,
+      meta: {
+        quest: true
+      }
+    },
+    {
+      path: '/registration',
+      name: 'registration',
+      component: Registration,
+      props: true,
+      meta: {
+        quest: true
+      }
+    },
+    {
+      path: '/password',
+      name: 'password',
+      component: Password,
       props: true,
       meta: {
         quest: true
