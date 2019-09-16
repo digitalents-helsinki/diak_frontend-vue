@@ -104,6 +104,22 @@ export const fi = {
     passwordText:'Lisää uusi salasana',
     submitPassword:'Lähetä',
     passwordInfo:'',
-    gettologinPage:'Takaisin'
+    gettologinPage:'Takaisin',
+    infoInstruction:'Hei, olet kirjautumassa ensimmäistä kertaa sisään. Täytäthän lyhyen tietolomakkeen ennenkuin jatkat eteenpäin.',
+    ProfilesubmitButton:'Tallenna',
+    userName:'Etunimi ja sukunimi',
+    userAddress:'Osoite',
+    userAge:'Syntymäaika',
+    userGender:'Sukupuoli',
+    userPhonenumber:'Puhelinnumero',
+    userEmailaddress:'Sähköpostiosoite',
+    calanderPlaceholder:'Valitse päivämäärä',
+    selectGender:'Valitse',
+    genderMale:'Mies',
+    genderFemale:'Nainen',
+    genderOther:'Muu',
+    profileInstruction:'Kyselysi',
+    finishedHeading:'Sinun vastatut kyselyt',
+    ongoingHeading:'Sinun kysely kutsut'
   }
 }

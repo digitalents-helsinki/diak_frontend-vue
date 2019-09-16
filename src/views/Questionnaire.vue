@@ -2,7 +2,9 @@
   <div class="background">
     <div class="container-fluid" id="questionnaire-main">
       <div class="questionnaire-top">
-        <img class="logo" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+      <div id="logodiv">
+        <img class="logotop" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+      </div>
         <button @click="toggleHelp" class="btn buttonOhjeet">Ohjeet</button>
       </div>
       <div class="questionnaire-bottom">
@@ -49,7 +51,10 @@
               <div v-show="questiondata.health" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.health = undefined"/></div>
               <div v-show="questiondata.health"><button class="btn remove-button" @click.prevent="questiondata.health = undefined">Poista Vastaus</button></div>
             </div>
-            <div class="range">
+            <div class="rangeLabelicons">
+              <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+              <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+            </div>
               <b-form-input
                 v-bind:class="{activeRange: questiondata.health}"
                 type="range"
@@ -57,7 +62,6 @@
                 max="10"
                 v-model="questiondata.health"
               />
-            </div>
               <div class="rangeLabel-mobile">
                 <div>0</div>
                 <div>10</div>
@@ -75,12 +79,8 @@
                 <div>9</div>
                 <div>10</div>
               </div>
-              <div class="rangeLabel-icons">
-                <span><font-awesome-icon icon="thumbs-down" style="font-size:1.6rem; color:grey;"/></span>
-                <span><font-awesome-icon icon="thumbs-up" style="font-size:1.6rem; color:grey;"/></span>
-            </div>
           </div>
-          <div class="textarea-wordCount">
+          <div class="textareaWordCount">
             <textarea
               v-model="questiondata.health_desc"
               rows="3" 
@@ -113,13 +113,17 @@
               <div v-show="questiondata.overcoming" class="remove-icon" @click.prevent="questiondata.overcoming = undefined"><font-awesome-icon icon="times-circle"/></div>
               <div v-show="questiondata.overcoming"><button class="btn remove-button" @click.prevent="questiondata.overcoming = undefined">Poista Vastaus</button></div>
             </div>
-            <b-form-input
-              v-bind:class="{activeRange: questiondata.overcoming}"
-              type="range"
-              min="0"
-              max="10"
-              v-model="questiondata.overcoming"
-            />
+            <div class="rangeLabelicons">
+              <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+              <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+            </div>
+              <b-form-input
+                v-bind:class="{activeRange: questiondata.overcoming}"
+                type="range"
+                min="0"
+                max="10"
+                v-model="questiondata.overcoming"
+              />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -137,12 +141,8 @@
               <div>9</div>
               <div>10</div>
             </div>
-            <div class="rangeLabel-words">
-                <span>{{ $t('message.dissatisfied') }}</span>
-                <span>{{ $t('message.satisfied') }}</span>
-            </div>
           </div>
-          <div class="textarea-wordCount">
+          <div class="textareaWordCount">
             <textarea
               v-model="questiondata.overcoming_desc"
               rows="3"
@@ -179,13 +179,17 @@
               <div v-show="questiondata.living" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.living = undefined" title="Poista numero"/></div>
               <div v-show="questiondata.living"> <button class="btn remove-button" @click.prevent="questiondata.living = undefined">Poista Vastaus</button></div>
             </div>
-            <b-form-input
-              v-bind:class="{activeRange: questiondata.living}"
-              type="range"
-              min="0"
-              max="10"
-              v-model="questiondata.living"
-            />
+            <div class="rangeLabelicons">
+              <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+              <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+            </div>
+              <b-form-input
+                v-bind:class="{activeRange: questiondata.living}"
+                type="range"
+                min="0"
+                max="10"
+                v-model="questiondata.living"
+              />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -203,12 +207,8 @@
               <div>9</div>
               <div>10</div>
             </div>
-             <div class="rangeLabel-words">
-                <span>{{ $t('message.dissatisfied') }}</span>
-                <span>{{ $t('message.satisfied') }}</span>
-            </div>
           </div>
-          <div class="textarea-wordCount">
+          <div class="textareaWordCount">
             <textarea
               v-model="questiondata.living_desc"
               rows="3"
@@ -245,13 +245,17 @@
               <div v-show="questiondata.coping" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.coping = undefined"/></div>
               <div v-show="questiondata.coping"><button class="btn remove-button" @click.prevent="questiondata.coping = undefined">Poista Vastaus</button></div>
             </div>
-            <b-form-input
-              v-bind:class="{activeRange: questiondata.coping}"
-              type="range"
-              min="0"
-              max="10"
-              v-model="questiondata.coping"
-            />
+            <div class="rangeLabelicons">
+              <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+              <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+            </div>
+              <b-form-input
+                v-bind:class="{activeRange: questiondata.coping}"
+                type="range"
+                min="0"
+                max="10"
+                v-model="questiondata.coping"
+              />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -269,12 +273,8 @@
               <div>9</div>
               <div>10</div>
             </div>
-             <div class="rangeLabel-words">
-                <span>{{ $t('message.dissatisfied') }}</span>
-                <span>{{ $t('message.satisfied') }}</span>
-            </div>
           </div>
-          <div class="textarea-wordCount">
+          <div class="textareaWordCount">
             <textarea
               v-model="questiondata.coping_desc"
               rows="3"
@@ -311,13 +311,17 @@
               <div v-show="questiondata.family" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.family = undefined"/></div>
               <div v-show="questiondata.family"><button class="btn remove-button" @click.prevent="questiondata.family = undefined">Poista Vastaus</button></div>
             </div>
-            <b-form-input
-              v-bind:class="{activeRange: questiondata.family}"
-              type="range"
-              min="0"
-              max="10"
-              v-model="questiondata.family"
-            />
+            <div class="rangeLabelicons">
+              <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+              <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+            </div>
+              <b-form-input
+                v-bind:class="{activeRange: questiondata.family}"
+                type="range"
+                min="0"
+                max="10"
+                v-model="questiondata.family"
+              />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -335,12 +339,8 @@
               <div>9</div>
               <div>10</div>
             </div>
-             <div class="rangeLabel-words">
-                <span>{{ $t('message.dissatisfied') }}</span>
-                <span>{{ $t('message.satisfied') }}</span>
-            </div>
           </div>
-          <div class="textarea-wordCount">
+          <div class="textareaWordCount">
             <textarea
               v-model="questiondata.family_desc"
               rows="3"
@@ -377,13 +377,17 @@
               <div v-show="questiondata.friends" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.friends = undefined" title="Poista numero"/></div>
               <div v-show="questiondata.friends"><button class="btn remove-button" @click.prevent="questiondata.friends = undefined">Poista Vastaus</button></div>
             </div>
-            <b-form-input
-              v-bind:class="{activeRange: questiondata.friends}"
-              type="range"
-              min="0"
-              max="10"
-              v-model="questiondata.friends"
-            />
+            <div class="rangeLabelicons">
+              <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+              <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+            </div>
+              <b-form-input
+                v-bind:class="{activeRange: questiondata.friends}"
+                type="range"
+                min="0"
+                max="10"
+                v-model="questiondata.friends"
+              />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -401,12 +405,8 @@
               <div>9</div>
               <div>10</div>
             </div>
-             <div class="rangeLabel-words">
-                <span>{{ $t('message.dissatisfied') }}</span>
-                <span>{{ $t('message.satisfied') }}</span>
-            </div>
           </div>
-          <div class="textarea-wordCount">
+          <div class="textareaWordCount">
             <textarea
               v-model="questiondata.friends_desc"
               rows="3"
@@ -443,13 +443,17 @@
               <div v-show="questiondata.finance" class="remove-icon" ><font-awesome-icon icon="times-circle" @click.prevent="questiondata.finance = undefined"/></div>
               <div v-show="questiondata.finance" ><button class="btn remove-button" @click.prevent="questiondata.finance = undefined">Poista Vastaus</button></div>
             </div>
-            <b-form-input
-              v-bind:class="{activeRange: questiondata.finance}"
-              type="range"
-              min="0"
-              max="10"
-              v-model="questiondata.finance"
-            />
+            <div class="rangeLabelicons">
+              <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+              <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+            </div>
+              <b-form-input
+                v-bind:class="{activeRange: questiondata.finance}"
+                type="range"
+                min="0"
+                max="10"
+                v-model="questiondata.finance"
+              />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -467,12 +471,8 @@
               <div>9</div>
               <div>10</div>
             </div>
-             <div class="rangeLabel-words">
-                <span>{{ $t('message.dissatisfied') }}</span>
-                <span>{{ $t('message.satisfied') }}</span>
-            </div>
           </div>
-          <div class="textarea-wordCount">
+          <div class="textareaWordCount">
             <textarea
               v-model="questiondata.finance_desc"
               rows="3"
@@ -509,13 +509,17 @@
               <div v-show="questiondata.strengths" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.strengths = undefined"/></div>
               <div v-show="questiondata.strengths"><button class="btn remove-button" @click.prevent="questiondata.strengths = undefined">Poista Vastaus</button></div>
             </div>
-            <b-form-input
-              v-bind:class="{activeRange: questiondata.strengths}"
-              type="range"
-              min="0"
-              max="10"
-              v-model="questiondata.strengths"
-            />
+            <div class="rangeLabelicons">
+              <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+              <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+            </div>
+              <b-form-input
+                v-bind:class="{activeRange: questiondata.strengths}"
+                type="range"
+                min="0"
+                max="10"
+                v-model="questiondata.strengths"
+              />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -533,12 +537,8 @@
               <div>9</div>
               <div>10</div>
             </div>
-             <div class="rangeLabel-words">
-                <span>{{ $t('message.dissatisfied') }}</span>
-                <span>{{ $t('message.satisfied') }}</span>
-            </div>
           </div>
-          <div class="textarea-wordCount">
+          <div class="textareaWordCount">
             <textarea
               v-model="questiondata.strengths_desc"
               rows="3"
@@ -575,13 +575,17 @@
               <div v-show="questiondata.self_esteem" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="questiondata.self_esteem = undefined"/></div>
               <div v-show="questiondata.self_esteem"><button class="btn remove-button" @click.prevent="questiondata.self_esteem = undefined">Poista Vastaus</button></div>
             </div>
-            <b-form-input
-              v-bind:class="{activeRange: questiondata.self_esteem}"
-              type="range"
-              min="0"
-              max="10"
-              v-model="questiondata.self_esteem"
-            />
+            <div class="rangeLabelicons">
+              <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+              <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+            </div>
+              <b-form-input
+                v-bind:class="{activeRange: questiondata.self_esteem}"
+                type="range"
+                min="0"
+                max="10"
+                v-model="questiondata.self_esteem"
+              />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -599,12 +603,8 @@
               <div>9</div>
               <div>10</div>
             </div>
-             <div class="rangeLabel-words">
-                <span>{{ $t('message.dissatisfied') }}</span>
-                <span>{{ $t('message.satisfied') }}</span>
-            </div>
           </div>
-          <div class="textarea-wordCount">
+          <div class="textareaWordCount">
             <textarea
               v-model="questiondata.self_esteem_desc"
               rows="3"
@@ -643,13 +643,17 @@
               <div v-show="questiondata.life_as_whole" class="remove-icon" ><font-awesome-icon icon="times-circle" @click.prevent="questiondata.life_as_whole = undefined"/></div>
               <div v-show="questiondata.life_as_whole" ><button class="btn remove-button" @click.prevent="questiondata.life_as_whole = undefined">Poista Vastaus</button></div>
             </div>
-            <b-form-input
-              v-bind:class="{activeRange: questiondata.life_as_whole}"
-              type="range"
-              min="0"
-              max="10"
-              v-model="questiondata.life_as_whole"
-            />
+            <div class="rangeLabelicons">
+              <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+              <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+            </div>
+              <b-form-input
+                v-bind:class="{activeRange: questiondata.life_as_whole}"
+                type="range"
+                min="0"
+                max="10"
+                v-model="questiondata.life_as_whole"
+              />
             <div class="rangeLabel-mobile">
               <div>0</div>
               <div>10</div>
@@ -667,12 +671,8 @@
               <div>9</div>
               <div>10</div>
             </div>
-             <div class="rangeLabel-words">
-                <span>erittäin tyytymätön</span>
-                <span>erittäin tyytyväinen</span>
-            </div>
           </div>
-          <div class="textarea-wordCount">
+          <div class="textareaWordCount">
             <textarea
               v-model="questiondata.life_as_whole_desc"
               rows="3" 
@@ -850,11 +850,11 @@ export default {
   color: red;
 }
 
-.range {
+/*.range {
   display: flex;
   width: 100%;
   margin: auto;
-}
+}*/
 
 .background {
   //background: linear-gradient(to right, #0078f0, #80bfff);
@@ -875,17 +875,20 @@ export default {
     font-size: 1rem;
     height:8rem;
     overflow: hidden;
-    margin-bottom: 1rem;
+    margin-bottom: 0.6rem;
 
     .questionnaire-top{
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-top:1rem;
-
-    .logo {
-      height: 60px;
-    }
+    
+      #logodiv{
+          #logotop {
+            width:100%;
+            height: 60px;
+          }
+      }
 
     .buttonOhjeet {
       border-radius: 8px 1px;
@@ -922,7 +925,7 @@ export default {
 }
 
 .questionnaire {
-  background-color: white;
+  background-color: #FFFFFF;
   padding: 0 5vh;
   border-radius: 15px 15px 0 0;
   height: 85%;
@@ -961,13 +964,13 @@ export default {
 
           p:nth-of-type(1) {
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #350e7e;
             margin-right: 1rem;
           }
 
           p:nth-of-type(2) {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #353535;
             margin-right: 1rem;
             }
@@ -992,7 +995,7 @@ export default {
           position: relative;
           display: flex;
           left: calc(50% - 30px);
-          margin-bottom: 1rem;
+          margin-bottom: 0.1rem;
           width: 50%;
           
           .rangeQuestiondata {
@@ -1013,27 +1016,29 @@ export default {
             display:none;
           }
         }
+        .rangeLabelicons{
+          display: -webkit-flex;
+          display: flex;
+          justify-content: space-between;
+          margin-bottom:0.2rem;
+          width:100%;
+
+          .thumbslogoDown{
+            height:1.6rem;
+          }
+          .thumbslogoUp{
+            height:1.6rem;
+          }
+        }
         .rangeLabel-mobile {
           display: -webkit-flex;
           display: flex;
           justify-content: space-between;
           font-weight: bold;
+          width:100%;
         }
         .rangeLabel {
           display: none;
-        }
-        .rangeLabel-icons{
-          display: -webkit-flex;
-          display: flex;
-          justify-content: space-between;
-          margin-bottom:0.1rem;
-        }
-        .rangeLabel-words{
-          display: -webkit-flex;
-          display: flex;
-          justify-content: space-between;
-          margin-bottom:0.2rem;
-          font-size:0.9rem;
         }
         .activeRange {
           &::-webkit-slider-thumb {
@@ -1100,7 +1105,9 @@ export default {
     }
   }
 }
-.textarea-wordCount{
+.textareaWordCount{
+  margin-top:0.6rem;
+  
   textarea {
     width: 100%;
     border-radius: 4px;
@@ -1295,8 +1302,24 @@ export default {
     margin: 1rem 0;
   }
 }*/
+@media only screen and (min-width: 320px) and (max-width: 360px){
+  #questionnaire-main {
+    margin-bottom: 0.1rem !important;
+  }
+  .questionHelpbutton {
+    margin-top:0.1rem !important;
+    margin-bottom:0.3rem !important;
+  }
+  .textareaWordCount{
+    margin-top:0.1rem !important;
+  }  
+}
 
 @media only screen and (min-width: 575px) {
+  #questionnaire-main {
+    margin-bottom: 1rem !important;
+  }
+  
   .questionHelpbutton p:nth-of-type(1) {
     font-size: 1.2rem !important;
   }
@@ -1352,11 +1375,11 @@ export default {
     justify-content: center;
   }
 
-  .rangeLabel-icons{
+  /*.rangeLabel-icons{
     display:none !important;
-  }
+  }*/
 
-  .rangeLabel-words{
+  /*.rangeLabel-words{
     display:block !important;
     display: -webkit-flex !important;
     display: flex !important;
@@ -1364,10 +1387,14 @@ export default {
     margin-bottom:0.1rem;
     margin-top:2rem;
     font-size:1rem !important;
-  }
+  }*/
 
   .results .text-review{
     padding-top:0rem !important;
+  }
+
+  .textareaWordCount{
+    margin-top:1.2rem;
   }
 
   .page-number{
@@ -1452,7 +1479,7 @@ export default {
       margin-top:1.7rem;
   }
 
-  textarea {
+  .textareaWordCount{
     margin-top: 2rem;
   }
 

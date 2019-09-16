@@ -9,7 +9,7 @@ import AdminTest from '@/views/Admin-test.vue'
 import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import Password from '@/views/Password.vue'
-import Profile from '@/views/Profile.vue'
+import UserProfile from '@/views/UserProfile.vue'
 
 Vue.use(Router)
 
@@ -52,6 +52,11 @@ export default new Router({
       }
     },
     {
+      path: '/userprofile',
+      name: 'userprofile',
+      component: UserProfile
+    },
+    {
       path: '/questionnaire/:surveyId',
       name: 'questionnaire',
       component: Questionnaire,
@@ -59,11 +64,6 @@ export default new Router({
       meta: {
         quest: true
       }
-    },
-    {
-      path: '/user/profile',
-      name: 'profile',
-      component: Profile
     },
     {
       path: '/user/results/:resultId',

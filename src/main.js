@@ -7,7 +7,7 @@ import VueMoment from 'vue-moment'
 import { messages } from './translation'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTimesCircle} from '@fortawesome/free-solid-svg-icons'
-import { faAngleUp } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
 import { faPencilAlt} from '@fortawesome/free-solid-svg-icons'
 import { faPlus} from '@fortawesome/free-solid-svg-icons'
@@ -29,7 +29,7 @@ Vue.use(VueI18n)
 Vue.use(VueMoment)
 
 library.add(faTimesCircle)
-library.add(faAngleUp)
+library.add(faAngleDown)
 library.add(faCalendarAlt)
 library.add(faPencilAlt)
 library.add(faPlus)
