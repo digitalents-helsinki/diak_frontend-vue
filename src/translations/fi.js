@@ -120,6 +120,19 @@ export const fi = {
     genderOther:'Muu',
     profileInstruction:'Kyselysi',
     finishedHeading:'Sinun vastatut kyselyt',
-    ongoingHeading:'Sinun kysely kutsut'
+    ongoingHeading:'Sinun kysely kutsut',
+    monthJanuary:'tammikuu',
+    monthFebruary:'helmikuu',
+    monthMarch:'maaliskuu',
+    monthApril:'huhtikuu',
+    monthMay:'toukokuu',
+    monthJune:'kesäkuu',
+    monthJuly:'heinäkuu',
+    monthAugust:'elokuu',
+    monthSeptember:'syyskuu',
+    monthOctober:'lokakuu',
+    monthNovember:'marraskuu',
+    monthDecember:'joulukuu'
+    
   }
 }

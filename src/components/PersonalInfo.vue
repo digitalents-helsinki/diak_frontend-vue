@@ -17,12 +17,35 @@
               <input id="enteraddress" type="text" name="enteraddress">
             </p>
              <div id="ageField">
-                <div id="labelCenter"><p>{{ $t('message.userAge') }}</p></div>
-                <div id="calanderPosition"><datepicker v-model="pickDate" :language="fi" v-bind:placeholder="$t('message.calanderPlaceholder')"></datepicker></div>
+                <p>{{ $t('message.userAge') }}</p>
+                <div id="birthdayDisplay">
+                  <div id="dayDisplay">
+                    <input id="dayEnter" type="text" name="day" placeholder="01" style="width: 60px;">
+                </div>
+                <div id="monthDisplay">
+                  <select id="monthEnter">
+                    <option>{{ $t('message.monthJanuary') }}</option>
+                    <option>{{ $t('message.monthFebruary') }}</option>
+                    <option>{{ $t('message.monthMarch') }}</option>
+                    <option>{{ $t('message.monthApril') }}</option>
+                    <option>{{ $t('message.monthMay') }}</option>
+                    <option>{{ $t('message.monthJune') }}</option>
+                    <option>{{ $t('message.monthJuly') }}</option>
+                    <option>{{ $t('message.monthAugust') }}</option>
+                    <option>{{ $t('message.monthSeptember') }}</option>
+                    <option>{{ $t('message.monthOctober') }}</option>
+                    <option>{{ $t('message.monthNovember') }}</option>
+                    <option>{{ $t('message.monthDecember') }}</option>
+                  </select>
+              </div>
+              <div id="yearDisplay">
+                <input id="yearEnter" type="text" name="year" placeholder="1990" style="width: 80px;">
+              </div>
             </div>
+          </div>
              <p id="genderField">
-              <label for="entergender">{{ $t('message.userGender') }}</label>
-                <select name="entergender">
+              <label for="genderEnter">{{ $t('message.userGender') }}</label>
+                <select name="genderEnter">
                   <option value="" disabled selected>{{ $t('message.selectGender') }}</option>
                   <option value="male">{{ $t('message.genderMale') }}</option>
                   <option value="female">{{ $t('message.genderFemale') }}</option>
@@ -160,8 +183,22 @@ components: {
           flex-direction:column;
           margin-bottom:1rem;
 
-          #labelCenter{
-            font-size:1.1rem;
+          #birthdayDisplay{
+            display:flex;
+            flex-direction:row;
+            justify-content:flex-start;
+          
+            #dayDisplay{
+              margin-right:0.1rem;
+            }
+
+            #monthDisplay{
+              margin-right:0.1rem;
+
+              #monthEnter{
+                height:29px;
+              }
+            }
           }
         }
 

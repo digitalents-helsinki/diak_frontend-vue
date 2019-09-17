@@ -3,7 +3,7 @@
     <div class="container-fluid" id="questionnaire-main">
       <div class="questionnaire-top">
       <div id="logodiv">
-        <img class="logotop" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+        <img id="logotop" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
       </div>
         <button @click="toggleHelp" class="btn buttonOhjeet">Ohjeet</button>
       </div>

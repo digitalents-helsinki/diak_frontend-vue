@@ -10,7 +10,7 @@
             <div id="previousSurvies">
               <div id="headingPrevious">
                 <p id="paragraphPrevious">{{ $t('message.finishedHeading') }}</p>
-                <b-button v-b-toggle.collapse-vastatut class="textarea-collapse pointer btn-dark"><font-awesome-icon icon="angle-down"/></b-button>
+                <b-button v-b-toggle.collapse-vastatut class="textarea-collapse pointer btn-secondary"><font-awesome-icon icon="angle-down"/></b-button>
               </div>
                 <b-collapse id="collapse-vastatut">
                 </b-collapse>
@@ -18,7 +18,7 @@
             <div id="currentSurvies">
               <div id="headingCurrent">
                 <p id="paragraphCurrent">{{ $t('message.ongoingHeading') }}</p>
-                <b-button v-b-toggle.collapse-kysely class="textarea-collapse pointer btn-dark"><font-awesome-icon icon="angle-down"/></b-button>
+                <b-button v-b-toggle.collapse-kysely class="textarea-collapse pointer btn-secondary"><font-awesome-icon icon="angle-down"/></b-button>
               </div>
               <b-collapse id="collapse-kysely">
               </b-collapse>
@@ -113,7 +113,7 @@ export default {
             display:flex;
             flex-direction:row;
             justify-content:space-around;
-            
+
             #paragraphCurrent{
               color:#FFFFFF;
               font-size:1.1rem;

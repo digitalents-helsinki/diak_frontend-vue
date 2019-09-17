@@ -80,6 +80,7 @@ export default {
       background-color: #F9F9FB;
       width:100%;
       box-shadow: 0 5px 5px gray;
+      margin-bottom:1rem;
     
       #space{
         background-color:#80CDE6;
