@@ -7,11 +7,11 @@
         </div>
         <div id="loginContent">
           <p id="loginMessage">{{ $t('message.loginText') }}</p>
-          <div id="loginCredentials">
-            <input type="email" id="email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')" required>
-            <input type="password" id="password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')" required>
-            <button type="submit" class="btn submitButton">{{ $t('message.formsubmitButton') }}</button>
-          </div>
+          <form id="loginCredentials">
+            <input type="text" autocomplete="email" id="email" v-model="login.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')" required>
+            <input type="password" autocomplete="current-password" id="password" v-model="login.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')" required>
+            <button type="submit" @click.prevent="handleLogin" class="btn submitButton">{{ $t('message.formsubmitButton') }}</button>
+          </form>
           <div id="registerandPassword">
               <p id="changePassword" @click="handlePasswordClick">{{ $t('message.newPassword') }}</p>
               <p id="registeration" @click="handleRegisterClick">{{ $t('message.registrationLink') }}</p>
@@ -19,7 +19,7 @@
           <p class="otherWay">{{ $t('message.loginwithother') }}</p>
           <div id="loginOtherway">
             <button class="btn loginFacebookButton"><font-awesome-icon :icon="['fab', 'facebook']" style="font-size:1.6rem; margin-right:0.6rem;"/>Facebook</button>
-            <button class="btn loginGoogleButton" @click="handleSignIn"><font-awesome-icon :icon="['fab', 'google']" style="font-size:1.6rem; margin-right:0.6rem;"/>Google</button>
+            <button class="btn loginGoogleButton" @click="handleGSignIn"><font-awesome-icon :icon="['fab', 'google']" style="font-size:1.6rem; margin-right:0.6rem;"/>Google</button>
           </div>
         </div>
       </div>
@@ -31,15 +31,47 @@
 </template>
 <script>
 import axios from 'axios'
+import store from '@/store'
 
 export default {
   name: 'login',
+  data() {
+    return {
+      login: {
+        email: null,
+        password: null
+      },
+      error: false
+    }
+  },
   methods: {
-    handleSignIn() {
+    handleLogin() {
+      const data = JSON.stringify({
+        user: this.login.email,
+        pass: this.login.password
+      })
+      axios
+        .post(process.env.VUE_APP_BACKEND + "/login", data, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          if (res.data.success) {
+            store.state.auth.loggedIn = true
+            store.state.auth.accessToken = res.token
+            this.$router.push({ name: 'user' })
+          } else { 
+            this.$data.error = true
+          }
+        })
+    },
+    handleGSignIn() {
       this.$gAuth
         .signIn()
         .then(gUser => {
-          this.$router.push({ name: 'questionnaire', params: { user: gUser.w3.ig}})
+          store.state.auth.loggedIn = true
+          this.$router.push({ name: 'user' })
         })
     },
     handlePasswordClick() {

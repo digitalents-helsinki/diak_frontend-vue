@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home.vue'
+import store from '@/store'
 import Questionnaire from '@/views/Questionnaire.vue'
 import Results from '@/views/Results.vue'
 import SurveyResults from '@/views/SurveyResults.vue'
@@ -9,9 +10,17 @@ import AdminTest from '@/views/Admin-test.vue'
 import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import Password from '@/views/Password.vue'
-import UserProfile from '@/views/UserProfile.vue'
+import User from '@/views/User.vue'
 
 Vue.use(Router)
+
+function guard(to, from, next) {
+  if(store.state.auth.loggedIn) {
+    next()
+  } else {
+    next('/login')
+  }
+}
 
 export default new Router({
   mode: 'history',
@@ -52,9 +61,10 @@ export default new Router({
       }
     },
     {
-      path: '/userprofile',
-      name: 'userprofile',
-      component: UserProfile
+      path: '/user',
+      name: 'user',
+      component: User,
+      beforeEnter: guard
     },
     {
       path: '/questionnaire/:surveyId',
