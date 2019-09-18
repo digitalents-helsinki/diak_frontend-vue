@@ -58,9 +58,17 @@ export default {
         })
         .then(res => {
           if (res.data.success) {
-            store.state.auth.loggedIn = true
-            store.state.auth.accessToken = res.token
-            this.$router.push({ name: 'user' })
+            if (res.data.role === 'admin') {
+              store.state.auth.loggedIn = true
+              store.state.auth.role = 'admin'
+              store.state.auth.accessToken = res.data.token
+              this.$router.push({ name: 'admin' })
+            } else {
+              store.state.auth.loggedIn = true
+              store.state.auth.role = 'user'
+              store.state.auth.accessToken = res.data.token
+              this.$router.push({ name: 'user' })
+            }
           } else { 
             this.$data.error = true
           }

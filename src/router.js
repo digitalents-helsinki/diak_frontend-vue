@@ -70,39 +70,26 @@ export default new Router({
       path: '/questionnaire/:surveyId',
       name: 'questionnaire',
       component: Questionnaire,
-      props: true,
-      meta: {
-        quest: true
-      }
+      props: true
     },
     {
       path: '/user/results/:resultId',
       name: 'results',
       component: Results,
+      beforeEnter: guard,
       props: true
     },
     {
       path: '/admin/surveyresults/',
       name: 'surveyresults',
-      component: SurveyResults,
-      meta: {
-        requiresAuth: true,
-        is_admin: true
-      }
+      beforeEnter: guard,
+      component: SurveyResults
     },
     {
-      path: '/admin/',
+      path: '/admin',
       name: 'admin',
-      component: Admin,
-      meta: {
-        requiresAuth: true,
-        is_admin: true
-      }
-    },
-    {
-      path: '/admintest/',
-      name: 'admintest',
-      component: AdminTest
+      beforeEnter: guard,
+      component: Admin
     }
   ]
 })
