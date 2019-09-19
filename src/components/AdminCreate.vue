@@ -1,104 +1,109 @@
 <template>
 <div class="rightsideCreate">
-    <div class="rightsideCreate-top">
-         <p>{{ $t('message.surveyCreate') }}</p> 
-    </div>
-    <div class="top-buttons">
-        <button class="btn savecontinueButton">{{ $t('message.saveContinue') }}</button>
-        <button class="btn discardButton">{{ $t('message.disCard') }}</button>
-    </div>
-    <div class="adminForm">
-        <div class="nameInputsection">
-            <label for="forminputName" class="nameInputlabel">{{ $t('message.adminformName') }}</label>
-            <input 
-            id="surveyname"
-            v-model="surveyName"
-            type="text"
-            name="forminputName"
-            v-bind:placeholder="$t('message.namePlaceholder')"
-            >
+    <div class="createWrapper-before" v-if="!created">
+        <div class="rightsideCreate-top">
+            <p>{{ $t('message.surveyCreate') }}</p> 
         </div>
-        <hr class="borderLine">
-        <div class="optionValue">
-            <label for="choiceRadio" class="optionValuelabel">{{ $t('message.radioOption') }}</label>
-            <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" value=true ><span class="optionValueleft">{{ $t('message.anonymousRadio') }}</span></div>
-            <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" value=false ><span class="optionValueleft">{{ $t('message.authenticationRadio') }}</span></div>
+        <div class="top-buttons">
+            <button class="btn savecontinueButton">{{ $t('message.saveContinue') }}</button>
+            <button class="btn discardButton">{{ $t('message.disCard') }}</button>
         </div>
-        <hr class="borderLine">
-        <div class="dateOption">
-            <p class="date-paragraph">{{ $t('message.dateParagraph') }}</p>
-            <div class="startdateOption">
-                <p> {{ $t('message.startDate') }}</p>
-                <datepicker v-model="startDate" :language="fi" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
-                <div class="calendarIcon"><font-awesome-icon icon="calendar-alt"/></div>
+        <div class="adminForm">
+            <div class="nameInputsection">
+                <label for="forminputName" class="nameInputlabel">{{ $t('message.adminformName') }}</label>
+                <input 
+                id="surveyname"
+                v-model="surveyName"
+                type="text"
+                name="forminputName"
+                v-bind:placeholder="$t('message.namePlaceholder')"
+                >
             </div>
-            <div class="enddateOption">
-                <p> {{ $t('message.endDate') }}</p>
-                <datepicker v-model="endDate" :language="fi" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
-                <div class="calendarIcon"><font-awesome-icon icon="calendar-alt"/></div>
+            <hr class="borderLine">
+            <div class="optionValue">
+                <label for="choiceRadio" class="optionValuelabel">{{ $t('message.radioOption') }}</label>
+                <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" value=true ><span class="optionValueleft">{{ $t('message.anonymousRadio') }}</span></div>
+                <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" value=false ><span class="optionValueleft">{{ $t('message.authenticationRadio') }}</span></div>
             </div>
-        </div>
-        <hr class="borderLine">
-        <div class="insertingQuestions">
-            <p class="insertingQuestions-p">{{ $t('message.questionsParagraph')}}</p>
-            <div class="questionsModify-div"> 
-                <p class=""> {{ $t('message.defaultQuestions') }} </p>
-                <button class="btn questionsModify-button">{{ $t('message.questionsModify') }}<font-awesome-icon icon="pencil-alt" class="iconButton-pencil"/></button>
-            </div>
-            <div id="insertedQuestionsview">
-                <div class="questionInsert">
-                    <textarea 
-                        v-model="question" 
-                        rows="3"
-                        v-bind:placeholder="$t('message.questionPlaceholder')"
-                        class="writeinQuestion">
-                    </textarea>
+            <hr class="borderLine">
+            <div class="dateOption">
+                <p class="date-paragraph">{{ $t('message.dateParagraph') }}</p>
+                <div class="startdateOption">
+                    <p> {{ $t('message.startDate') }}</p>
+                    <datepicker v-model="startDate" :language="fi" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+                    <div class="calendarIcon"><font-awesome-icon icon="calendar-alt"/></div>
                 </div>
-                <div class="moreQuestions-div"> 
-                    <p class=""> {{ $t('message.addQuestionsparagraph') }} </p>
-                    <button  @click="addQuestion" class="btn moreQuestions-button">{{ $t('message.addQuestions') }}<font-awesome-icon icon="plus" class="iconButton-plus"/></button>
+                <div class="enddateOption">
+                    <p> {{ $t('message.endDate') }}</p>
+                    <datepicker v-model="endDate" :language="fi" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+                    <div class="calendarIcon"><font-awesome-icon icon="calendar-alt"/></div>
+                </div>
+            </div>
+            <hr class="borderLine">
+            <div class="insertingQuestions">
+                <p class="insertingQuestions-p">{{ $t('message.questionsParagraph')}}</p>
+                <div class="questionsModify-div"> 
+                    <p class=""> {{ $t('message.defaultQuestions') }} </p>
+                    <button class="btn questionsModify-button">{{ $t('message.questionsModify') }}<font-awesome-icon icon="pencil-alt" class="iconButton-pencil"/></button>
+                </div>
+                <div id="insertedQuestionsview">
+                    <div class="questionInsert">
+                        <textarea 
+                            v-model="question" 
+                            rows="3"
+                            v-bind:placeholder="$t('message.questionPlaceholder')"
+                            class="writeinQuestion">
+                        </textarea>
                     </div>
-                <div class="questionlistDiv">
-                        <ul class="questionList">
-                        <li v-for="(question, index) in questions" v-bind:key="index">
-                            <div class="questionMention"><span class="questionTitle"> Question </span><button @click="removeQuestion(index)">X</button></div>
-                            <span>{{question}}</span>
-                        </li>
-                    </ul>
+                    <div class="moreQuestions-div"> 
+                        <p class=""> {{ $t('message.addQuestionsparagraph') }} </p>
+                        <button  @click="addQuestion" class="btn moreQuestions-button">{{ $t('message.addQuestions') }}<font-awesome-icon icon="plus" class="iconButton-plus"/></button>
+                        </div>
+                    <div class="questionlistDiv">
+                            <ul class="questionList">
+                            <li v-for="(question, index) in questions" v-bind:key="index">
+                                <div class="questionMention"><span class="questionTitle"> Question </span><button @click="removeQuestion(index)">X</button></div>
+                                <span>{{question}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>  
+            </div>
+            <hr class="borderLine">
+            <div class="adminaddEmail">
+                <p class="emailmain-Paragraph">{{ $t('message.emailParagraph') }}</p>
+                <div class="emailTop">
+                    <p> {{ $t('message.emailtopparagrapgh') }} </p>
+                    <div class="moreroundedButton">
+                        <button class="btn moreEmail-button"><font-awesome-icon icon="users" class="iconmoreEmail"/>{{ $t('message.moreEmail') }}</button>
+                        <button class="btn roundedButton"> ? </button>
+                    </div>
                 </div>
-            </div>  
+                <div class="emailContent">
+                    <div class="emailcontentTop">
+                        <input v-model="email" type="email" class="writeinEmail" v-bind:placeholder="$t('message.emailPlaceholder')"/>
+                        <button @click="addEmail" class="insertemailButton">{{ $t('message.insertmoreEmail') }}<font-awesome-icon icon="plus" class="moreemailPlus"/></button>
+                    </div>
+                    <div class="emaillistDiv">
+                        <ul class="emailList">
+                            <li v-for="(email, index) in emails" v-bind:key="index">
+                                <span>{{email}}</span><button @click="removeEmail(index)">X</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div  class="putMessagediv">
+                    <button class="btn putMessage"><font-awesome-icon icon="paperclip" class="putMessageicon"/>{{ $t('message.addMessage') }}</button>
+                </div> 
+                <div class="bottom-buttons">
+                    <button class="btn savecontinueBottom">{{ $t('message.saveContinue') }}</button>
+                    <button class="btn sendsurveyButton" @click="sendSurvey">{{ $t('message.sendSurvey') }}<font-awesome-icon icon="paper-plane" class="putMessageicon"/></button>
+                </div>
+            </div>
         </div>
-        <hr class="borderLine">
-        <div class="adminaddEmail">
-            <p class="emailmain-Paragraph">{{ $t('message.emailParagraph') }}</p>
-            <div class="emailTop">
-                <p> {{ $t('message.emailtopparagrapgh') }} </p>
-                <div class="moreroundedButton">
-                    <button class="btn moreEmail-button"><font-awesome-icon icon="users" class="iconmoreEmail"/>{{ $t('message.moreEmail') }}</button>
-                    <button class="btn roundedButton"> ? </button>
-                </div>
-            </div>
-            <div class="emailContent">
-                <div class="emailcontentTop">
-                    <input v-model="email" type="email" class="writeinEmail" v-bind:placeholder="$t('message.emailPlaceholder')"/>
-                    <button @click="addEmail" class="insertemailButton">{{ $t('message.insertmoreEmail') }}<font-awesome-icon icon="plus" class="moreemailPlus"/></button>
-                </div>
-                <div class="emaillistDiv">
-                    <ul class="emailList">
-                        <li v-for="(email, index) in emails" v-bind:key="index">
-                            <span>{{email}}</span><button @click="removeEmail(index)">X</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div  class="putMessagediv">
-                <button class="btn putMessage"><font-awesome-icon icon="paperclip" class="putMessageicon"/>{{ $t('message.addMessage') }}</button>
-            </div> 
-            <div class="bottom-buttons">
-                <button class="btn savecontinueBottom">{{ $t('message.saveContinue') }}</button>
-                <button class="btn sendsurveyButton" @click="sendSurvey">{{ $t('message.sendSurvey') }}<font-awesome-icon icon="paper-plane" class="putMessageicon"/></button>
-            </div>
-        </div>
+    </div>
+    <div class="createWrapper-after" v-if="created">
+        <p>Kyselysi on luotu onnistuneesti</p>
     </div>
 </div>
 </template>
@@ -111,6 +116,7 @@ export default {
     name: 'admin-create',
     data() {
         return {
+            created: false,
             form: {
 
             },
@@ -161,7 +167,7 @@ export default {
                     }
                 })
                 .then(res => {
-                    console.log(res)
+                    this.$data.created = true
                 })
             } else {
                 console.log('error')
