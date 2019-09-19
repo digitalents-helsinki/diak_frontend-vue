@@ -33,30 +33,33 @@
     </div>
     <div class="questionnaire container text-center shadow-lg">
       <form>
-        <div v-if="currentQuestion.key" class="question">
+        <b-spinner class="m-5" label="Loading..." v-if="!currentQuestion && questionnum === 0" />
+        <div v-if="currentQuestion" class="question">
         <Question
-          v-bind:subject="currentQuestion.name" 
-          v-bind:subject-val.sync="questiondata[currentQuestion.key].val" 
-          v-bind:subject-desc.sync="questiondata[currentQuestion.key].desc" 
-          v-bind:questionnum.sync="questionnum" 
-          v-on:toggle-cancel="toggleCancel"
+          v-bind:subject="currentQuestion.key" 
+          v-bind:subject-val.sync="questiondata[currentQuestion.key]" 
+          v-bind:subject-desc.sync="questiondata[currentQuestion.descKey]"
+          v-bind:subject-help-visibility.sync="question_helps_visibility[currentQuestion.key]"
         />
         <div class="buttons">
-          <button class="btn button-next" @click.prevent="questionnum++">{{ $t('message.next') }}</button>
-          <button v-show="questionnum > 0" class="btn button-previous" @click.prevent="questionnum--">{{ $t('message.previous') }}</button>
+          <button v-if="finalQuestion" class="btn button-complete" @click.prevent="questionnum++">{{ $t('message.complete') }}</button>
+          <button v-else class="btn button-next" @click.prevent="questionnum++">{{ $t('message.next') }}</button>
+          <button v-if="questionnum > 0" class="btn button-previous" @click.prevent="questionnum--">{{ $t('message.previous') }}</button>
         </div>
           <p class="page-number"  style="align-self: center"><span class="current">{{questionnum + 1}}</span><span class="total">/10</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
-      <div class="review" v-show="questionnum === Object.keys(questiondata).length">
+      <div class="review" v-if="!currentQuestion && questionnum > 0">
           <h3>Kooste vastauksistasi</h3>
           <div class="results">
-            <div v-for="(value, name, index) in questiondata" v-bind:key="index">
+          <div class="results">
+            <div v-for="(value, name, index) in results" v-bind:key="index">
               <span v-html="$t(`message.${name}_title`)"></span><span v-bind:class="{notanswered :!value.val}">{{value.val ? value.val : "Ei vastattu"}}</span>
               <b-collapse id="collapse-health" v-bind:visible="!!value.desc">
                 <p class="text-review">{{value.desc ? value.desc : "Ei vastattu" }}</p>
               </b-collapse>
             </div>
+          </div>
           </div>
           <div class="review-buttons">
             <button class="btn send-button" @click.prevent="saveQuestions">{{ $t('message.send')}}</button>
@@ -85,73 +88,80 @@ export default {
     return {
       questiondata: {},
       questionnum: 0,
+      question_helps_visibility: {},
       help_visible: false,
       cancel_visible: false,
-      show: false,
       surveyId: this.$route.params.surveyId
     };
   },
   computed: {
+    subjects: function() {
+      return Object.keys(this.questiondata).filter(key => !key.endsWith("_desc"))
+    },
     currentQuestion: function() {
-      return {name: Object.keys(this.questiondata)[this.questionnum], key: Object.keys(this.questiondata)[this.questionnum]}
+      //get current subject and description keys
+      const key = this.subjects[this.questionnum]
+      if (key) {
+        return {key: key, descKey: `${key}_desc`}
+      } else {
+        return null
+      }
+    },
+    results: function() {
+      //format for rendering results
+      return this.subjects.reduce((obj, key) => ({ ...obj, [key]: { val: this.questiondata[key], desc: this.questiondata[`${key}_desc`] } }), {})
+    },
+    finalQuestion: function() {
+      return this.questionnum === Object.keys(this.subjects).length - 1
     }
   },
   methods: {
     getQuestions() {
-      const questiondata = {
-        health: null,
-        overcoming: null,
-        living: null,
-        coping: null,
-        family: null,
-        friends: null,
-        finance: null,
-        strengths: null,
-        self_esteem: null,
-        life_as_whole: null,
-        health_desc: null,
-        overcoming_desc: null,
-        living_desc: null,
-        coping_desc: null,
-        family_desc: null,
-        friends_desc: null,
-        finance_desc: null,
-        strengths_desc: null,
-        self_esteem_desc: null,
-        life_as_whole_desc: null
-      }
-
-      //Format data for rendering {health: {val: null, desc: null}}
-
-      const obj = {}
-
-      Object.keys(questiondata).forEach(key => {
-        if (!key.endsWith("_desc")) {
-          obj[key] = {val: questiondata[key], desc: questiondata[`${key}_desc`]}
-        }
+      const questiondata = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve({
+            life_as_whole_desc: null,
+            health: null,
+            overcoming: null,
+            living: null,
+            coping: null,
+            family: null,
+            friends: null,
+            finance: null,
+            strengths: null,
+            self_esteem: null,
+            life_as_whole: null,
+            health_desc: null,
+            overcoming_desc: null,
+            living_desc: null,
+            coping_desc: null,
+            family_desc: null,
+            friends_desc: null,
+            finance_desc: null,
+            strengths_desc: null,
+            self_esteem_desc: null
+          })
+        }, 250)
+      }).then((res) => {
+        this.questiondata = res
       })
-
-      this.questiondata = {...obj}
     },
     saveQuestions() {
-      //Undo formatting
-      const axiosData = {}
-      Object.keys(this.questiondata).forEach(key => {
-        axiosData[key] = this.questiondata[key].val
-        axiosData[`${key}_desc`] = this.questiondata[key].desc
-      })
 
       axios({
         method: "POST",
         url: process.env.VUE_APP_BACKEND + "/result",
-        data: { ...axiosData }
+        data: { ...this.questiondata }
       })
         .then(res => {
           if (res.data.status === "ok") {
-            this.$router.push({ path: `/results/${res.data.resultId}` });
+            this.$router.push({ path: `/user/results/${res.data.resultId}` });
           }
         })
         .catch(err => {});
+    },
+    createHelps() {
+      this.question_helps_visibility = this.subjects.reduce((obj, key) => ({ ...obj, [key]: false }), {})
     },
     toggleHelp() {
       this.help_visible = !this.help_visible;
@@ -163,8 +173,9 @@ export default {
       this.$router.push({ path: "/" });
     }
   },
-  mounted() {
+  created() {
     this.getQuestions()
+    this.createHelps()
   }
 };
 </script>
