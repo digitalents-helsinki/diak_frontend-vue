@@ -1,7 +1,7 @@
 <template>
     <div class="rightsideManage">
       <div class="rightsideManage-top">
-         <p>{{ $t('message.manageSurveys') }}</p>
+        <p>{{ $t('message.manageSurveys') }}</p>
       </div>
     <div class="searchParagraph-div">
       <div class="totalParagraph">
@@ -47,7 +47,7 @@
                 </div>
                 <div v-else-if="field.colType === 'delete'">
                   <button> <font-awesome-icon icon="folder" style="font-size:1.6rem; color:grey;"/></button>
-                  <button class="iconButton-times" @click="deleteSurvey(data.item.id)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:red;"/> </button>
+                  <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:red;"/> </button>
                 </div>
               </div>
             </template> 
@@ -121,7 +121,7 @@ export default {
           id: surveyId
         }
       }).then(res => {
-        const index = this.surveys.findIndex(survey => survey.id === surveyId)
+        const index = this.surveys.findIndex(survey => survey.surveyId === surveyId)
         if (~index)
           this.surveys.splice(index, 1)
       })
