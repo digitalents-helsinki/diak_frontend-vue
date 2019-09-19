@@ -1,29 +1,39 @@
 <template>
   <div class="loginmaindiv">
-    <div class="container loginDiv">
-      <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="loginLogo"/>
-      <div id="logincontentDiv">
-        <div id="space">
-        </div>
-        <div id="loginContent">
-          <p id="loginMessage">{{ $t('message.loginText') }}</p>
-          <form id="loginCredentials">
-            <input type="text" autocomplete="email" id="email" v-model="login.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')" required>
-            <input type="password" autocomplete="current-password" id="password" v-model="login.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')" required>
-            <button type="submit" @click.prevent="handleLogin" class="btn submitButton">{{ $t('message.formsubmitButton') }}</button>
-          </form>
-          <div id="registerandPassword">
-              <p id="changePassword" @click="handlePasswordClick">{{ $t('message.newPassword') }}</p>
-              <p id="registeration" @click="handleRegisterClick">{{ $t('message.registrationLink') }}</p>
+    <b-container>
+      <div class="loginDiv">
+        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="loginLogo"/>
+        <div id="logincontentDiv">
+          <div id="space">
           </div>
-          <p class="otherWay">{{ $t('message.loginwithother') }}</p>
-          <div id="loginOtherway">
-            <button class="btn loginFacebookButton"><font-awesome-icon :icon="['fab', 'facebook']" style="font-size:1.6rem; margin-right:0.6rem;"/>Facebook</button>
-            <button class="btn loginGoogleButton" @click="handleGSignIn"><font-awesome-icon :icon="['fab', 'google']" style="font-size:1.6rem; margin-right:0.6rem;"/>Google</button>
+          <div id="loginContent">
+            <p id="loginMessage">{{ $t('message.loginText') }}</p>
+            <div id="loginCredentials">
+            <b-form>
+              <b-form-group id="loginfield">
+                <b-form-input type="text" autocomplete="email" id="email" v-model="login.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')" required>
+                </b-form-input>
+              </b-form-group>
+                <b-form-group id="passwordfield">
+                  <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')" required>
+                  </b-form-input>
+                </b-form-group>
+              <b-button type="submit" @click.prevent="handleLogin" class="submitButton">{{ $t('message.formsubmitButton') }}</b-button>
+            </b-form>
+          </div>
+            <div id="registerandPassword">
+                <p id="changePassword" @click="handlePasswordClick">{{ $t('message.newPassword') }}</p>
+                <p id="registration" @click="handleRegisterClick">{{ $t('message.registrationLink') }}</p>
+            </div>
+            <p class="otherWay">{{ $t('message.loginwithother') }}</p>
+            <div id="loginOtherway">
+              <b-button class="loginFacebookButton"><font-awesome-icon :icon="['fab', 'facebook']" style="font-size:1.6rem; margin-right:0.6rem;"/>Facebook</b-button>
+              <b-button class="loginGoogleButton" @click="handleGSignIn"><font-awesome-icon :icon="['fab', 'google']" style="font-size:1.6rem; margin-right:0.6rem;"/>Google</b-button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </b-container>
   </div>
 <!--<div class="login">
   <button class="btn" @click="handleSignIn">Kirjaudu sisään</button>
@@ -171,16 +181,34 @@ export default {
 
           #changePassword{
             margin-right:1rem;
+            font-size:1.1rem;
+            cursor: pointer; 
+          }
+
+          #registration{
+            font-size:1.1rem;
+            cursor: pointer; 
           }
         }
+
         .otherWay{
           font-size:1rem;
         }
+        
         #loginOtherway{
           display:flex;
           flex-direction:row;
           justify-content:space-around;
           margin-bottom:2rem;
+
+        .loginFacebookButton{
+            background-color: #3b5998;
+            color: #FFFFFF;
+            border-radius: 5px;
+            box-shadow: 0 5px 5px gray;
+            padding:0.6rem 1rem;
+            font-weight:bold;
+          }
 
           .loginGoogleButton{
             background-color: #F4B400;
@@ -190,15 +218,6 @@ export default {
             padding:0.6rem 1rem;
             font-weight:bold;
           }
-
-          .loginFacebookButton{
-            background-color: #3b5998;
-            color: #FFFFFF;
-            border-radius: 5px;
-            box-shadow: 0 5px 5px gray;
-            padding:0.6rem 1rem;
-            font-weight:bold;
-          } 
         }
       }
     }

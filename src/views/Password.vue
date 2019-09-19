@@ -1,22 +1,32 @@
 <template>
-  <div class="registermaindiv">
-    <div class="container registerDiv">
-      <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="registerLogo"/>
-      <div id="registercontentDiv">
-        <div id="space">
-        </div>
-        <div id="registerContent">
-          <p id="registerMessage">{{ $t('message.passwordText') }}</p>
-          <div id="registerCredentials">
-            <input type="password" id="password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
-            <input type="password" id="confirmpassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')" required>
-            <button type="submit" class="btn submitPassword">{{ $t('message.submitPassword') }}</button>
+  <div class="passwordmaindiv">
+    <b-container>
+      <div class="passwordDiv">
+        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="passwordLogo"/>
+        <div id="passwordcontentDiv">
+          <div id="space">
           </div>
-          <p class="info">{{ $t('message.passwordInfo') }}</p>
-          <p id="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p>
+          <div id="passwordContent">
+            <p id="passwordMessage">{{ $t('message.passwordText') }}</p>
+            <div id="passwordCredentials">
+              <b-form>
+                <b-form-group id="passwordtype">
+                  <b-form-input type="password" id="password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
+                  </b-form-input>
+                </b-form-group>
+                <b-form-group id="passwordretype">
+                  <b-form-input type="password" id="confirmpassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')" required>
+                  </b-form-input>
+                </b-form-group>
+                <b-button type="submit" class="submitPassword">{{ $t('message.submitPassword') }}</b-button>
+              </b-form>
+            </div>
+            <p class="info">{{ $t('message.passwordInfo') }}</p>
+            <p id="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p>
+          </div>
         </div>
       </div>
-    </div>
+    </b-container>
   </div>
 </template>
 <script>
@@ -40,7 +50,7 @@ export default {
 
 </script>
 <style lang="scss" scoped>
-.registermaindiv{
+.passwordmaindiv{
   background-color: #FFFFFF;
   width:100%;
   height: 100%;
@@ -51,7 +61,7 @@ export default {
   font-style:normal;
   font-size: 1rem;
 
-  .registerDiv{
+  .passwordDiv{
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -59,11 +69,11 @@ export default {
     text-align: center;
     margin-top: 1rem;
       
-      #registerLogo{
+      #passwordLogo{
         width: 100%;
       }
 
-    #registercontentDiv{
+    #passwordcontentDiv{
       background-color: #F9F9FB;
       width:100%;
       box-shadow: 0 5px 5px gray;
@@ -74,7 +84,7 @@ export default {
         padding: 1rem;
       }
 
-      #registerContent{
+      #passwordContent{
         display: flex;
         flex-direction: column;
         margin-top:1.8rem;
@@ -85,11 +95,11 @@ export default {
           margin-bottom:1rem;
         }
 
-        #registerMessage{
+        #passwordMessage{
           font-size:1.6rem;
         }
 
-        #registerCredentials{
+        #passwordCredentials{
           display:flex;
           flex-direction:column;
           width:100%;
@@ -115,17 +125,19 @@ export default {
         #backtologinPage{
           color:#350E7E;
           margin-bottom:1rem;
+          font-size:1.1rem;
+          cursor: pointer; 
         }
       }
     }
   }
 }
 @media screen and (min-width: 768px) { 
-  #registerLogo{
+  #passwordLogo{
     width:29rem !important;
     margin-bottom:1rem;
   }
-  #registercontentDiv {
+  #passwordcontentDiv {
     width:30rem !important;
   }
 }

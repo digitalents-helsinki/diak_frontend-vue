@@ -1,23 +1,36 @@
 <template>
   <div class="registermaindiv">
-    <div class="container registerDiv">
-      <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="registerLogo"/>
-      <div id="registercontentDiv">
-        <div id="space">
-        </div>
-        <div id="registerContent">
-          <p id="registerMessage">{{ $t('message.registerText') }}</p>
-          <div id="registerCredentials">
-            <input type="email" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')" required>
-            <input type="password" id="password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
-            <input type="password" id="confirmpassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')" required>
-            <button type="submit" class="btn registersubmitButton">{{ $t('message.submitRegister') }}</button>
+    <b-container>
+      <div class="registerDiv">
+        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="registerLogo"/>
+        <div id="registercontentDiv">
+          <div id="space">
           </div>
-          <p class="info">{{ $t('message.registrationInfo') }}</p>
-          <p id="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p>
+          <div id="registerContent">
+            <p id="registerMessage">{{ $t('message.registerText') }}</p>
+            <div id="registerCredentials">
+              <b-form>
+                <b-form-group id="regnamefield">
+                  <b-form-input type="email" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')" required>
+                  </b-form-input>
+                </b-form-group>
+                <b-form-group id="regpasswordfield">
+                  <b-form-input type="password" id="password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
+                  </b-form-input>
+                </b-form-group>
+                <b-form-group id="retypefield">
+                  <b-form-input type="password" id="confirmpassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')" required>
+                  </b-form-input>
+                </b-form-group>
+                <b-button type="submit" class="btn registersubmitButton">{{ $t('message.submitRegister') }}</b-button>
+              </b-form>
+            </div>
+            <p class="registerinfo">{{ $t('message.registrationInfo') }}</p>
+            <p id="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p>
+          </div>
         </div>
       </div>
-    </div>
+    </b-container>
   </div>
 </template>
 <script>
@@ -110,13 +123,15 @@ export default {
           }
         }
 
-        .info{
+        .registerinfo{
           font-size:1rem;
         }
 
         #backtologinPage{
           color:#350E7E;
           margin-bottom:1rem;
+          font-size:1.1rem;
+          cursor: pointer; 
         }
       }
     }
