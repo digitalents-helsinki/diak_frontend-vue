@@ -132,7 +132,12 @@ export const fi = {
     monthSeptember:'syyskuu',
     monthOctober:'lokakuu',
     monthNovember:'marraskuu',
-    monthDecember:'joulukuu'
-    
+    monthDecember:'joulukuu',
+    instructionsHeading:'Täältä voit:',
+    InstructionPone:'-muokata kyselyä',
+    InstructionPtwo:'-tuottaa raportin',
+    InstructionPthree:'-arkistoida tai poistaa kyselyjä',
+    reportHeading:'Voit tarkastella ja tulostaa raportin kuvassa näkyvästä painikkeesta.',
+    reportParagraph:'Raportti'
   }
 }
