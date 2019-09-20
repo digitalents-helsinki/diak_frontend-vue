@@ -17,13 +17,18 @@
     </div>
       <div class="tableandfilter">
         <div class="buttonstotal">
-            <b-dropdown id="dropdown-1" variant="secondary" text="Kaikki kyselyt" class="m-md-2 dropdownButtons-top">
-              <b-dropdown-item>Käynnissä olevat kyselyt</b-dropdown-item>
-              <b-dropdown-item>Arkistoidut kyselyt</b-dropdown-item>
+          <div>
+            <b-dropdown id="dropdownleft" variant="secondary" text="Kaikki kyselyt" class="m-md-2 dropdownButtonsleft">
+              <b-dropdown-item>item</b-dropdown-item>
+              <b-dropdown-item>item</b-dropdown-item>
             </b-dropdown>
+          </div>
+          <div>
+            <b-button variant="secondary" @click="toggleDisplay" id="butttonRight">{{ $t('message.archiveButton') }}</b-button>
+          </div>
         </div>
         <div class="tableDisplayfields">
-          <b-table hover responsive :items="surveys" :fields="fields" head-variant="light">
+          <b-table hover responsive :items="displayedSurveys" :fields="fields" head-variant="light">
             <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
               <div v-bind:key="field.key">
                 <div v-if="field.colType === 'name'">
@@ -45,7 +50,7 @@
                   <button> <img src="../images/assessment_24px.png" alt="" style="width:25px; height:25px;"/></button>
                 </div>
                 <div v-else-if="field.colType === 'delete'">
-                  <button> <font-awesome-icon icon="folder" style="font-size:1.6rem; color:grey;"/></button>
+                  <button @click="archiveSurvey(data.item.surveyId)"> <font-awesome-icon icon="folder" style="font-size:1.6rem; color:grey;"/></button>
                   <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:red;"/> </button>
                 </div>
               </div>
@@ -102,8 +107,18 @@ export default {
             colType: 'delete'
           }
         ],
-        surveys: null,
+        surveys: [],
+        display: "archived",
         loaded: false
+    }
+  },
+  computed: {
+    displayedSurveys: function() {
+      if(this.display === "archived") {
+        return this.$data.surveys.filter(obj => obj.archived)
+      } else if (this.display === "all") {
+        return this.$data.surveys
+      }
     }
   },
   methods: {
@@ -133,6 +148,13 @@ export default {
           id: surveyId
         }
       })
+    },
+    toggleDisplay() {
+      if(this.display === "all") {
+        this.display = "archived"
+      } else {
+        this.display = "all"
+      }
     }
   },
   mounted() {
@@ -206,6 +228,21 @@ export default {
       .buttonstotal{
         display:flex;
         flex-direction:row;
+        margin-bottom:1rem;
+
+        #butttonRight{
+          color: #ffffff;
+          border-radius: 5px;
+          padding-right:0.7rem;
+          padding-left:0.7rem;
+          height:auto;
+          margin-top:0.5rem;
+          margin-left:1.8rem;
+
+          .iconButton-caret{
+              margin-left:0.5rem;
+          }
+          }
       }
       
       .tableDisplayfields{
