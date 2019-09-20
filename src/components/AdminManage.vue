@@ -18,9 +18,8 @@
       <div class="tableandfilter">
         <div class="buttonstotal">
             <b-dropdown id="dropdown-1" variant="secondary" text="Kaikki kyselyt" class="m-md-2 dropdownButtons-top">
-              <b-dropdown-item>First Action</b-dropdown-item>
-              <b-dropdown-item>Second Action</b-dropdown-item>
-              <b-dropdown-item>Third Action</b-dropdown-item>
+              <b-dropdown-item>Käynnissä olevat kyselyt</b-dropdown-item>
+              <b-dropdown-item>Arkistoidut kyselyt</b-dropdown-item>
             </b-dropdown>
         </div>
         <div class="tableDisplayfields">
@@ -124,6 +123,15 @@ export default {
         const index = this.surveys.findIndex(survey => survey.surveyId === surveyId)
         if (~index)
           this.surveys.splice(index, 1)
+      })
+    },
+    archiveSurvey(surveyId) {
+      axios({
+        method: "POST",
+        url: process.env.VUE_APP_BACKEND + "/survey/archive",
+        data: {
+          id: surveyId
+        }
       })
     }
   },
