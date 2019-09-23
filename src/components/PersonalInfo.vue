@@ -1,102 +1,92 @@
 <template>
-  <div id="maindivInfo">
-    <div class="container-fluid" id="topofPage">
-      <div id="logoPlace"><img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="profileLogo"/></div>
+    <div id="maindivInfo">
+        <div class="container-fluid" id="topofPage">
+        <div id="logoPlace"><img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="profileLogo"/></div>
     </div>
-    <div class="container infoTopcontent">
-      <div id="personalContent">
-        <p id="instruction"> {{ $t('message.infoInstruction') }}</p>
-          <div id="infoContentFields">
-            <form action="" method="post" name="">
-            <p id="fullnameField">
-              <label for="firstandfamilyname">{{ $t('message.userName') }}</label>
-              <input id="firstandfamilyname" type="text" name="firstandfamilyname">
-            </p>
-             <p id="addressField">
-              <label for="enteraddress">{{ $t('message.userAddress') }}</label>
-              <input id="enteraddress" type="text" name="enteraddress">
-            </p>
-             <div id="ageField">
-                <p>{{ $t('message.userAge') }}</p>
-                <div id="birthdayDisplay">
-                  <div id="dayDisplay">
-                    <input id="dayEnter" type="text" name="day" placeholder="01" style="width: 60px;">
+    <b-container>
+        <div class="infoTopcontent">
+            <div id="personalContent">
+                <p id="instruction"> {{ $t('message.infoInstruction') }}</p>
+                <div id="infoContentFields">
+                    <b-form>
+                        <b-form-group
+                            id="fullnameField"
+                            v-bind:label="$t('message.userName')"
+                            label-for="firstandfamilyname"
+                        >
+                            <b-form-input id="firstandfamilyname" type="text" name="firstandfamilyname"></b-form-input>
+                        </b-form-group>
+                        <b-form-group
+                            id="addressField"
+                            v-bind:label="$t('message.userAddress')"
+                            label-for="enteraddress"
+                        >
+                            <b-form-input id="enteraddress" type="text" name="enteraddress"></b-form-input>
+                        </b-form-group>
+                        <b-form-group
+                            id="ageField"
+                            v-bind:label="$t('message.userAge')"
+                            label-for="birthday"
+                        >
+                            <div id="birthdayDisplay">
+                                <b-form-input id="dayEnter" type="text" name="day" placeholder="01" ></b-form-input>
+                                    <b-form-select
+                                        id="monthEnter"
+                                        v-model="selected"
+                                        :options="months.fi"
+                                    ></b-form-select>
+                                <b-form-input id="yearEnter" type="text" name="year" placeholder="1990"></b-form-input>
+                            </div>
+                        </b-form-group>
+                        <b-form-group
+                            id="genderField"
+                            v-bind:label="$t('message.userGender')"
+                            label-for="genderEnter"
+                        >
+                            <b-form-select
+                                id="genderEnter"
+                                :options="gender.fi"
+                            ></b-form-select>
+                        </b-form-group>
+                        <b-form-group
+                            id="phoneField"
+                            v-bind:label="$t('message.userPhonenumber')"
+                            label-for="enterphonenumber"
+                        >
+                            <b-form-input id="enterphonenumber" type="tel" name="enterphonenumber"></b-form-input>
+                        </b-form-group>
+                        <b-form-group
+                            id="emailaddressField"
+                            v-bind:label="$t('message.userEmailaddress')"
+                            label-for="emailaddressField"
+                        >
+                        <b-form-input id="enteremailaddress" type="email" name="emailaddressField"></b-form-input>
+                        </b-form-group>
+                        <div id="submitinfoform">
+                          <b-button type="submit" class="submitIncluded">{{ $t('message.ProfilesubmitButton') }}</b-button>
+                        </div>
+                    </b-form>
                 </div>
-                <div id="monthDisplay">
-                  <select id="monthEnter">
-                    <option>{{ $t('message.monthJanuary') }}</option>
-                    <option>{{ $t('message.monthFebruary') }}</option>
-                    <option>{{ $t('message.monthMarch') }}</option>
-                    <option>{{ $t('message.monthApril') }}</option>
-                    <option>{{ $t('message.monthMay') }}</option>
-                    <option>{{ $t('message.monthJune') }}</option>
-                    <option>{{ $t('message.monthJuly') }}</option>
-                    <option>{{ $t('message.monthAugust') }}</option>
-                    <option>{{ $t('message.monthSeptember') }}</option>
-                    <option>{{ $t('message.monthOctober') }}</option>
-                    <option>{{ $t('message.monthNovember') }}</option>
-                    <option>{{ $t('message.monthDecember') }}</option>
-                  </select>
-              </div>
-              <div id="yearDisplay">
-                <input id="yearEnter" type="text" name="year" placeholder="1990" style="width: 80px;">
-              </div>
             </div>
-          </div>
-             <p id="genderField">
-              <label for="genderEnter">{{ $t('message.userGender') }}</label>
-                <select name="genderEnter">
-                  <option value="" disabled selected>{{ $t('message.selectGender') }}</option>
-                  <option value="male">{{ $t('message.genderMale') }}</option>
-                  <option value="female">{{ $t('message.genderFemale') }}</option>
-                  <option value="other">{{ $t('message.genderOther') }}</option>
-                </select>
-            </p>
-             <p id="phonenumberField">
-              <label for="enterphonenumber">{{ $t('message.userPhonenumber') }}</label>
-              <input id="enterphonenumber" type="tel" name="enterphonenumber">
-            </p>
-            <p id="emailaddressField">
-              <label for="emailaddressField">{{ $t('message.userEmailaddress') }}</label>
-              <input id="emailaddressField" type="email" name="emailaddressField">
-            </p>
-            <div id="infosubmitButton"> <button type="submit" class="btn submitIncluded">{{ $t('message.ProfilesubmitButton') }}</button></div>
-            </form>
-          </div>
-      </div>
-    </div>
+        </div>
+    </b-container>
   </div>
-  <!--<form>
-    <div class="form-group">
-      <label for="userName">Nimi</label>
-      <input type="text" class="form-control" id="userName" placeholder="" />
-    </div>
-    <div class="form-group">
-      <label for="userGender">Sukupuoli</label>
-      <select class="form-control" id="userGender">
-        <option>mies</option>
-        <option>nainen</option>
-        <option>muu</option>
-      </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Tallenna</button>
-  </form>-->
 </template>
 <script>
-import Datepicker from 'vuejs-datepicker'
-import { fi } from 'vuejs-datepicker/dist/locale'
-
+ 
 export default {
-  name: 'PersonalInfo',
+  name: 'pro',
   data() {
     return {
-      fi: fi,
-      pickDate: null
+      selected: 'tammikuu',
+      months: {
+        fi: ['tammikuu', 'helmikuu', 'maaliskuu','huhtikuu', 'toukokuu', 'kesäkuu','heinäkuu', 'elokuu', 'syyskuu','lokakuu', 'marraskuu', 'joulukuu']
+      },
+        gender: {
+            fi: ['Mies', 'Nainen', 'Muu']
+        },
+    }
   }
-},
-components: {
-        Datepicker
-    },
 }
 </script>
 <style lang="scss" scoped>
@@ -152,96 +142,24 @@ components: {
         padding:1rem;
         margin-bottom:1rem;
 
-        #fullnameField{
-          display:flex;
-          flex-direction:column;
-
-          label{
-            font-size:1.1rem;
-          }
-
-          input{
-            width:100%;
-          }
-        }
-
-        #addressField{
-          display:flex;
-          flex-direction:column;
-
-          label{
-            font-size:1.1rem;
-          }
-
-          input{
-            width:100%;
-          }
-        }
-
         #ageField{
           display:flex;
           flex-direction:column;
           margin-bottom:1rem;
 
           #birthdayDisplay{
-            display:flex;
-            flex-direction:row;
-            justify-content:flex-start;
-          
-            #dayDisplay{
-              margin-right:0.1rem;
-            }
-
-            #monthDisplay{
-              margin-right:0.1rem;
-
-              #monthEnter{
-                height:29px;
-              }
-            }
+            
+            #monthEnter{
+              margin-top:0.1rem;
+              margin-bottom:0.1rem;
+            } 
           }
         }
-
-        #genderField{
+        #submitinfoform{
           display:flex;
-          flex-direction:column;
+          flex-direction:row;
+          justify-content:center;
 
-          label{
-            font-size:1.1rem;
-          }
-        }
-
-        #phonenumberField{
-          display:flex;
-          flex-direction:column;
-
-          label{
-            font-size:1.1rem;
-          }
-
-          input{
-            width:100%;
-          }
-        }
-
-        #emailaddressField{
-          display:flex;
-          flex-direction:column;
-          margin-bottom:2rem;
-
-          label{
-            font-size:1.1rem;
-          }
-
-          input{
-            width:100%;
-          }
-        }
-        #infosubmitButton{
-          display:flex;
-          flex-direction:column;
-          align-items:center;
-          
           .submitIncluded{
             background-color: #350E7E;
             font-weight:bold;
@@ -258,6 +176,7 @@ components: {
     }
   }
 }
+
 @media screen and (max-width: 360px) { 
    .infoTopcontent{
      padding:0rem;
@@ -281,7 +200,6 @@ components: {
 
   #personalContent {
     width:38rem !important;
-  
   }
 }
 </style>
