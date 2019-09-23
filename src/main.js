@@ -21,6 +21,7 @@ import { faGoogle} from '@fortawesome/free-brands-svg-icons'
 import { faFacebook} from '@fortawesome/free-brands-svg-icons'
 import { faThumbsUp} from '@fortawesome/free-solid-svg-icons'
 import { faThumbsDown} from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.config.productionTip = false
@@ -43,6 +44,7 @@ library.add(faGoogle)
 library.add(faFacebook)
 library.add(faThumbsUp)
 library.add(faThumbsDown)
+library.add(faArrowRight)
 
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {
