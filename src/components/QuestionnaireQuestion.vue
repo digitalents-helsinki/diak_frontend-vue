@@ -1,39 +1,39 @@
 <template>
-  <Fragment>
+  <div class="question">
     <div class="question_text">
       <div class="questionHelpbutton">
-        <p v-if="!value.custom" v-html="$t(`message.${value.name}_title`)"></p>
-        <p v-else>{{`${value.number + 1}. ${value.custom.title}`}}</p>
-        <label v-if="!value.custom" for="textarea" v-html="$t(`message.question_${value.name}`)"></label>
-        <label v-else for="textarea">{{value.custom.description}}</label>        
+        <p v-if="!question.custom" v-html="$t(`message.${question.name}_title`)"></p>
+        <p v-else>{{`${navigation.questionnum + 1}. ${question.custom.title}`}}</p>
+        <label v-if="!question.custom" for="textarea" v-html="$t(`message.question_${question.name}`)"></label>
+        <label v-else for="textarea">{{question.custom.description}}</label>        
         <button
-          v-if="!value.custom || value.custom.help"
+          v-if="!question.custom || question.custom.help"
           class="btn help_button buttonHelp"
-          @click.prevent="$emit('input', {help: {[value.name]: !value.help}})"
+          @click.prevent="$emit('update:question', {help: {[question.name]: !question.help}})"
         >{{ $t('message.questionHelp') }}</button>
       </div>
     </div>
-    <p v-if="value.help && !value.custom">{{ $t(`message.help_text_${value.name}`) }}</p>
-    <p v-else-if="value.help">{{value.custom.help}}</p>
+    <p v-if="question.help && !question.custom">{{ $t(`message.help_text_${question.name}`) }}</p>
+    <p v-else-if="question.help">{{question.custom.help}}</p>
     <div class="range-input">
       <div class="rangeQuestiondata-icon">
-        <p class="rangeQuestiondata">{{value.val}}</p>
-        <div v-show="value.val" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('input', {[value.name]:  null})"/></div>
-        <div v-show="value.val"><button class="btn remove-button" @click.prevent="$emit('input', {[value.name]:  null})">Poista Vastaus</button></div>
+        <p class="rangeQuestiondata">{{question.val}}</p>
+        <div v-show="question.val" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', {[question.name]:  null})"/></div>
+        <div v-show="question.val"><button class="btn remove-button" @click.prevent="$emit('update:question', {[question.name]:  null})">Poista Vastaus</button></div>
       </div>
       <div class="rangeLabelicons">
         <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
         <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
       </div>
         <b-form-input
-          v-bind:class="{activeRange: value.val}"
+          v-bind:class="{activeRange: question.val}"
           type="range"
           id="range"
           number
           min="0"
           max="10"
-          v-bind:value="value.val"
-          @update="$emit('input', {[value.name]: $event})"
+          v-bind:value="question.val"
+          @update="$emit('update:question', {[question.name]: $event})"
         />
         <label for="range" class="rangeLabel-mobile">
           <div>0</div>
@@ -56,26 +56,29 @@
     <div class="textareaWordCount">
       <textarea
         id="textarea"
-        v-bind:value="value.desc"
-        @input="$emit('input', {[`${value.name}_desc`]: $event.target.value})"
+        v-bind:value="question.desc"
+        @input="$emit('update:question', {[`${question.name}_desc`]: $event.target.value})"
         rows="3" 
         maxlength="2000"
         v-bind:placeholder="$t('message.question_desc_placeholder')"
       />
-      <p>{{ $t('message.length') }}{{value.desc ? value.desc.length : '0'}}/2000</p>
+      <p>{{ $t('message.length') }}{{question.desc ? question.desc.length : '0'}}/2000</p>
     </div>
-  </Fragment>
+    <div class="buttons">
+      <button v-if="navigation.questionnum + 1 === navigation.questionamount" class="btn button-complete" @click.prevent="$emit('update:navigation', navigation.questionnum + 1)">{{ $t('message.complete') }}</button>
+      <button v-else class="btn button-next" @click.prevent="$emit('update:navigation', navigation.questionnum + 1)">{{ $t('message.next') }}</button>
+      <button v-if="navigation.questionnum > 0" class="btn button-previous" @click.prevent="$emit('update:navigation', navigation.questionnum - 1)">{{ $t('message.previous') }}</button>
+    </div>
+    <p class="page-number"  style="align-self: center"><span class="current">{{navigation.questionnum + 1}}</span><span class="total">/{{navigation.questionamount}}</span></p>
+    <button @click.prevent="$emit('toggleCancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
+  </div>
 </template>
 <script>
-import { Fragment } from 'vue-fragment'
 
 export default {
-  name: 'question',
-  components: { 
-    Fragment
-  },
+  name: 'QuestionnaireQuestion',
   props: {
-    value: {
+    question: {
       type: Object,
       required: true, 
       validator: function(prop) {
@@ -83,8 +86,16 @@ export default {
         if (typeof prop.val !== "number" && prop.val !== null) return false
         if (typeof prop.desc !== "string" && prop.desc !== null) return false
         if (prop.help !== undefined && typeof prop.help !== "boolean") return false
-        if (typeof prop.number !== "number") return false
         if (prop.custom !== undefined && prop.custom.title === undefined && prop.custom.description === undefined) return false
+        return true
+      }
+    },
+    navigation: {
+      type: Object,
+      required: true,
+      validator: function(prop) {
+        if (typeof prop.questionnum !== "number") return false
+        if (typeof prop.questionamount !== "number") return false
         return true
       }
     }
@@ -101,183 +112,193 @@ export default {
   width: 100%;
   margin: auto;
 }*/
-
-.question_text {
+.question {
   display: flex;
   flex-flow: column nowrap;
+  justify-content: space-between;
+  height: 75vh;
 
-  .questionHelpbutton {
+  .question_text {
+    display: flex;
+    flex-flow: column nowrap;
+
+    .questionHelpbutton {
+      margin-top:1rem;
+      margin-bottom:1rem;
+      text-align: left;
+
+      p, label, button {
+        display:inline;
+      }
+
+      p {
+        font-weight: bold;
+        font-size: 1rem;
+        color: #350e7e;
+        margin-right: 1rem;
+      }
+
+      label {
+        font-size: 1rem;
+        color: #353535;
+        margin-right: 1rem;
+        }
+
+      .help_button {
+        background-color: #350e7e;
+        padding: 0 0.6rem ;
+        font-size: 1.1rem;
+        font-weight: bold;
+        align-items: center;
+        color: #FFFFFF;
+        //align-self: flex-end;
+      }
+    } 
+  }
+
+  .range-input {
+    display: flex;
+    flex-direction: column;
+
+    .rangeQuestiondata-icon {
+      position: relative;
+      display: flex;
+      left: calc(50% - 30px);
+      margin-bottom: 0.1rem;
+      width: 50%;
+
+      .rangeQuestiondata {
+        font-size: 1.8rem;
+        width:60px;
+        height:60px;
+        border:1px solid lightgrey;
+        display: flex;
+        justify-content:center;
+        align-items:center;
+      }
+
+      .remove-icon {
+        font-size:2rem;
+        color:#353535;
+        display:flex;
+      }
+
+      .remove-button {
+        display:none;
+      }
+    }
+
+    .rangeLabelicons {
+      display: -webkit-flex;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom:0.2rem;
+      width:100%;
+
+      .thumbslogoDown {
+        height:1.6rem;
+      }
+
+      .thumbslogoUp {
+        height:1.6rem;
+      }
+    }
+
+    .rangeLabel-mobile {
+      display: -webkit-flex;
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      width:100%;
+    }
+
+    .rangeLabel {
+      display: none;
+    }
+
+    .activeRange {
+      &::-webkit-slider-thumb {
+        background: #350e7e;
+      }
+
+      &::-moz-range-thumb {
+        background: #350e7e;
+      }
+
+      &::-ms-thumb {
+        background: #350e7e;
+      }
+    }
+  }
+
+  .buttons {
+    display: flex;
+    flex-flow: row-reverse nowrap;
+    justify-content: space-between;
+    text-align:center;
+
+    button {
+      border-radius: 50px;
+      box-shadow: 0 5px 5px gray;
+      line-height: 2;
+      width: 8rem;
+    }
+    .button-next {
+      background-color: #353535;
+      color: #FFFFFF;
+      font-weight:bold;
+    }
+    .button-previous {
+      background-color: #353535;
+      color: #FFFFFF;
+      font-weight:bold;
+    }
+    .button-complete {
+      background-color:#350E7E;
+      color:#FFFFFF;
+      font-weight:bold;
+    }
+  }
+
+  .page-number {
+    font-size:1.1rem;
     margin-top:1rem;
-    margin-bottom:1rem;
-    text-align: left;
+    margin-bottom:0;
 
-    p, label, button {
-      display:inline;
+    .current {
+      padding:0.1rem;
+    }
+
+    .total {
+      padding:0.1rem;
+    }
+  }
+
+  .textareaWordCount{
+    margin-top:0.6rem;
+
+    textarea {
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    textarea::placeholder {
+      opacity: 40%;
+      color: #353535;
     }
 
     p {
-      font-weight: bold;
-      font-size: 1rem;
-      color: #350e7e;
-      margin-right: 1rem;
-    }
-
-    label {
-      font-size: 1rem;
-      color: #353535;
-      margin-right: 1rem;
-      }
-
-    .help_button {
-      background-color: #350e7e;
-      padding: 0 0.6rem ;
-      font-size: 1.1rem;
-      font-weight: bold;
-      align-items: center;
-      color: #FFFFFF;
-      //align-self: flex-end;
-    }
-  } 
-}
-
-.range-input {
-  display: flex;
-  flex-direction: column;
-
-  .rangeQuestiondata-icon {
-    position: relative;
-    display: flex;
-    left: calc(50% - 30px);
-    margin-bottom: 0.1rem;
-    width: 50%;
-          
-    .rangeQuestiondata {
-      font-size: 1.8rem;
-      width:60px;
-      height:60px;
-      border:1px solid lightgrey;
-      display: flex;
-      justify-content:center;
-      align-items:center;
-    }
-    
-    .remove-icon {
-      font-size:2rem;
-      color:#353535;
       display:flex;
+      justify-content:flex-end;
+      font-size:1rem;
     }
-          
-    .remove-button {
-      display:none;
-    }
+
   }
-        
-  .rangeLabelicons {
-    display: -webkit-flex;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom:0.2rem;
-    width:100%;
-
-    .thumbslogoDown {
-      height:1.6rem;
-    }
-
-    .thumbslogoUp {
-      height:1.6rem;
-    }
-  }
-
-  .rangeLabel-mobile {
-    display: -webkit-flex;
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    width:100%;
-  }
-
-  .rangeLabel {
-    display: none;
-  }
-
-  .activeRange {
-    &::-webkit-slider-thumb {
-      background: #350e7e;
-    }
-
-    &::-moz-range-thumb {
-      background: #350e7e;
-    }
-
-    &::-ms-thumb {
-      background: #350e7e;
-    }
+  .cancel-button {
+    color:#350E7E;
+    font-size:1.1rem;
   }
 }
-
-.buttons {
-  display: flex;
-  flex-flow: row-reverse nowrap;
-  justify-content: space-between;
-  text-align:center;
-
-  button {
-    border-radius: 50px;
-    box-shadow: 0 5px 5px gray;
-    line-height: 2;
-    width: 8rem;
-  }
-  .button-next {
-    background-color: #353535;
-    color: #FFFFFF;
-    font-weight:bold;
-  }
-  .button-previous {
-    background-color: #353535;
-    color: #FFFFFF;
-    font-weight:bold;
-  }
-  .button-complete {
-    background-color:#350E7E;
-    color:#FFFFFF;
-    font-weight:bold;
-  }
-}
-
-.page-number {
-  font-size:1.1rem;
-  margin-top:1rem;
-  margin-bottom:0;
-
-  .current {
-    padding:0.1rem;
-  }
-
-  .total {
-    padding:0.1rem;
-  }
-}
-
-.textareaWordCount{
-  margin-top:0.6rem;
-  
-  textarea {
-    width: 100%;
-    border-radius: 4px;
-  }
-  
-  textarea::placeholder {
-    opacity: 40%;
-    color: #353535;
-  }
-
-  p {
-    display:flex;
-    justify-content:flex-end;
-    font-size:1rem;
-  }
-}
-
 //iPhone 4 Portrait
 /*@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
   textarea {

@@ -32,58 +32,38 @@
       </div>
     </div>
     <div class="questionnaire container text-center shadow-lg">
-      <div class="loader-spinner-container" v-if="!currentQuestionData && questionnum === 0">
+      <div class="loader-spinner-container" v-if="!currentQuestionData && questionnum !== navigationData.questionamount">
         <b-spinner label="Loading..." />
       </div>
       <form>
-        <div v-if="currentQuestionData" class="question">
         <Question
-          v-model="currentQuestionData"
+          v-if="currentQuestionData"
+          v-bind:question.sync="currentQuestionData"
+          v-bind:navigation.sync="navigationData"
+          v-on:toggleCancel="toggleCancel"
         />
-        <div class="buttons">
-          <button v-if="finalQuestion" class="btn button-complete" @click.prevent="questionnum++">{{ $t('message.complete') }}</button>
-          <button v-else class="btn button-next" @click.prevent="questionnum++">{{ $t('message.next') }}</button>
-          <button v-if="questionnum > 0" class="btn button-previous" @click.prevent="questionnum--">{{ $t('message.previous') }}</button>
-        </div>
-          <p class="page-number"  style="align-self: center"><span class="current">{{questionnum + 1}}</span><span class="total">/{{Object.keys(subjects).length}}</span></p>
-          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
-        </div>
-      <div class="review" v-if="!currentQuestionData && questionnum > 0">
-          <h3>Kooste vastauksistasi</h3>
-          <div class="results">
-          <div class="results">
-            <div v-for="(value, name, index) in results" v-bind:key="index">
-              <span v-if="!value.custom" v-html="$t(`message.${name}_title`)"></span>
-              <span v-else>{{`${index + 1}. ${value.custom.title}`}}</span>              
-              <span v-bind:class="{notanswered :!value.val}">{{value.val ? value.val : "Ei vastattu"}}</span>
-              <b-collapse id="collapse-health" v-bind:visible="!!value.desc">
-                <p class="text-review">{{value.desc ? value.desc : "Ei vastattu" }}</p>
-              </b-collapse>
-            </div>
-          </div>
-          </div>
-          <div class="review-buttons">
-            <button class="btn send-button" @click.prevent="saveQuestions">{{ $t('message.send')}}</button>
-            <button
-              class="btn return-button" 
-              @click.prevent="questionnum--"
-            >{{ $t('message.return')}}</button>
-          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
-        </div>
-        </div>
+        <Review 
+          v-if="navigationData.questionamount <= questionnum"
+          v-bind:results.sync="resultData"
+          v-bind:navigation.sync="navigationData"
+          v-on:saveQuestions="saveQuestions"
+          v-on:toggleCancel="toggleCancel"
+        />
       </form>
     </div>
   </div>
 </template>
 <script>
 import axios from "axios";
-import Question from "@/components/Question.vue"
+import Question from "@/components/QuestionnaireQuestion.vue"
+import Review from "@/components/QuestionnaireReview.vue"
 
 export default {
   name: "Questionnaire",
   props: ['user'],
   components: {
-    Question
+    Question,
+    Review
   },
   data() {
     return {
@@ -139,8 +119,8 @@ export default {
   },
   computed: {
     subjects: function() {
-      //everything in questiondata that doesn't end with _desc or start with custom_
-      return Object.keys(this.questiondata).filter(key => !key.endsWith("_desc") && !key.startsWith("custom_"))
+      //everything in questiondata that doesn't end with _desc or _custom
+      return Object.keys(this.questiondata).filter(key => !key.endsWith("_desc") && !key.endsWith("_custom"))
     },
     currentQuestionData: {
       get: function() {
@@ -148,7 +128,13 @@ export default {
         const key = this.subjects[this.questionnum]
         //associate questiondata
         if (key) {
-          return {name: key, val: this.questiondata[key], desc: this.questiondata[`${key}_desc`], number: this.questionnum, help: this.question_help_visible[key], custom: this.questiondata[`custom_${key}`]}
+          return ({
+            name: key, 
+            val: this.questiondata[key], 
+            desc: this.questiondata[`${key}_desc`], 
+            help: this.question_help_visible[key], 
+            custom: this.questiondata[`${key}_custom`]
+          })
         } else {
           return null
         }
@@ -158,24 +144,49 @@ export default {
         const key = Object.keys(newObject)[0]
         if (this.questiondata.hasOwnProperty(key)) {
           Object.assign(this.questiondata, newObject)
-        } else if (key === "help") {
+        } else if (typeof newObject[key] === "object" && newObject[key] !== null) {
           //toggle question help
           Object.assign(this.question_help_visible, newObject.help)
         }
       }
     },
-    results: function() {
-      //format for rendering results
-      return this.subjects.reduce((obj, key) => ({ ...obj, [key]: { val: this.questiondata[key], desc: this.questiondata[`${key}_desc`], custom: this.questiondata[`custom_${key}`] } }), {})
+    navigationData: {
+      get: function() {
+        return ({
+          questionnum: this.questionnum, 
+          questionamount: this.subjects.length
+        })
+      },
+      set: function(newValue) {
+        this.questionnum = newValue
+      }
     },
-    finalQuestion: function() {
-      return this.questionnum === this.subjects.length - 1
+    resultData: function() {
+      //format for rendering results
+      return this.subjects.reduce((obj, key) => {
+        return { 
+          ...obj, 
+          [key]: { 
+            val: this.questiondata[key], 
+            desc: this.questiondata[`${key}_desc`], 
+            custom: this.questiondata[`${key}_custom`] 
+          } 
+        }
+      }, {})
     }
   },
   methods: {
     getQuestions() {
-      const data = {question: null, question_desc: null, custom_question: {title: "Custom Title", description: "Custom Description", help: "Custom Help"}}
-      this.questiondata = {...this.questiondata, ...data}
+      const fetchedData = {
+        question: null, 
+        question_desc: null, 
+        question_custom: {
+          title: "Custom Title", 
+          description: "Custom Description", 
+          help: "Custom Help"
+        }
+      }
+      this.questiondata = {...this.questiondata, ...fetchedData}
     },
     saveQuestions() {
 
@@ -310,63 +321,6 @@ export default {
     width: 60vw;
     margin-bottom: 5vh;
     border-radius: 15px;
-  }
-
-  form {
-    .question {
-      display: flex;
-      flex-flow: column nowrap;
-      justify-content: space-between;
-      height: 75vh;
-
-      .buttons {
-        display: flex;
-        flex-flow: row-reverse nowrap;
-        justify-content: space-between;
-        text-align:center;
-
-        button {
-          border-radius: 50px;
-          box-shadow: 0 5px 5px gray;
-          line-height: 2;
-          width: 8rem;
-        }
-        .button-next {
-          background-color: #353535;
-          color: #FFFFFF;
-          font-weight:bold;
-        }
-        .button-previous {
-          background-color: #353535;
-          color: #FFFFFF;
-          font-weight:bold;
-        }
-        .button-complete{
-          background-color:#350E7E;
-          color:#FFFFFF;
-          font-weight:bold;
-        }
-      }
-
-    .page-number{
-      font-size:1.1rem;
-      margin-top:1rem;
-      margin-bottom:0;
-
-      .current{
-        padding:0.1rem;
-      }
-      .total{
-        padding:0.1rem;
-      }
-    }
-    
-      .cancel-button {
-        color: #350e7e;
-        opacity: 70%;
-        font-size: 1.3em;
-      }
-    }
   }
 }
 
