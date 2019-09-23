@@ -8,8 +8,8 @@
         <button @click="toggleHelp" class="btn buttonOhjeet">Ohjeet</button>
       </div>
       <div class="questionnaire-bottom">
-        <span v-if="user">{{user}}</span>
-        <span v-if="!user">anonyymi kysely {{surveyId}}</span>
+        <span v-if="user">{{user}} | {{surveyId}}</span>
+        <span v-else>Anonyymi | {{surveyId}}</span>
       </div>
     </div>
         <div @click="toggleHelp" class="dim-background" v-show="help_visible">
@@ -32,29 +32,30 @@
       </div>
     </div>
     <div class="questionnaire container text-center shadow-lg">
+      <div class="loader-spinner-container" v-if="!currentQuestionData && questionnum === 0">
+        <b-spinner label="Loading..." />
+      </div>
       <form>
-        <b-spinner class="m-5" label="Loading..." v-if="!currentQuestion && questionnum === 0" />
-        <div v-if="currentQuestion" class="question">
+        <div v-if="currentQuestionData" class="question">
         <Question
-          v-bind:subject="currentQuestion.key" 
-          v-bind:subject-val.sync="questiondata[currentQuestion.key]" 
-          v-bind:subject-desc.sync="questiondata[currentQuestion.descKey]"
-          v-bind:subject-help-visibility.sync="question_helps_visibility[currentQuestion.key]"
+          v-model="currentQuestionData"
         />
         <div class="buttons">
           <button v-if="finalQuestion" class="btn button-complete" @click.prevent="questionnum++">{{ $t('message.complete') }}</button>
           <button v-else class="btn button-next" @click.prevent="questionnum++">{{ $t('message.next') }}</button>
           <button v-if="questionnum > 0" class="btn button-previous" @click.prevent="questionnum--">{{ $t('message.previous') }}</button>
         </div>
-          <p class="page-number"  style="align-self: center"><span class="current">{{questionnum + 1}}</span><span class="total">/10</span></p>
+          <p class="page-number"  style="align-self: center"><span class="current">{{questionnum + 1}}</span><span class="total">/{{Object.keys(subjects).length}}</span></p>
           <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
         </div>
-      <div class="review" v-if="!currentQuestion && questionnum > 0">
+      <div class="review" v-if="!currentQuestionData && questionnum > 0">
           <h3>Kooste vastauksistasi</h3>
           <div class="results">
           <div class="results">
             <div v-for="(value, name, index) in results" v-bind:key="index">
-              <span v-html="$t(`message.${name}_title`)"></span><span v-bind:class="{notanswered :!value.val}">{{value.val ? value.val : "Ei vastattu"}}</span>
+              <span v-if="!value.custom" v-html="$t(`message.${name}_title`)"></span>
+              <span v-else>{{`${index + 1}. ${value.custom.title}`}}</span>              
+              <span v-bind:class="{notanswered :!value.val}">{{value.val ? value.val : "Ei vastattu"}}</span>
               <b-collapse id="collapse-health" v-bind:visible="!!value.desc">
                 <p class="text-review">{{value.desc ? value.desc : "Ei vastattu" }}</p>
               </b-collapse>
@@ -86,65 +87,95 @@ export default {
   },
   data() {
     return {
-      questiondata: {},
+      questiondata: {
+        health: null,
+        overcoming: null,
+        living: null,
+        coping: null,
+        family: null,
+        friends: null,
+        finance: null,
+        strengths: null,
+        self_esteem: null,
+        life_as_whole: null,
+        health_desc: null,
+        overcoming_desc: null,
+        living_desc: null,
+        coping_desc: null,
+        family_desc: null,
+        friends_desc: null,
+        finance_desc: null,
+        strengths_desc: null,
+        self_esteem_desc: null,
+        life_as_whole_desc: null
+      },
       questionnum: 0,
-      question_helps_visibility: {},
+      question_help_visible: {
+        health: false,
+        overcoming: false,
+        living: false,
+        coping: false,
+        family: false,
+        friends: false,
+        finance: false,
+        strengths: false,
+        self_esteem: false,
+        life_as_whole: false
+      },
       help_visible: false,
       cancel_visible: false,
       surveyId: this.$route.params.surveyId
     };
   },
+  watch: {
+    subjects: function(newSubjects) {
+      //create question help visibility data when custom questions get fetched
+      newSubjects.forEach(key => {
+        if (!Object.keys(this.question_help_visible).includes(key)) {
+          this.$set(this.question_help_visible, key, false)
+        }
+      })
+    }
+  },
   computed: {
     subjects: function() {
-      return Object.keys(this.questiondata).filter(key => !key.endsWith("_desc"))
+      //everything in questiondata that doesn't end with _desc or start with custom_
+      return Object.keys(this.questiondata).filter(key => !key.endsWith("_desc") && !key.startsWith("custom_"))
     },
-    currentQuestion: function() {
-      //get current subject and description keys
-      const key = this.subjects[this.questionnum]
-      if (key) {
-        return {key: key, descKey: `${key}_desc`}
-      } else {
-        return null
+    currentQuestionData: {
+      get: function() {
+        //get current question
+        const key = this.subjects[this.questionnum]
+        //associate questiondata
+        if (key) {
+          return {name: key, val: this.questiondata[key], desc: this.questiondata[`${key}_desc`], number: this.questionnum, help: this.question_help_visible[key], custom: this.questiondata[`custom_${key}`]}
+        } else {
+          return null
+        }
+      },
+      set: function(newObject) {
+        //set correct questiondata property
+        const key = Object.keys(newObject)[0]
+        if (this.questiondata.hasOwnProperty(key)) {
+          Object.assign(this.questiondata, newObject)
+        } else if (key === "help") {
+          //toggle question help
+          Object.assign(this.question_help_visible, newObject.help)
+        }
       }
     },
     results: function() {
       //format for rendering results
-      return this.subjects.reduce((obj, key) => ({ ...obj, [key]: { val: this.questiondata[key], desc: this.questiondata[`${key}_desc`] } }), {})
+      return this.subjects.reduce((obj, key) => ({ ...obj, [key]: { val: this.questiondata[key], desc: this.questiondata[`${key}_desc`], custom: this.questiondata[`custom_${key}`] } }), {})
     },
     finalQuestion: function() {
-      return this.questionnum === Object.keys(this.subjects).length - 1
+      return this.questionnum === this.subjects.length - 1
     }
   },
   methods: {
     getQuestions() {
-      const questiondata = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve({
-            life_as_whole_desc: null,
-            health: null,
-            overcoming: null,
-            living: null,
-            coping: null,
-            family: null,
-            friends: null,
-            finance: null,
-            strengths: null,
-            self_esteem: null,
-            life_as_whole: null,
-            health_desc: null,
-            overcoming_desc: null,
-            living_desc: null,
-            coping_desc: null,
-            family_desc: null,
-            friends_desc: null,
-            finance_desc: null,
-            strengths_desc: null,
-            self_esteem_desc: null
-          })
-        }, 250)
-      }).then((res) => {
-        this.questiondata = res
-      })
+      const data = {question: null, question_desc: null, custom_question: {title: "Custom Title", description: "Custom Description", help: "Custom Help"}}
+      this.questiondata = {...this.questiondata, ...data}
     },
     saveQuestions() {
 
@@ -160,9 +191,6 @@ export default {
         })
         .catch(err => {});
     },
-    createHelps() {
-      this.question_helps_visibility = this.subjects.reduce((obj, key) => ({ ...obj, [key]: false }), {})
-    },
     toggleHelp() {
       this.help_visible = !this.help_visible;
     },
@@ -175,11 +203,12 @@ export default {
   },
   created() {
     this.getQuestions()
-    this.createHelps()
   }
+
 };
 </script>
 <style lang="scss" scoped>
+
 .notAnswered {
   color: red;
 }
@@ -242,7 +271,7 @@ export default {
       font-weight:bold;
 
       span {
-        color: white;
+        color: #353535;
         font-size: 1rem;
         position: absolute;
         
@@ -265,6 +294,13 @@ export default {
   height: 85%;
   overflow: auto;
   border-radius: 14px;
+
+  .loader-spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 85%;
+  }
 
   /*.buttonOhjeet {
     display: none;

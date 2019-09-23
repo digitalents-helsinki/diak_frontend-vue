@@ -2,39 +2,44 @@
   <Fragment>
     <div class="question_text">
       <div class="questionHelpbutton">
-        <p v-html="$t(`message.${subject}_title`)"></p>
-        <p v-html="$t(`message.question_${subject}`)"></p>
+        <p v-if="!value.custom" v-html="$t(`message.${value.name}_title`)"></p>
+        <p v-else>{{`${value.number + 1}. ${value.custom.title}`}}</p>
+        <label v-if="!value.custom" for="textarea" v-html="$t(`message.question_${value.name}`)"></label>
+        <label v-else for="textarea">{{value.custom.description}}</label>        
         <button
+          v-if="!value.custom || value.custom.help"
           class="btn help_button buttonHelp"
-          @click.prevent="$emit('update:subjectHelpVisibility', !subjectHelpVisibility)"
+          @click.prevent="$emit('input', {help: {[value.name]: !value.help}})"
         >{{ $t('message.questionHelp') }}</button>
       </div>
     </div>
-    <p v-if="subjectHelpVisibility">{{ $t(`message.help_text_${subject}`) }}</p>
+    <p v-if="value.help && !value.custom">{{ $t(`message.help_text_${value.name}`) }}</p>
+    <p v-else-if="value.help">{{value.custom.help}}</p>
     <div class="range-input">
       <div class="rangeQuestiondata-icon">
-        <p class="rangeQuestiondata">{{subjectVal}}</p>
-        <div v-show="subjectVal" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:subjectVal', null)"/></div>
-        <div v-show="subjectVal"><button class="btn remove-button" @click.prevent="$emit('update:subjectVal', null)">Poista Vastaus</button></div>
+        <p class="rangeQuestiondata">{{value.val}}</p>
+        <div v-show="value.val" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('input', {[value.name]:  null})"/></div>
+        <div v-show="value.val"><button class="btn remove-button" @click.prevent="$emit('input', {[value.name]:  null})">Poista Vastaus</button></div>
       </div>
       <div class="rangeLabelicons">
         <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
         <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
       </div>
         <b-form-input
-          v-bind:class="{activeRange: subjectVal}"
+          v-bind:class="{activeRange: value.val}"
           type="range"
+          id="range"
           number
           min="0"
           max="10"
-          v-bind:value="subjectVal"
-          @update="$emit('update:subjectVal', $event)"
+          v-bind:value="value.val"
+          @update="$emit('input', {[value.name]: $event})"
         />
-        <div class="rangeLabel-mobile">
+        <label for="range" class="rangeLabel-mobile">
           <div>0</div>
           <div>10</div>
-        </div>
-        <div class="rangeLabel">
+        </label>
+        <label for="range" class="rangeLabel">
           <div>0</div>
           <div>1</div>
           <div>2</div>
@@ -46,17 +51,18 @@
           <div>8</div>
           <div>9</div>
           <div>10</div>
-        </div>
+        </label>
     </div>
     <div class="textareaWordCount">
       <textarea
-        v-bind:value="subjectDesc"
-        @input="$emit('update:subjectDesc', $event.target.value)"
+        id="textarea"
+        v-bind:value="value.desc"
+        @input="$emit('input', {[`${value.name}_desc`]: $event.target.value})"
         rows="3" 
         maxlength="2000"
         v-bind:placeholder="$t('message.question_desc_placeholder')"
-      ></textarea>
-      <p>{{ $t('message.length') }}{{subjectDesc ? subjectDesc.length : '0'}}/2000</p>
+      />
+      <p>{{ $t('message.length') }}{{value.desc ? value.desc.length : '0'}}/2000</p>
     </div>
   </Fragment>
 </template>
@@ -69,21 +75,18 @@ export default {
     Fragment
   },
   props: {
-    subject: {
-      required: true,
-      type: String
-    },
-    subjectVal: {
-      required: true,
-      validator: (prop) => typeof prop === "number" || prop === null
-    },
-    subjectDesc: {
-      required: true,
-      validator: (prop) => typeof prop === "string" || prop === null
-    },
-    subjectHelpVisibility: {
-      type: Boolean,
-      default: false
+    value: {
+      type: Object,
+      required: true, 
+      validator: function(prop) {
+        if (typeof prop.name !== "string") return false
+        if (typeof prop.val !== "number" && prop.val !== null) return false
+        if (typeof prop.desc !== "string" && prop.desc !== null) return false
+        if (prop.help !== undefined && typeof prop.help !== "boolean") return false
+        if (typeof prop.number !== "number") return false
+        if (prop.custom !== undefined && prop.custom.title === undefined && prop.custom.description === undefined) return false
+        return true
+      }
     }
   }
 }
@@ -108,18 +111,18 @@ export default {
     margin-bottom:1rem;
     text-align: left;
 
-    p, button {
+    p, label, button {
       display:inline;
     }
 
-    p:nth-of-type(1) {
+    p {
       font-weight: bold;
       font-size: 1rem;
       color: #350e7e;
       margin-right: 1rem;
     }
 
-    p:nth-of-type(2) {
+    label {
       font-size: 1rem;
       color: #353535;
       margin-right: 1rem;
@@ -316,21 +319,21 @@ export default {
 }
 
 @media only screen and (min-width: 575px) {
-  .questionHelpbutton p:nth-of-type(1) {
+  .questionHelpbutton p {
     font-size: 1.2rem !important;
   }
 
-  .questionHelpbutton p:nth-of-type(2) {
+  .questionHelpbutton label {
     font-size: 1.1rem !important;
   }
 }
 
 @media only screen and (min-width: 768px) {
-  .questionHelpbutton p:nth-of-type(1) {
+  .questionHelpbutton p {
     font-size: 1.2rem !important;
   }
 
-  .questionHelpbutton p:nth-of-type(2) {
+  .questionHelpbutton label {
     font-size: 1.1rem !important;
   }
   
@@ -435,11 +438,11 @@ export default {
     margin-top:2rem !important;
   }
 
-  .questionHelpbutton p:nth-of-type(1) {
+  .questionHelpbutton p {
     font-size: 1.3rem !important;
   }
   
-  .questionHelpbutton p:nth-of-type(2) {
+  .questionHelpbutton label {
     font-size: 1.2rem !important;
   }
 
@@ -480,11 +483,11 @@ export default {
     text-align: center !important;
   }
 
-  .questionHelpbutton p:nth-of-type(1) {
+  .questionHelpbutton p {
     font-size: 1.375rem !important;
   }
   
-  .questionHelpbutton p:nth-of-type(2) {
+  .questionHelpbutton label {
     font-size: 1.3rem !important;
   }
 
@@ -506,11 +509,11 @@ export default {
     margin:0 4rem;
   }
 
-  .questionHelpbutton p:nth-of-type(1) {
+  .questionHelpbutton p {
     font-size: 1.375rem !important;
   }
 
-  .questionHelpbutton p:nth-of-type(2) {
+  .questionHelpbutton label {
     font-size: 1.3rem !important;
   }
 }
