@@ -2,9 +2,9 @@
   <div class="background">
     <div class="container-fluid" id="questionnaire-main">
       <div class="questionnaire-top">
-      <div id="logodiv">
-        <img id="logotop" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
-      </div>
+        <div id="logodiv">
+          <img id="logotop" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+        </div>
         <button @click="toggleHelp" class="btn buttonOhjeet">Ohjeet</button>
       </div>
       <div class="questionnaire-bottom">
@@ -12,7 +12,7 @@
         <span v-else>Anonyymi | {{surveyId}}</span>
       </div>
     </div>
-        <div @click="toggleHelp" class="dim-background" v-show="help_visible">
+    <div @click="toggleHelp" class="dim-background" v-show="help_visible">
       <div class="help-container">
         <p>{{ $t('message.help_text_1') }}</p>
         <p>{{ $t('message.help_text_2') }}</p>
@@ -142,9 +142,9 @@ export default {
       set: function(newObject) {
         //set correct questiondata property
         const key = Object.keys(newObject)[0]
-        if (this.questiondata.hasOwnProperty(key)) {
+        if (this.questiondata.hasOwnProperty(key) && typeof newObject[key] !== "object") {
           Object.assign(this.questiondata, newObject)
-        } else if (typeof newObject[key] === "object" && newObject[key] !== null) {
+        } else if (key === "help" && newObject[key] !== null) {
           //toggle question help
           Object.assign(this.question_help_visible, newObject.help)
         }
@@ -324,89 +324,6 @@ export default {
   }
 }
 
-.review {
-
-  h3{
-    margin:2rem;
-  }
-
-  .results {
-    display: flex;
-    flex-flow: column;
-    text-align: start;
-
-    .notanswered{
-      color:#A1318A;
-      font-size:1rem !important;
-    }
-
-    div {
-      border: 1px solid lightgray;
-      padding: 0.7rem;
-      margin: 0.6rem;
-
-      span:nth-of-type(1) {
-        font-weight: bold;
-        font-size:1.125rem;   
-        color:#350E7E;
-      }
-
-      span:nth-of-type(2) {
-        font-size:1rem;
-        padding-right:1rem;
-      }
-
-      span:nth-child(even) {
-        float: right;
-      }
-      
-      .textarea-collapse{
-        background-color:white;
-        color:black;
-        border:0;
-        font-size:1.1rem;
-        font-weight:bold;
-        margin-left:1rem;
-      }
-       .text-review{
-         white-space: pre-wrap;
-         word-wrap:break-word;
-         padding-top:0.6rem;
-      }
-    }
-  }
-
-  .review-buttons {
-    //margin: 1.8rem 0;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    margin:2rem 0;
-
-    .send-button {
-      border-radius: 50px;
-      box-shadow: 0 5px 5px gray;
-      line-height: 2;
-      width: 16rem;
-      padding: 1rem 2rem;
-      background-color:#350E7E;
-      color:#FFFFFF;
-      font-weight:bold;
-      margin:1rem;
-      font-size:1rem;
-    }
-
-    .return-button{
-      color:#350E7E;
-      font-size:1.1rem;
-    }
-
-    .cancel-button {
-      color:#350E7E;
-      font-size:1.1rem;
-    }
-  }
-}
 .dim-background {
   position: absolute;
   z-index: 5;
@@ -528,10 +445,6 @@ export default {
     text-align: center;
   }
 
-  .results .text-review{
-    padding-top:0rem !important;
-  }
-
   .page-number{
     margin-top:0rem !important;
   }
@@ -632,9 +545,5 @@ export default {
     top: 0%;
     left: -5%;
   }*/
-
-  .review h3{
-      margin:1rem 1rem 2rem 1rem;
-  }
 }
 </style>
