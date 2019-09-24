@@ -11,18 +11,18 @@
             <div id="registerCredentials">
               <b-form>
                 <b-form-group id="regnamefield">
-                  <b-form-input type="email" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')" required>
+                  <b-form-input type="email" v-model="registration.email" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')" required>
                   </b-form-input>
                 </b-form-group>
                 <b-form-group id="regpasswordfield">
-                  <b-form-input type="password" id="password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
+                  <b-form-input type="password" id="password" v-model="registration.password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
                   </b-form-input>
                 </b-form-group>
                 <b-form-group id="retypefield">
                   <b-form-input type="password" id="confirmpassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')" required>
                   </b-form-input>
                 </b-form-group>
-                <b-button type="submit" class="btn registersubmitButton">{{ $t('message.submitRegister') }}</b-button>
+                <b-button type="submit" @click.prevent="handleRegistration" class="btn registersubmitButton">{{ $t('message.submitRegister') }}</b-button>
               </b-form>
             </div>
             <p class="registerinfo">{{ $t('message.registrationInfo') }}</p>
@@ -38,7 +38,31 @@ import axios from 'axios'
 
 export default {
   name: 'registration',
+  data() {
+    return {
+      registration: {
+        email: null,
+        password: null
+      }
+    }
+  },
   methods: {
+    handleRegistration() {
+      const data = JSON.stringify({
+        email: this.registration.email,
+        password: this.registration.password
+      })
+      axios
+        .post(process.env.VUE_APP_BACKEND + "/signup", data, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }).then(res => {
+          if (res.data.success) {
+            this.$router.push({ name: 'login' })
+          }
+        })
+    },
     handleSignIn() {
       this.$gAuth
         .signIn()

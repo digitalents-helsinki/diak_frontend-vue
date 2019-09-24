@@ -57,11 +57,11 @@ export default {
   methods: {
     handleLogin() {
       const data = JSON.stringify({
-        user: this.login.email,
-        pass: this.login.password
+        email: this.login.email,
+        password: this.login.password
       })
       axios
-        .post(process.env.VUE_APP_BACKEND + "/login", data, {
+        .post(process.env.VUE_APP_BACKEND + "/signin", data, {
           headers: {
             "Content-Type": "application/json"
           }
