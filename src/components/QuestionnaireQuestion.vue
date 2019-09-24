@@ -70,7 +70,7 @@
       <button v-if="navigation.questionnum > 0" class="btn button-previous" @click.prevent="$emit('update:navigation', navigation.questionnum - 1)">{{ $t('message.previous') }}</button>
     </div>
     <p class="page-number"  style="align-self: center"><span class="current">{{navigation.questionnum + 1}}</span><span class="total">/{{navigation.questionamount}}</span></p>
-    <button @click.prevent="$emit('toggleCancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
+    <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
   </div>
 </template>
 <script>
@@ -329,6 +329,16 @@ export default {
     font-size: 1rem;
   }
 }*/
+
+@media only screen and (min-width: 768px) {
+  
+  .page-number{
+    margin-top:0rem !important;
+  }
+
+  //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
+}
+
 @media only screen and (min-width: 320px) and (max-width: 360px){
   .questionHelpbutton {
     margin-top:0.1rem !important;

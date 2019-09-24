@@ -17,7 +17,7 @@
         class="btn return-button" 
         @click.prevent="$emit('update:navigation', navigation.questionnum - 1)"
       >{{ $t('message.return')}}</button>
-    <button @click.prevent="$emit('toggleCancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
+    <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
     </div>
   </div>
 </template>
