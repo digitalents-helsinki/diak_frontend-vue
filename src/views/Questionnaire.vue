@@ -73,6 +73,7 @@ export default {
         life_as_whole_desc: null
       },
       questionnum: 0,
+      latestquestionnum: 0,
       question_help_visible: {
         health: false,
         overcoming: false,
@@ -97,6 +98,9 @@ export default {
           this.$set(this.question_help_visible, key, false)
         }
       })
+    },
+    questionnum: function(newVal, oldVal) {
+      this.latestquestionnum = oldVal
     }
   },
   computed: {
@@ -135,7 +139,8 @@ export default {
     navigationData: {
       get: function() {
         return ({
-          questionnum: this.questionnum, 
+          questionnum: this.questionnum,
+          latestquestionnum: this.latestquestionnum,
           questionamount: this.subjects.length
         })
       },
@@ -229,6 +234,7 @@ export default {
   border-radius: 15px 15px 0 0;
   height: 85%;
   overflow: auto;
+  overflow-x: hidden; //transition
   border-radius: 14px;
 
   .loader-spinner-container {

@@ -1,6 +1,13 @@
 <template>
-  <div class="question">
-    <div class="question_text">
+  <div class="question" >
+    <transition 
+      v-bind:name="slide" 
+      mode="out-in"
+      @beforeLeave="beforeLeave"
+      @enter="enter"
+      @afterEnter="afterEnter"
+      >
+    <div class="question_text" v-bind:key="navigation.questionnum">
       <div class="questionHelpbutton">
         <p v-if="!question.custom" v-html="$t(`message.${question.name}_title`)"></p>
         <p v-else>{{`${navigation.questionnum + 1}. ${question.custom.title}`}}</p>
@@ -13,9 +20,24 @@
         >{{ $t('message.questionHelp') }}</button>
       </div>
     </div>
-    <p v-if="question.help && !question.custom">{{ $t(`message.help_text_${question.name}`) }}</p>
-    <p v-else-if="question.help">{{question.custom.help}}</p>
-    <div class="range-input">
+    </transition>
+    <transition 
+      v-bind:name="slide" 
+      mode="out-in"
+      @beforeLeave="beforeLeave"
+      @enter="enter"
+      @afterEnter="afterEnter"
+    >
+      <p class="helpClassForTransition" v-bind:class="{helpShow: !question.help}" v-bind:key="navigation.questionnum">{{ !question.custom ? $t(`message.help_text_${question.name}`) : question.custom.help }}</p>
+    </transition>
+    <transition 
+      v-bind:name="slide" 
+      mode="out-in"
+      @beforeLeave="beforeLeave"
+      @enter="enter"
+      @afterEnter="afterEnter"
+    >
+    <div class="range-input" v-bind:key="navigation.questionnum">
       <div class="rangeQuestiondata-icon">
         <p class="rangeQuestiondata">{{question.val}}</p>
         <div v-show="question.val" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', {[question.name]:  null})"/></div>
@@ -53,7 +75,15 @@
           <div>10</div>
         </label>
     </div>
-    <div class="textareaWordCount">
+    </transition>
+    <transition 
+      v-bind:name="slide" 
+      mode="out-in"
+      @beforeLeave="beforeLeave"
+      @enter="enter"
+      @afterEnter="afterEnter"
+    >
+    <div class="textareaWordCount" v-bind:key="navigation.questionnum">
       <textarea
         id="textarea"
         v-bind:value="question.desc"
@@ -64,6 +94,7 @@
       />
       <p>{{ $t('message.length') }}{{question.desc ? question.desc.length : '0'}}/2000</p>
     </div>
+    </transition>
     <div class="buttons">
       <button v-if="navigation.questionnum + 1 === navigation.questionamount" class="btn button-complete" @click.prevent="$emit('update:navigation', navigation.questionnum + 1)">{{ $t('message.complete') }}</button>
       <button v-else class="btn button-next" @click.prevent="$emit('update:navigation', navigation.questionnum + 1)">{{ $t('message.next') }}</button>
@@ -99,6 +130,33 @@ export default {
         return true
       }
     }
+  },
+  data() {
+    return {
+      heights: {}
+    }
+  },
+  computed: {
+    slide: function() {
+      return this.navigation.latestquestionnum < this.navigation.questionnum ? "forward" : "backward"
+    }
+  },
+  methods: {
+    beforeLeave(element) {
+      this.$set(this.heights, `${element.classList[0]}PrevHeight`, getComputedStyle(element).height)
+    },
+    enter(element) {
+      const { height } = getComputedStyle(element);
+
+      element.style.height = this.heights[`${element.classList[0]}PrevHeight`]
+
+      setTimeout(() => {
+        element.style.height = height;
+      });
+    },
+    afterEnter(element) {
+      element.style.height = null;
+    }
   }
 }
 </script>
@@ -107,16 +165,56 @@ export default {
   color: red;
 }
 
+.helpShow {
+  height: 0;
+  display: none;
+}
+
 /*.range {
   display: flex;
   width: 100%;
   margin: auto;
 }*/
+
 .question {
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-between;
   height: 75vh;
+
+  .forward-enter-to {
+    opacity: 0.75;
+  }
+
+  .forward-enter {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  
+  .forward-leave-to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  .backward-enter {
+    opacity: 0.75;
+  }
+
+  .backward-enter {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  
+  .backward-leave-to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  .forward-enter-active, .forward-leave-active, .backward-enter-active, .backward-leave-active {
+    transition-duration: 0.2s;
+    transition-property: height, opacity, transform;
+    transition-timing-function: ease;
+  }
 
   .question_text {
     display: flex;
