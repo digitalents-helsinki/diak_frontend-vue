@@ -16,19 +16,13 @@
         <button
           v-if="!question.custom || question.custom.help"
           class="btn help_button buttonHelp"
-          @click.prevent="$emit('update:question', {help: {[question.name]: !question.help}})"
-        >{{ $t('message.questionHelp') }}</button>
+          @click.prevent
+          v-b-popover.hover.focus.bottom="!question.custom ? $t(`message.help_text_${question.name}`) : question.custom.help"
+        >
+          {{ $t('message.questionHelp') }}
+        </button>
       </div>
     </div>
-    </transition>
-    <transition 
-      v-bind:name="slide" 
-      mode="out-in"
-      @beforeLeave="beforeLeave"
-      @enter="enter"
-      @afterEnter="afterEnter"
-    >
-      <p class="helpClassForTransition" v-bind:class="{helpShow: !question.help}" v-bind:key="navigation.questionnum">{{ !question.custom ? $t(`message.help_text_${question.name}`) : question.custom.help }}</p>
     </transition>
     <transition 
       v-bind:name="slide" 
@@ -116,7 +110,6 @@ export default {
         if (typeof prop.name !== "string") return false
         if (typeof prop.val !== "number" && prop.val !== null) return false
         if (typeof prop.desc !== "string" && prop.desc !== null) return false
-        if (prop.help !== undefined && typeof prop.help !== "boolean") return false
         if (prop.custom !== undefined && prop.custom.title === undefined && prop.custom.description === undefined) return false
         return true
       }
@@ -163,11 +156,6 @@ export default {
 <style lang="scss" scoped>
 .notAnswered {
   color: red;
-}
-
-.helpShow {
-  height: 0;
-  display: none;
 }
 
 /*.range {

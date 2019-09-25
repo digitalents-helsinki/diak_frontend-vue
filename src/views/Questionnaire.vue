@@ -74,31 +74,11 @@ export default {
       },
       questionnum: 0,
       latestquestionnum: 0,
-      question_help_visible: {
-        health: false,
-        overcoming: false,
-        living: false,
-        coping: false,
-        family: false,
-        friends: false,
-        finance: false,
-        strengths: false,
-        self_esteem: false,
-        life_as_whole: false
-      },
       modal_visible: null,
       surveyId: this.$route.params.surveyId
     };
   },
   watch: {
-    subjects: function(newSubjects) {
-      //create question help visibility data when custom questions get fetched
-      newSubjects.forEach(key => {
-        if (!Object.keys(this.question_help_visible).includes(key)) {
-          this.$set(this.question_help_visible, key, false)
-        }
-      })
-    },
     questionnum: function(newVal, oldVal) {
       this.latestquestionnum = oldVal
     }
@@ -117,8 +97,7 @@ export default {
           return ({
             name: key, 
             val: this.questiondata[key], 
-            desc: this.questiondata[`${key}_desc`], 
-            help: this.question_help_visible[key], 
+            desc: this.questiondata[`${key}_desc`],
             custom: this.questiondata[`${key}_custom`]
           })
         } else {
@@ -128,11 +107,8 @@ export default {
       set: function(newObject) {
         //set correct questiondata property
         const key = Object.keys(newObject)[0]
-        if (this.questiondata.hasOwnProperty(key) && (newObject[key] === null || typeof newObject[key] !== "object")) {
+        if (this.questiondata.hasOwnProperty(key)) {
           Object.assign(this.questiondata, newObject)
-        } else if (key === "help" && newObject[key] !== null) {
-          //toggle question help
-          Object.assign(this.question_help_visible, newObject.help)
         }
       }
     },
