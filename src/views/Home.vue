@@ -27,8 +27,8 @@
       <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="logo" />
       <div class="textContainer">
         <h2>Testaa kyselyä</h2>
-        <button @click="handleRegisterClick" class="btn btn-primary">Siirry käyttäjänäkymään</button>
-        <button @click="moveQuestionnaire" class="btn btn-primary">Siirry testikyselyyn</button>
+        <button @click="handleUserClick" class="btn btn-primary">Siirry käyttäjänäkymään</button>
+        <button @click="handleTestQuestionnaireClick" class="btn btn-primary">Siirry testikyselyyn</button>
         <button @click="handleAdminClick" class="btn btn-primary">Siirry hallinnointinäkymään</button>
       </div>
     </div>
@@ -38,13 +38,13 @@
 export default {
   name: 'home',
   methods: {
-    handleRegisterClick() {
+    handleUserClick() {
       this.$router.push({ path: '/user' })
     },
     handleAdminClick() {
       this.$router.push({ path: '/admin' })
     },
-    moveQuestionnaire() {
+    handleTestQuestionnaireClick() {
       this.$router.push({ path: '/questionnaire/testikysely'})
     }
   }

@@ -3,8 +3,12 @@
     <div class="container-fluid" id="userprofileTop">
       <div id="logoLocation"><img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="logoHere"/></div>
     </div>
-    <div class="container profilecontentUser">
+    <div v-if="!hasInfo">
+      <personal-info />
+    </div>
+    <div v-if="hasInfo" class="container profilecontentUser">
       <div id="profiledivUser">
+        {{user}}
           <p id="paragraphTop"> {{ $t('message.profileInstruction') }}</p> 
           <div id="contentforUser">
             <div id="previousSurvies">
@@ -30,21 +34,31 @@
 </template>
 <script>
 import axios from 'axios'
+import PersonalInfo from '../components/PersonalInfo.vue'
+import store from '@/store'
 
 export default {
   name: 'user',
   data() {
     return {
-      isLogged: false
+      isLogged: false,
+      hasInfo: true,
+      user: null
     }
   },
   methods: {
-    getUser() {
-
+    async getUser() {
+      this.$data.user = await axios.get(process.env.VUE_APP_BACKEND + "/user/" + store.state.auth.userId)
     },
     getUserSurveys() {
       
     }
+  },
+  components: {
+    PersonalInfo
+  },
+  mounted() {
+    this.getUser()
   }
 }
 </script>
