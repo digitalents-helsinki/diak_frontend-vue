@@ -29,11 +29,21 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
   name: 'user',
   data() {
     return {
       isLogged: false
+    }
+  },
+  methods: {
+    getUser() {
+
+    },
+    getUserSurveys() {
+      
     }
   }
 }

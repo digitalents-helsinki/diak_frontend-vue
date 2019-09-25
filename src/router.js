@@ -81,13 +81,11 @@ export default new Router({
     {
       path: '/admin/surveyresults/',
       name: 'surveyresults',
-      beforeEnter: guard,
       component: SurveyResults
     },
     {
       path: '/admin',
       name: 'admin',
-      beforeEnter: guard,
       component: Admin
     }
   ]

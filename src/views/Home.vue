@@ -1,30 +1,35 @@
+/*
+<div class="container-fluid" id="textContainer-top">
+  <p class="welcomeMessage">{{ $t('message.home') }}</p>
+</div>
+<div class="text-container">
+  <div class="text-container-content">
+    <img src="../images/diak-meter.svg" alt="" />
+    <p>{{ $t('message.help_text_1') }}</p>
+  </div>
+  <div class="text-container-content">
+    <img src="../images/DiakThumbs.svg" alt="" />
+    <p>{{ $t('message.help_text_2') }}</p>
+  </div>
+  <div class="text-container-content">
+    <img src="../images/diak-balance.svg" alt="" />
+    <p>{{ $t('message.help_text_3') }}</p>
+  </div>
+  <div class="text-container-content">
+    <img src="../images/Diak-null.svg" alt="" />
+    <p>{{ $t('message.help_text_4') }}</p>
+  </div>
+</div>
+*/
 <template>
   <div class="home">
     <div class="container main">
       <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="logo" />
       <div class="textContainer">
-        <div class="container-fluid" id="textContainer-top">
-          <p class="welcomeMessage">{{ $t('message.home') }}</p>
-        </div>
-        <div class="text-container">
-          <div class="text-container-content">
-            <img src="../images/diak-meter.svg" alt="" />
-            <p>{{ $t('message.help_text_1') }}</p>
-          </div>
-          <div class="text-container-content">
-            <img src="../images/DiakThumbs.svg" alt="" />
-            <p>{{ $t('message.help_text_2') }}</p>
-          </div>
-          <div class="text-container-content">
-            <img src="../images/diak-balance.svg" alt="" />
-            <p>{{ $t('message.help_text_3') }}</p>
-          </div>
-          <div class="text-container-content">
-            <img src="../images/Diak-null.svg" alt="" />
-            <p>{{ $t('message.help_text_4') }}</p>
-          </div>
-        </div>
-        <button @click="moveQuestionnaire" class="btn btn-primary">{{ $t('message.begin') }}</button>
+        <h2>Testaa kyselyä</h2>
+        <button @click="handleRegisterClick" class="btn btn-primary">Siirry käyttäjänäkymään</button>
+        <button @click="moveQuestionnaire" class="btn btn-primary">Siirry testikyselyyn</button>
+        <button @click="handleAdminClick" class="btn btn-primary">Siirry hallinnointinäkymään</button>
       </div>
     </div>
   </div>
@@ -33,6 +38,12 @@
 export default {
   name: 'home',
   methods: {
+    handleRegisterClick() {
+      this.$router.push({ path: '/user' })
+    },
+    handleAdminClick() {
+      this.$router.push({ path: '/admin' })
+    },
     moveQuestionnaire() {
       this.$router.push({ path: '/questionnaire/testikysely'})
     }
