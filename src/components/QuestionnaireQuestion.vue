@@ -90,9 +90,9 @@
     </div>
     </transition>
     <div class="buttons">
-      <button v-if="navigation.questionnum + 1 === navigation.questionamount" class="btn button-complete" @click.prevent="$emit('update:navigation', navigation.questionnum + 1)">{{ $t('message.complete') }}</button>
-      <button v-else class="btn button-next" @click.prevent="$emit('update:navigation', navigation.questionnum + 1)">{{ $t('message.next') }}</button>
-      <button v-if="navigation.questionnum > 0" class="btn button-previous" @click.prevent="$emit('update:navigation', navigation.questionnum - 1)">{{ $t('message.previous') }}</button>
+      <button v-if="navigation.questionnum + 1 === navigation.questionamount" class="btn button-complete" @click.prevent="$emit('update:navigation', 'add')">{{ $t('message.complete') }}</button>
+      <button v-else class="btn button-next" @click.prevent="$emit('update:navigation', 'add')">{{ $t('message.next') }}</button>
+      <button v-if="navigation.questionnum > 0" class="btn button-previous" @click.prevent="$emit('update:navigation', 'subtract')">{{ $t('message.previous') }}</button>
     </div>
     <p class="page-number"  style="align-self: center"><span class="current">{{navigation.questionnum + 1}}</span><span class="total">/{{navigation.questionamount}}</span></p>
     <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
@@ -119,6 +119,7 @@ export default {
       required: true,
       validator: function(prop) {
         if (typeof prop.questionnum !== "number") return false
+        if (typeof prop.latestquestionnum !== "number") return false
         if (typeof prop.questionamount !== "number") return false
         return true
       }

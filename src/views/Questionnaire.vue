@@ -120,8 +120,9 @@ export default {
           questionamount: this.subjects.length
         })
       },
-      set: function(newValue) {
-        this.questionnum = newValue
+      set: function(operator) {
+        if (operator === 'add') this.questionnum += 1
+        else if (operator === 'subtract') this.questionnum -= 1
       }
     },
     resultData: function() {

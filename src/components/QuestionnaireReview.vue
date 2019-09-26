@@ -15,7 +15,7 @@
       <button class="btn send-button" @click.prevent="$emit('saveQuestions')">{{ $t('message.send')}}</button>
       <button
         class="btn return-button" 
-        @click.prevent="$emit('update:navigation', navigation.questionnum - 1)"
+        @click.prevent="$emit('update:navigation', 'subtract')"
       >{{ $t('message.return')}}</button>
     <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
     </div>
@@ -38,6 +38,7 @@ export default {
       required: true,
       validator: function(prop) {
         if (typeof prop.questionnum !== "number") return false
+        if (typeof prop.latestquestionnum !== "number") return false
         if (typeof prop.questionamount !== "number") return false
         return true
       }
