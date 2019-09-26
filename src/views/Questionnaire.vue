@@ -79,12 +79,12 @@ export default {
     };
   },
   watch: {
-    questionnum: function(newVal, oldVal) {
+    questionnum(newVal, oldVal) {
       this.latestquestionnum = oldVal
     }
   },
   computed: {
-    subjects: function() {
+    subjects() {
       //everything in questiondata that doesn't end with _desc or _custom
       return Object.keys(this.questiondata).filter(key => !key.endsWith("_desc") && !key.endsWith("_custom"))
     },
@@ -125,7 +125,7 @@ export default {
         else if (operator === 'subtract') this.questionnum -= 1
       }
     },
-    resultData: function() {
+    resultData() {
       //format for rendering results
       return this.subjects.reduce((obj, key) => {
         return { 
@@ -177,7 +177,6 @@ export default {
   created() {
     this.getQuestions()
   }
-
 };
 </script>
 <style lang="scss" scoped>
