@@ -2,26 +2,28 @@
 <div class="adminPage">
     <div class="leftSide">
         <div class="leftSide-top">
-            <img class="diakLogo" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" >
-            <p> {{ $t('message.adminName') }}</p>
-            <p> {{ $t('message.adminEmail') }}</p>
+            <div class="imagelocation">
+                <img class="diakLogo" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" >
+            </div>
+            <div class="adminnameemail">
+                <p class="namelocation"> {{ $t('message.adminName') }}</p>
+                <p class="emaillocation"> {{ $t('message.adminEmail') }}</p>
+            </div>
         </div>
         <div class="text-icons">
-            <div class="text-icons-content inquery">
-                <div v-if="activeComponent === 'adminCreate'" class="inquerydiv"> </div>
+            <div class="icontextInquery">
                 <img src="../images/note_add_24px_outlined.svg" alt="" />
                 <button @click="activeComponent = 'adminCreate'" class="btn inquery-open">{{ $t('message.surveyCreatebutton') }}</button>
             </div>
-            <div class="text-icons-content manage">
-                <div v-if="activeComponent === 'adminManage'" class="managediv"> </div>
+            <div class="icontextManage">
                 <img src="../images/scatter_plot_24px_outlined.svg" alt="" />
                 <button @click="activeComponent = 'adminManage'" class="btn manageSurveys-open">{{ $t('message.manageSurveysbutton') }}</button>
             </div>
-            <div class="text-icons-content produce">
+            <!--<div class="text-icons-content produce">
                 <div class="producediv"> </div>
                 <img src="../images/paste_24px_outlined.svg" alt="" />
                 <button class="btn produceReport-open">{{ $t('message.produceReportbutton') }}</button>
-            </div>
+            </div>-->
         </div>
     </div>
     <admin-create v-if="activeComponent === 'adminCreate'"/>
@@ -50,67 +52,70 @@ export default {
     background-color:#F9F9FB;
     width:100%;
     display: flex;
-    flex-direction: row;
-    justify-content:center;
+    flex-direction: column;
+    align-items:center;
     font-family: Arial, Helvetica, sans-serif;
     font-style:normal;
     font-size: 1rem;
 
     .leftSide{
         background-color:#F9F9FB;
-        width:16%; 
+        width:100%; 
         
         .leftSide-top{
             background-color:#35CDE6;
             width:100%;
-            height:16rem; 
+            height:7rem; 
             display:flex;
-            flex-direction:column;
-            align-items:center;
+            flex-direction:row;
+            justify-content:space-between;
+            padding:1rem;
+            
+            .imagelocation{
 
-            .diakLogo{
-                width:67%;
-                height:auto;
-                margin-top:2rem;
-            }
-        }
-        .leftSide-top > p {
-            font-weight:bold;
-            color:#FFFFFF;
-            line-height:1.1rem;
-        }
+                .diakLogo{
+                    width:100%;
+                    height:65px;
+                    margin-top:0.1rem;
+                }
+            }   
+            
+            .adminnameemail{
+                margin-top:0.1rem;
+                margin-right:1rem;
 
-        .leftSide-top > p:nth-of-type(1) {
-            margin-top:5rem;
-            font-size:1.1em;
-            padding-left:0.1rem;
-        }
+                .namelocation{
+                    font-size:1.1rem;
+                    color:#FFFFFF;
+                    font-weight:bold;
+                }
 
-        .leftSide-top > p:nth-of-type(2) {
-            font-size:0.875em;
-            word-break: break-all;
-            padding-left:0.1rem;
+                .emaillocation{
+                    font-size:0.875rem;
+                    color:#FFFFFF;
+                    font-weight:bold;
+                }
+            }       
         }
 
         .text-icons {
             background-color: #FFFFFF;
             display: flex;
-            flex-direction: column;
-            align-items:center;
-            box-shadow: 0 2px 2px lightgray;
+            flex-direction: row;
+            justify-content:center;
             font-size:1rem;
-            height:43vh;
+            padding-top:1.8rem;
+            padding-bottom:1.8rem;
 
-            div {
+            .icontextInquery {
                 display: flex;
-                flex-flow: row nowrap;
-                display:flex;
-                justify-content:flex-end;
-
+                flex-flow: row;
+            
                 img {
                     height: 25px;
                     flex-basis: 20%;
-                    margin-top:2.8rem;
+                    margin-left:0.2rem;
+                    margin-top:0.5rem;
                 }
 
                 .inquery-open {
@@ -118,20 +123,22 @@ export default {
                     color: #FFFFFF;
                     border-radius: 10px;
                     box-shadow: 0 5px 5px gray;
-                    width:11rem;
-                    height:auto;
+                    width:11.5rem;
+                    height:2.5rem;
                     font-weight:bold;
-                    margin-top:2.5rem;
-                    margin-right:0.1rem;
-                    margin-left:1rem;
+                    margin-left:0.2rem;
                 }
-        
-                .inquerydiv{
-                    width:1rem;
-                    height:2rem;
-                    margin-left:-1rem;
-                    margin-top:2.7rem;
-                    background: #350E7E;
+            }
+            .icontextManage {
+                display: flex;
+                flex-flow: row;
+                margin-left:1rem;
+
+                img {
+                    height: 25px;
+                    flex-basis: 20%;
+                    margin-left:0.2rem;
+                    margin-top:0.5rem;
                 }
 
                 .manageSurveys-open {
@@ -139,23 +146,13 @@ export default {
                     color: #FFFFFF;
                     border-radius: 10px;
                     box-shadow: 0 5px 5px gray;
-                    width:11rem;
-                    height:auto;
+                    width:11.5rem;
+                    height:2.5rem;
                     font-weight:bold;
-                    margin-top:2.5rem;
-                    margin-right:0.1rem;
-                    margin-left:1rem;
+                    margin-left:0.2rem;
                 }
-
-                .managediv{
-                    width:1rem;
-                    height:2rem;
-                    margin-left:-1rem;
-                    margin-top:2.7rem;
-                    background: #350E7E;
-                }
-
-                .produceReport-open {
+            }
+                /*.produceReport-open {
                     background-color: #353535;
                     color: #FFFFFF;
                     border-radius: 10px;
@@ -173,66 +170,8 @@ export default {
                     height:2rem;
                     margin-left:-1rem;
                     margin-top:2.7rem; 
-                }
-            }
+                }*/
         }
     }
 }
-
-@media only screen and (max-width: 1450px) {
-    .leftSide{
-        width:25% !important;
-    }
-
-    .leftSide-top > p:nth-of-type(2) {
-        margin-bottom:6rem;
-    }
-}
-
-@media only screen and (max-width: 1024px) {
-    .adminPage{
-        display:flex;
-        flex-direction:column;
-        width:100%;
-    }
-    
-    .leftSide{
-        width:100% !important;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-    }
-
-    .leftSide-top{
-        height:13rem !important;
-    }
-
-    .leftSide-top > p:nth-of-type(1) {
-            margin-top:1rem !important;
-        }
-
-    .text-icons{
-        width:100% !important;
-        display:flex !important;
-        flex-direction:row !important;
-        justify-content:center;
-        height:auto !important;
-        padding-bottom:2rem;
-    }
-
-    .managediv{
-        margin-left:0rem !important;
-    }
-
-    .rightsideCreate{
-        width:100% !important;
-        margin:0 !important;
-    }
-
-    .rightsideManage{
-        width:100% !important;
-        margin:0 !important;
-    }
-}
-
 </style>

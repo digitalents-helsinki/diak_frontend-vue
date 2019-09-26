@@ -179,8 +179,9 @@ export default {
 <style lang="scss" scoped>
 .rightsideCreate{
     background-color:#FFFFFF;
-    width:81.8%;
-    margin:1rem 1rem 0rem 1rem;
+    width:80%;
+    margin:1rem;
+    box-shadow: 0 5px 5px #787878;
 
     .rightsideCreate-top{
         background-color:#350E7E;
@@ -188,7 +189,7 @@ export default {
         height: 5rem;
         font-size:1.1rem;
         font-weight:bold;
-        color:white;
+        color:#FFFFFF;
         display:flex;
         justify-content:center;
         align-items:center;
@@ -205,7 +206,7 @@ export default {
 
         .savecontinueButton{
             background-color: #353535;
-            color: #ffffff;
+            color: #FFFFFF;
             border-radius: 6px;
             box-shadow: 0 5px 5px gray;
             width:18rem;
@@ -214,9 +215,9 @@ export default {
         }
         .discardButton{
             background-color: #A1318A;
-            color: #ffffff;
+            color: #FFFFFF;
             border-radius: 6px;
-            box-shadow: 0 5px 5px gray;
+            box-shadow: 0 5px 5px #787878;
             width:10rem;
             height:auto;
             font-weight:bold;
@@ -349,8 +350,8 @@ export default {
                     padding-bottom:1rem;
 
                     .writeinQuestion{
-                            width:80rem;
-                        }
+                        width:80rem;
+                    }
                 }
                 .moreQuestions-div{
                     display:flex;
@@ -458,6 +459,7 @@ export default {
                 margin-right:5rem;
                 margin-left:5rem;
                 margin-bottom:2rem;
+                border:1px solid #C0C0C0;
 
                 .emailcontentTop{
                     display:flex;
@@ -544,47 +546,19 @@ export default {
     }
 }
 
-@media only screen and (max-width: 1450px) {
+@media only screen and (max-width: 1400px) {
     .rightsideCreate{
-        width:72.8% !important;
+        width:100%;   
     }
 }
 
 @media only screen and (max-width: 1000px) {
-    .rightsideCreate{
-        width:67.8% !important;
+    #insertedQuestionsview{
+        margin-left:0.1rem !important;
     }
-
-    .adminaddEmail{
-        margin-left:0rem !important;
-    }
-
+    
     .emailContent{
-        margin-right:0 !important;
-        margin-left:0 !important;
-        width:100%;
+        margin-left:0.1rem !important;
     }
-
-    .emailTop{
-        display:flex !important;
-        flex-direction:column !important;
-        align-items:flex-start;
-    }
-    .bottom-buttons{
-       margin:0 1rem 8rem 1rem !important;
-    }
-    .savecontinueBottom{
-        margin-right:1rem;
-    }
-}
-
-@media only screen and (max-width: 767px) {
-    .rightsideCreate{
-        width:100% !important;
-    }
-    #surveyname{
-        width:18rem !important;
-    }
-
 }
 </style>
