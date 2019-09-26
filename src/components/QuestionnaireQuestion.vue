@@ -1,94 +1,76 @@
 <template>
   <div class="question" >
-    <transition 
-      v-bind:name="slide" 
-      mode="out-in"
-      @beforeLeave="beforeLeave"
-      @enter="enter"
-      @afterEnter="afterEnter"
-      >
-    <div class="question_text" v-bind:key="navigation.questionnum">
-      <div class="questionHelpbutton">
-        <p v-if="!question.custom" v-html="$t(`message.${question.name}_title`)"></p>
-        <p v-else>{{`${navigation.questionnum + 1}. ${question.custom.title}`}}</p>
-        <label v-if="!question.custom" for="textarea" v-html="$t(`message.question_${question.name}`)"></label>
-        <label v-else for="textarea">{{question.custom.description}}</label>        
-        <button
-          v-if="!question.custom || question.custom.help"
-          class="btn help_button buttonHelp"
-          @click.prevent
-          v-b-popover.hover.focus.bottom="!question.custom ? $t(`message.help_text_${question.name}`) : question.custom.help"
-        >
-          {{ $t('message.questionHelp') }}
-        </button>
+    <SlideTransition v-bind:navigation="navigation">
+      <div class="question_text" v-bind:key="navigation.questionnum">
+        <div class="questionHelpbutton">
+          <p v-if="!question.custom" v-html="$t(`message.${question.name}_title`)"></p>
+          <p v-else>{{`${navigation.questionnum + 1}. ${question.custom.title}`}}</p>
+          <label v-if="!question.custom" for="textarea" v-html="$t(`message.question_${question.name}`)"></label>
+          <label v-else for="textarea">{{question.custom.description}}</label>        
+          <button
+            v-if="!question.custom || question.custom.help"
+            class="btn help_button buttonHelp"
+            @click.prevent
+            v-b-popover.hover.focus.bottom="!question.custom ? $t(`message.help_text_${question.name}`) : question.custom.help"
+          >
+            {{ $t('message.questionHelp') }}
+          </button>
+        </div>
       </div>
-    </div>
-    </transition>
-    <transition 
-      v-bind:name="slide" 
-      mode="out-in"
-      @beforeLeave="beforeLeave"
-      @enter="enter"
-      @afterEnter="afterEnter"
-    >
-    <div class="range-input" v-bind:key="navigation.questionnum">
-      <div class="rangeQuestiondata-icon">
-        <p class="rangeQuestiondata">{{question.val}}</p>
-        <div v-show="question.val" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', [question.name, null])"/></div>
-        <div v-show="question.val"><button class="btn remove-button" @click.prevent="$emit('update:question', [question.name,  null])">Poista Vastaus</button></div>
+    </SlideTransition>
+    <SlideTransition v-bind:navigation="navigation">
+      <div class="range-input" v-bind:key="navigation.questionnum">
+        <div class="rangeQuestiondata-icon">
+          <p class="rangeQuestiondata">{{question.val}}</p>
+          <div v-show="question.val" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', [question.name, null])"/></div>
+          <div v-show="question.val"><button class="btn remove-button" @click.prevent="$emit('update:question', [question.name,  null])">Poista Vastaus</button></div>
+        </div>
+        <div class="rangeLabelicons">
+          <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+          <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+        </div>
+          <b-form-input
+            v-bind:class="{activeRange: question.val}"
+            type="range"
+            id="range"
+            number
+            min="0"
+            max="10"
+            v-bind:value="question.val"
+            @update="$emit('update:question', [question.name, $event])"
+          />
+          <label for="range" class="rangeLabel-mobile">
+            <div>0</div>
+            <div>10</div>
+          </label>
+          <label for="range" class="rangeLabel">
+            <div>0</div>
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>
+            <div>7</div>
+            <div>8</div>
+            <div>9</div>
+            <div>10</div>
+          </label>
       </div>
-      <div class="rangeLabelicons">
-        <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
-        <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
-      </div>
-        <b-form-input
-          v-bind:class="{activeRange: question.val}"
-          type="range"
-          id="range"
-          number
-          min="0"
-          max="10"
-          v-bind:value="question.val"
-          @update="$emit('update:question', [question.name, $event])"
+    </SlideTransition>
+    <SlideTransition v-bind:navigation="navigation">
+      <div class="textareaWordCount" v-bind:key="navigation.questionnum">
+        <textarea
+          id="textarea"
+          v-bind:value="question.desc"
+          @input="$emit('update:question', [`${question.name}_desc`, $event.target.value])"
+          rows="3" 
+          maxlength="2000"
+          v-bind:placeholder="$t('message.question_desc_placeholder')"
         />
-        <label for="range" class="rangeLabel-mobile">
-          <div>0</div>
-          <div>10</div>
-        </label>
-        <label for="range" class="rangeLabel">
-          <div>0</div>
-          <div>1</div>
-          <div>2</div>
-          <div>3</div>
-          <div>4</div>
-          <div>5</div>
-          <div>6</div>
-          <div>7</div>
-          <div>8</div>
-          <div>9</div>
-          <div>10</div>
-        </label>
-    </div>
-    </transition>
-    <transition 
-      v-bind:name="slide" 
-      mode="out-in"
-      @beforeLeave="beforeLeave"
-      @enter="enter"
-      @afterEnter="afterEnter"
-    >
-    <div class="textareaWordCount" v-bind:key="navigation.questionnum">
-      <textarea
-        id="textarea"
-        v-bind:value="question.desc"
-        @input="$emit('update:question', [`${question.name}_desc`, $event.target.value])"
-        rows="3" 
-        maxlength="2000"
-        v-bind:placeholder="$t('message.question_desc_placeholder')"
-      />
-      <p>{{ $t('message.length') }}{{question.desc ? question.desc.length : '0'}}/2000</p>
-    </div>
-    </transition>
+        <p>{{ $t('message.length') }}{{question.desc ? question.desc.length : '0'}}/2000</p>
+      </div>
+    </SlideTransition>
     <div class="buttons">
       <button v-if="navigation.questionnum + 1 === navigation.questionamount" class="btn button-complete" @click.prevent="$emit('update:navigation', 'add')">{{ $t('message.complete') }}</button>
       <button v-else class="btn button-next" @click.prevent="$emit('update:navigation', 'add')">{{ $t('message.next') }}</button>
@@ -99,9 +81,13 @@
   </div>
 </template>
 <script>
+import SlideTransition from '@/components/QuestionnaireQuestionSlideTransition.vue'
 
 export default {
   name: 'QuestionnaireQuestion',
+  components: {
+    SlideTransition
+  },
   props: {
     question: {
       type: Object,
@@ -124,33 +110,6 @@ export default {
         return true
       }
     }
-  },
-  data() {
-    return {
-      heights: {}
-    }
-  },
-  computed: {
-    slide: function() {
-      return this.navigation.latestquestionnum < this.navigation.questionnum ? "forward" : "backward"
-    }
-  },
-  methods: {
-    beforeLeave(element) {
-      this.$set(this.heights, `${element.classList[0]}PrevHeight`, getComputedStyle(element).height)
-    },
-    enter(element) {
-      const { height } = getComputedStyle(element);
-
-      element.style.height = this.heights[`${element.classList[0]}PrevHeight`]
-
-      setTimeout(() => {
-        element.style.height = height;
-      });
-    },
-    afterEnter(element) {
-      element.style.height = null;
-    }
   }
 }
 </script>
@@ -170,40 +129,6 @@ export default {
   flex-flow: column nowrap;
   justify-content: space-between;
   height: 75vh;
-
-  .forward-enter-to {
-    opacity: 0.75;
-  }
-
-  .forward-enter {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  
-  .forward-leave-to {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-
-  .backward-enter {
-    opacity: 0.75;
-  }
-
-  .backward-enter {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  
-  .backward-leave-to {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-
-  .forward-enter-active, .forward-leave-active, .backward-enter-active, .backward-leave-active {
-    transition-duration: 0.2s;
-    transition-property: height, opacity, transform;
-    transition-timing-function: ease;
-  }
 
   .question_text {
     display: flex;
