@@ -34,8 +34,8 @@
     <div class="range-input" v-bind:key="navigation.questionnum">
       <div class="rangeQuestiondata-icon">
         <p class="rangeQuestiondata">{{question.val}}</p>
-        <div v-show="question.val" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', {[question.name]:  null})"/></div>
-        <div v-show="question.val"><button class="btn remove-button" @click.prevent="$emit('update:question', {[question.name]:  null})">Poista Vastaus</button></div>
+        <div v-show="question.val" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', [question.name, null])"/></div>
+        <div v-show="question.val"><button class="btn remove-button" @click.prevent="$emit('update:question', [question.name,  null])">Poista Vastaus</button></div>
       </div>
       <div class="rangeLabelicons">
         <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
@@ -49,7 +49,7 @@
           min="0"
           max="10"
           v-bind:value="question.val"
-          @update="$emit('update:question', {[question.name]: $event})"
+          @update="$emit('update:question', [question.name, $event])"
         />
         <label for="range" class="rangeLabel-mobile">
           <div>0</div>
@@ -81,7 +81,7 @@
       <textarea
         id="textarea"
         v-bind:value="question.desc"
-        @input="$emit('update:question', {[`${question.name}_desc`]: $event.target.value})"
+        @input="$emit('update:question', [`${question.name}_desc`, $event.target.value])"
         rows="3" 
         maxlength="2000"
         v-bind:placeholder="$t('message.question_desc_placeholder')"

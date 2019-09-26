@@ -104,11 +104,11 @@ export default {
           return null
         }
       },
-      set: function(newObject) {
+      set: function(keyValueArr) {
         //set correct questiondata property
-        const key = Object.keys(newObject)[0]
-        if (this.questiondata.hasOwnProperty(key)) {
-          Object.assign(this.questiondata, newObject)
+        const [ key, value ] = keyValueArr
+        if (this.questiondata.hasOwnProperty(key) && this.questiondata.propertyIsEnumerable(key)) {
+          this.questiondata[key] = value
         }
       }
     },
