@@ -123,7 +123,7 @@ export default {
 
     .send-button {
       border-radius: 50px;
-      box-shadow: 0 5px 5px gray;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
       line-height: 2;
       width: 16rem;
       padding: 1rem 2rem;
@@ -132,9 +132,18 @@ export default {
       font-weight:bold;
       margin:1rem;
       font-size:1rem;
+      transition: box-shadow 0.3s ease;
+
+       &:focus {
+        box-shadow: 0 5px 5px rgba(0, 64, 112, 0.5);
+      }
+
+      &:hover {
+        background-color: lighten(#350E7E, 5%)
+      }
     }
 
-    .return-button{
+    .return-button {
       color:#350E7E;
       font-size:1.1rem;
     }
