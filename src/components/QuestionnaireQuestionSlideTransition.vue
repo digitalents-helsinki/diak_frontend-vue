@@ -17,6 +17,11 @@ export default {
     questionnum: {
       type: Number,
       required: true
+    },
+    direction: {
+      type: String,
+      default: "horizontal",
+      validator: (prop) => ["horizontal", "vertical"].includes(prop)
     }
   },
   data() {
@@ -32,7 +37,8 @@ export default {
   },
   computed: {
     slide() {
-      return this.latestquestionnum < this.questionnum ? "forward" : "backward"
+      if (this.direction === "horizontal") return this.latestquestionnum < this.questionnum ? "forward" : "backward"
+      else if (this.direction === "vertical") return this.latestquestionnum < this.questionnum ? "upward" : "downward"
     }
   },
   methods: {
@@ -54,7 +60,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-  .forward-enter-to {
+  .forward-enter-to, .backward-enter, .upward-enter, .downward-enter {
     opacity: 0.75;
   }
 
@@ -69,10 +75,6 @@ export default {
   }
 
   .backward-enter {
-    opacity: 0.75;
-  }
-
-  .backward-enter {
     transform: translateX(-100%);
     opacity: 0;
   }
@@ -82,7 +84,28 @@ export default {
     opacity: 0;
   }
 
-  .forward-enter-active, .forward-leave-active, .backward-enter-active, .backward-leave-active {
+  .upward-enter {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  .upward-leave-to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  .downward-enter {
+    transform: translateY(-100%);
+  }
+
+  .downward-leave-to {
+    transform: translateY(100%)
+  }
+
+  .forward-enter-active, .forward-leave-active, 
+  .backward-enter-active, .backward-leave-active, 
+  .upward-enter-active, .upward-leave-active, 
+  .downward-enter-active, .downward-leave-active {
     transition-duration: 0.2s;
     transition-property: height, opacity, transform;
     transition-timing-function: ease;
