@@ -10,19 +10,21 @@
         <b-spinner label="Loading..." />
       </div>
       <form>
-        <Question
-          v-if="currentQuestionData"
-          v-bind:question.sync="currentQuestionData"
-          v-bind:navigation.sync="navigationData"
-          v-on:toggleModal="toggleModal"
-        />
-        <Review 
-          v-if="navigationData.questionamount <= questionnum"
-          v-bind:results.sync="resultData"
-          v-bind:navigation.sync="navigationData"
-          v-on:saveQuestions="saveQuestions"
-          v-on:toggleModal="toggleModal"
-        />
+        <transition name="fade" mode="out-in">
+          <Question
+            v-if="currentQuestionData"
+            v-bind:question.sync="currentQuestionData"
+            v-bind:navigation.sync="navigationData"
+            v-on:toggleModal="toggleModal"
+          />
+          <Review 
+            v-if="navigationData.questionamount <= questionnum"
+            v-bind:results.sync="resultData"
+            v-bind:navigation.sync="navigationData"
+            v-on:saveQuestions="saveQuestions"
+            v-on:toggleModal="toggleModal"
+          />
+        </transition>
       </form>
     </div>
     <Modals
@@ -38,6 +40,7 @@ import Main from '@/components/QuestionnaireMain.vue'
 import Question from "@/components/QuestionnaireQuestion.vue"
 import Review from "@/components/QuestionnaireReview.vue"
 import Modals from '@/components/QuestionnaireModals.vue'
+import SlideTransition from '@/components/QuestionnaireQuestionSlideTransition.vue'
 
 export default {
   name: "Questionnaire",
@@ -46,7 +49,8 @@ export default {
     Main,
     Question,
     Review,
-    Modals
+    Modals,
+    SlideTransition
   },
   data() {
     return {
@@ -176,6 +180,14 @@ export default {
 
 .notAnswered {
   color: red;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.125s ease;
 }
 
 /*.range {
