@@ -1,21 +1,23 @@
 <template>
-  <div @click="$emit('toggleModal', null)" class="dim-background" v-show="modal">
-    <div class="help-container" v-if="modal === 'help'">
-      <p>{{ $t('message.help_text_1') }}</p>
-      <p>{{ $t('message.help_text_2') }}</p>
-    </div>
-    <div class="cancel-container" v-if="modal === 'cancel'">
-      <div>
-        <button class="btn btn-primary">{{ $t('message.cancel_save') }}</button>
+  <transition name="fade">
+    <div @click="$emit('toggleModal', null)" class="dim-background" v-show="modal">
+      <div class="help-container" v-if="modal === 'help'">
+        <p>{{ $t('message.help_text_1') }}</p>
+        <p>{{ $t('message.help_text_2') }}</p>
       </div>
-      <div>
-        <button
-          @click.prevent="$emit('moveHome')"
-          class="btn btn-primary"
-        >{{ $t('message.cancel_discard') }}</button>
+      <div class="cancel-container" v-if="modal === 'cancel'">
+        <div>
+          <button class="btn btn-primary">{{ $t('message.cancel_save') }}</button>
+        </div>
+        <div>
+          <button
+            @click.prevent="$emit('moveHome')"
+            class="btn btn-primary"
+          >{{ $t('message.cancel_discard') }}</button>
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 <script>
 export default {
@@ -29,6 +31,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+.fade {
+  &-enter, &-leave-to {
+    opacity: 0;
+  }
+  &-enter-active, &-leave-active {
+    transition: opacity 0.2s ease;
+  }
+}
 
 .dim-background {
   position: absolute;

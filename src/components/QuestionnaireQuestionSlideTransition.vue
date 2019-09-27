@@ -106,7 +106,7 @@ export default {
   .backward-enter-active, .backward-leave-active, 
   .upward-enter-active, .upward-leave-active, 
   .downward-enter-active, .downward-leave-active {
-    transition-duration: 0.2s;
+    transition-duration: 0.175s;
     transition-property: height, opacity, transform;
     transition-timing-function: ease;
   }
