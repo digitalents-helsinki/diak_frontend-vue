@@ -3,9 +3,25 @@
       <div class="rightsideManage-top">
         <p>{{ $t('message.manageSurveys') }}</p>
       </div>
-    <div class="searchParagraph-div">
+    <div class="totalinstructionsearch">
       <div class="totalParagraph">
         <p>{{ $t('message.total') }}</p>
+      </div>
+      <div class="manageInstructions">
+        <div class="instructiondivone">
+          <p class="divoneHeading">{{ $t('message.instructionsHeading') }} </p>
+          <p class="divoneParagraph">{{ $t('message.InstructionPone') }} </p>
+          <p class="divoneParagraph">{{ $t('message.InstructionPtwo') }} </p>
+          <p class="divoneParagraph">{{ $t('message.InstructionPthree') }} </p>
+        </div>
+        <div class="arrowbetweendivs">
+          <font-awesome-icon icon="arrow-right" style="font-size:1.8rem;"/>
+        </div>
+        <div class="instructiondivtwo">
+        <p class="divtwoHeading">{{ $t('message.reportHeading') }} </p>
+        <p class="divtwoParagraph">{{ $t('message.reportParagraph') }} </p>
+        <div class="reportimageButton"><img src="../images/assessment_24px.png" alt="" style="width:25px; height:25px;"/></div>
+        </div>
       </div>
       <div class="searchbar-div">
           <p class="paragraphTop">{{ $t('message.searchParagraph') }}</p>
@@ -98,7 +114,7 @@ export default {
           },
           {
             key: 'control',
-            label: 'Analysoi',
+            label: 'Reportti',
             colType: 'analyze'
           },
           {
@@ -189,18 +205,78 @@ export default {
         padding-top:1.1rem;
         margin-bottom:1rem;
     }
-    .searchParagraph-div{
-      margin-bottom:8rem;
+    .totalinstructionsearch{
       background-color:#FFFFFF;
+      margin-top:1rem;
+      margin-bottom:3rem;
       width:100%;
+      padding-top:1rem;
       padding-bottom:1rem;
 
       .totalParagraph{
         font-size:1rem;
         color:grey;
         margin-left:1rem;
-        margin-bottom:6rem;
+        margin-bottom:1.8rem;
         }
+      
+      .manageInstructions{
+        display:flex;
+        flex-direction:row;
+        margin-right:1rem;
+        margin-bottom:1.8rem;
+        margin-left:1rem;
+      
+        .instructiondivone{
+          border:1px solid grey;
+          padding:1rem 1.8rem;
+          margin-right:1rem;
+          font-size:1rem;
+
+          .divoneHeading{
+            font-size:1.1rem;
+            font-weight:bold;
+
+          }
+          .divoneParagraph{
+            font-size:1.1rem;
+            margin-left:1rem;
+          }
+        }
+
+        .arrowbetweendivs{
+          padding:1rem;
+          margin-right:1rem;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+        }
+
+        .instructiondivtwo{
+          border:1px solid grey;
+          padding:1rem;
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+
+          .divtwoHeading{
+            font-size:1.1rem;
+            font-weight:bold;
+          }
+
+          .divtwoParagraph{
+            background-color:lightgrey;
+            width:8rem;
+            font-size:1.1rem;
+            font-weight:bold;
+            text-align:center;
+            padding:0.1rem;
+          }
+
+          .reportimageButton{
+          }
+        }
+      }
 
       .searchbar-div{
         margin:1rem;

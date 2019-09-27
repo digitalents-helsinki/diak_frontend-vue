@@ -8,8 +8,8 @@
         <button @click="toggleHelp" class="btn buttonOhjeet">Ohjeet</button>
       </div>
       <div class="questionnaire-bottom">
-        <span v-if="user">{{user}}</span>
-        <span v-if="!user">anonyymi kysely {{surveyId}}</span>
+        <span v-if="user">{{user}} | {{surveyId}}</span>
+        <span v-else>Anonyymi | {{surveyId}}</span>
       </div>
     </div>
         <div @click="toggleHelp" class="dim-background" v-show="help_visible">
@@ -32,73 +32,42 @@
       </div>
     </div>
     <div class="questionnaire container text-center shadow-lg">
+      <div class="loader-spinner-container" v-if="!currentQuestionData && questionnum !== navigationData.questionamount">
+        <b-spinner label="Loading..." />
+      </div>
       <form>
-        <div v-if="currentQuestion.key" class="question">
         <Question
-          v-bind:subject="currentQuestion.name" 
-          v-bind:subject-val.sync="questiondata[currentQuestion.key].val" 
-          v-bind:subject-desc.sync="questiondata[currentQuestion.key].desc" 
-          v-bind:questionnum.sync="questionnum" 
-          v-on:toggle-cancel="toggleCancel"
+          v-if="currentQuestionData"
+          v-bind:question.sync="currentQuestionData"
+          v-bind:navigation.sync="navigationData"
+          v-on:toggleCancel="toggleCancel"
         />
-        <div class="buttons">
-          <button class="btn button-next" @click.prevent="questionnum++">{{ $t('message.next') }}</button>
-          <button v-show="questionnum > 0" class="btn button-previous" @click.prevent="questionnum--">{{ $t('message.previous') }}</button>
-        </div>
-          <p class="page-number"  style="align-self: center"><span class="current">{{questionnum + 1}}</span><span class="total">/10</span></p>
-          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
-        </div>
-      <div class="review" v-show="questionnum === Object.keys(questiondata).length">
-          <h3>Kooste vastauksistasi</h3>
-          <div class="results">
-            <div v-for="(value, name, index) in questiondata" v-bind:key="index">
-              <span v-html="$t(`message.${name}_title`)"></span><span v-bind:class="{notanswered :!value.val}">{{value.val ? value.val : "Ei vastattu"}}</span>
-              <b-collapse id="collapse-health" v-bind:visible="!!value.desc">
-                <p class="text-review">{{value.desc ? value.desc : "Ei vastattu" }}</p>
-              </b-collapse>
-            </div>
-          </div>
-          <div class="review-buttons">
-            <button class="btn send-button" @click.prevent="saveQuestions">{{ $t('message.send')}}</button>
-            <button
-              class="btn return-button" 
-              @click.prevent="questionnum--"
-            >{{ $t('message.return')}}</button>
-          <button @click.prevent="toggleCancel" class="btn cancel-button">{{ $t('message.cancel')}}</button>
-        </div>
-        </div>
+        <Review 
+          v-if="navigationData.questionamount <= questionnum"
+          v-bind:results.sync="resultData"
+          v-bind:navigation.sync="navigationData"
+          v-on:saveQuestions="saveQuestions"
+          v-on:toggleCancel="toggleCancel"
+        />
       </form>
     </div>
   </div>
 </template>
 <script>
 import axios from "axios";
-import Question from "@/components/Question.vue"
+import Question from "@/components/QuestionnaireQuestion.vue"
+import Review from "@/components/QuestionnaireReview.vue"
 
 export default {
   name: "Questionnaire",
   props: ['user'],
   components: {
-    Question
+    Question,
+    Review
   },
   data() {
     return {
-      questiondata: {},
-      questionnum: 0,
-      help_visible: false,
-      cancel_visible: false,
-      show: false,
-      surveyId: this.$route.params.surveyId
-    };
-  },
-  computed: {
-    currentQuestion: function() {
-      return {name: Object.keys(this.questiondata)[this.questionnum], key: Object.keys(this.questiondata)[this.questionnum]}
-    }
-  },
-  methods: {
-    getQuestions() {
-      const questiondata = {
+      questiondata: {
         health: null,
         overcoming: null,
         living: null,
@@ -119,36 +88,116 @@ export default {
         strengths_desc: null,
         self_esteem_desc: null,
         life_as_whole_desc: null
-      }
-
-      //Format data for rendering {health: {val: null, desc: null}}
-
-      const obj = {}
-
-      Object.keys(questiondata).forEach(key => {
-        if (!key.endsWith("_desc")) {
-          obj[key] = {val: questiondata[key], desc: questiondata[`${key}_desc`]}
+      },
+      questionnum: 0,
+      question_help_visible: {
+        health: false,
+        overcoming: false,
+        living: false,
+        coping: false,
+        family: false,
+        friends: false,
+        finance: false,
+        strengths: false,
+        self_esteem: false,
+        life_as_whole: false
+      },
+      help_visible: false,
+      cancel_visible: false,
+      surveyId: this.$route.params.surveyId
+    };
+  },
+  watch: {
+    subjects: function(newSubjects) {
+      //create question help visibility data when custom questions get fetched
+      newSubjects.forEach(key => {
+        if (!Object.keys(this.question_help_visible).includes(key)) {
+          this.$set(this.question_help_visible, key, false)
         }
       })
-
-      this.questiondata = {...obj}
+    }
+  },
+  computed: {
+    subjects: function() {
+      //everything in questiondata that doesn't end with _desc or _custom
+      return Object.keys(this.questiondata).filter(key => !key.endsWith("_desc") && !key.endsWith("_custom"))
+    },
+    currentQuestionData: {
+      get: function() {
+        //get current question
+        const key = this.subjects[this.questionnum]
+        //associate questiondata
+        if (key) {
+          return ({
+            name: key, 
+            val: this.questiondata[key], 
+            desc: this.questiondata[`${key}_desc`], 
+            help: this.question_help_visible[key], 
+            custom: this.questiondata[`${key}_custom`]
+          })
+        } else {
+          return null
+        }
+      },
+      set: function(newObject) {
+        //set correct questiondata property
+        const key = Object.keys(newObject)[0]
+        if (this.questiondata.hasOwnProperty(key)) {
+          Object.assign(this.questiondata, newObject)
+        } else if (typeof newObject[key] === "object" && newObject[key] !== null) {
+          //toggle question help
+          Object.assign(this.question_help_visible, newObject.help)
+        }
+      }
+    },
+    navigationData: {
+      get: function() {
+        return ({
+          questionnum: this.questionnum, 
+          questionamount: this.subjects.length
+        })
+      },
+      set: function(newValue) {
+        this.questionnum = newValue
+      }
+    },
+    resultData: function() {
+      //format for rendering results
+      return this.subjects.reduce((obj, key) => {
+        return { 
+          ...obj, 
+          [key]: { 
+            val: this.questiondata[key], 
+            desc: this.questiondata[`${key}_desc`], 
+            custom: this.questiondata[`${key}_custom`] 
+          } 
+        }
+      }, {})
+    }
+  },
+  methods: {
+    getQuestions() {
+      const fetchedData = {
+        question: null, 
+        question_desc: null, 
+        question_custom: {
+          title: "Custom Title", 
+          description: "Custom Description", 
+          help: "Custom Help"
+        }
+      }
+      this.questiondata = {...this.questiondata, ...fetchedData}
     },
     saveQuestions() {
-      //Undo formatting
-      const axiosData = {}
-      Object.keys(this.questiondata).forEach(key => {
-        axiosData[key] = this.questiondata[key].val
-        axiosData[`${key}_desc`] = this.questiondata[key].desc
-      })
 
       axios({
         method: "POST",
         url: process.env.VUE_APP_BACKEND + "/result",
-        data: { ...axiosData }
+        data: { ...this.questiondata }
       })
         .then(res => {
           if (res.data.status === "ok") {
-            this.$router.push({ path: `/results/${res.data.resultId}` });
+            this.$router.push({ path: `/user/results/${res.data.resultId}` });
           }
         })
         .catch(err => {});
@@ -163,12 +212,14 @@ export default {
       this.$router.push({ path: "/" });
     }
   },
-  mounted() {
+  created() {
     this.getQuestions()
   }
+
 };
 </script>
 <style lang="scss" scoped>
+
 .notAnswered {
   color: red;
 }
@@ -231,7 +282,7 @@ export default {
       font-weight:bold;
 
       span {
-        color: white;
+        color: #353535;
         font-size: 1rem;
         position: absolute;
         
@@ -255,6 +306,13 @@ export default {
   overflow: auto;
   border-radius: 14px;
 
+  .loader-spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 85%;
+  }
+
   /*.buttonOhjeet {
     display: none;
   }*/
@@ -263,63 +321,6 @@ export default {
     width: 60vw;
     margin-bottom: 5vh;
     border-radius: 15px;
-  }
-
-  form {
-    .question {
-      display: flex;
-      flex-flow: column nowrap;
-      justify-content: space-between;
-      height: 75vh;
-
-      .buttons {
-        display: flex;
-        flex-flow: row-reverse nowrap;
-        justify-content: space-between;
-        text-align:center;
-
-        button {
-          border-radius: 50px;
-          box-shadow: 0 5px 5px gray;
-          line-height: 2;
-          width: 8rem;
-        }
-        .button-next {
-          background-color: #353535;
-          color: #FFFFFF;
-          font-weight:bold;
-        }
-        .button-previous {
-          background-color: #353535;
-          color: #FFFFFF;
-          font-weight:bold;
-        }
-        .button-complete{
-          background-color:#350E7E;
-          color:#FFFFFF;
-          font-weight:bold;
-        }
-      }
-
-    .page-number{
-      font-size:1.1rem;
-      margin-top:1rem;
-      margin-bottom:0;
-
-      .current{
-        padding:0.1rem;
-      }
-      .total{
-        padding:0.1rem;
-      }
-    }
-    
-      .cancel-button {
-        color: #350e7e;
-        opacity: 70%;
-        font-size: 1.3em;
-      }
-    }
   }
 }
 
