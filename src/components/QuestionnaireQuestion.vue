@@ -204,29 +204,40 @@ export default {
     text-align:center;
 
     button {
+      background-color: #353535;
+      color: #FFFFFF;
+      font-weight:bold;
       border-radius: 50px;
-      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
       line-height: 2;
       width: 8rem;
-      transition: box-shadow 0.5s ease;
+      transition: box-shadow 0.3s ease;
+
+      &:focus {
+        box-shadow: 0 5px 5px rgba(0, 64, 112, 0.3);
+      }
     }
-    .button-next {
-      background-color: #353535;
-      color: #FFFFFF;
-      font-weight:bold;
-    }
-    .button-previous {
-      background-color: #353535;
-      color: #FFFFFF;
-      font-weight:bold;
-    }
-    .button-complete {
-      background-color:#350E7E;
-      color:#FFFFFF;
-      font-weight:bold;
-    }
-    button:focus {
-      box-shadow: 0 5px 5px rgba(0, 64, 112, 0.5);
+
+    .button {
+      &-next {
+        &:hover {
+          background-color: lighten(#353535, 6.66%)
+        }
+      }
+
+      &-previous {
+        &:hover {
+          background-color: lighten(#353535, 6.66%)
+        }
+      }
+      
+      &-complete {
+        background-color:#350E7E;
+
+        &:hover {
+          background-color: lighten(#350E7E, 6.66%)
+        }
+      }
     }
   }
 
