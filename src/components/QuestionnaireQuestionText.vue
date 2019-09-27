@@ -1,15 +1,15 @@
 <template>
     <div class="question_text">
       <div class="questionHelpbutton">
-        <p v-if="!question.custom" v-html="$t(`message.${question.name}_title`)"></p>
-        <p v-else>{{`${questionnum + 1}. ${question.custom.title}`}}</p>
-        <label v-if="!question.custom" for="textarea" v-html="$t(`message.question_${question.name}`)"></label>
-        <label v-else for="textarea">{{question.custom.description}}</label>        
+        <p v-if="!custom" v-html="$t(`message.${name}_title`)"></p>
+        <p v-else>{{`${questionnum + 1}. ${custom.title}`}}</p>
+        <label v-if="!custom" for="textarea" v-html="$t(`message.question_${name}`)"></label>
+        <label v-else for="textarea">{{custom.description}}</label>        
         <button
-          v-if="!question.custom || question.custom.help"
+          v-if="!custom || custom.help"
           class="btn help_button buttonHelp"
           @click.prevent
-          v-b-popover.hover.focus.bottom="!question.custom ? $t(`message.help_text_${question.name}`) : question.custom.help"
+          v-b-popover.hover.focus.bottom="!custom ? $t(`message.help_text_${name}`) : custom.help"
         >
           {{ $t('message.questionHelp') }}
         </button>
@@ -21,14 +21,17 @@
 export default {
   name: 'QuestionnaireQuestion',
   props: {
-    question: {
-      type: Object,
-      required: true, 
-      validator: function(prop) {
-        if (typeof prop.name !== "string") return false
-        if (typeof prop.val !== "number" && prop.val !== null) return false
-        if (typeof prop.desc !== "string" && prop.desc !== null) return false
-        if (prop.custom !== undefined && prop.custom.title === undefined && prop.custom.description === undefined) return false
+    name: {
+      type: String,
+      required: true
+    },
+    custom: {
+      default: undefined,
+      validator(prop) {
+        if (typeof prop !== "object" && prop !== undefined) return false
+        if (typeof prop !== undefined && typeof prop.title !== "string") return false
+        if (typeof prop !== undefined && typeof prop.description !== "string") return false
+        if (typeof prop !== undefined && typeof prop.help !== "string") return false
         return true
       }
     },

@@ -1,13 +1,14 @@
 <template>
   <div class="question" >
-    <SlideTransition v-bind:navigation="navigation">
+    <SlideTransition v-bind:questionnum="navigation.questionnum">
       <QuestionText
         v-bind:key="navigation.questionnum"
-        v-bind:question="question"
+        v-bind:name="question.name"
+        v-bind:custom="question.custom"
         v-bind:questionnum="navigation.questionnum"
       />
     </SlideTransition>
-    <SlideTransition v-bind:navigation="navigation">
+    <SlideTransition v-bind:questionnum="navigation.questionnum">
       <div class="range-input" v-bind:key="navigation.questionnum">
         <div class="rangeQuestiondata-icon">
           <p class="rangeQuestiondata">{{question.val}}</p>
@@ -47,7 +48,7 @@
           </label>
       </div>
     </SlideTransition>
-    <SlideTransition v-bind:navigation="navigation">
+    <SlideTransition v-bind:questionnum="navigation.questionnum">
       <div class="textareaWordCount" v-bind:key="navigation.questionnum">
         <textarea
           id="textarea"
@@ -96,7 +97,6 @@ export default {
       required: true,
       validator: function(prop) {
         if (typeof prop.questionnum !== "number") return false
-        if (typeof prop.latestquestionnum !== "number") return false
         if (typeof prop.questionamount !== "number") return false
         return true
       }
@@ -196,6 +196,7 @@ export default {
     }
   }
 
+
   .buttons {
     display: flex;
     flex-flow: row-reverse nowrap;
@@ -204,9 +205,10 @@ export default {
 
     button {
       border-radius: 50px;
-      box-shadow: 0 5px 5px gray;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
       line-height: 2;
       width: 8rem;
+      transition: box-shadow 0.5s ease;
     }
     .button-next {
       background-color: #353535;
@@ -222,6 +224,9 @@ export default {
       background-color:#350E7E;
       color:#FFFFFF;
       font-weight:bold;
+    }
+    button:focus {
+      box-shadow: 0 5px 5px rgba(0, 64, 112, 0.5);
     }
   }
 

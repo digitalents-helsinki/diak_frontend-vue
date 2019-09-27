@@ -14,25 +14,25 @@
 export default {
   name: 'QuestionnaireQuestionSlideTransition',
   props: {
-    navigation: {
-      type: Object,
-      required: true,
-      validator: function(prop) {
-        if (typeof prop.questionnum !== "number") return false
-        if (typeof prop.latestquestionnum !== "number") return false
-        if (typeof prop.questionamount !== "number") return false
-        return true
-      }
+    questionnum: {
+      type: Number,
+      required: true
     }
   },
   data() {
     return {
-      prevHeight: null
+      prevHeight: null,
+      latestquestionnum: 0
+    }
+  },
+  watch: {
+    questionnum(_, oldVal) {
+      this.latestquestionnum = oldVal
     }
   },
   computed: {
-    slide: function() {
-      return this.navigation.latestquestionnum < this.navigation.questionnum ? "forward" : "backward"
+    slide() {
+      return this.latestquestionnum < this.questionnum ? "forward" : "backward"
     }
   },
   methods: {
