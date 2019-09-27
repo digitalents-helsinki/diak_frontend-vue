@@ -30,7 +30,18 @@ export default {
       type: Object,
       required: true,
       validator: function(prop) {
-        return true
+        const warn = (name) => console.warn(`Invalid prop: ${name}`)
+        const valid = [];
+        Object.keys(prop).forEach(key => {
+          if (typeof prop[key].val !== "number" && prop[key].val !== null) warn(`results.${key}.val`)
+          else if (typeof prop[key].desc !== "string" && prop[key].desc !== null) warn(`results.${key}.desc`)
+          else if (typeof prop[key].custom !== "object" && prop[key].custom !== undefined) warn(`results.${key}.custom`)
+          else if (prop[key].custom !== undefined && typeof prop[key].custom.title !== "string") warn(`results.${key}.custom.title`)
+          else if (prop[key].custom !== undefined && typeof prop[key].custom.description !== "string") warn(`results.${key}.custom.description`)
+          else if (prop[key].custom !== undefined && typeof prop[key].custom.help !== "string") warn(`results.${key}.custom.help`)
+          else valid.push(true)
+        })
+        return valid.length === Object.keys(prop).length
       }
     },
     navigation: {
@@ -38,7 +49,6 @@ export default {
       required: true,
       validator: function(prop) {
         if (typeof prop.questionnum !== "number") return false
-        if (typeof prop.latestquestionnum !== "number") return false
         if (typeof prop.questionamount !== "number") return false
         return true
       }

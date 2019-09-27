@@ -73,15 +73,9 @@ export default {
         life_as_whole_desc: null
       },
       questionnum: 0,
-      latestquestionnum: 0,
       modal_visible: null,
       surveyId: this.$route.params.surveyId
     };
-  },
-  watch: {
-    questionnum(newVal, oldVal) {
-      this.latestquestionnum = oldVal
-    }
   },
   computed: {
     subjects() {
@@ -116,7 +110,6 @@ export default {
       get: function() {
         return ({
           questionnum: this.questionnum,
-          latestquestionnum: this.latestquestionnum,
           questionamount: this.subjects.length
         })
       },
