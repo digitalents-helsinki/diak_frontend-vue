@@ -61,6 +61,10 @@ export default {
       font-size: 1rem;
       font-weight: bold;
       text-align: center;
+
+      &:hover {
+        background-color: lighten(#353535, 5%);
+      }
     }
   }
   .questionnaire-bottom {
