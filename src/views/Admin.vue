@@ -13,11 +13,11 @@
         <div class="text-icons">
             <div class="icontextInquery">
                 <img src="../images/note_add_24px_outlined.svg" alt="" />
-                <button @click="activeComponent = 'adminCreate'" class="btn inquery-open">{{ $t('message.surveyCreatebutton') }}</button>
+                <button @click="activeComponent = 'adminCreate'" class="btn inquery-open" v-bind:class="classObjectcreate">{{ $t('message.surveyCreatebutton') }}</button>
             </div>
             <div class="icontextManage">
                 <img src="../images/scatter_plot_24px_outlined.svg" alt="" />
-                <button @click="activeComponent = 'adminManage'" class="btn manageSurveys-open">{{ $t('message.manageSurveysbutton') }}</button>
+                <button @click="activeComponent = 'adminManage'" class="btn manageSurveys-open" v-bind:class="classObjectmanage">{{ $t('message.manageSurveysbutton') }}</button>
             </div>
             <!--<div class="text-icons-content produce">
                 <div class="producediv"> </div>
@@ -44,6 +44,19 @@ export default {
     components: {
         AdminCreate,
         AdminManage
+    },
+    computed: {
+        classObjectcreate: function () {
+            return {
+                'text-info': this.activeComponent === 'adminCreate'
+            }
+        },
+
+        classObjectmanage: function () {
+            return {
+                'text-info': this.activeComponent === 'adminManage'
+            }
+        },
     }
 }
 </script>

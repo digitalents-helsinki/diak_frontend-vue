@@ -1,9 +1,9 @@
 <template>
   <div class="home">
     <div class="container main">
-      <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="logo" />
+      <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logoProfile" />
       <div class="textContainer">
-        <div class="container-fluid" id="textContainer-top">
+        <div class="container-fluid textContainer-top">
           <p class="welcomeMessage">{{ $t('message.home') }}</p>
         </div>
         <div class="text-container">
@@ -65,7 +65,7 @@ p {
     text-align: center;
     margin-top: 1rem;
 
-    #logo {
+    .logoProfile {
       width: 100%;
     }
 
@@ -80,7 +80,7 @@ p {
         height: 60vh;
       }
         
-      #textContainer-top{
+      .textContainer-top{
         background-color:#80CDE6;
         color:#FFFFFF;
         padding: 0.5rem;
@@ -159,7 +159,7 @@ p {
   }
 
   @media screen and (min-width: 768px) { 
-    #logo{
+    .logoProfile{
       width:40rem !important;
     }
   }

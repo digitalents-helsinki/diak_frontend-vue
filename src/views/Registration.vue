@@ -2,13 +2,13 @@
   <div class="registermaindiv">
     <b-container>
       <div class="registerDiv">
-        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="registerLogo"/>
-        <div id="registercontentDiv">
-          <div id="space">
+        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="registerLogo"/>
+        <div class="registercontentDiv">
+          <div class="spaceRegister">
           </div>
-          <div id="registerContent">
-            <p id="registerMessage">{{ $t('message.registerText') }}</p>
-            <div id="registerCredentials">
+          <div class="registerContent">
+            <p class="registerMessage">{{ $t('message.registerText') }}</p>
+            <div class="registerCredentials">
               <b-form>
                 <b-form-group id="regnamefield">
                   <b-form-input type="email" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')" required>
@@ -26,7 +26,7 @@
               </b-form>
             </div>
             <p class="registerinfo">{{ $t('message.registrationInfo') }}</p>
-            <p id="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p>
+            <p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p>
           </div>
         </div>
       </div>
@@ -73,23 +73,23 @@ export default {
     text-align: center;
     margin-top: 1rem;
       
-      #registerLogo{
+      .registerLogo{
         width: 100%;
       }
 
-    #registercontentDiv{
+    .registercontentDiv{
       background-color: #F9F9FB;
       width:100%;
       box-shadow: 0 5px 5px gray;
       margin-bottom:1rem;
     
-      #space{
+      .spaceRegister{
         background-color:#80CDE6;
         width:100%;
         padding: 1rem;
       }
 
-      #registerContent{
+      .registerContent{
         display: flex;
         flex-direction: column;
         margin-top:1.8rem;
@@ -100,11 +100,11 @@ export default {
           margin-bottom:1rem;
         }
 
-        #registerMessage{
+        .registerMessage{
           font-size:1.6rem;
         }
 
-        #registerCredentials{
+        .registerCredentials{
           display:flex;
           flex-direction:column;
           width:100%;
@@ -127,7 +127,7 @@ export default {
           font-size:1rem;
         }
 
-        #backtologinPage{
+        .backtologinPage{
           color:#350E7E;
           margin-bottom:1rem;
           font-size:1.1rem;
@@ -138,11 +138,11 @@ export default {
   }
 }
 @media screen and (min-width: 768px) { 
-  #registerLogo{
+  .registerLogo{
     width:29rem !important;
     margin-bottom:1rem;
   }
-  #registercontentDiv {
+  .registercontentDiv {
     width:30rem !important;
   }
 }
