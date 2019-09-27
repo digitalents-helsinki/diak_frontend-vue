@@ -1,6 +1,6 @@
 <template>
   <div class="question" >
-    <SlideTransition v-bind:questionnum="navigation.questionnum">
+    <SlideTransition v-bind:referencenum="navigation.questionnum">
       <QuestionText
         v-bind:key="navigation.questionnum"
         v-bind:name="question.name"
@@ -8,7 +8,7 @@
         v-bind:questionnum="navigation.questionnum"
       />
     </SlideTransition>
-    <SlideTransition v-bind:questionnum="navigation.questionnum">
+    <SlideTransition v-bind:referencenum="navigation.questionnum">
       <div class="range-input" v-bind:key="navigation.questionnum">
         <div class="rangeQuestiondata-icon">
           <p class="rangeQuestiondata">{{question.val}}</p>
@@ -48,7 +48,7 @@
           </label>
       </div>
     </SlideTransition>
-    <SlideTransition v-bind:questionnum="navigation.questionnum">
+    <SlideTransition v-bind:referencenum="navigation.questionnum">
       <div class="textareaWordCount" v-bind:key="navigation.questionnum">
         <textarea
           id="textarea"
@@ -71,7 +71,7 @@
   </div>
 </template>
 <script>
-import SlideTransition from '@/components/QuestionnaireQuestionSlideTransition.vue'
+import SlideTransition from '@/components/TransitionSlide.vue'
 import QuestionText from '@/components/QuestionnaireQuestionText.vue'
 
 export default {

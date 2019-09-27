@@ -40,7 +40,6 @@ import Main from '@/components/QuestionnaireMain.vue'
 import Question from "@/components/QuestionnaireQuestion.vue"
 import Review from "@/components/QuestionnaireReview.vue"
 import Modals from '@/components/QuestionnaireModals.vue'
-import SlideTransition from '@/components/QuestionnaireQuestionSlideTransition.vue'
 
 export default {
   name: "Questionnaire",
@@ -49,8 +48,7 @@ export default {
     Main,
     Question,
     Review,
-    Modals,
-    SlideTransition
+    Modals
   },
   data() {
     return {
@@ -178,16 +176,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 
+.fade {
+  &-enter, &-leave-to {
+    opacity: 0;
+  }
+  &-enter-active, &-leave-active {
+    transition: opacity 0.125s ease;
+  }
+}
+
 .notAnswered {
   color: red;
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.125s ease;
 }
 
 /*.range {

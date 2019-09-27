@@ -12,9 +12,9 @@
 <script>
 
 export default {
-  name: 'QuestionnaireQuestionSlideTransition',
+  name: 'TransitionSlide',
   props: {
-    questionnum: {
+    referencenum: {
       type: Number,
       required: true
     },
@@ -27,18 +27,18 @@ export default {
   data() {
     return {
       prevHeight: null,
-      latestquestionnum: 0
+      latestreferencenum: 0
     }
   },
   watch: {
-    questionnum(_, oldVal) {
-      this.latestquestionnum = oldVal
+    referencenum(_, oldVal) {
+      this.latestreferencenum = oldVal
     }
   },
   computed: {
     slide() {
-      if (this.direction === "horizontal") return this.latestquestionnum < this.questionnum ? "forward" : "backward"
-      else if (this.direction === "vertical") return this.latestquestionnum < this.questionnum ? "upward" : "downward"
+      if (this.direction === "horizontal") return this.latestreferencenum < this.referencenum ? "forward" : "backward"
+      else if (this.direction === "vertical") return this.latestreferencenum < this.referencenum ? "upward" : "downward"
     }
   },
   methods: {
@@ -60,55 +60,35 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-  .forward-enter-to, .backward-enter, .upward-enter, .downward-enter {
-    opacity: 0.75;
-  }
-
-  .forward-enter {
+  .forward-enter, .backward-leave-to {
     transform: translateX(100%);
     opacity: 0;
   }
   
-  .forward-leave-to {
+  .forward-leave-to, .backward-enter {
     transform: translateX(-100%);
     opacity: 0;
   }
 
-  .backward-enter {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  
-  .backward-leave-to {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-
-  .upward-enter {
+  .upward-enter, .downward-leave-to {
     transform: translateY(100%);
     opacity: 0;
   }
 
-  .upward-leave-to {
+  .upward-enter-to, .downward-enter {
     transform: translateY(-100%);
     opacity: 0;
   }
 
-  .downward-enter {
-    transform: translateY(-100%);
-  }
-
-  .downward-leave-to {
-    transform: translateY(100%)
-  }
-
-  .forward-enter-active, .forward-leave-active, 
-  .backward-enter-active, .backward-leave-active, 
-  .upward-enter-active, .upward-leave-active, 
-  .downward-enter-active, .downward-leave-active {
-    transition-duration: 0.175s;
-    transition-property: height, opacity, transform;
-    transition-timing-function: ease;
+  .forward, .backward, .upward, .downward {
+    &-enter-active, &-leave-active {
+      transition-duration: 0.175s;
+      transition-property: height, opacity, transform;
+      transition-timing-function: ease;
+    }
+    &-enter-to {
+      opacity: 0.75;
+    }
   }
 
 </style>
