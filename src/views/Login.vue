@@ -2,31 +2,31 @@
   <div class="loginmaindiv">
     <b-container>
       <div class="loginDiv">
-        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="loginLogo"/>
-        <div id="logincontentDiv">
-          <div id="space">
+        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="loginLogo"/>
+        <div class="logincontentDiv">
+          <div class="spaceLogin">
           </div>
-          <div id="loginContent">
-            <p id="loginMessage">{{ $t('message.loginText') }}</p>
-            <div id="loginCredentials">
+          <div class="loginContent">
+            <p class="loginMessage">{{ $t('message.loginText') }}</p>
+            <div class="loginCredentials">
             <b-form>
-              <b-form-group id="loginfield">
+              <b-form-group class="loginfield">
                 <b-form-input type="text" autocomplete="email" id="email" v-model="login.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')" required>
                 </b-form-input>
               </b-form-group>
-                <b-form-group id="passwordfield">
+                <b-form-group class="passwordfield">
                   <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')" required>
                   </b-form-input>
                 </b-form-group>
               <b-button type="submit" @click.prevent="handleLogin" class="submitButton">{{ $t('message.formsubmitButton') }}</b-button>
             </b-form>
           </div>
-            <div id="registerandPassword">
-                <p id="changePassword" @click="handlePasswordClick">{{ $t('message.newPassword') }}</p>
-                <p id="registration" @click="handleRegisterClick">{{ $t('message.registrationLink') }}</p>
+            <div class="registerandPassword">
+                <p class="changePassword" @click="handlePasswordClick">{{ $t('message.newPassword') }}</p>
+                <p class="registration" @click="handleRegisterClick">{{ $t('message.registrationLink') }}</p>
             </div>
             <p class="otherWay">{{ $t('message.loginwithother') }}</p>
-            <div id="loginOtherway">
+            <div class="loginOtherway">
               <b-button class="loginFacebookButton"><font-awesome-icon :icon="['fab', 'facebook']" style="font-size:1.6rem; margin-right:0.6rem;"/>Facebook</b-button>
               <b-button class="loginGoogleButton" @click="handleGSignIn"><font-awesome-icon :icon="['fab', 'google']" style="font-size:1.6rem; margin-right:0.6rem;"/>Google</b-button>
             </div>
@@ -123,23 +123,23 @@ export default {
     text-align: center;
     margin-top: 1rem;
       
-      #loginLogo{
+      .loginLogo{
         width: 100%;
       }
 
-    #logincontentDiv{
+    .logincontentDiv{
       background-color: #F9F9FB;
       width:100%;
       box-shadow: 0 5px 5px gray;
       margin-bottom:1rem;
     
-      #space{
+      .spaceLogin{
         background-color:#80CDE6;
         width:100%;
         padding: 1rem;
       }
 
-      #loginContent{
+      .loginContent{
         display: flex;
         flex-direction: column;
         margin-top:1.8rem;
@@ -150,11 +150,11 @@ export default {
           margin-bottom:1rem;
         }
 
-        #loginMessage{
+        .loginMessage{
           font-size:1.6rem;
         }
 
-        #loginCredentials{
+        .loginCredentials{
           display:flex;
           flex-direction:column;
           width:100%;
@@ -173,20 +173,20 @@ export default {
           }
         }
 
-        #registerandPassword{
+        .registerandPassword{
           display:flex;
           flex-direction:row;
           justify-content: center;
           color:#350E7E;
           margin-top:1rem;
 
-          #changePassword{
+          .changePassword{
             margin-right:1rem;
             font-size:1.1rem;
             cursor: pointer; 
           }
 
-          #registration{
+          .registration{
             font-size:1.1rem;
             cursor: pointer; 
           }
@@ -196,7 +196,7 @@ export default {
           font-size:1rem;
         }
         
-        #loginOtherway{
+        .loginOtherway{
           display:flex;
           flex-direction:row;
           justify-content:space-around;
@@ -225,11 +225,11 @@ export default {
   }
 }
 @media screen and (min-width: 768px) { 
-  #loginLogo{
+  .loginLogo{
     width:29rem !important;
     margin-bottom:1rem;
   }
-  #logincontentDiv {
+  .logincontentDiv {
     width:30rem !important;
   }
 }

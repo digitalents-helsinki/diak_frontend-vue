@@ -2,13 +2,13 @@
   <div class="passwordmaindiv">
     <b-container>
       <div class="passwordDiv">
-        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="passwordLogo"/>
-        <div id="passwordcontentDiv">
-          <div id="space">
+        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="passwordLogo"/>
+        <div class="passwordcontentDiv">
+          <div class="spacePassword">
           </div>
-          <div id="passwordContent">
-            <p id="passwordMessage">{{ $t('message.passwordText') }}</p>
-            <div id="passwordCredentials">
+          <div class="passwordContent">
+            <p class="passwordMessage">{{ $t('message.passwordText') }}</p>
+            <div class="passwordCredentials">
               <b-form>
                 <b-form-group id="passwordtype">
                   <b-form-input type="password" id="password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
@@ -22,7 +22,7 @@
               </b-form>
             </div>
             <p class="info">{{ $t('message.passwordInfo') }}</p>
-            <p id="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p>
+            <p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p>
           </div>
         </div>
       </div>
@@ -69,22 +69,22 @@ export default {
     text-align: center;
     margin-top: 1rem;
       
-      #passwordLogo{
+      .passwordLogo{
         width: 100%;
       }
 
-    #passwordcontentDiv{
+    .passwordcontentDiv{
       background-color: #F9F9FB;
       width:100%;
       box-shadow: 0 5px 5px gray;
     
-      #space{
+      .spacePassword{
         background-color:#80CDE6;
         width:100%;
         padding: 1rem;
       }
 
-      #passwordContent{
+      .passwordContent{
         display: flex;
         flex-direction: column;
         margin-top:1.8rem;
@@ -95,11 +95,11 @@ export default {
           margin-bottom:1rem;
         }
 
-        #passwordMessage{
+        .passwordMessage{
           font-size:1.6rem;
         }
 
-        #passwordCredentials{
+        .passwordCredentials{
           display:flex;
           flex-direction:column;
           width:100%;
@@ -122,7 +122,7 @@ export default {
           font-size:1rem;
         }
 
-        #backtologinPage{
+        .backtologinPage{
           color:#350E7E;
           margin-bottom:1rem;
           font-size:1.1rem;
@@ -133,11 +133,11 @@ export default {
   }
 }
 @media screen and (min-width: 768px) { 
-  #passwordLogo{
+  .passwordLogo{
     width:29rem !important;
     margin-bottom:1rem;
   }
-  #passwordcontentDiv {
+  .passwordcontentDiv {
     width:30rem !important;
   }
 }

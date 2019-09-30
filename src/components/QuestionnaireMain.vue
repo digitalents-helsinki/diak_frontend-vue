@@ -1,0 +1,176 @@
+<template>
+  <div class="container-fluid" id="questionnaire-main">
+    <div class="questionnaire-top">
+      <div id="logodiv">
+        <img id="logotop" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+      </div>
+      <button @click="$emit('toggleModal', 'help')" class="btn buttonOhjeet">Ohjeet</button>
+    </div>
+    <div class="questionnaire-bottom">
+      <span v-if="user">{{user}} | {{surveyId}}</span>
+      <span v-else>Anonyymi | {{surveyId}}</span>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  name: 'QuestionnaireMain',
+  props: ['user', 'surveyId']
+}
+</script>
+<style lang="scss" scoped>
+
+.notAnswered {
+  color: red;
+}
+
+/*.range {
+  display: flex;
+  width: 100%;
+  margin: auto;
+}*/
+
+#questionnaire-main {
+  display: flex;
+  flex-direction:column;
+  background-color: #80cde6;
+  font-size: 1rem;
+  height:8rem;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+
+  .questionnaire-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top:1rem;
+    
+    #logodiv {
+      #logotop {
+        width:100%;
+        height: 60px;
+      }
+    }
+
+    .buttonOhjeet {
+      border-radius: 8px 1px;
+      background-color: #353535;
+      //background-color: #80cde6;
+      color: #FFFFFF;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+
+      &:hover {
+        background-color: lighten(#353535, 5%);
+      }
+    }
+  }
+  .questionnaire-bottom {
+    display: flex;
+    justify-content:flex-end;
+    margin-top:0.1rem;
+    font-weight:bold;
+
+    span {
+      color: #353535;
+      font-size: 1rem;
+      position: absolute;
+      
+    }
+  }
+}
+
+.help-button {
+  color: white;
+  align-self: flex-start;
+  padding-bottom: 5vh;
+  padding-left: 5vh;
+}
+
+
+@media only screen and (min-width: 320px) and (max-width: 360px){
+  #questionnaire-main {
+    margin-bottom: 0.1rem !important;
+  }
+}
+
+@media only screen and (min-width: 575px) {
+  #questionnaire-main {
+    margin-bottom: 1rem !important;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  #questionnaire-main {
+    height: 9rem !important;
+  }
+
+  .questionnaire-top > img {
+    height: 70px !important;
+  }
+
+  .help-container {
+    height: 60vh !important; 
+    width: 60vw !important;
+  }
+  //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
+}
+
+
+@media only screen and (min-width: 1025px) {
+  #questionnaire-main {
+    height: 9rem !important;
+  }
+  
+  .questionnaire-top {
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  .questionnaire-bottom{
+    margin-top:0 !important;
+  }
+
+  /*.buttonOhjeet-Ohjeet {
+    display: none !important;
+  }*/
+
+  .buttonOhjeet {
+    //display: block !important;
+    position: absolute;
+    top: 3%;
+    right: 1%;
+    //background-color: #353535 !important;
+    font-size: 1rem !important;
+    padding: 0.5rem 1.8rem !important;
+    //border-radius: 8px 1px;
+    //color: #FFFFFF;
+    //padding: 0.6rem 1.8rem;
+    //font-weight: bold;
+    //text-align: center;
+  }
+
+  .help_button {
+    font-size: 1.3rem !important;
+  }
+
+  /*.rangeQuestiondata-icon .remove-icon{
+     display:none !important;
+    }
+
+  .rangeQuestiondata-icon .remove-button{
+     display:block !important;
+     border-radius: 50px;
+     box-shadow: 0 5px 5px gray;
+     line-height: 2;
+     width: 10rem;
+     background-color: #353535;
+     color: #ffffff;
+     padding:0.1rem 0;
+     margin:0.6rem 0 0 1rem;
+     Outline: none;
+  }*/
+}
+</style>

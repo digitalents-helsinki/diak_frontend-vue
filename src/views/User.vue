@@ -1,7 +1,7 @@
 <template>
-  <div id="maindivProfile">
-    <div class="container-fluid" id="userprofileTop">
-      <div id="logoLocation"><img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="logoHere"/></div>
+  <div class="maindivProfile">
+    <div class="container-fluid userprofileTop">
+      <div class="logoLocation"><img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logoHere"/></div>
     </div>
     <div v-if="!hasInfo">
       <personal-info />
@@ -18,9 +18,9 @@
                 <b-collapse id="collapse-vastatut">
                 </b-collapse>
             </div>
-            <div id="currentSurvies">
-              <div id="headingCurrent">
-                <p id="paragraphCurrent">{{ $t('message.ongoingHeading') }}</p>
+            <div class="currentSurvies">
+              <div class="headingCurrent">
+                <p class="paragraphCurrent">{{ $t('message.ongoingHeading') }}</p>
                 <b-button v-b-toggle.collapse-kysely class="textarea-collapse pointer btn-secondary"><font-awesome-icon icon="angle-down"/></b-button>
               </div>
               <b-collapse id="collapse-kysely">
@@ -62,7 +62,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-#maindivProfile{
+.maindivProfile{
   background-color: #FFFFFF;
   width:100%;
   display: flex;
@@ -71,7 +71,7 @@ export default {
   font-style:normal;
   font-size: 1rem;
   
-  #userprofileTop{
+  .userprofileTop{
     background-color: #80cde6;
     display:flex;
     flex-direction:row;
@@ -80,8 +80,8 @@ export default {
     width:100%;
     height:7rem;
     
-    #logoLocation{
-      #logoHere{
+    .logoLocation{
+      .logoHere{
         width:100%;
         height: 80px;
       }
@@ -90,7 +90,7 @@ export default {
 
   .profilecontentUser{
 
-    #profiledivUser{
+    .profiledivUser{
       background-color: #FFFFFF;
       display: flex;
       flex-direction: column;
@@ -99,13 +99,13 @@ export default {
       margin-top: 1.8rem;
       margin-bottom:1rem;
             
-      #paragraphTop{
+      .paragraphTop{
         font-size:1.6rem;
         margin:1rem 0;
         text-align:center;
       }
 
-      #contentforUser{
+      .contentforUser{
         background-color: #FFFFFF;
         display:flex;
         flex-direction:column;
@@ -113,17 +113,17 @@ export default {
         padding:1rem;
         margin-bottom:1rem;
 
-        #previousSurvies{
+        .previousSurvies{
           background-color: #F9F9FB;
           margin:1rem 0;
 
-          #headingPrevious{
+          .headingPrevious{
             background-color:#350D7E;
             display:flex;
             flex-direction:row;
             justify-content:space-around;
             
-            #paragraphPrevious{
+            .paragraphPrevious{
               color:#FFFFFF;
               font-size:1.1rem;
               font-weight:bold;
@@ -131,17 +131,17 @@ export default {
             }
           }
         }
-        #currentSurvies{
+        .currentSurvies{
           background-color: #F9F9FB;
           margin:1rem 0;
 
-          #headingCurrent{
+          .headingCurrent{
             background-color:#A1318A;
             display:flex;
             flex-direction:row;
             justify-content:space-around;
 
-            #paragraphCurrent{
+            .paragraphCurrent{
               color:#FFFFFF;
               font-size:1.1rem;
               font-weight:bold;
@@ -155,7 +155,7 @@ export default {
 }
 
 @media screen and (min-width: 768px) { 
-  #maindivProfile{
+  .maindivProfile{
     height:100%;
   }
 
@@ -165,7 +165,7 @@ export default {
     align-items:center;
   }
 
-  #profiledivUser {
+  .profiledivUser {
     width:30rem !important;
   
   }
