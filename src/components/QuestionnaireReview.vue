@@ -132,7 +132,6 @@ export default {
       font-weight:bold;
       margin:1rem;
       font-size:1rem;
-      transition: box-shadow 0.3s ease;
 
        &:focus {
         box-shadow: 0 5px 5px rgba(0, 64, 112, 0.5);

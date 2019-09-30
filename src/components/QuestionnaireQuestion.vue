@@ -66,7 +66,10 @@
       <button v-else class="btn button-next" @click.prevent="$emit('update:navigation', 'add')">{{ $t('message.next') }}</button>
       <button v-if="navigation.questionnum > 0" class="btn button-previous" @click.prevent="$emit('update:navigation', 'subtract')">{{ $t('message.previous') }}</button>
     </div>
-    <p class="page-number"  style="align-self: center"><span class="current">{{navigation.questionnum + 1}}</span><span class="total">/{{navigation.questionamount}}</span></p>
+      <p class="page-number"  style="align-self: center">
+        <span class="current" v-bind:key="navigation.questionnum">{{navigation.questionnum + 1}}</span>
+        <span class="total">/{{navigation.questionamount}}</span>
+      </p>
     <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
   </div>
 </template>
@@ -211,7 +214,6 @@ export default {
       box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
       line-height: 2;
       width: 8rem;
-      transition: box-shadow 0.3s ease;
 
       &:focus {
         box-shadow: 0 5px 5px rgba(0, 64, 112, 0.5);

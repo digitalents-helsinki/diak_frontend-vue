@@ -36,10 +36,10 @@
 </template>
 <script>
 import axios from "axios";
-import Main from '@/components/QuestionnaireMain.vue'
-import Question from "@/components/QuestionnaireQuestion.vue"
-import Review from "@/components/QuestionnaireReview.vue"
-import Modals from '@/components/QuestionnaireModals.vue'
+import Main from '@/components/QuestionnaireMain.vue';
+import Question from "@/components/QuestionnaireQuestion.vue";
+import Review from "@/components/QuestionnaireReview.vue";
+import Modals from '@/components/QuestionnaireModals.vue';
 
 export default {
   name: "Questionnaire",
