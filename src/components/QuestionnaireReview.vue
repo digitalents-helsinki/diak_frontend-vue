@@ -15,9 +15,9 @@
       <button class="btn send-button" @click.prevent="$emit('saveQuestions')">{{ $t('message.send')}}</button>
       <button
         class="btn return-button" 
-        @click.prevent="$emit('update:navigation', navigation.questionnum - 1)"
+        @click.prevent="$emit('update:navigation', 'subtract')"
       >{{ $t('message.return')}}</button>
-    <button @click.prevent="$emit('toggleCancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
+    <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
     </div>
   </div>
 </template>
@@ -30,7 +30,18 @@ export default {
       type: Object,
       required: true,
       validator: function(prop) {
-        return true
+        const warn = (name) => console.warn(`Invalid prop: results.${name}`)
+        const valid = [];
+        Object.keys(prop).forEach(key => {
+          if (typeof prop[key].val !== "number" && prop[key].val !== null) warn(`${key}.val`)
+          else if (typeof prop[key].desc !== "string" && prop[key].desc !== null) warn(`${key}.desc`)
+          else if (typeof prop[key].custom !== "object" && prop[key].custom !== undefined) warn(`${key}.custom`)
+          else if (prop[key].custom !== undefined && typeof prop[key].custom.title !== "string") warn(`${key}.custom.title`)
+          else if (prop[key].custom !== undefined && typeof prop[key].custom.description !== "string") warn(`${key}.custom.description`)
+          else if (prop[key].custom !== undefined && typeof prop[key].custom.help !== "string") warn(`${key}.custom.help`)
+          else valid.push(true)
+        })
+        return valid.length === Object.keys(prop).length
       }
     },
     navigation: {
@@ -112,7 +123,7 @@ export default {
 
     .send-button {
       border-radius: 50px;
-      box-shadow: 0 5px 5px gray;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
       line-height: 2;
       width: 16rem;
       padding: 1rem 2rem;
@@ -121,9 +132,17 @@ export default {
       font-weight:bold;
       margin:1rem;
       font-size:1rem;
+
+       &:focus {
+        box-shadow: 0 5px 5px rgba(0, 64, 112, 0.5);
+      }
+
+      &:hover {
+        background-color: lighten(#350E7E, 5%)
+      }
     }
 
-    .return-button{
+    .return-button {
       color:#350E7E;
       font-size:1.1rem;
     }
