@@ -40,7 +40,7 @@
             </b-dropdown>
         </div>
         <div class="tableDisplayfields">
-          <b-table hover responsive :items="surveys" :fields="fields" head-variant="light">
+          <b-table hover responsive :items="surveys" :fields="fields" bordered head-variant="light">
             <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
               <div v-bind:key="field.key">
                 <div v-if="field.colType === 'name'">
@@ -159,8 +159,9 @@ export default {
 
 .rightsideManage{
     background-color:#F9F9FB;
-    width:81.8%;
-    margin:1rem 1rem 0rem 1rem;
+    width:90%;
+    margin:1rem;
+    box-shadow: 0 5px 5px #787878;
 
     .rightsideManage-top{
         background-color:#350E7E;
@@ -168,13 +169,14 @@ export default {
         height: 5rem;
         font-size:1.1rem;
         font-weight:bold;
-        color:white;
+        color:#FFFFFF;
         display:flex;
         justify-content:center;
         align-items:center;
         padding-top:1.1rem;
         margin-bottom:1rem;
     }
+
     .totalinstructionsearch{
       background-color:#FFFFFF;
       margin-top:1rem;
@@ -185,7 +187,7 @@ export default {
 
       .totalParagraph{
         font-size:1rem;
-        color:grey;
+        color:#787878;
         margin-left:1rem;
         margin-bottom:1.8rem;
         }
@@ -198,7 +200,7 @@ export default {
         margin-left:1rem;
       
         .instructiondivone{
-          border:1px solid grey;
+          border:1px solid #787878;
           padding:1rem 1.8rem;
           margin-right:1rem;
           font-size:1rem;
@@ -261,7 +263,7 @@ export default {
           
           .iconsearch{
             font-size:2rem;
-            color:grey;
+            color:#787878;
             margin-right:1rem;
           }
         }
@@ -270,17 +272,19 @@ export default {
     .tableandfilter{
       display:flex;
       flex-direction:column;
+      padding:1rem;
 
       .buttonstotal{
         display:flex;
         flex-direction:row;
+        margin-bottom:1rem;
       }
       
       .tableDisplayfields{
         background-color:#FFFFFF;
 
         .iconButton-times{
-          margin-left:1rem;
+          margin-left:0.5rem;
         }
       }  
     }
@@ -293,6 +297,11 @@ export default {
     padding: 15px;
     justify-content: space-between;
   }
+}
+@media only screen and (max-width: 1400px) {
+    .rightsideManage{
+      width:100%;
+    }
 }
 </style>
 
