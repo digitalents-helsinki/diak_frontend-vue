@@ -6,7 +6,7 @@
       v-on:toggleModal="toggleModal"
     />
     <div class="questionnaire container text-center shadow-lg">
-      <div class="loader-spinner-container" v-if="!currentQuestionData && questionnum !== navigationData.questionamount">
+      <div class="loader-spinner-container" v-if="!currentQuestionData && questionnum < navigationData.questionamount">
         <b-spinner label="Loading..." />
       </div>
       <form>
@@ -19,7 +19,7 @@
           />
           <Review 
             v-if="navigationData.questionamount <= questionnum"
-            v-bind:results.sync="resultData"
+            v-bind:results="formattedData"
             v-bind:navigation.sync="navigationData"
             v-on:saveQuestions="saveQuestions"
             v-on:toggleModal="toggleModal"
@@ -84,17 +84,27 @@ export default {
       //everything in questiondata that doesn't end with _desc or _custom
       return Object.keys(this.questiondata).filter(key => !key.endsWith("_desc") && !key.endsWith("_custom"))
     },
+    formattedData() {
+      //format for rendering
+      return this.subjects.reduce((obj, key) => {
+        return { 
+          ...obj, 
+          [key]: { 
+            val: this.questiondata[key], 
+            desc: this.questiondata[`${key}_desc`], 
+            custom: this.questiondata[`${key}_custom`] 
+          } 
+        }
+      }, {})
+    },
     currentQuestionData: {
       get: function() {
         //get current question
         const key = this.subjects[this.questionnum]
-        //associate questiondata
         if (key) {
           return ({
             name: key, 
-            val: this.questiondata[key], 
-            desc: this.questiondata[`${key}_desc`],
-            custom: this.questiondata[`${key}_custom`]
+            ...this.formattedData[key]
           })
         } else {
           return null
@@ -119,19 +129,6 @@ export default {
         if (operator === 'add') this.questionnum += 1
         else if (operator === 'subtract') this.questionnum -= 1
       }
-    },
-    resultData() {
-      //format for rendering results
-      return this.subjects.reduce((obj, key) => {
-        return { 
-          ...obj, 
-          [key]: { 
-            val: this.questiondata[key], 
-            desc: this.questiondata[`${key}_desc`], 
-            custom: this.questiondata[`${key}_custom`] 
-          } 
-        }
-      }, {})
     }
   },
   methods: {
@@ -170,7 +167,7 @@ export default {
     }
   },
   created() {
-    this.getQuestions()
+    //this.getQuestions()
   }
 };
 </script>
