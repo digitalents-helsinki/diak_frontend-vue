@@ -104,7 +104,8 @@ export default {
       },
       help_visible: false,
       cancel_visible: false,
-      surveyId: this.$route.params.surveyId
+      surveyId: this.$route.params.surveyId,
+      anonId: this.$route.params.anonId
     };
   },
   watch: {

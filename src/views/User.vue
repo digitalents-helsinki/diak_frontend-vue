@@ -8,7 +8,6 @@
     </div>
     <div v-if="hasInfo" class="container profilecontentUser">
       <div id="profiledivUser">
-        {{user}}
           <p id="paragraphTop"> {{ $t('message.profileInstruction') }}</p> 
           <div id="contentforUser">
             <div id="previousSurvies">

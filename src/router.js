@@ -72,6 +72,12 @@ export default new Router({
       props: true
     },
     {
+      path: '/questionnaire/:surveyId/:anonId',
+      name: 'questionnaire',
+      component: Questionnaire,
+      props: true
+    },
+    {
       path: '/user/results/:resultId',
       name: 'results',
       component: Results,
