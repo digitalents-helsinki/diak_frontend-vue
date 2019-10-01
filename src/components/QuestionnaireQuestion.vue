@@ -114,12 +114,6 @@ export default {
   color: red;
 }
 
-/*.range {
-  display: flex;
-  width: 100%;
-  margin: auto;
-}*/
-
 .question {
   display: flex;
   flex-flow: column nowrap;
@@ -284,44 +278,12 @@ export default {
     font-size:1.1rem;
   }
 }
-//iPhone 4 Portrait
-/*@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
-  textarea {
-    width: 100%;
-    border-radius: 4px;
-    margin: 1rem 0;
-    padding-bottom: 5rem;
-  }
-
-  textarea::placeholder {
-    opacity: 40%;
-    color: #353535;
-    font-size: 1rem;
-  }
-}*/
-//iPhone 5 Portrait
-/*@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
-  textarea {
-    width: 100%;
-    border-radius: 4px;
-    margin: 1rem 0;
-    padding-bottom: 5rem;
-  }
-
-  textarea::placeholder {
-    opacity: 40%;
-    color: #353535;
-    font-size: 1rem;
-  }
-}*/
 
 @media only screen and (min-width: 768px) {
   
   .page-number{
     margin-top:0rem !important;
   }
-
-  //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
 }
 
 @media only screen and (min-width: 320px) and (max-width: 360px){
@@ -358,25 +320,9 @@ export default {
     justify-content: center;
   }
 
-  /*.rangeLabel-icons{
-    display:none !important;
-  }*/
-
-  /*.rangeLabel-words{
-    display:block !important;
-    display: -webkit-flex !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    margin-bottom:0.1rem;
-    margin-top:2rem;
-    font-size:1rem !important;
-  }*/
-
   .textareaWordCount{
     margin-top:1.2rem;
   }
-
-  //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
 }
 
 .custom-range {
@@ -406,23 +352,6 @@ export default {
   .textareaWordCount{
     margin-top: 2rem;
   }
-
-  /*.rangeQuestiondata-icon .remove-icon{
-     display:none !important;
-    }
-
-  .rangeQuestiondata-icon .remove-button{
-     display:block !important;
-     border-radius: 50px;
-     box-shadow: 0 5px 5px gray;
-     line-height: 2;
-     width: 10rem;
-     background-color: #353535;
-     color: #ffffff;
-     padding:0.1rem 0;
-     margin:0.6rem 0 0 1rem;
-     Outline: none;
-  }*/
 }
 
 @media only screen and (min-width: 1400px) {

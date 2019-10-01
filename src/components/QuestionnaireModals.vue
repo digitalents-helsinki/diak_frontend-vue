@@ -78,7 +78,6 @@ export default {
     background-color: white;
     height: 40%;
     border-radius: 15px;
-    //width: 80vw;
     padding-left: 5vw;
     padding-right: 5vw;
 

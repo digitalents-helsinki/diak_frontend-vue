@@ -1,20 +1,20 @@
 <template>
-    <div class="question_text">
-      <div class="questionHelpbutton">
-        <p v-if="!custom">{{ $t(`message.${name}_title`) }}</p>
-        <p v-else>{{`${questionnum + 1}. ${custom.title}`}}</p>
-        <label v-if="!custom" tag="label" for="textarea">{{ $t(`message.question_base`) }}<b>{{ $t(`message.question_${name}`) }}</b></label>
-        <label v-else for="textarea">{{custom.description}}</label>
-        <button
-          v-if="!custom || custom.help"
-          class="btn help_button buttonHelp"
-          @click.prevent
-          v-b-popover.hover.focus.bottom="!custom ? $t(`message.help_text_${name}`) : custom.help"
-        >
-          {{ $t('message.questionHelp') }}
-        </button>
-      </div>
+  <div class="question_text">
+    <div class="questionHelpbutton">
+      <p v-if="!custom">{{ $t(`message.${name}_title`) }}</p>
+      <p v-else>{{`${questionnum + 1}. ${custom.title}`}}</p>
+      <label v-if="!custom" tag="label" for="textarea">{{ $t(`message.question_base`) }}<b>{{ $t(`message.question_${name}`) }}</b></label>
+      <label v-else for="textarea">{{custom.description}}</label>
+      <button
+        v-if="!custom || custom.help"
+        class="btn help_button buttonHelp"
+        @click.prevent
+        v-b-popover.hover.focus.bottom="!custom ? $t(`message.help_text_${name}`) : custom.help"
+      >
+        {{ $t('message.questionHelp') }}
+      </button>
     </div>
+  </div>
 </template>
 <script>
 
@@ -80,7 +80,6 @@ export default {
       font-weight: bold;
       align-items: center;
       color: #FFFFFF;
-      //align-self: flex-end;
     }
   } 
 }
@@ -114,18 +113,11 @@ export default {
 
 @media only screen and (min-width: 1025px) {
   .buttonOhjeet {
-    //display: block !important;
     position: absolute;
     top: 3%;
     right: 1%;
-    //background-color: #353535 !important;
     font-size: 1rem !important;
     padding: 0.5rem 1.8rem !important;
-    //border-radius: 8px 1px;
-    //color: #FFFFFF;
-    //padding: 0.6rem 1.8rem;
-    //font-weight: bold;
-    //text-align: center;
   }
   
   .questionHelpbutton {
@@ -159,12 +151,6 @@ export default {
 }
 
 @media only screen and (min-width: 1900px) {
-  /*.buttonOhjeet {
-    position: relative !important;
-    top: 0%;
-    left: -5%;
-  }*/
-
   .questionHelpbutton {
     margin-top: 2.5rem !important;
     margin:0 4rem;

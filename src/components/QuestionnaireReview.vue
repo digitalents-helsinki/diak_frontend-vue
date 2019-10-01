@@ -115,7 +115,6 @@ export default {
   }
 
   .review-buttons {
-    //margin: 1.8rem 0;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -154,60 +153,13 @@ export default {
   }
 }
 
-//iPhone 4 Portrait
-/*@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
-  textarea {
-    width: 100%;
-    border-radius: 4px;
-    margin: 1rem 0;
-    padding-bottom: 5rem;
-  }
-
-  textarea::placeholder {
-    opacity: 40%;
-    color: #353535;
-    font-size: 1rem;
-  }
-
-  .cancel-button {
-    margin: 1rem 0;
-  }
-}*/
-//iPhone 5 Portrait
-/*@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
-  textarea {
-    width: 100%;
-    border-radius: 4px;
-    margin: 1rem 0;
-    padding-bottom: 5rem;
-  }
-
-  textarea::placeholder {
-    opacity: 40%;
-    color: #353535;
-    font-size: 1rem;
-  }
-
-  .cancel-button {
-    margin: 1rem 0;
-  }
-}*/
-
 @media only screen and (min-width: 768px) {
   .results .text-review{
     padding-top:0rem !important;
   }
-  //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
 }
 
 @media only screen and (min-width: 1900px) {
-
-  /*.buttonOhjeet {
-    position: relative !important;
-    top: 0%;
-    left: -5%;
-  }*/
-
   .review h3{
       margin:1rem 1rem 2rem 1rem;
   }
