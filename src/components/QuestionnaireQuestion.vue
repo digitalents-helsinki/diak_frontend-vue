@@ -1,82 +1,90 @@
 <template>
-  <div class="question">
-    <div class="question_text">
-      <div class="questionHelpbutton">
-        <p v-if="!question.custom" v-html="$t(`message.${question.name}_title`)"></p>
-        <p v-else>{{`${navigation.questionnum + 1}. ${question.custom.title}`}}</p>
-        <label v-if="!question.custom" for="textarea" v-html="$t(`message.question_${question.name}`)"></label>
-        <label v-else for="textarea">{{question.custom.description}}</label>        
-        <button
-          v-if="!question.custom || question.custom.help"
-          class="btn help_button buttonHelp"
-          @click.prevent="$emit('update:question', {help: {[question.name]: !question.help}})"
-        >{{ $t('message.questionHelp') }}</button>
-      </div>
-    </div>
-    <p v-if="question.help && !question.custom">{{ $t(`message.help_text_${question.name}`) }}</p>
-    <p v-else-if="question.help">{{question.custom.help}}</p>
-    <div class="range-input">
-      <div class="rangeQuestiondata-icon">
-        <p class="rangeQuestiondata">{{question.val}}</p>
-        <div v-show="question.val" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', {[question.name]:  null})"/></div>
-        <div v-show="question.val"><button class="btn remove-button" @click.prevent="$emit('update:question', {[question.name]:  null})">Poista Vastaus</button></div>
-      </div>
-      <div class="rangeLabelicons">
-        <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
-        <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
-      </div>
-        <b-form-input
-          v-bind:class="{activeRange: question.val}"
-          type="range"
-          id="range"
-          number
-          min="0"
-          max="10"
-          v-bind:value="question.val"
-          @update="$emit('update:question', {[question.name]: $event})"
-        />
-        <label for="range" class="rangeLabel-mobile">
-          <div>0</div>
-          <div>10</div>
-        </label>
-        <label for="range" class="rangeLabel">
-          <div>0</div>
-          <div>1</div>
-          <div>2</div>
-          <div>3</div>
-          <div>4</div>
-          <div>5</div>
-          <div>6</div>
-          <div>7</div>
-          <div>8</div>
-          <div>9</div>
-          <div>10</div>
-        </label>
-    </div>
-    <div class="textareaWordCount">
-      <textarea
-        id="textarea"
-        v-bind:value="question.desc"
-        @input="$emit('update:question', {[`${question.name}_desc`]: $event.target.value})"
-        rows="3" 
-        maxlength="2000"
-        v-bind:placeholder="$t('message.question_desc_placeholder')"
+  <div class="question" >
+    <SlideTransition v-bind:referencenum="navigation.questionnum">
+      <QuestionText
+        v-bind:key="navigation.questionnum"
+        v-bind:name="question.name"
+        v-bind:custom="question.custom"
+        v-bind:questionnum="navigation.questionnum"
       />
-      <p>{{ $t('message.length') }}{{question.desc ? question.desc.length : '0'}}/2000</p>
-    </div>
+    </SlideTransition>
+    <SlideTransition v-bind:referencenum="navigation.questionnum">
+      <div class="range-input" v-bind:key="navigation.questionnum">
+        <div class="rangeQuestiondata-icon">
+          <p class="rangeQuestiondata">{{question.val}}</p>
+          <div v-show="question.val !== null" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', [question.name, null])"/></div>
+          <div v-show="question.val !== null"><button class="btn remove-button" @click.prevent="$emit('update:question', [question.name,  null])">Poista Vastaus</button></div>
+        </div>
+        <div class="rangeLabelicons">
+          <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
+          <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
+        </div>
+          <b-form-input
+            v-bind:class="{activeRange: question.val}"
+            type="range"
+            id="range"
+            number
+            min="0"
+            max="10"
+            v-bind:value="question.val"
+            @click="!(question.val === null) || $emit('update:question', [question.name, Number($event.target.value)])"
+            @update="$emit('update:question', [question.name, $event])"
+          />
+          <!-- Clickhandler above allows you to select 5 as a value straight away without firing extra events -->
+          <label for="range" class="rangeLabel-mobile">
+            <div>0</div>
+            <div>10</div>
+          </label>
+          <label for="range" class="rangeLabel">
+            <div>0</div>
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>
+            <div>7</div>
+            <div>8</div>
+            <div>9</div>
+            <div>10</div>
+          </label>
+      </div>
+    </SlideTransition>
+    <SlideTransition v-bind:referencenum="navigation.questionnum">
+      <div class="textareaWordCount" v-bind:key="navigation.questionnum">
+        <textarea
+          id="textarea"
+          v-bind:value="question.desc"
+          @input="$emit('update:question', [`${question.name}_desc`, $event.target.value])"
+          rows="3" 
+          maxlength="2000"
+          v-bind:placeholder="$t('message.question_desc_placeholder')"
+        />
+        <p>{{ $t('message.length') }}{{question.desc ? question.desc.length : '0'}}/2000</p>
+      </div>
+    </SlideTransition>
     <div class="buttons">
-      <button v-if="navigation.questionnum + 1 === navigation.questionamount" class="btn button-complete" @click.prevent="$emit('update:navigation', navigation.questionnum + 1)">{{ $t('message.complete') }}</button>
-      <button v-else class="btn button-next" @click.prevent="$emit('update:navigation', navigation.questionnum + 1)">{{ $t('message.next') }}</button>
-      <button v-if="navigation.questionnum > 0" class="btn button-previous" @click.prevent="$emit('update:navigation', navigation.questionnum - 1)">{{ $t('message.previous') }}</button>
+      <button v-if="navigation.questionnum + 1 === navigation.questionamount" class="btn button-complete" @click.prevent="$emit('update:navigation', 'add')">{{ $t('message.complete') }}</button>
+      <button v-else class="btn button-next" @click.prevent="$emit('update:navigation', 'add')">{{ $t('message.next') }}</button>
+      <button v-if="navigation.questionnum > 0" class="btn button-previous" @click.prevent="$emit('update:navigation', 'subtract')">{{ $t('message.previous') }}</button>
     </div>
-    <p class="page-number"  style="align-self: center"><span class="current">{{navigation.questionnum + 1}}</span><span class="total">/{{navigation.questionamount}}</span></p>
-    <button @click.prevent="$emit('toggleCancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
+      <p class="page-number"  style="align-self: center">
+        <span class="current" v-bind:key="navigation.questionnum">{{navigation.questionnum + 1}}</span>
+        <span class="total">/{{navigation.questionamount}}</span>
+      </p>
+    <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
   </div>
 </template>
 <script>
+import SlideTransition from '@/components/TransitionSlide.vue'
+import QuestionText from '@/components/QuestionnaireQuestionText.vue'
 
 export default {
   name: 'QuestionnaireQuestion',
+  components: {
+    SlideTransition,
+    QuestionText
+  },
   props: {
     question: {
       type: Object,
@@ -85,7 +93,6 @@ export default {
         if (typeof prop.name !== "string") return false
         if (typeof prop.val !== "number" && prop.val !== null) return false
         if (typeof prop.desc !== "string" && prop.desc !== null) return false
-        if (prop.help !== undefined && typeof prop.help !== "boolean") return false
         if (prop.custom !== undefined && prop.custom.title === undefined && prop.custom.description === undefined) return false
         return true
       }
@@ -112,49 +119,12 @@ export default {
   width: 100%;
   margin: auto;
 }*/
+
 .question {
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-between;
   height: 75vh;
-
-  .question_text {
-    display: flex;
-    flex-flow: column nowrap;
-
-    .questionHelpbutton {
-      margin-top:1rem;
-      margin-bottom:1rem;
-      text-align: left;
-
-      p, label, button {
-        display:inline;
-      }
-
-      p {
-        font-weight: bold;
-        font-size: 1rem;
-        color: #350e7e;
-        margin-right: 1rem;
-      }
-
-      label {
-        font-size: 1rem;
-        color: #353535;
-        margin-right: 1rem;
-        }
-
-      .help_button {
-        background-color: #350e7e;
-        padding: 0 0.6rem ;
-        font-size: 1.1rem;
-        font-weight: bold;
-        align-items: center;
-        color: #FFFFFF;
-        //align-self: flex-end;
-      }
-    } 
-  }
 
   .range-input {
     display: flex;
@@ -231,6 +201,7 @@ export default {
     }
   }
 
+
   .buttons {
     display: flex;
     flex-flow: row-reverse nowrap;
@@ -238,25 +209,39 @@ export default {
     text-align:center;
 
     button {
+      background-color: #353535;
+      color: #FFFFFF;
+      font-weight:bold;
       border-radius: 50px;
-      box-shadow: 0 5px 5px gray;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
       line-height: 2;
       width: 8rem;
+
+      &:focus {
+        box-shadow: 0 5px 5px rgba(0, 64, 112, 0.5);
+      }
     }
-    .button-next {
-      background-color: #353535;
-      color: #FFFFFF;
-      font-weight:bold;
-    }
-    .button-previous {
-      background-color: #353535;
-      color: #FFFFFF;
-      font-weight:bold;
-    }
-    .button-complete {
-      background-color:#350E7E;
-      color:#FFFFFF;
-      font-weight:bold;
+
+    .button {
+      &-next {
+        &:hover {
+          background-color: lighten(#353535, 5%)
+        }
+      }
+
+      &-previous {
+        &:hover {
+          background-color: lighten(#353535, 5%)
+        }
+      }
+      
+      &-complete {
+        background-color:#350E7E;
+
+        &:hover {
+          background-color: lighten(#350E7E, 5%)
+        }
+      }
     }
   }
 
@@ -329,34 +314,24 @@ export default {
     font-size: 1rem;
   }
 }*/
-@media only screen and (min-width: 320px) and (max-width: 360px){
-  .questionHelpbutton {
-    margin-top:0.1rem !important;
-    margin-bottom:0.3rem !important;
+
+@media only screen and (min-width: 768px) {
+  
+  .page-number{
+    margin-top:0rem !important;
   }
+
+  //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 360px){
   .textareaWordCount{
     margin-top:0.1rem !important;
   }  
 }
 
-@media only screen and (min-width: 575px) {
-  .questionHelpbutton p {
-    font-size: 1.2rem !important;
-  }
-
-  .questionHelpbutton label {
-    font-size: 1.1rem !important;
-  }
-}
 
 @media only screen and (min-width: 768px) {
-  .questionHelpbutton p {
-    font-size: 1.2rem !important;
-  }
-
-  .questionHelpbutton label {
-    font-size: 1.1rem !important;
-  }
   
   .rangeLabel-mobile {
     display: none !important;
@@ -423,53 +398,6 @@ export default {
 }
 
 @media only screen and (min-width: 1025px) {
-  #questionnaire-main {
-    height: 9rem !important;
-  }
-  
-  .questionnaire-top {
-    display: flex !important;
-    justify-content: center !important;
-  }
-
-  .questionnaire-bottom{
-    margin-top:0 !important;
-  }
-
-  /*.buttonOhjeet-Ohjeet {
-    display: none !important;
-  }*/
-
-  .buttonOhjeet {
-    //display: block !important;
-    position: absolute;
-    top: 3%;
-    right: 1%;
-    //background-color: #353535 !important;
-    font-size: 1rem !important;
-    padding: 0.5rem 1.8rem !important;
-    //border-radius: 8px 1px;
-    //color: #FFFFFF;
-    //padding: 0.6rem 1.8rem;
-    //font-weight: bold;
-    //text-align: center;
-  }
-  
-  .questionHelpbutton {
-    margin-top:2rem !important;
-  }
-
-  .questionHelpbutton p {
-    font-size: 1.3rem !important;
-  }
-  
-  .questionHelpbutton label {
-    font-size: 1.2rem !important;
-  }
-
-  .help_button {
-    font-size: 1.3rem !important;
-  }
 
   .rangeLabel-words{
       margin-top:1.7rem;
@@ -498,44 +426,10 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-  .questionHelpbutton {
-    margin-top:2.5rem !important;
-    margin:0 4rem;
-    text-align: center !important;
-  }
-
-  .questionHelpbutton p {
-    font-size: 1.375rem !important;
-  }
-  
-  .questionHelpbutton label {
-    font-size: 1.3rem !important;
-  }
 
   .rangeLabel-words{
       margin-top:2rem;
   }
   
-}
-
-@media only screen and (min-width: 1900px) {
-  /*.buttonOhjeet {
-    position: relative !important;
-    top: 0%;
-    left: -5%;
-  }*/
-
-  .questionHelpbutton {
-    margin-top: 2.5rem !important;
-    margin:0 4rem;
-  }
-
-  .questionHelpbutton p {
-    font-size: 1.375rem !important;
-  }
-
-  .questionHelpbutton label {
-    font-size: 1.3rem !important;
-  }
 }
 </style>
