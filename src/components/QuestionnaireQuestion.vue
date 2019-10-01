@@ -110,9 +110,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.notAnswered {
+/*.notAnswered {
   color: red;
-}
+}*/
 
 .question {
   display: flex;
@@ -255,7 +255,7 @@ export default {
   }
 
   .page-number {
-    font-size:1.1rem;
+    font-size:1rem;
     margin-top:1rem;
     margin-bottom:0;
 

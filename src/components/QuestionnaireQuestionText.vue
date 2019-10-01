@@ -86,7 +86,7 @@ export default {
 
 @media only screen and (min-width: 320px) and (max-width: 360px){
   .questionHelpbutton {
-    margin-top:0.1rem !important;
+    margin-top:0.6rem !important;
     margin-bottom:0.3rem !important;
   }
 }
