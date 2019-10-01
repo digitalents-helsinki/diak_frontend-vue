@@ -146,6 +146,7 @@ export default {
         font-size:2rem;
         color:#353535;
         display:flex;
+        align-self: flex-start;
         transition: color 150ms;
 
         &:hover {
