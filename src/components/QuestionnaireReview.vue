@@ -3,7 +3,7 @@
     <h3>Kooste vastauksistasi</h3>
     <div class="results">
       <div v-for="(value, name, index) in results" v-bind:key="index">
-        <span v-if="!value.custom" v-html="$t(`message.${name}_title`)"></span>
+        <span v-if="!value.custom">{{$t(`message.${name}_title`)}}</span>
         <span v-else>{{`${index + 1}. ${value.custom.title}`}}</span>              
         <span v-bind:class="{notanswered :!value.val}">{{value.val ? value.val : "Ei vastattu"}}</span>
         <b-collapse id="collapse-health" v-bind:visible="!!value.desc">
