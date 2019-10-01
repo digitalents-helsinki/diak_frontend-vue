@@ -12,8 +12,8 @@
       <div class="range-input" v-bind:key="navigation.questionnum">
         <div class="rangeQuestiondata-icon">
           <p class="rangeQuestiondata">{{question.val}}</p>
-          <div v-show="question.val" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', [question.name, null])"/></div>
-          <div v-show="question.val"><button class="btn remove-button" @click.prevent="$emit('update:question', [question.name,  null])">Poista Vastaus</button></div>
+          <div v-show="question.val !== null" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', [question.name, null])"/></div>
+          <div v-show="question.val !== null"><button class="btn remove-button" @click.prevent="$emit('update:question', [question.name,  null])">Poista Vastaus</button></div>
         </div>
         <div class="rangeLabelicons">
           <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
@@ -27,8 +27,10 @@
             min="0"
             max="10"
             v-bind:value="question.val"
+            @click="!(question.val === null) || $emit('update:question', [question.name, Number($event.target.value)])"
             @update="$emit('update:question', [question.name, $event])"
           />
+          <!-- Clickhandler above allows you to select 5 as a value straight away without firing extra events -->
           <label for="range" class="rangeLabel-mobile">
             <div>0</div>
             <div>10</div>
