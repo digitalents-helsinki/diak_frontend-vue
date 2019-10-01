@@ -12,7 +12,7 @@
       <div class="range-input" v-bind:key="navigation.questionnum">
         <div class="rangeQuestiondata-icon">
           <p class="rangeQuestiondata">{{question.val}}</p>
-          <button v-show="question.val !== null" class="remove-icon" @click.prevent="$emit('update:question', [question.name, null])"><font-awesome-icon icon="times-circle" /></button>
+          <button v-show="question.val !== null" class="remove-icon" aria-label="Remove Answer" @click.prevent="$emit('update:question', [question.name, null])"><font-awesome-icon icon="times-circle" /></button>
         </div>
         <div class="rangeLabelicons">
           <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
