@@ -31,11 +31,11 @@
             @update="$emit('update:question', [question.name, $event])"
           />
           <!-- Clickhandler above allows you to select 5 as a value straight away without firing extra events -->
-          <label for="range" class="rangeLabel-mobile">
+          <label for="range" class="rangeLabel-mobile" @click.prevent>
             <div>0</div>
             <div>10</div>
           </label>
-          <label for="range" class="rangeLabel">
+          <label for="range" class="rangeLabel" @click.prevent>
             <div>0</div>
             <div>1</div>
             <div>2</div>
