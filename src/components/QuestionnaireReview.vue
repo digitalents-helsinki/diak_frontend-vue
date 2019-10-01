@@ -133,6 +133,7 @@ export default {
       font-size:1rem;
 
        &:focus {
+        background-color: darken(#350E7E, 5%);
         box-shadow: 0 5px 5px rgba(0, 64, 112, 0.5);
       }
 

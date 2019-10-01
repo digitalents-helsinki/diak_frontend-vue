@@ -12,8 +12,7 @@
       <div class="range-input" v-bind:key="navigation.questionnum">
         <div class="rangeQuestiondata-icon">
           <p class="rangeQuestiondata">{{question.val}}</p>
-          <div v-show="question.val !== null" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', [question.name, null])"/></div>
-          <div v-show="question.val !== null"><button class="btn remove-button" @click.prevent="$emit('update:question', [question.name,  null])">Poista Vastaus</button></div>
+          <button v-show="question.val !== null" class="remove-icon" @click.prevent="$emit('update:question', [question.name, null])"><font-awesome-icon icon="times-circle" /></button>
         </div>
         <div class="rangeLabelicons">
           <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
@@ -23,6 +22,7 @@
             v-bind:class="{activeRange: question.val}"
             type="range"
             id="range"
+            autofocus
             number
             min="0"
             max="10"
@@ -142,13 +142,18 @@ export default {
       }
 
       .remove-icon {
+        all: unset;
         font-size:2rem;
         color:#353535;
         display:flex;
-      }
+        transition: color 150ms;
 
-      .remove-button {
-        display:none;
+        &:hover {
+          color: lighten(#353535, 5%);
+        }
+        &:focus {
+          color: darken(#353535, 5%);
+        }
       }
     }
 
@@ -221,11 +226,17 @@ export default {
         &:hover {
           background-color: lighten(#353535, 5%)
         }
+        &:focus {
+          background-color: darken(#353535, 5%)
+        }
       }
 
       &-previous {
         &:hover {
           background-color: lighten(#353535, 5%)
+        }
+        &:focus {
+          background-color: darken(#353535, 5%)
         }
       }
       
@@ -234,6 +245,9 @@ export default {
 
         &:hover {
           background-color: lighten(#350E7E, 5%)
+        }
+        &:focus {
+          background-color: darken(#350E7E, 5%)
         }
       }
     }

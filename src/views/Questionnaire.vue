@@ -113,7 +113,7 @@ export default {
       set: function(keyValueArr) {
         //set correct questiondata property
         const [ key, value ] = keyValueArr
-        if (this.questiondata.hasOwnProperty(key) && this.questiondata.propertyIsEnumerable(key)) {
+        if (this.questiondata.propertyIsEnumerable(key)) {
           this.questiondata[key] = value
         }
       }
