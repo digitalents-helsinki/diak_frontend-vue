@@ -123,6 +123,15 @@ export default {
         loaded: false
     }
   },
+  /*computed: {
+    displayedSurveys: function() {
+      if(this.display === "archived") {
+        return this.$data.surveys.filter(obj => obj.archived)
+        } else if (this.display === "all") {
+          return this.$data.surveys
+        }
+      }
+    },*/
   methods: {
     async getSurveys() {
       const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/all")
