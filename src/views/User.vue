@@ -1,31 +1,41 @@
 <template>
   <div class="maindivProfile">
-    <div class="container-fluid userprofileTop">
-      <div class="logoLocation"><img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logoHere"/></div>
-    </div>
-    <div class="container profilecontentUser">
-      <div class="profiledivUser">
-          <p class="paragraphTop"> {{ $t('message.profileInstruction') }}</p> 
-          <div class="contentforUser">
-            <div class="previousSurvies">
-              <div class="headingPrevious">
-                <p class="paragraphPrevious">{{ $t('message.finishedHeading') }}</p>
-                <b-button v-b-toggle.collapse-vastatut class="textarea-collapse pointer btn-secondary"><font-awesome-icon icon="angle-down"/></b-button>
+      <div class="userprofileTop">
+        <div class="logoLocation"><img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logoHere"/></div>
+      </div>
+      <div class="usernameLogout">
+        <div class="user-name">
+            <p class="namelocation"> {{ $t('message.userName') }}</p>
+        </div>
+        <div class="logoutcontent">
+            <button class="btn userlogoutButton">{{ $t('message.logoutButtontranslate') }}</button>
+        </div>
+      </div>
+    <b-container>
+      <div class="profilecontentUser">
+        <div class="profiledivUser">
+            <p class="paragraphTop"> {{ $t('message.profileInstruction') }}</p> 
+            <div class="contentforUser">
+              <div class="previousSurvies">
+                <div class="headingPrevious">
+                  <p class="paragraphPrevious">{{ $t('message.finishedHeading') }}</p>
+                  <b-button v-b-toggle.collapse-vastatut class="textarea-collapse btn-dark"><font-awesome-icon icon="angle-down"/></b-button>
+                </div>
+                  <b-collapse id="collapse-vastatut">
+                  </b-collapse>
               </div>
-                <b-collapse id="collapse-vastatut">
+              <div class="currentSurvies">
+                <div class="headingCurrent">
+                  <p class="paragraphCurrent">{{ $t('message.ongoingHeading') }}</p>
+                  <b-button v-b-toggle.collapse-kysely class="textarea-collapse btn-dark"><font-awesome-icon icon="angle-down"/></b-button>
+                </div>
+                <b-collapse id="collapse-kysely">
                 </b-collapse>
             </div>
-            <div class="currentSurvies">
-              <div class="headingCurrent">
-                <p class="paragraphCurrent">{{ $t('message.ongoingHeading') }}</p>
-                <b-button v-b-toggle.collapse-kysely class="textarea-collapse pointer btn-secondary"><font-awesome-icon icon="angle-down"/></b-button>
-              </div>
-              <b-collapse id="collapse-kysely">
-              </b-collapse>
           </div>
         </div>
       </div>
-    </div>
+    </b-container>
   </div>
 </template>
 <script>
@@ -40,7 +50,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .maindivProfile{
-  background-color: #FFFFFF;
+  background-color:#F9F9FB;
   width:100%;
   display: flex;
   flex-flow: column nowrap;
@@ -49,14 +59,14 @@ export default {
   font-size: 1rem;
   
   .userprofileTop{
-    background-color: #80cde6;
+    background-color: #35CDE6;
     display:flex;
     flex-direction:row;
     justify-content:center;
-    align-items:center;
     width:100%;
     height:7rem;
-    
+    padding:1rem;
+
     .logoLocation{
       .logoHere{
         width:100%;
@@ -64,6 +74,39 @@ export default {
       }
     }
   }
+  .usernameLogout{
+    background-color:#FFFFFF;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+    padding:1rem;
+
+      .user-name{
+        margin-top:1rem;
+
+        .namelocation{
+          font-size:1.1rem;
+          color:#000000;
+          font-weight:bold;
+        }
+      }
+      
+      .logoutcontent{
+        margin:1rem;
+
+        .userlogoutButton{
+          background-color: #A1318A;
+          color: #FFFFFF;
+          border-radius: 10px;
+          box-shadow: 0 5px 5px gray;
+          width:10rem;
+          height:2.5rem;
+          font-weight:bold;
+          margin-left:0.2rem;
+        }
+      }
+    }
 
   .profilecontentUser{
 
@@ -136,6 +179,13 @@ export default {
     height:100%;
   }
 
+  .usernameLogout{
+    display:flex !important;
+    flex-direction:row !important;
+    justify-content:flex-end !important;
+    height:5rem;
+  }
+
   .profilecontentUser{
     display:flex;
     flex-direction:column;
@@ -144,7 +194,6 @@ export default {
 
   .profiledivUser {
     width:30rem !important;
-  
   }
 }
 </style>

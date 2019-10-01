@@ -138,6 +138,8 @@ export const fi = {
     InstructionPtwo:'-tuottaa raportin',
     InstructionPthree:'-arkistoida tai poistaa kyselyjä',
     reportHeading:'Voit tarkastella ja tulostaa raportin kuvassa näkyvästä painikkeesta.',
-    reportParagraph:'Raportti'
+    reportParagraph:'Raportti',
+    logoutButtontranslate:'Kirjaudu ulos',
+    userName:'User Valvonen'
   }
 }
