@@ -5,15 +5,15 @@
             <div class="imagelocation">
                 <img class="logoPlace" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" >
             </div>
-            <div class="nameemailLogout">
+            <!--<div class="nameemailLogout">-->
                 <div class="adminnameemail">
                     <p class="namelocation"> {{ $t('message.adminName') }}</p>
                     <p class="emaillocation"> {{ $t('message.adminEmail') }}</p>
                 </div>
-                <div class="logoutDiv">
+                <!--<div class="logoutDiv">
                     <button class="btn logoutButton">{{ $t('message.logoutButtontranslate') }}</button>
                 </div>
-            </div>
+            </div>-->
         </div>
         <div class="textIcons">
             <div class="icontextInquery">
@@ -97,12 +97,13 @@ export default {
                     margin-top:0.1rem;
                 }
             }   
-            .nameemailLogout{
+            /*.nameemailLogout{
                 display:flex;
-                flex-direction:row;
+                flex-direction:row;*/
 
                 .adminnameemail{
                     margin-top:0.1rem;
+                    margi-right:0.1rem;
 
                     .namelocation{
                         font-size:1.1rem;
@@ -117,7 +118,7 @@ export default {
                     }
                 }
 
-                .logoutDiv{
+                /*.logoutDiv{
                     margin-top:1rem;
                     margin-right:1rem;
                     margin-left:1rem;
@@ -133,7 +134,7 @@ export default {
                         margin-left:0.2rem;
                     }
                 }
-            }     
+            }*/    
         }
 
         .textIcons {

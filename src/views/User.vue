@@ -3,14 +3,14 @@
       <div class="userprofileTop">
         <div class="logoLocation"><img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logoHere"/></div>
       </div>
-      <div class="usernameLogout">
+      <!--<div class="usernameLogout">
         <div class="user-name">
             <p class="namelocation"> {{ $t('message.userNametesting') }}</p>
         </div>
         <div class="logoutcontent">
             <button class="btn userlogoutButton">{{ $t('message.logoutButtontranslate') }}</button>
         </div>
-      </div>
+      </div>-->
     <b-container>
       <div class="profilecontentUser">
         <div class="profiledivUser">
@@ -74,7 +74,7 @@ export default {
       }
     }
   }
-  .usernameLogout{
+  /*.usernameLogout{
     background-color:#FFFFFF;
     display:flex;
     flex-direction:column;
@@ -106,7 +106,7 @@ export default {
           margin-left:0.2rem;
         }
       }
-    }
+    }*/
 
   .profilecontentUser{
 
