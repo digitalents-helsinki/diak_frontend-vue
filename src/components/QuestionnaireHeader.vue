@@ -14,20 +14,17 @@
 </template>
 <script>
 export default {
-  name: 'QuestionnaireMain',
+  name: 'QuestionnaireHeader',
   props: ['user', 'surveyId']
 }
 </script>
 <style lang="scss" scoped>
 
-.notAnswered {
-  color: red;
-}
-
 #questionnaire-main {
+  background-color: #80cde6;
+  width:100%;
   display: flex;
   flex-direction:column;
-  background-color: #80cde6;
   font-size: 1rem;
   height:8rem;
   overflow: hidden;
@@ -50,6 +47,7 @@ export default {
       border-radius: 8px 1px;
       background-color: #353535;
       color: #FFFFFF;
+      margin-right:0.1rem;
       padding: 0.5rem 1rem;
       font-size: 1rem;
       font-weight: bold;
@@ -60,10 +58,12 @@ export default {
       }
     }
   }
+  
   .questionnaire-bottom {
     display: flex;
     justify-content:flex-end;
     margin-top:0.1rem;
+    margin-right:0.6rem;
     font-weight:bold;
 
     span {
@@ -82,7 +82,6 @@ export default {
   padding-left: 5vh;
 }
 
-
 @media only screen and (min-width: 320px) and (max-width: 360px){
   #questionnaire-main {
     margin-bottom: 0.1rem !important;
@@ -97,7 +96,7 @@ export default {
 
 @media only screen and (min-width: 768px) {
   #questionnaire-main {
-    height: 9rem !important;
+    height: 8rem !important;
   }
 
   .questionnaire-top > img {
@@ -110,10 +109,9 @@ export default {
   }
 }
 
-
 @media only screen and (min-width: 1025px) {
   #questionnaire-main {
-    height: 9rem !important;
+    height: 8rem !important;
   }
   
   .questionnaire-top {

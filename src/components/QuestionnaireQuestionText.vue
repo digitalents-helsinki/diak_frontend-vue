@@ -43,9 +43,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.notAnswered {
-  color: red;
-}
 
 .question_text {
   display: flex;
@@ -76,7 +73,7 @@ export default {
     .help_button {
       background-color: #350e7e;
       padding: 0 0.6rem ;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
       align-items: center;
       color: #FFFFFF;
@@ -86,8 +83,8 @@ export default {
 
 @media only screen and (min-width: 320px) and (max-width: 360px){
   .questionHelpbutton {
-    margin-top:0.6rem !important;
-    margin-bottom:0.3rem !important;
+    margin-top:0.1rem !important;
+    margin-bottom:0.6rem !important;
   }
 }
 
@@ -107,18 +104,22 @@ export default {
   }
 
   .questionHelpbutton label {
+    font-size: 1.170rem !important;
+  }
+
+  .help_button {
     font-size: 1.1rem !important;
   }
 }
 
 @media only screen and (min-width: 1025px) {
-  .buttonOhjeet {
+  /*.buttonOhjeet {
     position: absolute;
     top: 3%;
     right: 1%;
     font-size: 1rem !important;
     padding: 0.5rem 1.8rem !important;
-  }
+  }*/
   
   .questionHelpbutton {
     margin-top:2rem !important;
@@ -148,20 +149,5 @@ export default {
     font-size: 1.3rem !important;
   }
   
-}
-
-@media only screen and (min-width: 1900px) {
-  .questionHelpbutton {
-    margin-top: 2.5rem !important;
-    margin:0 4rem;
-  }
-
-  .questionHelpbutton p {
-    font-size: 1.375rem !important;
-  }
-
-  .questionHelpbutton label {
-    font-size: 1.3rem !important;
-  }
 }
 </style>

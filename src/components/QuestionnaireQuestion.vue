@@ -14,7 +14,7 @@
           <p class="rangeQuestiondata">{{question.val}}</p>
           <button v-show="question.val !== null" class="remove-icon" aria-label="Remove Answer" @click.prevent="$emit('update:question', [question.name, null])"><font-awesome-icon icon="times-circle" /></button>
         </div>
-        <div class="rangeLabelicons">
+        <div class="iconsrangeLabel">
           <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
           <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
         </div>
@@ -31,11 +31,11 @@
             @update="$emit('update:question', [question.name, $event])"
           />
           <!-- Clickhandler above allows you to select 5 as a value straight away without firing extra events -->
-          <label for="range" class="rangeLabel-mobile" @click.prevent>
+          <label for="range" class="mobilerangeLabel" @click.prevent>
             <div>0</div>
             <div>10</div>
           </label>
-          <label for="range" class="rangeLabel" @click.prevent>
+          <label for="range" class="largedeviceLabel" @click.prevent>
             <div>0</div>
             <div>1</div>
             <div>2</div>
@@ -68,11 +68,13 @@
       <button v-else class="btn button-next" @click.prevent="$emit('update:navigation', 'add')">{{ $t('message.next') }}</button>
       <button v-if="navigation.questionnum > 0" class="btn button-previous" @click.prevent="$emit('update:navigation', 'subtract')">{{ $t('message.previous') }}</button>
     </div>
-      <p class="page-number"  style="align-self: center">
+      <p class="page-number">
         <span class="current" v-bind:key="navigation.questionnum">{{navigation.questionnum + 1}}</span>
         <span class="total">/{{navigation.questionamount}}</span>
       </p>
-    <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
+      <div class="cancelButtondiv">
+        <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
+      </div>
   </div>
 </template>
 <script>
@@ -110,9 +112,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-/*.notAnswered {
-  color: red;
-}*/
 
 .question {
   display: flex;
@@ -158,7 +157,7 @@ export default {
       }
     }
 
-    .rangeLabelicons {
+    .iconsrangeLabel {
       display: -webkit-flex;
       display: flex;
       justify-content: space-between;
@@ -174,7 +173,7 @@ export default {
       }
     }
 
-    .rangeLabel-mobile {
+    .mobilerangeLabel {
       display: -webkit-flex;
       display: flex;
       justify-content: space-between;
@@ -182,7 +181,7 @@ export default {
       width:100%;
     }
 
-    .rangeLabel {
+    .largedeviceLabel {
       display: none;
     }
 
@@ -200,7 +199,6 @@ export default {
       }
     }
   }
-
 
   .buttons {
     display: flex;
@@ -254,20 +252,6 @@ export default {
     }
   }
 
-  .page-number {
-    font-size:1rem;
-    margin-top:1rem;
-    margin-bottom:0;
-
-    .current {
-      padding:0.1rem;
-    }
-
-    .total {
-      padding:0.1rem;
-    }
-  }
-
   .textareaWordCount{
     margin-top:0.6rem;
 
@@ -288,16 +272,32 @@ export default {
     }
 
   }
-  .cancel-button {
-    color:#350E7E;
-    font-size:1.1rem;
-  }
-}
 
-@media only screen and (min-width: 768px) {
-  
-  .page-number{
-    margin-top:0rem !important;
+  .page-number {
+    color:#000000;
+    font-size:1rem;
+    margin-top:1rem;
+    margin-bottom:0;
+
+    .current {
+      padding:0.1rem;
+    }
+
+    .total {
+      padding:0.1rem;
+    }
+  }
+
+  .cancelButtondiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    .cancel-button {
+      color:#350E7E;
+      font-size:1.1rem;
+      width:8rem;
+    }
   }
 }
 
@@ -307,14 +307,12 @@ export default {
   }  
 }
 
-
 @media only screen and (min-width: 768px) {
-  
-  .rangeLabel-mobile {
+  .mobilerangeLabel {
     display: none !important;
   }
 
-  .rangeLabel {
+  .largedeviceLabel {
     display: block !important;
     display: -webkit-flex !important;
     display: flex !important;
@@ -324,7 +322,7 @@ export default {
     margin: auto;
   }
 
-  .rangeLabel > div {
+  .largedeviceLabel > div {
     height: 0.6875rem;
     width: 0.0625rem;
     background: #000000;
@@ -336,7 +334,12 @@ export default {
   }
 
   .textareaWordCount{
-    margin-top:1.2rem;
+    margin-top:1.1rem !important;
+  }
+
+  .page-number{
+    margin-top:0rem !important;
+    font-size:1.1rem !important;
   }
 }
 
@@ -346,7 +349,7 @@ export default {
   }
 
   &::-moz-range-thumb {
-    background: gray;
+    background: lightgray;
   }
 
   &::-ms-thumb {
@@ -359,21 +362,8 @@ export default {
 }
 
 @media only screen and (min-width: 1025px) {
-
-  .rangeLabel-words{
-      margin-top:1.7rem;
-  }
-
   .textareaWordCount{
-    margin-top: 2rem;
+    margin-top: 1.6rem !important;
   }
-}
-
-@media only screen and (min-width: 1400px) {
-
-  .rangeLabel-words{
-      margin-top:2rem;
-  }
-  
 }
 </style>

@@ -1,12 +1,12 @@
 <template>
   <div class="review">
-    <h3>Kooste vastauksistasi</h3>
+    <h3>{{ $t(`message.reviewHeading`) }}</h3>
     <div class="results">
       <div v-for="(value, name, index) in results" v-bind:key="index">
         <span v-if="!value.custom">{{$t(`message.${name}_title`)}}</span>
         <span v-else>{{`${index + 1}. ${value.custom.title}`}}</span>              
         <span v-bind:class="{notanswered :!value.val}">{{value.val ? value.val : "Ei vastattu"}}</span>
-        <b-collapse id="collapse-health" v-bind:visible="!!value.desc">
+        <b-collapse id="collapse-reviewcontent" v-bind:visible="!!value.desc">
           <p class="text-review">{{value.desc ? value.desc : "Ei vastattu" }}</p>
         </b-collapse>
       </div>
@@ -58,10 +58,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-.notAnswered {
-  color: red;
-}
-
 .review {
 
   h3{
@@ -90,7 +86,7 @@ export default {
       }
 
       span:nth-of-type(2) {
-        font-size:1rem;
+        font-size:1.1rem;
         padding-right:1rem;
       }
 
@@ -109,7 +105,7 @@ export default {
        .text-review{
          white-space: pre-wrap;
          word-wrap:break-word;
-         padding-top:0.6rem;
+         padding-top:0.1rem;
       }
     }
   }

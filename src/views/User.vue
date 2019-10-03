@@ -5,7 +5,7 @@
       </div>
       <div class="usernameLogout">
         <div class="user-name">
-            <p class="namelocation"> {{ $t('message.userName') }}</p>
+            <p class="namelocation"> {{ $t('message.userNametesting') }}</p>
         </div>
         <div class="logoutcontent">
             <button class="btn userlogoutButton">{{ $t('message.logoutButtontranslate') }}</button>

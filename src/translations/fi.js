@@ -13,7 +13,7 @@ export const fi = {
     return: 'Palaa kyselyyn',
     cancel_save: 'Tallenna ja jatka myöhemmin',
     cancel_discard: 'Peruuta',
-    questionHelp:'?',
+    questionHelp:'info ',
     question_min: 'erittäin tyytymätön',
     question_max: 'erittäin tyytyväinen',
     health_title:'1. Terveys:',
@@ -52,8 +52,9 @@ export const fi = {
     help_text_2: '0 tarkoittaa että olet erittäin tyytymätön ja 10 erittäin tyytyväinen.',
     help_text_3: '5 tarkoittaa, että et ole kumpaakaan.',
     help_text_4: 'Voit myös jättää kysymyksen vastaamatta.',
-    adminName:'Admin Valvonen',
-    adminEmail:'adminvalvonen@gmail.com',
+    reviewHeading:'Kooste vastauksistasi',
+    adminName:'Admin Name',
+    adminEmail:'adminname@gmail.com',
     surveyCreatebutton:'Luo uusi kysely',
     surveyCreate:'LUO UUSI KYSELY',
     manageSurveysbutton:'Hallinnoi kyselyjä',
@@ -141,6 +142,6 @@ export const fi = {
     reportHeading:'Voit tarkastella ja tulostaa raportin kuvassa näkyvästä painikkeesta.',
     reportParagraph:'Raportti',
     logoutButtontranslate:'Kirjaudu ulos',
-    userName:'User Valvonen'
+    userNametesting:'User Name'
   }
 }
