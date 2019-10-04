@@ -49,10 +49,25 @@
                 <div id="insertedQuestionsview">
                     <div class="questionInsert">
                         <textarea 
-                            v-model="question" 
+                            v-model="question.title" 
                             rows="3"
-                            v-bind:placeholder="$t('message.questionPlaceholder')"
+                            v-bind:placeholder="'Title: ' + $t('message.questionPlaceholder')"
+                            class="writeinQuestion"
+                        >
+                        </textarea>
+                        <textarea
+                            v-model="question.description" 
+                            rows="3"
+                            v-bind:placeholder="'Description: ' + $t('message.questionPlaceholder')"
                             class="writeinQuestion">
+                        >
+                        </textarea>
+                        <textarea
+                            v-model="question.help" 
+                            rows="3"
+                            v-bind:placeholder="'Help: ' + $t('message.questionPlaceholder')"
+                            class="writeinQuestion">
+                        >
                         </textarea>
                     </div>
                     <div class="moreQuestions-div"> 
@@ -60,10 +75,12 @@
                         <button  @click="addQuestion" class="btn moreQuestions-button">{{ $t('message.addQuestions') }}<font-awesome-icon icon="plus" class="iconButton-plus"/></button>
                         </div>
                     <div class="questionlistDiv">
-                            <ul class="questionList">
+                        <ul class="questionList">
                             <li v-for="(question, index) in questions" v-bind:key="index">
                                 <div class="questionMention"><span class="questionTitle"> Question </span><button @click="removeQuestion(index)">X</button></div>
-                                <span>{{question}}</span>
+                                <span>Title: {{question.title}}</span><br/>
+                                <span>Description: {{question.description}}</span><br/>
+                                <span>Help: {{question.help}}</span>
                             </li>
                         </ul>
                     </div>
@@ -124,8 +141,54 @@ export default {
                 to: new Date()
             },
             fi: fi,
+            defaultQuestions: [
+                {
+                    name: 'health',
+                    number: 1
+                },
+                {
+                    name: 'overcoming',
+                    number: 2
+                },                        
+                {
+                    name: 'living',
+                    number: 3
+                },
+                {
+                    name: 'coping',
+                    number: 4
+                },
+                {
+                    name: 'family',
+                    number: 5
+                },
+                {
+                    name: 'friends',
+                    number: 6
+                },
+                {
+                    name: 'finance',
+                    number: 7
+                },
+                {
+                    name: 'strengths',
+                    number: 8
+                },
+                {
+                    name: 'self_esteem',
+                    number: 9
+                },
+                {
+                    name: 'life_as_whole',
+                    number: 10
+                }
+            ],
             questions: [],
-            question:null,
+            question: {
+                title: null,
+                description: null,
+                help: null
+            },
             emails: [],
             email: null,
             surveyName: null,
@@ -139,8 +202,14 @@ export default {
     },
     methods: {
         addQuestion() {
-            this.$data.questions.push(this.$data.question)
-            this.$data.question = null
+            this.$data.questions.push({
+                    name: null,
+                    number: 11 + this.$data.questions.length,
+                    ...this.$data.question
+                })
+            this.$data.question.title = null
+            this.$data.question.description = null
+            this.$data.question.help = null
         },
         removeQuestion(index) {
             this.$data.questions.splice(index, 1)
@@ -163,7 +232,8 @@ export default {
                         anon: this.$data.surveyAnon,
                         startDate: this.$data.startDate,
                         endDate: this.$data.endDate,
-                        respondents_size: this.$data.emails.length
+                        respondents_size: this.$data.emails.length,
+                        questions: [...this.$data.defaultQuestions, ...this.$data.questions]
                     }
                 })
                 .then(res => {

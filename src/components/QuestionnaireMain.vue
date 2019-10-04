@@ -7,15 +7,15 @@
       <button @click="$emit('toggleModal', 'help')" class="btn buttonOhjeet">Ohjeet</button>
     </div>
     <div class="questionnaire-bottom">
-      <span v-if="user">{{user}} | {{surveyId}}</span>
-      <span v-else>Anonyymi | {{surveyId}}</span>
+      <span v-if="user">{{user}} | {{surveyName}}</span>
+      <span v-else>Anonyymi | {{surveyName}}</span>
     </div>
   </div>
 </template>
 <script>
 export default {
   name: 'QuestionnaireMain',
-  props: ['user', 'surveyId']
+  props: ['user', 'surveyName']
 }
 </script>
 <style lang="scss" scoped>

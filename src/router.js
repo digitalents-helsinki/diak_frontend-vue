@@ -85,7 +85,7 @@ export default new Router({
       props: true
     },
     {
-      path: '/admin/surveyresults/',
+      path: '/admin/surveyresults/:surveyId',
       name: 'surveyresults',
       component: SurveyResults
     },

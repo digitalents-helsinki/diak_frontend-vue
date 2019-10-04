@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="Login" v-if="!login_token">
+    <div class="Login" v-if="login_token">
       <input type="text" v-model="login.user" />
       <input type="text" v-model="login.pass" />
       <button @click.prevent="postLogin">Kirjaudu sisään</button>
     </div>
-    <div class="SurveyResults" v-if="login_token">
+    <div class="SurveyResults" v-if="!login_token">
       <div class="chart-container">
         <bar-chart v-if="loaded" :avgdata="avg_array" :dvddata="dvd_array"></bar-chart>
       </div>
@@ -61,18 +61,7 @@ export default {
   name: "SurveyResults",
   data() {
     return {
-      values: [
-        "health",
-        "overcoming",
-        "living",
-        "coping",
-        "family",
-        "friends",
-        "finance",
-        "strengths",
-        "self_esteem",
-        "life_as_whole"
-      ],
+      values: [],
       results: undefined,
       avg_array: [],
       dvd_array: [],
@@ -113,28 +102,33 @@ export default {
   },
   methods: {
     async getResults() {
-      const res = await axios.get(process.env.VUE_APP_BACKEND + "/results");
+      const res = await axios.get(process.env.VUE_APP_BACKEND + "/results/" + this.$route.params.surveyId);
       this.results = res.data;
+      this.values = this.results.Questions.reduce((arr, question) => {
+        arr[question.number - 1] = question.name
+        return arr
+      }, []).filter(question => question)
       this.avg_array = this.values.map(value => {
         return(
-          this.results
-            .filter(result => result[value])
-            .reduce((acc, result) => acc + result[value], 0) /
-          this.results.filter(result => result[value]).length
+          this.results.Questions
+            .filter(question => question.name === value)[0].Answers
+            .reduce((acc, answer) => acc + answer.value, 0) /
+              this.results.Questions.filter(question => question.name === value)[0].Answers.length
         );
       });
       this.dvd_array = this.values.map(value => {
         return this.standardDeviation(
-          this.results
-            .filter(result => result[value])
-            .map(result => result[value])
+          this.results.Questions
+            .filter(question => question.name === value)[0].Answers
+            .map(answer => answer.value)
         );
       });
       this.n_array = this.values.map(value => {
-        return this.results.filter(result => result[value])
-          .reduce((acc, result) => acc + 1, 0)
+        return this.results.Questions
+          .filter(question => question.name === value)[0].Answers
+          .reduce((acc, answer) => acc + 1, 0)
       });
-      this.respondent_size = this.results.length;
+      this.respondent_size = this.results.Questions[0].Answers.length;
       this.loaded = true;
     },
     average(data) {
@@ -180,6 +174,9 @@ export default {
   components: {
     BarChart,
     downloadexcel
+  },
+  created() {
+    this.getResults()
   }
 };
 </script>

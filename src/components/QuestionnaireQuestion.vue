@@ -12,8 +12,7 @@
       <div class="range-input" v-bind:key="navigation.questionnum">
         <div class="rangeQuestiondata-icon">
           <p class="rangeQuestiondata">{{question.val}}</p>
-          <div v-show="question.val" class="remove-icon"><font-awesome-icon icon="times-circle" @click.prevent="$emit('update:question', [question.name, null])"/></div>
-          <div v-show="question.val"><button class="btn remove-button" @click.prevent="$emit('update:question', [question.name,  null])">Poista Vastaus</button></div>
+          <button v-show="question.val !== null" class="remove-icon" aria-label="Remove Answer" @click.prevent="$emit('update:question', ['val', null])"><font-awesome-icon icon="times-circle" /></button>
         </div>
         <div class="rangeLabelicons">
           <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
@@ -27,7 +26,8 @@
             min="0"
             max="10"
             v-bind:value="question.val"
-            @update="$emit('update:question', [question.name, $event])"
+            @click="!(question.val === null) || $emit('update:question', ['val', Number($event.target.value)])"
+            @update="$emit('update:question', ['val', $event])"
           />
           <label for="range" class="rangeLabel-mobile">
             <div>0</div>
@@ -53,7 +53,7 @@
         <textarea
           id="textarea"
           v-bind:value="question.desc"
-          @input="$emit('update:question', [`${question.name}_desc`, $event.target.value])"
+          @input="$emit('update:question', ['desc', $event.target.value])"
           rows="3" 
           maxlength="2000"
           v-bind:placeholder="$t('message.question_desc_placeholder')"
