@@ -19,7 +19,7 @@
           <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
         </div>
           <b-form-input
-            v-bind:class="{activeRange: question.val}"
+            v-bind:class="{activeRange: question.val !== null}"
             type="range"
             id="range"
             autofocus
