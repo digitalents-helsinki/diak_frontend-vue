@@ -7,7 +7,7 @@
     </div>
     <div class="SurveyResults" v-if="!login_token">
       <div class="chart-container">
-        <bar-chart v-if="loaded" :avgdata="avg_array" :dvddata="dvd_array"></bar-chart>
+        <bar-chart v-if="loaded" :avgdata="avg_array" :dvddata="dvd_array" :names="Object.keys(excel_fields)"></bar-chart>
       </div>
       <div class="text-center">
         <p>Vastaajien lukumäärä {{respondent_size}}</p>
@@ -15,28 +15,19 @@
       <div class="values">
         <div class="labels">
           <h4>Values</h4>
-          <p>Terveys</p>
-          <p>Resilienssi</p>
-          <p>Asuminen</p>
-          <p>Pärjääminen</p>
-          <p>Perhesuhteet</p>
-          <p>Ystävyyssuhteet</p>
-          <p>Talous</p>
-          <p>Itsensä kehittäminen</p>
-          <p>Itsetunto</p>
-          <p>Elämään tyytyväisyys</p>
+          <p v-for="(value, name, index) in excel_fields" v-bind:key="index">{{name}}</p>
         </div>
         <div class="averages">
           <h4>Keskiarvot</h4>
-          <p v-for="value of avg_array">{{value.toFixed(2)}}</p>
+          <p v-for="(value, index) of avg_array" v-bind:key="index">{{value.toFixed(2)}}</p>
         </div>
         <div class="stds">
           <h4>Keskihajonnat</h4>
-          <p v-for="value of dvd_array">{{value.toFixed(2)}}</p>
+          <p v-for="(value, index) of dvd_array" v-bind:key="index">{{value.toFixed(2)}}</p>
         </div>
         <div class="ns">
           <h4>Lukumäärä</h4>
-          <p v-for="value of n_array">{{value}}</p>
+          <p v-for="(value, index) of n_array" v-bind:key="index">{{value}}</p>
         </div>
       </div>
       <div class="text-center">
@@ -67,28 +58,7 @@ export default {
       dvd_array: [],
       loaded: false,
       respondent_size: NaN,
-      excel_fields: {
-        Terveys: "health",
-        "Terveys teksti": "health_desc",
-        Ylitsepääseminen: "overcoming",
-        "Ylitsepääseminen teksti": "overcoming_desc",
-        Asuminen: "living",
-        "Asuminen teksti": "living_desc",
-        Pärjääminen: "coping",
-        "Pärjääminen teksti": "coping_desc",
-        Perhe: "family",
-        "Perhe teksti": "family_desc",
-        Ystävät: "friends",
-        "Ystävät teksti": "friends_desc",
-        Talous: "finance",
-        "Talous teksti": "finance_desc",
-        Vahvuudet: "strengths",
-        "Vahvuudet teksti": "strengths_desc",
-        Itsetunto: "self_esteem",
-        "Itsetunto teksti": "self_esteem_desc",
-        "Elämän kokonaisuus": "life_as_whole",
-        "Elämän kokonaisuus teksti": "life_as_whole_desc"
-      },
+      excel_fields: {},
       loggedIn: false,
       login: {
         user: undefined,
@@ -103,32 +73,63 @@ export default {
   methods: {
     async getResults() {
       const res = await axios.get(process.env.VUE_APP_BACKEND + "/results/" + this.$route.params.surveyId);
-      this.results = res.data;
-      this.values = this.results.Questions.reduce((arr, question) => {
+      console.log(res)
+      this.values = res.data.Questions.reduce((arr, question) => {
         arr[question.number - 1] = question.name
         return arr
       }, []).filter(question => question)
       this.avg_array = this.values.map(value => {
         return(
-          this.results.Questions
-            .filter(question => question.name === value)[0].Answers
+          res.data.Questions
+            .find(question => question.name === value).Answers
             .reduce((acc, answer) => acc + answer.value, 0) /
-              this.results.Questions.filter(question => question.name === value)[0].Answers.length
+              res.data.Questions.find(question => question.name === value).Answers.length
         );
       });
       this.dvd_array = this.values.map(value => {
         return this.standardDeviation(
-          this.results.Questions
-            .filter(question => question.name === value)[0].Answers
+          res.data.Questions
+            .find(question => question.name === value).Answers
             .map(answer => answer.value)
         );
       });
       this.n_array = this.values.map(value => {
-        return this.results.Questions
-          .filter(question => question.name === value)[0].Answers
+        return res.data.Questions
+          .find(question => question.name === value).Answers
           .reduce((acc, answer) => acc + 1, 0)
       });
-      this.respondent_size = this.results.Questions[0].Answers.length;
+      this.excel_fields = this.values.reduce((obj, value) => {
+        if (!value.endsWith("_custom")) {
+          return {
+            ...obj,
+            [this.$t(`message.${value}_title`).slice(0, -1)]: value
+          }
+        } else {
+          return {
+            ...obj,
+            [res.data.Questions.find(question => question.name === value).title]: value
+          }
+        }
+      }, {});
+      const answers = res.data.Questions.flatMap(question => question.Answers)
+      const questions = res.data.Questions.map(question => {
+        return {
+          id: question.questionId,
+          name: question.name
+        }
+      });
+      const users = [...new Set(res.data.Questions[0].Answers.map(answer => answer.UserUserId || answer.AnonUserId))]
+      const results = users.map(user => {
+        return questions.reduce((obj, question) => {
+          return {
+            ...obj,
+            [question.name]: answers.find(answer => (answer.UserUserId === user || answer.AnonUserId === user) && answer.QuestionQuestionId === question.id).value,
+            [question.name + '_desc']: answers.find(answer => (answer.UserUserId === user || answer.AnonUserId === user) && answer.QuestionQuestionId === question.id).description
+          }
+        }, {})
+      });
+      this.respondent_size = users.length
+      this.results = results
       this.loaded = true;
     },
     average(data) {
