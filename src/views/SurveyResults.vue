@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="Login" v-if="login_token">
+    <div class="Login" v-if="!login_token">
       <input type="text" v-model="login.user" />
       <input type="text" v-model="login.pass" />
       <button @click.prevent="postLogin">Kirjaudu sisään</button>
     </div>
-    <div class="SurveyResults" v-if="!login_token">
+    <div class="SurveyResults" v-if="login_token">
       <div class="chart-container">
         <bar-chart v-if="loaded" :avgdata="avg_array" :dvddata="dvd_array" :names="Object.keys(excel_fields)"></bar-chart>
       </div>
