@@ -14,26 +14,17 @@
 </template>
 <script>
 export default {
-  name: 'QuestionnaireMain',
+  name: 'QuestionnaireHeader',
   props: ['user', 'surveyName']
 }
 </script>
 <style lang="scss" scoped>
 
-.notAnswered {
-  color: red;
-}
-
-/*.range {
-  display: flex;
-  width: 100%;
-  margin: auto;
-}*/
-
 #questionnaire-main {
+  background-color: #80cde6;
+  width:100%;
   display: flex;
   flex-direction:column;
-  background-color: #80cde6;
   font-size: 1rem;
   height:8rem;
   overflow: hidden;
@@ -55,8 +46,8 @@ export default {
     .buttonOhjeet {
       border-radius: 8px 1px;
       background-color: #353535;
-      //background-color: #80cde6;
       color: #FFFFFF;
+      margin-right:0.1rem;
       padding: 0.5rem 1rem;
       font-size: 1rem;
       font-weight: bold;
@@ -67,10 +58,12 @@ export default {
       }
     }
   }
+  
   .questionnaire-bottom {
     display: flex;
     justify-content:flex-end;
     margin-top:0.1rem;
+    margin-right:0.6rem;
     font-weight:bold;
 
     span {
@@ -89,7 +82,6 @@ export default {
   padding-left: 5vh;
 }
 
-
 @media only screen and (min-width: 320px) and (max-width: 360px){
   #questionnaire-main {
     margin-bottom: 0.1rem !important;
@@ -104,7 +96,7 @@ export default {
 
 @media only screen and (min-width: 768px) {
   #questionnaire-main {
-    height: 9rem !important;
+    height: 8rem !important;
   }
 
   .questionnaire-top > img {
@@ -115,13 +107,11 @@ export default {
     height: 60vh !important; 
     width: 60vw !important;
   }
-  //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
 }
-
 
 @media only screen and (min-width: 1025px) {
   #questionnaire-main {
-    height: 9rem !important;
+    height: 8rem !important;
   }
   
   .questionnaire-top {
@@ -133,44 +123,16 @@ export default {
     margin-top:0 !important;
   }
 
-  /*.buttonOhjeet-Ohjeet {
-    display: none !important;
-  }*/
-
   .buttonOhjeet {
-    //display: block !important;
     position: absolute;
     top: 3%;
     right: 1%;
-    //background-color: #353535 !important;
     font-size: 1rem !important;
     padding: 0.5rem 1.8rem !important;
-    //border-radius: 8px 1px;
-    //color: #FFFFFF;
-    //padding: 0.6rem 1.8rem;
-    //font-weight: bold;
-    //text-align: center;
   }
 
   .help_button {
     font-size: 1.3rem !important;
   }
-
-  /*.rangeQuestiondata-icon .remove-icon{
-     display:none !important;
-    }
-
-  .rangeQuestiondata-icon .remove-button{
-     display:block !important;
-     border-radius: 50px;
-     box-shadow: 0 5px 5px gray;
-     line-height: 2;
-     width: 10rem;
-     background-color: #353535;
-     color: #ffffff;
-     padding:0.1rem 0;
-     margin:0.6rem 0 0 1rem;
-     Outline: none;
-  }*/
 }
 </style>

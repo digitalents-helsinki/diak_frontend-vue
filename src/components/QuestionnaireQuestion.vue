@@ -14,14 +14,15 @@
           <p class="rangeQuestiondata">{{question.val}}</p>
           <button v-show="question.val !== null" class="remove-icon" aria-label="Remove Answer" @click.prevent="$emit('update:question', ['val', null])"><font-awesome-icon icon="times-circle" /></button>
         </div>
-        <div class="rangeLabelicons">
+        <div class="iconsrangeLabel">
           <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
           <span><img class="thumbslogoUp" src="../images/thumbsUp.svg" alt="ThumbsUp"/></span>
         </div>
           <b-form-input
-            v-bind:class="{activeRange: question.val}"
+            v-bind:class="{activeRange: question.val !== null}"
             type="range"
             id="range"
+            autofocus
             number
             min="0"
             max="10"
@@ -29,11 +30,12 @@
             @click="!(question.val === null) || $emit('update:question', ['val', Number($event.target.value)])"
             @update="$emit('update:question', ['val', $event])"
           />
-          <label for="range" class="rangeLabel-mobile">
+          <!-- Clickhandler above allows you to select 5 as a value straight away without firing extra events -->
+          <label for="range" class="mobilerangeLabel" @click.prevent>
             <div>0</div>
             <div>10</div>
           </label>
-          <label for="range" class="rangeLabel">
+          <label for="range" class="largedeviceLabel" @click.prevent>
             <div>0</div>
             <div>1</div>
             <div>2</div>
@@ -66,11 +68,13 @@
       <button v-else class="btn button-next" @click.prevent="$emit('update:navigation', 'add')">{{ $t('message.next') }}</button>
       <button v-if="navigation.questionnum > 0" class="btn button-previous" @click.prevent="$emit('update:navigation', 'subtract')">{{ $t('message.previous') }}</button>
     </div>
-      <p class="page-number"  style="align-self: center">
+      <p class="page-number">
         <span class="current" v-bind:key="navigation.questionnum">{{navigation.questionnum + 1}}</span>
         <span class="total">/{{navigation.questionamount}}</span>
       </p>
-    <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
+      <div class="cancelButtondiv">
+        <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
+      </div>
   </div>
 </template>
 <script>
@@ -108,15 +112,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.notAnswered {
-  color: red;
-}
-
-/*.range {
-  display: flex;
-  width: 100%;
-  margin: auto;
-}*/
 
 .question {
   display: flex;
@@ -146,17 +141,23 @@ export default {
       }
 
       .remove-icon {
+        all: unset;
         font-size:2rem;
         color:#353535;
         display:flex;
-      }
+        align-self: flex-start;
+        transition: color 150ms;
 
-      .remove-button {
-        display:none;
+        &:hover {
+          color: lighten(#353535, 5%);
+        }
+        &:focus {
+          color: darken(#353535, 5%);
+        }
       }
     }
 
-    .rangeLabelicons {
+    .iconsrangeLabel {
       display: -webkit-flex;
       display: flex;
       justify-content: space-between;
@@ -172,7 +173,7 @@ export default {
       }
     }
 
-    .rangeLabel-mobile {
+    .mobilerangeLabel {
       display: -webkit-flex;
       display: flex;
       justify-content: space-between;
@@ -180,7 +181,7 @@ export default {
       width:100%;
     }
 
-    .rangeLabel {
+    .largedeviceLabel {
       display: none;
     }
 
@@ -198,7 +199,6 @@ export default {
       }
     }
   }
-
 
   .buttons {
     display: flex;
@@ -225,11 +225,17 @@ export default {
         &:hover {
           background-color: lighten(#353535, 5%)
         }
+        &:focus {
+          background-color: darken(#353535, 5%)
+        }
       }
 
       &-previous {
         &:hover {
           background-color: lighten(#353535, 5%)
+        }
+        &:focus {
+          background-color: darken(#353535, 5%)
         }
       }
       
@@ -239,21 +245,10 @@ export default {
         &:hover {
           background-color: lighten(#350E7E, 5%)
         }
+        &:focus {
+          background-color: darken(#350E7E, 5%)
+        }
       }
-    }
-  }
-
-  .page-number {
-    font-size:1.1rem;
-    margin-top:1rem;
-    margin-bottom:0;
-
-    .current {
-      padding:0.1rem;
-    }
-
-    .total {
-      padding:0.1rem;
     }
   }
 
@@ -277,49 +272,33 @@ export default {
     }
 
   }
-  .cancel-button {
-    color:#350E7E;
-    font-size:1.1rem;
-  }
-}
-//iPhone 4 Portrait
-/*@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
-  textarea {
-    width: 100%;
-    border-radius: 4px;
-    margin: 1rem 0;
-    padding-bottom: 5rem;
+
+  .page-number {
+    color:#000000;
+    font-size:1rem;
+    margin-top:1rem;
+    margin-bottom:0;
+
+    .current {
+      padding:0.1rem;
+    }
+
+    .total {
+      padding:0.1rem;
+    }
   }
 
-  textarea::placeholder {
-    opacity: 40%;
-    color: #353535;
-    font-size: 1rem;
-  }
-}*/
-//iPhone 5 Portrait
-/*@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
-  textarea {
-    width: 100%;
-    border-radius: 4px;
-    margin: 1rem 0;
-    padding-bottom: 5rem;
-  }
+  .cancelButtondiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 
-  textarea::placeholder {
-    opacity: 40%;
-    color: #353535;
-    font-size: 1rem;
+    .cancel-button {
+      color:#350E7E;
+      font-size:1.1rem;
+      width:8rem;
+    }
   }
-}*/
-
-@media only screen and (min-width: 768px) {
-  
-  .page-number{
-    margin-top:0rem !important;
-  }
-
-  //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
 }
 
 @media only screen and (min-width: 320px) and (max-width: 360px){
@@ -328,14 +307,12 @@ export default {
   }  
 }
 
-
 @media only screen and (min-width: 768px) {
-  
-  .rangeLabel-mobile {
+  .mobilerangeLabel {
     display: none !important;
   }
 
-  .rangeLabel {
+  .largedeviceLabel {
     display: block !important;
     display: -webkit-flex !important;
     display: flex !important;
@@ -345,7 +322,7 @@ export default {
     margin: auto;
   }
 
-  .rangeLabel > div {
+  .largedeviceLabel > div {
     height: 0.6875rem;
     width: 0.0625rem;
     background: #000000;
@@ -356,25 +333,14 @@ export default {
     justify-content: center;
   }
 
-  /*.rangeLabel-icons{
-    display:none !important;
-  }*/
-
-  /*.rangeLabel-words{
-    display:block !important;
-    display: -webkit-flex !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    margin-bottom:0.1rem;
-    margin-top:2rem;
-    font-size:1rem !important;
-  }*/
-
   .textareaWordCount{
-    margin-top:1.2rem;
+    margin-top:1.1rem !important;
   }
 
-  //input[type=range]:not(:hover) ~ .rangeLabel { opacity: 0.10; }
+  .page-number{
+    margin-top:0rem !important;
+    font-size:1.1rem !important;
+  }
 }
 
 .custom-range {
@@ -383,7 +349,7 @@ export default {
   }
 
   &::-moz-range-thumb {
-    background: gray;
+    background: lightgray;
   }
 
   &::-ms-thumb {
@@ -396,38 +362,8 @@ export default {
 }
 
 @media only screen and (min-width: 1025px) {
-
-  .rangeLabel-words{
-      margin-top:1.7rem;
-  }
-
   .textareaWordCount{
-    margin-top: 2rem;
+    margin-top: 1.6rem !important;
   }
-
-  /*.rangeQuestiondata-icon .remove-icon{
-     display:none !important;
-    }
-
-  .rangeQuestiondata-icon .remove-button{
-     display:block !important;
-     border-radius: 50px;
-     box-shadow: 0 5px 5px gray;
-     line-height: 2;
-     width: 10rem;
-     background-color: #353535;
-     color: #ffffff;
-     padding:0.1rem 0;
-     margin:0.6rem 0 0 1rem;
-     Outline: none;
-  }*/
-}
-
-@media only screen and (min-width: 1400px) {
-
-  .rangeLabel-words{
-      margin-top:2rem;
-  }
-  
 }
 </style>
