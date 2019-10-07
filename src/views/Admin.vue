@@ -1,23 +1,28 @@
 <template>
 <div class="adminPage">
-    <div class="leftSide">
-        <div class="leftSide-top">
+    <div class="menuContent">
+        <div class="menuContentlogo">
             <div class="imagelocation">
-                <img class="diakLogo" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" >
+                <img class="logoPlace" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" >
             </div>
-            <div class="adminnameemail">
-                <p class="namelocation"> {{ $t('message.adminName') }}</p>
-                <p class="emaillocation"> {{ $t('message.adminEmail') }}</p>
-            </div>
+            <!--<div class="nameemailLogout">-->
+                <div class="adminnameemail">
+                    <p class="namelocation"> {{ $t('message.adminName') }}</p>
+                    <p class="emaillocation"> {{ $t('message.adminEmail') }}</p>
+                </div>
+                <!--<div class="logoutDiv">
+                    <button class="btn logoutButton">{{ $t('message.logoutButtontranslate') }}</button>
+                </div>
+            </div>-->
         </div>
-        <div class="text-icons">
+        <div class="textIcons">
             <div class="icontextInquery">
                 <img src="../images/note_add_24px_outlined.svg" alt="" />
-                <button @click="activeComponent = 'adminCreate'" class="btn inquery-open" v-bind:class="classObjectcreate">{{ $t('message.surveyCreatebutton') }}</button>
+                <button @click="activeComponent = 'adminCreate'" class="btn createSurveyopen" v-bind:class="classObjectcreate">{{ $t('message.surveyCreatebutton') }}</button>
             </div>
             <div class="icontextManage">
                 <img src="../images/scatter_plot_24px_outlined.svg" alt="" />
-                <button @click="activeComponent = 'adminManage'" class="btn manageSurveys-open" v-bind:class="classObjectmanage">{{ $t('message.manageSurveysbutton') }}</button>
+                <button @click="activeComponent = 'adminManage'" class="btn manageSurveyopen" v-bind:class="classObjectmanage">{{ $t('message.manageSurveysbutton') }}</button>
             </div>
             <!--<div class="text-icons-content produce">
                 <div class="producediv"> </div>
@@ -71,11 +76,11 @@ export default {
     font-style:normal;
     font-size: 1rem;
 
-    .leftSide{
+    .menuContent{
         background-color:#F9F9FB;
         width:100%; 
         
-        .leftSide-top{
+        .menuContentlogo{
             background-color:#35CDE6;
             width:100%;
             height:7rem; 
@@ -86,32 +91,53 @@ export default {
             
             .imagelocation{
 
-                .diakLogo{
+                .logoPlace{
                     width:100%;
                     height:65px;
                     margin-top:0.1rem;
                 }
             }   
-            
-            .adminnameemail{
-                margin-top:0.1rem;
-                margin-right:1rem;
+            /*.nameemailLogout{
+                display:flex;
+                flex-direction:row;*/
 
-                .namelocation{
-                    font-size:1.1rem;
-                    color:#FFFFFF;
-                    font-weight:bold;
+                .adminnameemail{
+                    margin-top:0.1rem;
+                    margi-right:0.1rem;
+
+                    .namelocation{
+                        font-size:1.1rem;
+                        color:#FFFFFF;
+                        font-weight:bold;
+                    }
+
+                    .emaillocation{
+                        font-size:0.875rem;
+                        color:#FFFFFF;
+                        font-weight:bold;
+                    }
                 }
 
-                .emaillocation{
-                    font-size:0.875rem;
-                    color:#FFFFFF;
-                    font-weight:bold;
+                /*.logoutDiv{
+                    margin-top:1rem;
+                    margin-right:1rem;
+                    margin-left:1rem;
+                    
+                    .logoutButton{
+                        background-color: #A1318A;
+                        color: #FFFFFF;
+                        border-radius: 10px;
+                        box-shadow: 0 5px 5px gray;
+                        width:10rem;
+                        height:2.5rem;
+                        font-weight:bold;
+                        margin-left:0.2rem;
+                    }
                 }
-            }       
+            }*/    
         }
 
-        .text-icons {
+        .textIcons {
             background-color: #FFFFFF;
             display: flex;
             flex-direction: row;
@@ -131,7 +157,7 @@ export default {
                     margin-top:0.5rem;
                 }
 
-                .inquery-open {
+                .createSurveyopen {
                     background-color: #353535;
                     color: #FFFFFF;
                     border-radius: 10px;
@@ -154,7 +180,7 @@ export default {
                     margin-top:0.5rem;
                 }
 
-                .manageSurveys-open {
+                .manageSurveyopen {
                     background-color: #353535;
                     color: #FFFFFF;
                     border-radius: 10px;

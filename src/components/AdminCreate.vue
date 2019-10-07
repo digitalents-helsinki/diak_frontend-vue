@@ -281,7 +281,7 @@ export default {
                 margin-left:5rem;
 
                 p{
-                    margin-right:1.8rem;
+                    margin-right:1.9rem;
                 }
                 .calendarIcon{
                     font-size:1.6rem;
@@ -294,7 +294,7 @@ export default {
                 margin-left:5rem;
 
                 p{
-                    margin-right:1.1rem;
+                    margin-right:1rem;
                 }
 
                 .calendarIcon{

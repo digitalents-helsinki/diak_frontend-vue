@@ -18,11 +18,11 @@
                   <b-form-input type="password" id="confirmpassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')" required>
                   </b-form-input>
                 </b-form-group>
-                <b-button type="submit" class="submitPassword">{{ $t('message.submitPassword') }}</b-button>
+                <b-button type="submit" class="recoveryButton">{{ $t('message.submitPassword') }}</b-button>
               </b-form>
             </div>
             <p class="info">{{ $t('message.passwordInfo') }}</p>
-            <p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p>
+            <div class="backtologindiv"><p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p></div>
           </div>
         </div>
       </div>
@@ -105,16 +105,19 @@ export default {
           width:100%;
           padding:1rem;
 
-          .submitPassword{
+          .recoveryButton{
             background-color: #350E7E;
-            font-weight:bold;
             color:#FFFFFF;
+            font-size: 1rem;
+            font-weight:bold;
+            padding-top: 0.5rem;
+            padding-bottom:0.5rem;
+            border: none;
             border-radius: 50px;
             box-shadow: 0 5px 5px gray;
-            line-height: 2;
             align-self: center;
-            padding: 0.5rem 3rem;
-            font-size: 1rem;
+            line-height:2;
+            width:16rem;
           }
         }
 
@@ -122,11 +125,17 @@ export default {
           font-size:1rem;
         }
 
-        .backtologinPage{
-          color:#350E7E;
-          margin-bottom:1rem;
-          font-size:1.1rem;
-          cursor: pointer; 
+        .backtologindiv{
+          display:flex;
+          flex-direction:row;
+          justify-content:center;
+
+          .backtologinPage{
+            color:#350E7E;
+            margin-bottom:1.8rem;
+            font-size:1.1rem;
+            cursor: pointer; 
+          }
         }
       }
     }

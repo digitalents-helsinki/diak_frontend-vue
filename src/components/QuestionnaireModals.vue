@@ -56,7 +56,7 @@ export default {
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
-    background-color: white;
+    background-color: #FFFFFF;
     height: 70vh;
     border-radius: 15px;
     width: 100vw;
@@ -78,7 +78,6 @@ export default {
     background-color: white;
     height: 40%;
     border-radius: 15px;
-    //width: 80vw;
     padding-left: 5vw;
     padding-right: 5vw;
 
@@ -101,13 +100,12 @@ export default {
 }
 
 @media only screen and (min-width: 768px) {
-
   .dim-background {
     text-align: center;
   }
 
   .help-container {
-    height: 60vh !important; 
+    height: 40vh !important; 
     width: 60vw !important;
   }
 }
