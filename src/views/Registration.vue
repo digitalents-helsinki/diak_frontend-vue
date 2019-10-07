@@ -26,7 +26,7 @@
               </b-form>
             </div>
             <p class="registerinfo">{{ $t('message.registrationInfo') }}</p>
-            <p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p>
+            <div class="backtologindiv"><p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p></div>
           </div>
         </div>
       </div>
@@ -136,26 +136,35 @@ export default {
 
           .registersubmitButton{
             background-color: #350E7E;
-            font-weight:bold;
             color:#FFFFFF;
+            font-size: 1rem;
+            font-weight:bold;
+            padding-top: 0.5rem;
+            padding-bottom:0.5rem;
+            border: none;
             border-radius: 50px;
             box-shadow: 0 5px 5px gray;
-            line-height: 2;
             align-self: center;
-            padding: 0.5rem 3rem;
-            font-size: 1rem;
+            line-height:2;
+            width:16rem;
           }
         }
 
         .registerinfo{
           font-size:1rem;
+          padding:0.1rem;
         }
+        .backtologindiv{
+          display:flex;
+          flex-direction:row;
+          justify-content:center;
 
-        .backtologinPage{
-          color:#350E7E;
-          margin-bottom:1rem;
-          font-size:1.1rem;
-          cursor: pointer; 
+          .backtologinPage{
+            color:#350E7E;
+            margin-bottom:1.8rem;
+            font-size:1.1rem;
+            cursor: pointer;
+          }
         }
       }
     }

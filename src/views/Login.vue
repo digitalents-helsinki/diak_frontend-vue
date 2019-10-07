@@ -18,7 +18,7 @@
                   <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')" required>
                   </b-form-input>
                 </b-form-group>
-              <b-button type="submit" @click.prevent="handleLogin" class="submitButton">{{ $t('message.formsubmitButton') }}</b-button>
+              <b-button type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
             </b-form>
           </div>
             <div class="registerandPassword">
@@ -160,16 +160,19 @@ export default {
           width:100%;
           padding:1rem;
 
-          .submitButton{
+          .loginsubmitButton{
             background-color: #350E7E;
-            font-weight:bold;
             color:#FFFFFF;
+            font-size: 1rem;
+            font-weight:bold;
+            padding-top: 0.5rem;
+            padding-bottom:0.5rem;
+            border: none;
             border-radius: 50px;
             box-shadow: 0 5px 5px gray;
-            line-height: 2;
             align-self: center;
-            padding: 0.5rem 3rem;
-            font-size: 1rem;
+            line-height:2;
+            width:16rem;
           }
         }
 
@@ -194,6 +197,7 @@ export default {
 
         .otherWay{
           font-size:1rem;
+          padding:0.1rem;
         }
         
         .loginOtherway{
@@ -205,19 +209,23 @@ export default {
         .loginFacebookButton{
             background-color: #3b5998;
             color: #FFFFFF;
+            font-size: 1rem;
+            font-weight:bold;
+            padding:0.6rem 1rem;
+            border: none;
             border-radius: 5px;
             box-shadow: 0 5px 5px gray;
-            padding:0.6rem 1rem;
-            font-weight:bold;
           }
 
           .loginGoogleButton{
             background-color: #F4B400;
             color: #FFFFFF;
+            font-size: 1rem;
+            font-weight:bold;
+            padding:0.6rem 1.1rem;
+            border: none;
             border-radius: 5px;
             box-shadow: 0 5px 5px gray;
-            padding:0.6rem 1rem;
-            font-weight:bold;
           }
         }
       }

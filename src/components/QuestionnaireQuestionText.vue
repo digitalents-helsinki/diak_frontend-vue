@@ -1,20 +1,20 @@
 <template>
-    <div class="question_text">
-      <div class="questionHelpbutton">
-        <p v-if="!custom" v-html="$t(`message.${name}_title`)"></p>
-        <p v-else>{{`${questionnum + 1}. ${custom.title}`}}</p>
-        <label v-if="!custom" for="textarea" v-html="$t(`message.question_${name}`)"></label>
-        <label v-else for="textarea">{{custom.description}}</label>        
-        <button
-          v-if="!custom || custom.help"
-          class="btn help_button buttonHelp"
-          @click.prevent
-          v-b-popover.hover.focus.bottom="!custom ? $t(`message.help_text_${name}`) : custom.help"
-        >
-          {{ $t('message.questionHelp') }}
-        </button>
-      </div>
+  <div class="question_text">
+    <div class="questionHelpbutton">
+      <p v-if="!custom">{{ $t(`message.${name}_title`) }}</p>
+      <p v-else>{{`${questionnum + 1}. ${custom.title}`}}</p>
+      <label v-if="!custom" tag="label" for="textarea">{{ $t(`message.question_base`) }}<b>{{ $t(`message.question_${name}`) }}</b></label>
+      <label v-else for="textarea">{{custom.description}}</label>
+      <button
+        v-if="!custom || custom.help"
+        class="btn help_button buttonHelp"
+        @click.prevent
+        v-b-popover.hover.focus.bottom="!custom ? $t(`message.help_text_${name}`) : custom.help"
+      >
+        {{ $t('message.questionHelp') }}
+      </button>
     </div>
+  </div>
 </template>
 <script>
 
@@ -43,9 +43,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.notAnswered {
-  color: red;
-}
 
 .question_text {
   display: flex;
@@ -76,11 +73,10 @@ export default {
     .help_button {
       background-color: #350e7e;
       padding: 0 0.6rem ;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
       align-items: center;
       color: #FFFFFF;
-      //align-self: flex-end;
     }
   } 
 }
@@ -88,7 +84,7 @@ export default {
 @media only screen and (min-width: 320px) and (max-width: 360px){
   .questionHelpbutton {
     margin-top:0.1rem !important;
-    margin-bottom:0.3rem !important;
+    margin-bottom:0.6rem !important;
   }
 }
 
@@ -108,25 +104,22 @@ export default {
   }
 
   .questionHelpbutton label {
+    font-size: 1.170rem !important;
+  }
+
+  .help_button {
     font-size: 1.1rem !important;
   }
 }
 
 @media only screen and (min-width: 1025px) {
-  .buttonOhjeet {
-    //display: block !important;
+  /*.buttonOhjeet {
     position: absolute;
     top: 3%;
     right: 1%;
-    //background-color: #353535 !important;
     font-size: 1rem !important;
     padding: 0.5rem 1.8rem !important;
-    //border-radius: 8px 1px;
-    //color: #FFFFFF;
-    //padding: 0.6rem 1.8rem;
-    //font-weight: bold;
-    //text-align: center;
-  }
+  }*/
   
   .questionHelpbutton {
     margin-top:2rem !important;
@@ -156,26 +149,5 @@ export default {
     font-size: 1.3rem !important;
   }
   
-}
-
-@media only screen and (min-width: 1900px) {
-  /*.buttonOhjeet {
-    position: relative !important;
-    top: 0%;
-    left: -5%;
-  }*/
-
-  .questionHelpbutton {
-    margin-top: 2.5rem !important;
-    margin:0 4rem;
-  }
-
-  .questionHelpbutton p {
-    font-size: 1.375rem !important;
-  }
-
-  .questionHelpbutton label {
-    font-size: 1.3rem !important;
-  }
 }
 </style>

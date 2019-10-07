@@ -36,7 +36,7 @@
 </template>
 <script>
 import axios from "axios";
-import Main from '@/components/QuestionnaireMain.vue';
+import Main from '@/components/QuestionnaireHeader.vue';
 import Question from "@/components/QuestionnaireQuestion.vue";
 import Review from "@/components/QuestionnaireReview.vue";
 import Modals from '@/components/QuestionnaireModals.vue';
@@ -114,7 +114,7 @@ export default {
       set: function(keyValueArr) {
         //set correct questiondata property
         const [ key, value ] = keyValueArr
-        if (this.questiondata.hasOwnProperty(key) && this.questiondata.propertyIsEnumerable(key)) {
+        if (this.questiondata.propertyIsEnumerable(key)) {
           this.questiondata[key] = value
         }
       }
@@ -187,19 +187,11 @@ export default {
   color: red;
 }
 
-/*.range {
-  display: flex;
-  width: 100%;
-  margin: auto;
-}*/
-
 .background {
-  //background: linear-gradient(to right, #0078f0, #80bfff);
   background: #FFFFFF;
   height: 100%;
   display: flex;
   flex-flow: column nowrap;
-  //justify-content: flex-end;
   overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
   font-style:normal;
@@ -222,10 +214,6 @@ export default {
     height: 85%;
   }
 
-  /*.buttonOhjeet {
-    display: none;
-  }*/
-
   @media screen and (min-width: 1024px) {
     width: 60vw;
     margin-bottom: 5vh;
@@ -235,53 +223,18 @@ export default {
 }
 
 @media only screen and (min-width: 1025px) {
-
-  /*.buttonOhjeet-Ohjeet {
-    display: none !important;
-  }*/
-
   .buttonOhjeet {
-    //display: block !important;
     position: absolute;
     top: 3%;
     right: 1%;
-    //background-color: #353535 !important;
     font-size: 1rem !important;
     padding: 0.5rem 1.8rem !important;
-    //border-radius: 8px 1px;
-    //color: #FFFFFF;
-    //padding: 0.6rem 1.8rem;
-    //font-weight: bold;
-    //text-align: center;
   }
-
-  /*.rangeQuestiondata-icon .remove-icon{
-     display:none !important;
-    }
-
-  .rangeQuestiondata-icon .remove-button{
-     display:block !important;
-     border-radius: 50px;
-     box-shadow: 0 5px 5px gray;
-     line-height: 2;
-     width: 10rem;
-     background-color: #353535;
-     color: #ffffff;
-     padding:0.1rem 0;
-     margin:0.6rem 0 0 1rem;
-     Outline: none;
-  }*/
 }
 
 @media only screen and (min-width: 1900px) {
   .questionnaire {
     height: 100%;
   }
-
-  /*.buttonOhjeet {
-    position: relative !important;
-    top: 0%;
-    left: -5%;
-  }*/
 }
 </style>
