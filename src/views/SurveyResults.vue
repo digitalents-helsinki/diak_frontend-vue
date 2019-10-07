@@ -82,32 +82,35 @@ export default {
         return(
           res.data.Questions
             .find(question => question.name === value).Answers
+            .filter(answer => answer.value)
             .reduce((acc, answer) => acc + answer.value, 0) /
-              res.data.Questions.find(question => question.name === value).Answers.length
+              res.data.Questions.find(question => question.name === value).Answers.filter(answer => answer.value).length
         );
       });
       this.dvd_array = this.values.map(value => {
         return this.standardDeviation(
           res.data.Questions
             .find(question => question.name === value).Answers
+            .filter(answer => answer.value)
             .map(answer => answer.value)
         );
       });
       this.n_array = this.values.map(value => {
         return res.data.Questions
           .find(question => question.name === value).Answers
+          .filter(answer => answer.value)
           .reduce((acc, answer) => acc + 1, 0)
       });
-      this.excel_fields = this.values.reduce((obj, value) => {
+      this.excel_fields = this.values.reduce((obj, value, idx) => {
         if (!value.endsWith("_custom")) {
           return {
             ...obj,
-            [this.$t(`message.${value}_title`).slice(0, -1)]: value
+            [`${idx}: ` + this.$t(`message.${value}_title`).slice(0, -1)]: value
           }
         } else {
           return {
             ...obj,
-            [res.data.Questions.find(question => question.name === value).title]: value
+            [`${idx}: ` + res.data.Questions.find(question => question.name === value).title]: value
           }
         }
       }, {});
@@ -186,7 +189,7 @@ export default {
   .chart-container {
     position: relative;
     height: 100%;
-    width: 100vw;
+    width: 100%;
   }
 
   .values {
