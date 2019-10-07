@@ -13,7 +13,7 @@ export const fi = {
     return: 'Palaa kyselyyn',
     cancel_save: 'Tallenna ja jatka myöhemmin',
     cancel_discard: 'Peruuta',
-    questionHelp:'info ',
+    questionHelp:'?',
     question_min: 'erittäin tyytymätön',
     question_max: 'erittäin tyytyväinen',
     health_title:'1. Terveys:',
