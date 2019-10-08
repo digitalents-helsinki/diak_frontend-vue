@@ -92,7 +92,17 @@ export default {
   },
   methods: {
     async getQuestions() {
-      const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/" + this.surveyId);
+      //FOR TESTING
+      const id = await (async () => {
+        if (this.surveyId === "testikysely") {
+          const test = await axios.post(process.env.VUE_APP_BACKEND + "/testsurvey/")
+          return test.data
+        } else {
+          return this.surveyId
+        }
+      })()
+      //
+      const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/" + id);
       const reducedData = res.data.Questions.reduce((arr, question) => {
         if(!question.name.endsWith("_custom")) {
           arr[question.number - 1] = {
@@ -119,10 +129,12 @@ export default {
       this.questiondata = reducedData
     },
     saveQuestions() {
-
+      //FOR TESTING
+      const post = this.surveyId === "testikysely" ? "/testresult" : "/result"
+      //
       axios({
         method: "POST",
-        url: process.env.VUE_APP_BACKEND + "/result",
+        url: process.env.VUE_APP_BACKEND + post,
         data: {
           anonId: this.anonId,
           surveyId: this.surveyId,

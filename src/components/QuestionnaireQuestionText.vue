@@ -1,7 +1,7 @@
 <template>
   <div class="question_text">
     <div class="questionHelpbutton">
-      <p v-if="!custom">{{ $t(`message.${name}_title`) }}</p>
+      <p v-if="!custom">{{`${questionnum + 1}. ${$t(`message.${name}_title`)}`}}</p>
       <p v-else>{{`${questionnum + 1}. ${custom.title}`}}</p>
       <label v-if="!custom" tag="label" for="textarea">{{ $t(`message.question_base`) }}<b>{{ $t(`message.question_${name}`) }}</b></label>
       <label v-else for="textarea">{{custom.description}}</label>

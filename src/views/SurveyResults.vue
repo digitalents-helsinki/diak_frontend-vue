@@ -77,7 +77,17 @@ export default {
   },
   methods: {
     async getResults() {
-      const res = await axios.get(process.env.VUE_APP_BACKEND + "/results/" + this.$route.params.surveyId);
+      //FOR TESTING
+      const id = await (async () => {
+        if (this.$route.params.surveyId === "testikysely") {
+          const test = await axios.post(process.env.VUE_APP_BACKEND + "/testsurvey/")
+          return test.data
+        } else {
+          return this.$route.params.surveyId
+        }
+      })()
+      //
+      const res = await axios.get(process.env.VUE_APP_BACKEND + "/results/" + id);
       this.values = res.data.Questions.reduce((arr, question) => {
         arr[question.number - 1] = question.name
         return arr
