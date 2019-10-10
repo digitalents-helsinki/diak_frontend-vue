@@ -81,7 +81,6 @@ export default new Router({
       path: '/user/results/:resultId',
       name: 'results',
       component: Results,
-      beforeEnter: guard,
       props: true
     },
     {
