@@ -2,8 +2,8 @@
   <div class="review">
     <h3>{{ $t(`message.reviewHeading`) }}</h3>
     <div class="results">
-      <div v-for="(value, name, index) in results" v-bind:key="index">
-        <span v-if="!value.custom">{{$t(`message.${name}_title`)}}</span>
+      <div v-for="(value, index) in results" v-bind:key="index">
+        <span v-if="!value.custom" v-html="`${index + 1}. ${$t(`message.${value.name}_title`)}`"></span>
         <span v-else>{{`${index + 1}. ${value.custom.title}`}}</span>              
         <span v-bind:class="{notanswered :value.val === null}">{{value.val !== null ? value.val : "Ei vastattu"}}</span>
         <b-collapse id="collapse-reviewcontent" v-bind:visible="!!value.desc">
@@ -27,18 +27,18 @@ export default {
   name: "QuestionnaireReview",
   props: {
     results: {
-      type: Object,
+      type: Array,
       required: true,
       validator: function(prop) {
         const warn = (name) => console.warn(`Invalid prop: results.${name}`)
         const valid = [];
-        Object.keys(prop).forEach(key => {
-          if (typeof prop[key].val !== "number" && prop[key].val !== null) warn(`${key}.val`)
-          else if (typeof prop[key].desc !== "string" && prop[key].desc !== null) warn(`${key}.desc`)
-          else if (typeof prop[key].custom !== "object" && prop[key].custom !== undefined) warn(`${key}.custom`)
-          else if (prop[key].custom !== undefined && typeof prop[key].custom.title !== "string") warn(`${key}.custom.title`)
-          else if (prop[key].custom !== undefined && typeof prop[key].custom.description !== "string") warn(`${key}.custom.description`)
-          else if (prop[key].custom !== undefined && typeof prop[key].custom.help !== "string") warn(`${key}.custom.help`)
+        prop.forEach(obj => {
+          if (typeof obj.val !== "number" && obj.val !== null) warn(`${obj.name}.val`)
+          else if (typeof obj.desc !== "string" && obj.desc !== null) warn(`${obj.name}.desc`)
+          else if (typeof obj.custom !== "object" && obj.custom !== undefined) warn(`${obj.name}.custom`)
+          else if (obj.custom !== undefined && typeof obj.custom.title !== "string") warn(`${obj.name}.custom.title`)
+          else if (obj.custom !== undefined && typeof obj.custom.description !== "string") warn(`${obj.name}.custom.description`)
+          else if (obj.custom !== undefined && typeof obj.custom.help !== "string") warn(`${obj.name}.custom.help`)
           else valid.push(true)
         })
         return valid.length === Object.keys(prop).length

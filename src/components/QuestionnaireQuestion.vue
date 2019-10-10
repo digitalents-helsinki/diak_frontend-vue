@@ -12,7 +12,7 @@
       <div class="range-input" v-bind:key="navigation.questionnum">
         <div class="rangeQuestiondata-icon">
           <p class="rangeQuestiondata">{{question.val}}</p>
-          <button v-show="question.val !== null" class="remove-icon" aria-label="Remove Answer" @click.prevent="$emit('update:question', [question.name, null])"><font-awesome-icon icon="times-circle" /></button>
+          <button v-show="question.val !== null" class="remove-icon" aria-label="Remove Answer" @click.prevent="$emit('update:question', ['val', null])"><font-awesome-icon icon="times-circle" /></button>
         </div>
         <div class="iconsrangeLabel">
           <span><img class="thumbslogoDown" src="../images/thumbsDown.svg" alt="ThumbsDown"/></span>
@@ -27,8 +27,8 @@
             min="0"
             max="10"
             v-bind:value="question.val"
-            @click="!(question.val === null) || $emit('update:question', [question.name, Number($event.target.value)])"
-            @update="$emit('update:question', [question.name, $event])"
+            @click="!(question.val === null) || $emit('update:question', ['val', Number($event.target.value)])"
+            @update="$emit('update:question', ['val', $event])"
           />
           <!-- Clickhandler above allows you to select 5 as a value straight away without firing extra events -->
           <label for="range" class="mobilerangeLabel" @click.prevent>
@@ -55,7 +55,7 @@
         <textarea
           id="textarea"
           v-bind:value="question.desc"
-          @input="$emit('update:question', [`${question.name}_desc`, $event.target.value])"
+          @input="$emit('update:question', ['desc', $event.target.value])"
           rows="3" 
           maxlength="2000"
           v-bind:placeholder="$t('message.question_desc_placeholder')"
