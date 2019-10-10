@@ -108,13 +108,15 @@ export default {
           arr[question.number - 1] = {
             name: question.name,
             val: null,
-            desc: null
+            desc: null,
+            id: question.questionId
           }
         } else {
           arr[question.number - 1] = {
             name: question.name,
             val: null,
             desc: null,
+            id: question.questionId,
             custom: {
               title: question.title,
               description: question.description,
@@ -138,12 +140,11 @@ export default {
         data: {
           anonId: this.anonId,
           surveyId: this.surveyId,
-          answers: {
-            ...this.questiondata
-          }
+          answers: [...this.questiondata]
         }
       })
         .then(res => {
+          console.log(res)
           if (res.data.status === "ok") {
             this.$router.push({ path: `/user/results/${this.surveyId}` });
           }

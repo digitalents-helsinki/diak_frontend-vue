@@ -88,6 +88,7 @@ export default {
       })()
       //
       const res = await axios.get(process.env.VUE_APP_BACKEND + "/results/" + id);
+      console.log(res)
       this.values = res.data.Questions.reduce((arr, question) => {
         arr[question.number - 1] = question.name
         return arr
@@ -119,8 +120,8 @@ export default {
         if (!value.endsWith("_custom")) {
           return {
             ...obj,
-            [`${idx + 1}: ` + this.$t(`message.${value}_title`).slice(0, -1)]: value,
-            [`${idx + 1}: ` + this.$t(`message.${value}_title`).slice(0, -1) + " teksti"]: `${value}_desc`
+            [`${idx + 1}: ` + this.$t(`message.${value}_title`)]: value,
+            [`${idx + 1}: ` + this.$t(`message.${value}_title`) + " teksti"]: `${value}_desc`
           }
         } else {
           return {
