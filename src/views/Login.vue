@@ -57,11 +57,11 @@ export default {
   methods: {
     handleLogin() {
       const data = JSON.stringify({
-        user: this.login.email,
-        pass: this.login.password
+        email: this.login.email,
+        password: this.login.password
       })
       axios
-        .post(process.env.VUE_APP_BACKEND + "/login", data, {
+        .post(process.env.VUE_APP_BACKEND + "/signin", data, {
           headers: {
             "Content-Type": "application/json"
           }
@@ -77,6 +77,7 @@ export default {
               store.state.auth.loggedIn = true
               store.state.auth.role = 'user'
               store.state.auth.accessToken = res.data.token
+              store.state.auth.userId = res.data.userId
               this.$router.push({ name: 'user' })
             }
           } else { 

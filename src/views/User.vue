@@ -39,12 +39,32 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+import PersonalInfo from '../components/PersonalInfo.vue'
+import store from '@/store'
+
 export default {
   name: 'user',
   data() {
     return {
-      isLogged: false
+      isLogged: false,
+      hasInfo: true,
+      user: null
     }
+  },
+  methods: {
+    async getUser() {
+      this.$data.user = await axios.get(process.env.VUE_APP_BACKEND + "/user/" + store.state.auth.userId)
+    },
+    getUserSurveys() {
+      
+    }
+  },
+  components: {
+    PersonalInfo
+  },
+  mounted() {
+    this.getUser()
   }
 }
 </script>

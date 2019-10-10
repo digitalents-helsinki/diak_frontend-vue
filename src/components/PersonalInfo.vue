@@ -1,93 +1,73 @@
 <template>
-  <div id="maindivInfo">
-    <div class="container-fluid" id="topofPage">
-      <div id="logoPlace"><img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="profileLogo"/></div>
-    </div>
-    <div class="container infoTopcontent">
-      <div id="personalContent">
-        <p id="instruction"> {{ $t('message.infoInstruction') }}</p>
-          <div id="infoContentFields">
-            <form action="" method="post" name="">
-            <p id="fullnameField">
-              <label for="firstandfamilyname">{{ $t('message.userName') }}</label>
-              <input id="firstandfamilyname" type="text" name="firstandfamilyname">
-            </p>
-             <p id="addressField">
-              <label for="enteraddress">{{ $t('message.userAddress') }}</label>
-              <input id="enteraddress" type="text" name="enteraddress">
-            </p>
-             <div id="ageField">
-                <p>{{ $t('message.userAge') }}</p>
-                <div id="birthdayDisplay">
-                  <div id="dayDisplay">
-                    <input id="dayEnter" type="text" name="day" placeholder="01" style="width: 60px;">
-                </div>
-                <div id="monthDisplay">
-                  <select id="monthEnter">
-                    <option>{{ $t('message.monthJanuary') }}</option>
-                    <option>{{ $t('message.monthFebruary') }}</option>
-                    <option>{{ $t('message.monthMarch') }}</option>
-                    <option>{{ $t('message.monthApril') }}</option>
-                    <option>{{ $t('message.monthMay') }}</option>
-                    <option>{{ $t('message.monthJune') }}</option>
-                    <option>{{ $t('message.monthJuly') }}</option>
-                    <option>{{ $t('message.monthAugust') }}</option>
-                    <option>{{ $t('message.monthSeptember') }}</option>
-                    <option>{{ $t('message.monthOctober') }}</option>
-                    <option>{{ $t('message.monthNovember') }}</option>
-                    <option>{{ $t('message.monthDecember') }}</option>
-                  </select>
-              </div>
-              <div id="yearDisplay">
-                <input id="yearEnter" type="text" name="year" placeholder="1990" style="width: 80px;">
-              </div>
+<div class="container infoTopcontent">
+  <div id="personalContent">
+    <p id="instruction"> {{ $t('message.infoInstruction') }}</p>
+      <div id="infoContentFields">
+        <form action="" method="post" name="">
+        <p id="fullnameField">
+          <label for="firstandfamilyname">{{ $t('message.userName') }}</label>
+          <input id="firstandfamilyname" type="text" name="firstandfamilyname">
+        </p>
+        <p id="addressField">
+          <label for="enteraddress">{{ $t('message.userAddress') }}</label>
+          <input id="enteraddress" type="text" name="enteraddress">
+        </p>
+        <div id="ageField">
+            <p>{{ $t('message.userAge') }}</p>
+            <div id="birthdayDisplay">
+              <div id="dayDisplay">
+                <input id="dayEnter" type="text" name="day" placeholder="01" style="width: 60px;">
             </div>
+            <div id="monthDisplay">
+              <select id="monthEnter">
+                <option>{{ $t('message.monthJanuary') }}</option>
+                <option>{{ $t('message.monthFebruary') }}</option>
+                <option>{{ $t('message.monthMarch') }}</option>
+                <option>{{ $t('message.monthApril') }}</option>
+                <option>{{ $t('message.monthMay') }}</option>
+                <option>{{ $t('message.monthJune') }}</option>
+                <option>{{ $t('message.monthJuly') }}</option>
+                <option>{{ $t('message.monthAugust') }}</option>
+                <option>{{ $t('message.monthSeptember') }}</option>
+                <option>{{ $t('message.monthOctober') }}</option>
+                <option>{{ $t('message.monthNovember') }}</option>
+                <option>{{ $t('message.monthDecember') }}</option>
+              </select>
           </div>
-             <p id="genderField">
-              <label for="genderEnter">{{ $t('message.userGender') }}</label>
-                <select name="genderEnter">
-                  <option value="" disabled selected>{{ $t('message.selectGender') }}</option>
-                  <option value="male">{{ $t('message.genderMale') }}</option>
-                  <option value="female">{{ $t('message.genderFemale') }}</option>
-                  <option value="other">{{ $t('message.genderOther') }}</option>
-                </select>
-            </p>
-             <p id="phonenumberField">
-              <label for="enterphonenumber">{{ $t('message.userPhonenumber') }}</label>
-              <input id="enterphonenumber" type="tel" name="enterphonenumber">
-            </p>
-            <p id="emailaddressField">
-              <label for="emailaddressField">{{ $t('message.userEmailaddress') }}</label>
-              <input id="emailaddressField" type="email" name="emailaddressField">
-            </p>
-            <div id="infosubmitButton"> <button type="submit" class="btn submitIncluded">{{ $t('message.ProfilesubmitButton') }}</button></div>
-            </form>
+          <div id="yearDisplay">
+            <input id="yearEnter" type="text" name="year" placeholder="1990" style="width: 80px;">
           </div>
+        </div>
       </div>
-    </div>
+        <p id="genderField">
+          <label for="genderEnter">{{ $t('message.userGender') }}</label>
+            <select name="genderEnter">
+              <option value="" disabled selected>{{ $t('message.selectGender') }}</option>
+              <option value="male">{{ $t('message.genderMale') }}</option>
+              <option value="female">{{ $t('message.genderFemale') }}</option>
+              <option value="other">{{ $t('message.genderOther') }}</option>
+            </select>
+        </p>
+        <p id="phonenumberField">
+          <label for="enterphonenumber">{{ $t('message.userPhonenumber') }}</label>
+          <input id="enterphonenumber" type="tel" name="enterphonenumber">
+        </p>
+        <p id="emailaddressField">
+          <label for="emailaddressField">{{ $t('message.userEmailaddress') }}</label>
+          <input id="emailaddressField" type="email" name="emailaddressField">
+        </p>
+        <div id="infosubmitButton"> <button type="submit" class="btn submitIncluded">{{ $t('message.ProfilesubmitButton') }}</button></div>
+        </form>
+      </div>
   </div>
-  <!--<form>
-    <div class="form-group">
-      <label for="userName">Nimi</label>
-      <input type="text" class="form-control" id="userName" placeholder="" />
-    </div>
-    <div class="form-group">
-      <label for="userGender">Sukupuoli</label>
-      <select class="form-control" id="userGender">
-        <option>mies</option>
-        <option>nainen</option>
-        <option>muu</option>
-      </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Tallenna</button>
-  </form>-->
+</div>
 </template>
 <script>
 import Datepicker from 'vuejs-datepicker'
 import { fi } from 'vuejs-datepicker/dist/locale'
 
 export default {
-  name: 'PersonalInfo',
+  name: 'personal-info',
   data() {
     return {
       fi: fi,

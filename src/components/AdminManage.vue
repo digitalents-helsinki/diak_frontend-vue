@@ -33,11 +33,15 @@
     </div>
       <div class="tableandfilter">
         <div class="buttonstotal">
-            <b-dropdown id="dropdown-1" variant="secondary" text="Kaikki kyselyt" class="m-md-2 dropdownButtons-top">
-              <b-dropdown-item>First Action</b-dropdown-item>
-              <b-dropdown-item>Second Action</b-dropdown-item>
-              <b-dropdown-item>Third Action</b-dropdown-item>
+          <div>
+            <b-dropdown id="dropdownleft" variant="secondary" text="Kaikki kyselyt" class="m-md-2 dropdownButtonsleft">
+              <b-dropdown-item>item</b-dropdown-item>
+              <b-dropdown-item>item</b-dropdown-item>
             </b-dropdown>
+          </div>
+          <div>
+            <b-button variant="secondary" @click="toggleDisplay" id="butttonRight">{{ $t('message.archiveButton') }}</b-button>
+          </div>
         </div>
         <div class="tableDisplayfields">
           <b-table hover responsive :items="surveys" :fields="fields" bordered head-variant="light">
@@ -62,7 +66,7 @@
                   <button> <img src="../images/assessment_24px.png" alt="" style="width:25px; height:25px;"/></button>
                 </div>
                 <div v-else-if="field.colType === 'delete'">
-                  <button> <font-awesome-icon icon="folder" style="font-size:1.6rem; color:grey;"/></button>
+                  <button @click="archiveSurvey(data.item.surveyId)"> <font-awesome-icon icon="folder" style="font-size:1.6rem; color:grey;"/></button>
                   <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:red;"/> </button>
                 </div>
               </div>
@@ -119,7 +123,8 @@ export default {
             colType: 'delete'
           }
         ],
-        surveys: null,
+        surveys: [],
+        display: "archived",
         loaded: false
     }
   },
@@ -150,6 +155,22 @@ export default {
         if (~index)
           this.surveys.splice(index, 1)
       })
+    },
+    archiveSurvey(surveyId) {
+      axios({
+        method: "POST",
+        url: process.env.VUE_APP_BACKEND + "/survey/archive",
+        data: {
+          id: surveyId
+        }
+      })
+    },
+    toggleDisplay() {
+      if(this.display === "all") {
+        this.display = "archived"
+      } else {
+        this.display = "all"
+      }
     }
   },
   mounted() {
