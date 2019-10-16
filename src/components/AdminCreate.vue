@@ -59,35 +59,44 @@
                                 v-on:after-leave="afterQuestionAnimation"
                             >
                                 <b-card class="questionCard" v-for="(question, index) in questions" v-bind:key="question.questionAnimationId">
-                                    <b-card-title 
-                                        v-on:blur="question.title = $event.target.textContent"
+                                    <b-card-title
+                                        v-on:input="saveQuestion($event, index, 'title')"
+                                        v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
+                                        v-on:keydown.enter="lockQuestions()"
+                                        v-editable="question.name ? $t(`message.${question.name}_title`) : question.title"
                                         v-bind:contenteditable="editIndex === index"
                                         spellcheck="false" 
                                         class="questionTitle"
                                         v-bind:data-placeholder="question.name ? '' : question.title ? '' : editIndex === index ? $t('message.questionTitlePlaceholder') : $t('message.questionTitlePlaceholder') + ' *'"
-                                    >{{question.title === undefined ? $t(`message.${question.name}_title`) : question.title}}</b-card-title>
+                                    />
                                     <b-card-text 
-                                        v-on:blur="question.description = $event.target.textContent"
+                                        v-on:input="saveQuestion($event, index, 'description')"
+                                        v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
+                                        v-on:keydown.enter="lockQuestions()"
+                                        v-editable="question.name ? $t(`message.question_base`) + $t(`message.question_${question.name}`) : question.description"
                                         v-bind:contenteditable="editIndex === index" 
                                         spellcheck="false" 
                                         class="questionDescription"
-                                        v-bind:data-placeholder="question.name ? '' : question.description ? '' : editIndex === index ? $t('message.questionDescriptionPlaceholder') : $t('message.questionDescriptionPlaceholder') + ' *'"
-                                    >{{question.description === undefined ? $t(`message.question_base`) + $t(`message.question_${question.name}`) : question.description}}</b-card-text>
+                                        v-bind:data-placeholder="question.name ? '' : question.description !== null ? '' : editIndex === index ? $t('message.questionDescriptionPlaceholder') : $t('message.questionDescriptionPlaceholder') + ' *'"
+                                    >{{ }}</b-card-text>
                                     <b-card-text 
-                                        v-on:blur="question.help = $event.target.textContent" 
+                                        v-on:input="saveQuestion($event, index, 'help')"
+                                        v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
+                                        v-on:keydown.enter="lockQuestions()"
+                                        v-editable="question.name ? $t(`message.help_text_${question.name}`) : question.help"
                                         v-bind:contenteditable="editIndex === index"
                                         spellcheck="false" 
                                         class="questionHelpText"
-                                        v-bind:data-placeholder="!question.help ? $t('message.questionHelpPlaceholder') : ''"
-                                    >{{question.help === undefined ? $t(`message.help_text_${question.name}`) : question.help}}</b-card-text>
+                                        v-bind:data-placeholder="question.help === null ? $t('message.questionHelpPlaceholder') : ''"
+                                    >{{ }}</b-card-text>
                                     <div class="questionNumber">{{index + 1}}</div>
                                     <button class="questionButton questionButtonFourth" @click="shiftQuestion(index, 'up')" aria-label="Move question up"><font-awesome-icon class="icon" icon="arrow-up"></font-awesome-icon></button>
                                     <button class="questionButton questionButtonThird" @click="shiftQuestion(index, 'down')" aria-label="Move question down"><font-awesome-icon class="icon" icon="arrow-down"></font-awesome-icon></button>
                                     <button v-if="editIndex !== index && question.name === null" class="questionButton questionButtonSecond" @click="editQuestion(index)" aria-label="Edit question"><font-awesome-icon class="icon" icon="pencil-alt"></font-awesome-icon></button>
-                                    <button v-else-if="question.title !== undefined" class="questionButton questionButtonSecond" @click="saveQuestion(index)" aria-label="Save question"><font-awesome-icon class="icon" icon="save"></font-awesome-icon></button>
+                                    <button v-else-if="editIndex === index" class="questionButton questionButtonSecond" @click="lockQuestions()" aria-label="Save question"><font-awesome-icon class="icon" icon="save"></font-awesome-icon></button>
                                     <button v-else-if="question.name" class="questionButton questionButtonSecond questionButtonKey" @click="editQuestion(index)" aria-label="Edit default question"><font-awesome-icon class="icon" icon="key"></font-awesome-icon></button>
                                     <button class="questionButton questionButtonDelete" @click="removeQuestion(index)" aria-label="Delete question"><font-awesome-icon class="icon" icon="times"></font-awesome-icon></button>
                                 </b-card>
@@ -120,7 +129,7 @@
                         </ul>
                     </div>
                 </div>
-                <div  class="putMessagediv">
+                <div class="putMessagediv">
                     <button class="btn putMessage"><font-awesome-icon icon="paperclip" class="putMessageicon"/>{{ $t('message.addMessage') }}</button>
                 </div> 
                 <div class="bottom-buttons">
@@ -225,9 +234,9 @@ export default {
                     questionAnimationId: Math.random()
                 }
             ];
-            if (this.editIndex !== null) {
-                this.saveQuestion(this.editIndex)
-            }
+
+            this.lockQuestions()
+
             if (defaultQuestions.every(defaultQuestion => this.$data.questions.some(question => question.name === defaultQuestion.name))) {
                 //delete defaultquestions if all of them exist
                 this.$data.questions = this.$data.questions.filter(question => !defaultQuestions.some(defaultQuestion => defaultQuestion.name === question.name))
@@ -238,9 +247,8 @@ export default {
             }
         },
         addQuestion() {
-            if (this.editIndex !== null) {
-                this.saveQuestion(this.editIndex)
-            }
+            this.lockQuestions()
+
             this.editIndex = this.$data.questions.length
             this.$data.questions.push({
                 name: null,
@@ -251,9 +259,8 @@ export default {
             })
         },
         shiftQuestion(index, direction) {
-            if (this.editIndex !== null) {
-                this.saveQuestion(this.editIndex)
-            }
+            this.lockQuestions()
+
             if (direction === 'up') {
                 this.$data.questions.splice(index === 0 ? this.$data.questions.length - 1 : index - 1, 0, ...this.$data.questions.splice(index, 1))
             } else if (direction === 'down') {
@@ -261,35 +268,29 @@ export default {
             }
         },
         editQuestion(index) {
-            if (this.editIndex !== null) {
-                this.saveQuestion(this.editIndex)
-            }
+            this.lockQuestions()
+
             this.editIndex = index
+        },
+        saveQuestion(event, index, key) {
             if (this.$data.questions[index].name) {
                 this.$data.questions[index].title = this.$t(`message.${this.$data.questions[index].name}_title`)
                 this.$data.questions[index].description = this.$t(`message.question_base`) + this.$t(`message.question_${this.$data.questions[index].name}`)
                 this.$data.questions[index].help = this.$t(`message.help_text_${this.$data.questions[index].name}`)
+                this.$data.questions[index].name = null
+                this.$data.questions[index][key] = event.target.textContent
+            } else {
+                this.$data.questions[index][key] = event.target.textContent
             }
         },
-        saveQuestion(index) {
-            if (this.$data.questions[index].default) {
-                if (this.$data.questions[index].title === this.$t(`message.${this.$data.questions[index].name}_title`) &&
-                    this.$data.questions[index].description === this.$t(`message.question_base`) + this.$t(`message.question_${this.$data.questions[index].name}`) &&
-                    this.$data.questions[index].help === this.$t(`message.help_text_${this.$data.questions[index].name}`)) {
-                        this.$data.questions[index].title = undefined
-                        this.$data.questions[index].description = undefined
-                        this.$data.questions[index].help = undefined
-                } else {
-                    this.$data.questions[index].name = null
-                }
-                this.$data.questions[index].edit = false
+        lockQuestions() {
+            if (this.editIndex !== null) {
+                this.editIndex = null
             }
-            this.editIndex = null
         },
         removeQuestion(index) {
-            if (this.editIndex !== null) {
-                this.saveQuestion(this.editIndex)
-            }
+            this.lockQuestions()
+
             this.$data.questions.splice(index, 1)
         },
         addEmail() {
@@ -350,6 +351,19 @@ export default {
             el.style.width = null
             this.lastWrapperHeight = null
             this.lastQuestionCardWidth = null
+        }
+    },
+    directives: {
+        editable: {
+            //only updates if element is not focused (prevents caret from jumping around)
+            bind(el, binding, vnode) {
+                if (binding.value) el.textContent = binding.value
+            },
+            update(el, binding, vnode) {
+                if (document.activeElement !== el && binding.value && binding.value !== binding.oldValue) {
+                    el.textContent = binding.value
+                }
+            }
         }
     }
 }
