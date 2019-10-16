@@ -6,7 +6,7 @@
       v-on:toggleModal="toggleModal"
     />
     <div class="questionnaire container text-center shadow-lg">
-     <b-alert v-if="errormessage" show variant="danger"><p>Survey not active</p></b-alert>
+     <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>Survey not active</p></b-alert>
       <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount">
         <b-spinner label="Loading..." />
       </div>
@@ -205,6 +205,14 @@ export default {
   overflow-x: hidden; //transition
   border-radius: 14px;
 
+  .errormessageDisplay{
+    margin-top:2rem;
+
+    p{
+      margin-top:1rem !important;
+    }
+  }
+  
   .loader-spinner-container {
     display: flex;
     align-items: center;

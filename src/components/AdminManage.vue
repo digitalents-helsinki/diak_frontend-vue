@@ -44,7 +44,7 @@
           </div>
         </div>
         <div class="tableDisplayfields">
-          <b-table hover responsive :items="surveys" :fields="fields" bordered head-variant="light">
+          <b-table hover responsive :items="displayedSurveys" :fields="fields" bordered head-variant="light">
             <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
               <div v-bind:key="field.key">
                 <div v-if="field.colType === 'name'">
@@ -128,7 +128,7 @@ export default {
         loaded: false
     }
   },
-  /*computed: {
+  computed: {
     displayedSurveys: function() {
       if(this.display === "archived") {
         return this.$data.surveys.filter(obj => obj.archived)
@@ -136,7 +136,7 @@ export default {
           return this.$data.surveys
         }
       }
-    },*/
+    },
   methods: {
     async getSurveys() {
       const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/all")
@@ -308,6 +308,16 @@ export default {
         display:flex;
         flex-direction:row;
         margin-bottom:1rem;
+
+        #butttonRight{
+          color: #ffffff;
+          border-radius: 5px;
+          padding-right:0.7rem;
+          padding-left:0.7rem;
+          height:auto;
+          margin-top:0.5rem;
+          margin-left:1.8rem;
+        }
       }
       
       .tableDisplayfields{
