@@ -177,6 +177,16 @@ export default {
             surveyNameState: null
         }
     },
+    computed: {
+        formattedStartDate() {
+            if (this.startDate) return new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate())
+            else return null
+        },
+        formattedEndDate() {
+            if (this.endDate) return new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate(), 23, 59, 59)
+            else return null
+        }
+    },
     components: {
         Datepicker
     },
@@ -301,7 +311,7 @@ export default {
             this.$data.emails.splice(index, 1)
         },
         sendSurvey() {
-            if (this.$data.questions.some(question => !question.name && (!question.title || !question.description)) || !this.$data.surveyName) {
+            if (this.$data.questions.length === 0 || this.$data.questions.some(question => !question.name && (!question.title || !question.description)) || !this.$data.surveyName) {
                 if (!this.$data.surveyName) this.$data.surveyNameState = false
                 this.$root.$emit('bv::show::popover', 'sendSurveyButton')
                 setTimeout(() => this.$root.$emit('bv::hide::popover', 'sendSurveyButton'), 5000)
@@ -313,8 +323,8 @@ export default {
                         to: this.$data.emails, 
                         id: this.$data.surveyName, 
                         anon: this.$data.surveyAnon,
-                        startDate: this.$data.startDate,
-                        endDate: this.$data.endDate,
+                        startDate: this.$data.formattedStartDate,
+                        endDate: this.$data.formattedEndDate,
                         respondents_size: this.$data.emails.length,
                         questions: [...this.$data.questions.map((question, idx) => {
                             return {
