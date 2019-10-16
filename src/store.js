@@ -8,7 +8,8 @@ export default new Vuex.Store({
     auth: {
       loggedIn: false,
       accessToken: null,
-      role: null
+      role: null,
+      userId: null
     }
   }
 })

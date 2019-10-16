@@ -2,7 +2,7 @@
   <div class="background">
     <Main
       v-bind:user="user"
-      v-bind:surveyId="surveyId"
+      v-bind:surveyName="surveyName"
       v-on:toggleModal="toggleModal"
     />
     <div class="questionnaire container text-center shadow-lg">
@@ -18,8 +18,8 @@
             v-on:toggleModal="toggleModal"
           />
           <Review 
-            v-if="navigationData.questionamount <= questionnum"
-            v-bind:results="formattedData"
+            v-else-if="navigationData.questionamount <= questionnum"
+            v-bind:results="questiondata"
             v-bind:navigation.sync="navigationData"
             v-on:saveQuestions="saveQuestions"
             v-on:toggleModal="toggleModal"
@@ -52,60 +52,19 @@ export default {
   },
   data() {
     return {
-      questiondata: {
-        health: null,
-        overcoming: null,
-        living: null,
-        coping: null,
-        family: null,
-        friends: null,
-        finance: null,
-        strengths: null,
-        self_esteem: null,
-        life_as_whole: null,
-        health_desc: null,
-        overcoming_desc: null,
-        living_desc: null,
-        coping_desc: null,
-        family_desc: null,
-        friends_desc: null,
-        finance_desc: null,
-        strengths_desc: null,
-        self_esteem_desc: null,
-        life_as_whole_desc: null
-      },
+      questiondata: [],
       questionnum: 0,
       modal_visible: null,
-      surveyId: this.$route.params.surveyId
+      anonId: this.$route.params.anonId,
+      surveyId: this.$route.params.surveyId,
+      surveyName: ""
     };
   },
   computed: {
-    subjects() {
-      //everything in questiondata that doesn't end with _desc or _custom
-      return Object.keys(this.questiondata).filter(key => !key.endsWith("_desc") && !key.endsWith("_custom"))
-    },
-    formattedData() {
-      //format for rendering
-      return this.subjects.reduce((obj, key) => {
-        return { 
-          ...obj, 
-          [key]: { 
-            val: this.questiondata[key], 
-            desc: this.questiondata[`${key}_desc`], 
-            custom: this.questiondata[`${key}_custom`] 
-          } 
-        }
-      }, {})
-    },
     currentQuestionData: {
       get: function() {
-        //get current question
-        const key = this.subjects[this.questionnum]
-        if (key) {
-          return ({
-            name: key, 
-            ...this.formattedData[key]
-          })
+        if (this.questiondata[this.questionnum]) {
+          return this.questiondata[this.questionnum]
         } else {
           return null
         }
@@ -113,8 +72,8 @@ export default {
       set: function(keyValueArr) {
         //set correct questiondata property
         const [ key, value ] = keyValueArr
-        if (this.questiondata.propertyIsEnumerable(key)) {
-          this.questiondata[key] = value
+        if (this.questiondata[this.questionnum].propertyIsEnumerable(key)) {
+          this.questiondata[this.questionnum][key] = value
         }
       }
     },
@@ -122,7 +81,7 @@ export default {
       get: function() {
         return ({
           questionnum: this.questionnum,
-          questionamount: this.subjects.length
+          questionamount: this.questiondata.length || this.questionnum + 1
         })
       },
       set: function(operator) {
@@ -132,28 +91,62 @@ export default {
     }
   },
   methods: {
-    getQuestions() {
-      const fetchedData = {
-        question: null, 
-        question_desc: null, 
-        question_custom: {
-          title: "Custom Title", 
-          description: "Custom Description", 
-          help: "Custom Help"
+    async getQuestions() {
+      //FOR TESTING
+      const id = await (async () => {
+        if (this.surveyId === "testikysely") {
+          const test = await axios.post(process.env.VUE_APP_BACKEND + "/testsurvey/")
+          return test.data
+        } else {
+          return this.surveyId
         }
-      }
-      this.questiondata = {...this.questiondata, ...fetchedData}
+      })()
+      //
+      const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/" + id);
+      const reducedData = res.data.Questions.reduce((arr, question) => {
+        if(!question.name.endsWith("_custom")) {
+          arr[question.number - 1] = {
+            name: question.name,
+            val: null,
+            desc: null,
+            id: question.questionId
+          }
+        } else {
+          arr[question.number - 1] = {
+            name: question.name,
+            val: null,
+            desc: null,
+            id: question.questionId,
+            custom: {
+              title: question.title,
+              description: question.description,
+              help: question.help
+            }
+          }
+        }
+        return arr
+      }, []).filter(question => question)
+
+      this.surveyName = res.data.name
+      this.questiondata = reducedData
     },
     saveQuestions() {
-
+      //FOR TESTING
+      const post = this.surveyId === "testikysely" ? "/testresult" : "/result"
+      //
       axios({
         method: "POST",
-        url: process.env.VUE_APP_BACKEND + "/result",
-        data: { ...this.questiondata }
+        url: process.env.VUE_APP_BACKEND + post,
+        data: {
+          anonId: this.anonId,
+          surveyId: this.surveyId,
+          answers: [...this.questiondata]
+        }
       })
         .then(res => {
+          console.log(res)
           if (res.data.status === "ok") {
-            this.$router.push({ path: `/user/results/${res.data.resultId}` });
+            this.$router.push({ path: `/user/results/${this.surveyId}` });
           }
         })
         .catch(err => {});
@@ -167,7 +160,7 @@ export default {
     }
   },
   created() {
-    //this.getQuestions()
+    this.getQuestions()
   }
 };
 </script>

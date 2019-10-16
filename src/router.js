@@ -72,22 +72,25 @@ export default new Router({
       props: true
     },
     {
-      path: '/user/results/:resultId',
-      name: 'results',
-      component: Results,
-      beforeEnter: guard,
+      path: '/questionnaire/:surveyId/:anonId',
+      name: 'questionnaire',
+      component: Questionnaire,
       props: true
     },
     {
-      path: '/admin/surveyresults/',
+      path: '/user/results/:resultId',
+      name: 'results',
+      component: Results,
+      props: true
+    },
+    {
+      path: '/admin/surveyresults/:surveyId',
       name: 'surveyresults',
-      beforeEnter: guard,
       component: SurveyResults
     },
     {
       path: '/admin',
       name: 'admin',
-      beforeEnter: guard,
       component: Admin
     }
   ]
