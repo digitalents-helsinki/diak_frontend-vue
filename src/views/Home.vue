@@ -3,6 +3,7 @@
     <div class="container main">
       <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logoProfile" />
       <div class="textContainer">
+        <LangMenu/>
         <div class="container-fluid textContainer-top">
           <p class="welcomeMessage">{{ $t('message.home') }}</p>
         </div>
@@ -30,8 +31,13 @@
   </div>
 </template>
 <script>
+import LangMenu from '@/components/Languages.vue';
+
 export default {
   name: 'home',
+  components:{
+    LangMenu
+  },
   methods: {
     moveQuestionnaire() {
       this.$router.push({ path: '/questionnaire/testikysely'})

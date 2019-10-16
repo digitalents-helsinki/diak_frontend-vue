@@ -298,6 +298,9 @@ export default {
       font-size:1.1rem;
       width:8rem;
     }
+    .cancel-button:hover {
+      font-weight:bold;
+    }
   }
 }
 

@@ -6,6 +6,7 @@
         <div class="logincontentDiv">
           <div class="spaceLogin">
           </div>
+          <LangMenu/>
           <div class="loginContent">
             <p class="loginMessage">{{ $t('message.loginText') }}</p>
             <div class="loginCredentials">
@@ -42,9 +43,13 @@
 <script>
 import axios from 'axios'
 import store from '@/store'
+import LangMenu from '@/components/Languages.vue';
 
 export default {
   name: 'login',
+  components:{
+    LangMenu
+  },
   data() {
     return {
       login: {
@@ -120,7 +125,7 @@ export default {
     background-color: white;
     align-items: center;
     text-align: center;
-    margin-top: 1rem;
+    margin-top: 0.1rem;
       
       .loginLogo{
         width: 100%;
@@ -137,11 +142,11 @@ export default {
         width:100%;
         padding: 1rem;
       }
-
+      
       .loginContent{
         display: flex;
         flex-direction: column;
-        margin-top:1.8rem;
+        margin-top:0.1rem;
         width:100%;
         height: 100%;
 
@@ -232,6 +237,9 @@ export default {
   }
 }
 @media screen and (min-width: 768px) { 
+  .loginDiv{
+    margin-top:1.8rem !important;
+  }
   .loginLogo{
     width:29rem !important;
     margin-bottom:1rem;
