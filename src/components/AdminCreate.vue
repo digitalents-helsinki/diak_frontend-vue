@@ -11,13 +11,14 @@
         <div class="adminForm">
             <div class="nameInputsection">
                 <label for="forminputName" class="nameInputlabel">{{ $t('message.adminformName') }}</label>
-                <input 
-                id="surveyname"
-                v-model="surveyName"
-                type="text"
-                name="forminputName"
-                v-bind:placeholder="$t('message.namePlaceholder')"
-                >
+                <b-input 
+                    id="surveyname"
+                    v-model="surveyName"
+                    v-bind:state="surveyNameState === null ? null : surveyName ? true : false"
+                    type="text"
+                    name="forminputName"
+                    v-bind:placeholder="$t('message.namePlaceholder')"
+                />
             </div>
             <hr class="borderLine">
             <div class="optionValue">
@@ -43,46 +44,56 @@
             <div class="insertingQuestions">
                 <p class="insertingQuestions-p">{{ $t('message.questionsParagraph')}}</p>
                 <div class="questionsModify-div"> 
-                    <p class=""> {{ $t('message.defaultQuestions') }} </p>
-                    <button class="btn questionsModify-button">{{ $t('message.questionsModify') }}<font-awesome-icon icon="pencil-alt" class="iconButton-pencil"/></button>
+                    <button @click="addDefaultQuestions" class="btn questionsModify-button">{{ $t('message.defaultQuestions') }}<font-awesome-icon icon="key" class="iconButton-key"/></button>
                 </div>
                 <div id="insertedQuestionsview">
-                    <div class="questionInsert">
-                        <textarea 
-                            v-model="question.title" 
-                            rows="3"
-                            v-bind:placeholder="'Title: ' + $t('message.questionPlaceholder')"
-                            class="writeinQuestion"
-                        >
-                        </textarea>
-                        <textarea
-                            v-model="question.description" 
-                            rows="3"
-                            v-bind:placeholder="'Description: ' + $t('message.questionPlaceholder')"
-                            class="writeinQuestion">
-                        >
-                        </textarea>
-                        <textarea
-                            v-model="question.help" 
-                            rows="3"
-                            v-bind:placeholder="'Help: ' + $t('message.questionPlaceholder')"
-                            class="writeinQuestion">
-                        >
-                        </textarea>
-                    </div>
-                    <div class="moreQuestions-div"> 
-                        <p class=""> {{ $t('message.addQuestionsparagraph') }} </p>
-                        <button  @click="addQuestion" class="btn moreQuestions-button">{{ $t('message.addQuestions') }}<font-awesome-icon icon="plus" class="iconButton-plus"/></button>
-                        </div>
                     <div class="questionlistDiv">
-                        <ul class="questionList">
-                            <li v-for="(question, index) in questions" v-bind:key="index">
-                                <div class="questionMention"><span class="questionTitle"> Question </span><button @click="removeQuestion(index)">X</button></div>
-                                <span>Title: {{question.title}}</span><br/>
-                                <span>Description: {{question.description}}</span><br/>
-                                <span>Help: {{question.help}}</span>
-                            </li>
-                        </ul>
+                        <b-card-group class="flex-column questionList" tag="div">
+                            <transition-group 
+                                name="question-list" 
+                                v-on:before-enter="beforeQuestionAnimation"
+                                v-on:before-leave="beforeQuestionAnimation"
+                                v-on:enter="questionAnimation"
+                                v-on:leave="questionAnimation"
+                                v-on:after-enter="afterQuestionAnimation"
+                                v-on:after-leave="afterQuestionAnimation"
+                            >
+                                <b-card class="questionCard" v-for="(question, index) in questions" v-bind:key="question.questionAnimationId">
+                                    <b-card-title 
+                                        v-on:blur="question.title = $event.target.textContent"
+                                        v-on:dblclick="editQuestion(index)"
+                                        v-bind:contenteditable="editIndex === index"
+                                        spellcheck="false" 
+                                        class="questionTitle"
+                                        v-bind:data-placeholder="question.name ? '' : question.title ? '' : editIndex === index ? $t('message.questionTitlePlaceholder') : $t('message.questionTitlePlaceholder') + ' *'"
+                                    >{{question.title === undefined ? $t(`message.${question.name}_title`) : question.title}}</b-card-title>
+                                    <b-card-text 
+                                        v-on:blur="question.description = $event.target.textContent"
+                                        v-on:dblclick="editQuestion(index)"
+                                        v-bind:contenteditable="editIndex === index" 
+                                        spellcheck="false" 
+                                        class="questionDescription"
+                                        v-bind:data-placeholder="question.name ? '' : question.description ? '' : editIndex === index ? $t('message.questionDescriptionPlaceholder') : $t('message.questionDescriptionPlaceholder') + ' *'"
+                                    >{{question.description === undefined ? $t(`message.question_base`) + $t(`message.question_${question.name}`) : question.description}}</b-card-text>
+                                    <b-card-text 
+                                        v-on:blur="question.help = $event.target.textContent" 
+                                        v-on:dblclick="editQuestion(index)"
+                                        v-bind:contenteditable="editIndex === index"
+                                        spellcheck="false" 
+                                        class="questionHelpText"
+                                        v-bind:data-placeholder="!question.help ? $t('message.questionHelpPlaceholder') : ''"
+                                    >{{question.help === undefined ? $t(`message.help_text_${question.name}`) : question.help}}</b-card-text>
+                                    <div class="questionNumber">{{index + 1}}</div>
+                                    <button class="questionButton questionButtonFourth" @click="shiftQuestion(index, 'up')" aria-label="Move question up"><font-awesome-icon class="icon" icon="arrow-up"></font-awesome-icon></button>
+                                    <button class="questionButton questionButtonThird" @click="shiftQuestion(index, 'down')" aria-label="Move question down"><font-awesome-icon class="icon" icon="arrow-down"></font-awesome-icon></button>
+                                    <button v-if="editIndex !== index && question.name === null" class="questionButton questionButtonSecond" @click="editQuestion(index)" aria-label="Edit question"><font-awesome-icon class="icon" icon="pencil-alt"></font-awesome-icon></button>
+                                    <button v-else-if="question.title !== undefined" class="questionButton questionButtonSecond" @click="saveQuestion(index)" aria-label="Save question"><font-awesome-icon class="icon" icon="save"></font-awesome-icon></button>
+                                    <button v-else-if="question.name" class="questionButton questionButtonSecond questionButtonKey" @click="editQuestion(index)" aria-label="Edit default question"><font-awesome-icon class="icon" icon="key"></font-awesome-icon></button>
+                                    <button class="questionButton questionButtonDelete" @click="removeQuestion(index)" aria-label="Delete question"><font-awesome-icon class="icon" icon="times"></font-awesome-icon></button>
+                                </b-card>
+                                <button  @click="addQuestion" key="moreQuestionButton" class="btn moreQuestions-button">{{ $t('message.addQuestions') }}<font-awesome-icon icon="plus" class="iconButton-plus"/></button>
+                            </transition-group>
+                        </b-card-group>
                     </div>
                 </div>  
             </div>
@@ -115,7 +126,10 @@
                 </div> 
                 <div class="bottom-buttons">
                     <button class="btn savecontinueBottom">{{ $t('message.saveContinue') }}</button>
-                    <button class="btn sendsurveyButton" @click="sendSurvey">{{ $t('message.sendSurvey') }}<font-awesome-icon icon="paper-plane" class="putMessageicon"/></button>
+                    <button id="sendSurveyButton" class="btn sendsurveyButton" @click="sendSurvey">{{ $t('message.sendSurvey') }}<font-awesome-icon icon="paper-plane" class="putMessageicon"/></button>
+                    <b-popover target="sendSurveyButton" triggers="manual" placement="top">
+                        {{$t('message.sendSurveyError')}}
+                    </b-popover>
                 </div>
             </div>
         </div>
@@ -142,79 +156,143 @@ export default {
                 to: new Date()
             },
             fi: fi,
-            defaultQuestions: [
-                {
-                    name: 'health',
-                    number: 1
-                },
-                {
-                    name: 'overcoming',
-                    number: 2
-                },                        
-                {
-                    name: 'living',
-                    number: 3
-                },
-                {
-                    name: 'coping',
-                    number: 4
-                },
-                {
-                    name: 'family',
-                    number: 5
-                },
-                {
-                    name: 'friends',
-                    number: 6
-                },
-                {
-                    name: 'finance',
-                    number: 7
-                },
-                {
-                    name: 'strengths',
-                    number: 8
-                },
-                {
-                    name: 'self_esteem',
-                    number: 9
-                },
-                {
-                    name: 'life_as_whole',
-                    number: 10
-                }
-            ],
             questions: [],
-            question: {
-                title: null,
-                description: null,
-                help: null
-            },
             emails: [],
             email: null,
             surveyName: null,
             surveyAnon: true,
             startDate: null,
             endDate: null,
-            messageVisible: false,
-            message: null
+            lastWrapperHeight: null,
+            lastQuestionCardWidth: null,
+            editIndex: null,
+            surveyNameState: null,
+            message: null,
+            messageVisible: false
         }
     },
     components: {
         Datepicker
     },
     methods: {
+        addDefaultQuestions() {
+            const defaultQuestions = [
+                {
+                    name: 'health',
+                    default: true,
+                    questionAnimationId: Math.random()
+                },
+                {
+                    name: 'overcoming',
+                    default: true,
+                    questionAnimationId: Math.random()
+                },                        
+                {
+                    name: 'living',
+                    default: true,
+                    questionAnimationId: Math.random()
+                },
+                {
+                    name: 'coping',
+                    default: true,
+                    questionAnimationId: Math.random()
+                },
+                {
+                    name: 'family',
+                    default: true,
+                    questionAnimationId: Math.random()
+                },
+                {
+                    name: 'friends',
+                    default: true,
+                    questionAnimationId: Math.random()
+                },
+                {
+                    name: 'finance',
+                    default: true,
+                    questionAnimationId: Math.random()
+                },
+                {
+                    name: 'strengths',
+                    default: true,
+                    questionAnimationId: Math.random()
+                },
+                {
+                    name: 'self_esteem',
+                    default: true,
+                    questionAnimationId: Math.random()
+                },
+                {
+                    name: 'life_as_whole',
+                    default: true,
+                    questionAnimationId: Math.random()
+                }
+            ];
+            if (this.editIndex !== null) {
+                this.saveQuestion(this.editIndex)
+            }
+            if (defaultQuestions.every(defaultQuestion => this.$data.questions.some(question => question.name === defaultQuestion.name))) {
+                //delete defaultquestions if all of them exist
+                this.$data.questions = this.$data.questions.filter(question => !defaultQuestions.some(defaultQuestion => defaultQuestion.name === question.name))
+            } else {
+                //add nonexisting defaultquestions
+                const filteredDefaultQuestions = defaultQuestions.filter(defaultQuestion => !this.$data.questions.some(question => question.name === defaultQuestion.name))
+                this.$data.questions = [...filteredDefaultQuestions, ...this.$data.questions]
+            }
+        },
         addQuestion() {
+            if (this.editIndex !== null) {
+                this.saveQuestion(this.editIndex)
+            }
+            this.editIndex = this.$data.questions.length
             this.$data.questions.push({
-                    name: null,
-                    number: 11 + this.$data.questions.length,
-                    ...this.$data.question
-                })
-            this.$data.question.title = null
-            this.$data.question.description = null
-            this.$data.question.help = null
+                name: null,
+                title: null,
+                description: null,
+                help: null,
+                questionAnimationId: Math.random()
+            })
+        },
+        shiftQuestion(index, direction) {
+            if (this.editIndex !== null) {
+                this.saveQuestion(this.editIndex)
+            }
+            if (direction === 'up') {
+                this.$data.questions.splice(index === 0 ? this.$data.questions.length - 1 : index - 1, 0, ...this.$data.questions.splice(index, 1))
+            } else if (direction === 'down') {
+                this.$data.questions.splice(index === this.$data.questions.length - 1 ? 0 : index + 1, 0, ...this.$data.questions.splice(index, 1))
+            }
+        },
+        editQuestion(index) {
+            if (this.editIndex !== null) {
+                this.saveQuestion(this.editIndex)
+            }
+            this.editIndex = index
+            if (this.$data.questions[index].name) {
+                this.$data.questions[index].title = this.$t(`message.${this.$data.questions[index].name}_title`)
+                this.$data.questions[index].description = this.$t(`message.question_base`) + this.$t(`message.question_${this.$data.questions[index].name}`)
+                this.$data.questions[index].help = this.$t(`message.help_text_${this.$data.questions[index].name}`)
+            }
+        },
+        saveQuestion(index) {
+            if (this.$data.questions[index].default) {
+                if (this.$data.questions[index].title === this.$t(`message.${this.$data.questions[index].name}_title`) &&
+                    this.$data.questions[index].description === this.$t(`message.question_base`) + this.$t(`message.question_${this.$data.questions[index].name}`) &&
+                    this.$data.questions[index].help === this.$t(`message.help_text_${this.$data.questions[index].name}`)) {
+                        this.$data.questions[index].title = undefined
+                        this.$data.questions[index].description = undefined
+                        this.$data.questions[index].help = undefined
+                } else {
+                    this.$data.questions[index].name = null
+                }
+                this.$data.questions[index].edit = false
+            }
+            this.editIndex = null
         },
         removeQuestion(index) {
+            if (this.editIndex !== null) {
+                this.saveQuestion(this.editIndex)
+            }
             this.$data.questions.splice(index, 1)
         },
         addEmail() {
@@ -225,7 +303,11 @@ export default {
             this.$data.emails.splice(index, 1)
         },
         sendSurvey() {
-            if (this.$data.surveyName !== null) {
+            if (this.$data.questions.some(question => !question.name && (!question.title || !question.description)) || !this.$data.surveyName) {
+                if (!this.$data.surveyName) this.$data.surveyNameState = false
+                this.$root.$emit('bv::show::popover', 'sendSurveyButton')
+                setTimeout(() => this.$root.$emit('bv::hide::popover', 'sendSurveyButton'), 5000)
+            } else {
                 axios({
                     method: "POST",
                     url: process.env.VUE_APP_BACKEND + "/survey/create",
@@ -236,24 +318,54 @@ export default {
                         startDate: this.$data.startDate,
                         endDate: this.$data.endDate,
                         respondents_size: this.$data.emails.length,
-                        questions: [...this.$data.defaultQuestions, ...this.$data.questions],
-                        message: this.$data.message
+                        message: this.$data.message,
+                        questions: [...this.$data.questions.map((question, idx) => {
+                            return {
+                                name: question.name,
+                                title: question.title,
+                                description: question.description,
+                                help: question.help,
+                                number: idx + 1
+                            }
+                        })]
                     }
                 })
                 .then(res => {
                     this.$data.created = true
                 })
-            } else {
-                console.log('error')
             }
         },
         showMessage() {
             this.$data.messageVisible = true
+        },
+        beforeQuestionAnimation(el) {
+            this.lastWrapperHeight = getComputedStyle(this.$el.querySelector('#insertedQuestionsview')).height
+            this.lastQuestionCardWidth = getComputedStyle(el).width
+        },
+        questionAnimation(el) {
+            const wrapper = this.$el.querySelector('#insertedQuestionsview')
+            const wrapperHeight = getComputedStyle(wrapper).height
+            const questionCardWidth = getComputedStyle(el).width
+
+            wrapper.style.height = this.lastWrapperHeight
+            el.style.width = this.lastQuestionCardWidth
+
+            setTimeout(() => wrapper.style.height = wrapperHeight);
+        },
+        afterQuestionAnimation(el) {
+            this.$el.querySelector('#insertedQuestionsview').style.height = null
+            el.style.width = null
+            this.lastWrapperHeight = null
+            this.lastQuestionCardWidth = null
         }
     }
 }
 </script>
 <style lang="scss" scoped>
+
+.sendSurveyPopover {
+    color: red;
+}
 .rightsideCreate{
     background-color:#FFFFFF;
     width:80%;
@@ -392,86 +504,215 @@ export default {
             .questionsModify-div{
                 display:flex;
                 flex-direction:row;
-                margin:5rem 0 1rem 5rem;
+                margin:1rem 0 1rem 5rem;
 
                 .questionsModify-button{
                     background-color: #353535;
                     color: #FFFFFF;
                     border-radius: 10px;
-                    box-shadow: 0 5px 5px gray;
-                    width:10rem;
+                    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
                     height:auto;
                     font-weight:bold;
-                    margin-left:1.8rem;
 
-                    .iconButton-pencil{
+                    .iconButton-key {
                         margin-left:1rem;
+                    }
+
+                    &:hover {
+                        background-color: darken(#353535, 5%);
+                    }
+
+                    &:focus {
+                        background-color: darken(#353535, 10%);
                     }
                 }
             }
 
             #insertedQuestionsview{
                 background-color:#F9F9FB;
-                padding:1rem;
+                border-radius: 10px;
+                padding: 0 1rem 1rem 1rem;
                 margin-right:5rem;
                 margin-left:5rem;
                 margin-bottom:2rem;
+                transition: height 0.3s;
 
-                .questionInsert{
-                    display:flex;
-                    flex-direction:row;
-                    justify-content:space-around;
-                    margin-bottom:2rem;
-                    background-color:#FFFFFF;
-                    padding-top:1rem;
-                    padding-bottom:1rem;
+                .moreQuestions-button {
+                    background-color: #353535;
+                    color: #ffffff;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+                    height:auto;
+                    font-weight:bold;
+                    margin-top: 1rem;
+                    float: right;
 
-                    .writeinQuestion{
-                        width:80rem;
+                    .iconButton-plus{
+                        margin-left:1rem;
+                    }
+
+                    &:hover {
+                        background-color: darken(#353535, 5%)
+                    }
+
+                    &:focus {
+                        background-color: darken(#353535, 10%)
                     }
                 }
-                .moreQuestions-div{
-                    display:flex;
-                    justify-content:flex-end;
-                    margin:0rem 0 2rem 1rem;
 
-                    .moreQuestions-button{
-                        background-color: #353535;
-                        color: #ffffff;
-                        border-radius: 10px;
-                        box-shadow: 0 5px 5px gray;
-                        width:10rem;
-                        height:auto;
-                        font-weight:bold;
-                        margin-left:1.8rem;
-                        
-                        .iconButton-plus{
-                            margin-left:1rem;
-                        }
-                    }
-                }
                 .questionlistDiv{
                     .questionList{
-                        li{
-                            width:96%;;
-                            height:auto;
+                        .question-list  {
+                            &-move {
+                                transition: transform 0.4s;
+                            }
+                            &-enter {
+                                opacity: 0;
+                                transform: scale(0, 0);
+                            }
+                            &-enter-active {
+                                transition: all 0.4s;
+                            }
+                            &-leave-to {
+                                opacity: 0;
+                                transform: scale(0, 0);
+                            }
+                            &-leave-active {
+                                transition: all 0.4s;
+                                position: absolute;
+                            }
+                        }
+
+                        .questionCard {
                             border: 1px solid lightgrey;
+                            border-radius: 10px;
                             background-color:#FFFFFF;
-                            margin:1rem 0;
-                            padding:1rem;
+                            margin-top:1rem;
                             list-style-type:none;
-                            white-space: pre-wrap;
-                            word-wrap:break-word;
+                            word-wrap: normal;
                             font-size:1rem;
 
-                            .questionMention{
-                                margin-bottom:0.6rem;
+                            .questionNumber {
+                                color: rgb(118, 118, 118);
+                                position: absolute;
+                                top: 0.9rem;
+                                font-weight: bold;
+                                right: 9rem;
+                                user-select: none;
+                            }
+                            
+                            .questionHelpText {
+                                color: #6c757d;
+                                margin-top: -0.375rem;
+                                margin-bottom: 0;
+                                line-height: 1.2;
+                                font-weight: 500;
+                                border-bottom: 1px solid white;
+                                outline: none;
+                                white-space: pre-wrap;
 
-                                .questionTitle{
-                                    color:#350E7E;
-                                    font-size:1rem;
-                                    font-weight:bold;
-                                    margin-bottom:0.1rem;
+                                &[contenteditable="true"] {
+                                    border-bottom: 1px dashed rgb(224, 224, 224);
+
+                                    &:not(:focus):before {
+                                        content:attr(data-placeholder);
+                                        color:grey;
+                                        font-weight: normal;
+                                        position: absolute;
+                                        pointer-events: none;
+                                    }
+                                }
+                                
+                            }
+
+                            .questionDescription {
+                                border-bottom: 1px solid white;
+                                outline: none;
+                                white-space: pre-wrap;
+                                
+                                &[contenteditable="true"] {
+                                    border-bottom: 1px dashed rgb(224, 224, 224);
+
+                                    &:not(:focus):before {
+                                        content:attr(data-placeholder);
+                                        color:grey;
+                                        font-weight: normal;
+                                        position: absolute;
+                                        pointer-events: none;
+                                    }
+                                }
+
+                                &[contenteditable="false"]:before {
+                                    content:attr(data-placeholder);
+                                    color: rgba(220, 20, 60, 1);
+                                    font-weight: normal;
+                                    position: absolute;
+                                    pointer-events: none;
+                                }
+                            }
+
+                            .questionTitle {
+                                color:#350E7E;
+                                font-size:1.2rem;
+                                font-weight:bold;
+                                width: 70%;
+                                outline: none;
+                                border-bottom: 1px solid white;
+                                white-space: pre-wrap;
+
+                                &[contenteditable="true"] {
+                                    border-bottom: 1px dashed rgb(224, 224, 224);
+
+                                    &:not(:focus):before {
+                                        content:attr(data-placeholder);
+                                        color:grey;
+                                        font-weight: normal;
+                                        position: absolute;
+                                        pointer-events: none;
+                                    }
+                                }
+
+                                &[contenteditable="false"]:before {
+                                    content:attr(data-placeholder);
+                                    color: rgba(220, 20, 60, 1);
+                                    font-weight: normal;
+                                    position: absolute;
+                                    pointer-events: none;
+                                }
+
+                            }
+
+                            .questionButton {
+                                all: unset;
+                                line-height: 0;
+                                color: rgb(118, 118, 118);
+                                position: absolute;
+                                top: 1rem;
+                                transition: color 150ms;
+
+                                &:hover, &:focus {
+                                    color: #353535;
+                                }
+
+                                .icon {
+                                    width: 1.2rem;
+                                    height: 1.2rem;
+                                }
+
+                                &Delete {
+                                    right: 1rem
+                                }
+
+                                &Second {
+                                    right: 3rem;
+                                }
+
+                                &Third {
+                                    right: 5rem;
+                                }
+
+                                &Fourth {
+                                    right: 7rem;
                                 }
                             }
                         }
@@ -638,6 +879,10 @@ export default {
 @media only screen and (max-width: 1000px) {
     #insertedQuestionsview{
         margin-left:0.1rem !important;
+    }
+
+    .questionsModify-div {
+        margin-left: 0.1rem !important;
     }
     
     .emailContent{
