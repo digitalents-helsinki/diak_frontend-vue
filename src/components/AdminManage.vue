@@ -67,7 +67,7 @@
                 </div>
                 <div v-else-if="field.colType === 'delete'">
                   <button @click="archiveSurvey(data.item.surveyId)"> <font-awesome-icon icon="folder" style="font-size:1.6rem; color:grey;"/></button>
-                  <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:red;"/> </button>
+                  <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:#FF0000;"/> </button>
                 </div>
               </div>
             </template> 

@@ -26,6 +26,7 @@
     <div class="container main">
       <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logoProfile" />
       <div class="textContainer">
+        <LangMenu />
         <h2>Testaa kyselyä</h2>
         <button @click="handleUserClick" class="btn btn-primary">Siirry käyttäjänäkymään</button>
         <button @click="handleTestQuestionnaireClick" class="btn btn-primary">Siirry testikyselyyn</button>
@@ -35,8 +36,13 @@
   </div>
 </template>
 <script>
+import LangMenu from '@/components/Languages.vue';
+
 export default {
   name: 'home',
+  components:{
+    LangMenu
+  },
   methods: {
     handleUserClick() {
       this.$router.push({ path: '/user' })

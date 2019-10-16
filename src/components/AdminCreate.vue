@@ -129,8 +129,9 @@
                         </ul>
                     </div>
                 </div>
-                <div class="putMessagediv">
-                    <button class="btn putMessage"><font-awesome-icon icon="paperclip" class="putMessageicon"/>{{ $t('message.addMessage') }}</button>
+                <div  class="putMessagediv">
+                    <button v-if="!messageVisible" class="btn putMessage" @click="showMessage"><font-awesome-icon icon="paperclip" class="putMessageicon"/>{{ $t('message.addMessage') }}</button>
+                    <input v-if="messageVisible" v-model="message" class="writeMessage" type="text" />
                 </div> 
                 <div class="bottom-buttons">
                     <button class="btn savecontinueBottom">{{ $t('message.saveContinue') }}</button>
@@ -174,7 +175,9 @@ export default {
             lastWrapperHeight: null,
             lastQuestionCardWidth: null,
             editIndex: null,
-            surveyNameState: null
+            surveyNameState: null,
+            message: null,
+            messageVisible: false
         }
     },
     computed: {
@@ -326,6 +329,7 @@ export default {
                         startDate: this.$data.formattedStartDate,
                         endDate: this.$data.formattedEndDate,
                         respondents_size: this.$data.emails.length,
+                        message: this.$data.message,
                         questions: [...this.$data.questions.map((question, idx) => {
                             return {
                                 name: question.name,
@@ -341,6 +345,9 @@ export default {
                     this.$data.created = true
                 })
             }
+        },
+        showMessage() {
+            this.$data.messageVisible = true
         },
         beforeQuestionAnimation(el) {
             this.lastWrapperHeight = getComputedStyle(this.$el.querySelector('#insertedQuestionsview')).height
@@ -740,6 +747,7 @@ export default {
 
         .adminaddEmail{
             margin-left:5rem;
+            margin-right: 5rem;
             display:flex;
             flex-direction:column;
 
@@ -830,6 +838,7 @@ export default {
             .putMessagediv{
                 margin-left:3rem;
                 margin-bottom:8rem;
+                margin-right: 3rem;
 
                 .putMessage{
                     background-color: #FFFFFF;
@@ -844,6 +853,10 @@ export default {
                     .putMessageicon{
                         margin-right:1rem;
                     }
+                }
+
+                .writeMessage {
+                    width: 100%;
                 }
             }
         }
