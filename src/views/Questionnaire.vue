@@ -6,7 +6,8 @@
       v-on:toggleModal="toggleModal"
     />
     <div class="questionnaire container text-center shadow-lg">
-      <div class="loader-spinner-container" v-if="!currentQuestionData && questionnum < navigationData.questionamount">
+     <b-alert v-if="errormessage" show variant="danger"><p>Survey not active</p></b-alert>
+      <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount">
         <b-spinner label="Loading..." />
       </div>
       <form>
@@ -57,7 +58,8 @@ export default {
       modal_visible: null,
       anonId: this.$route.params.anonId,
       surveyId: this.$route.params.surveyId,
-      surveyName: ""
+      surveyName: "",
+      errormessage:null
     };
   },
   computed: {
@@ -103,6 +105,10 @@ export default {
       })()
       //
       const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/" + id);
+      console.log(res)
+      if (res.data === "survey not active") {
+        this.errormessage = true;
+      }
       const reducedData = res.data.Questions.reduce((arr, question) => {
         if(!question.name.endsWith("_custom")) {
           arr[question.number - 1] = {
