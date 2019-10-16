@@ -110,7 +110,8 @@
                     </div>
                 </div>
                 <div  class="putMessagediv">
-                    <button class="btn putMessage"><font-awesome-icon icon="paperclip" class="putMessageicon"/>{{ $t('message.addMessage') }}</button>
+                    <button v-if="!messageVisible" class="btn putMessage" @click="showMessage"><font-awesome-icon icon="paperclip" class="putMessageicon"/>{{ $t('message.addMessage') }}</button>
+                    <input v-if="messageVisible" v-model="message" class="writeMessage" type="text" />
                 </div> 
                 <div class="bottom-buttons">
                     <button class="btn savecontinueBottom">{{ $t('message.saveContinue') }}</button>
@@ -194,7 +195,9 @@ export default {
             surveyName: null,
             surveyAnon: true,
             startDate: null,
-            endDate: null
+            endDate: null,
+            messageVisible: false,
+            message: null
         }
     },
     components: {
@@ -233,7 +236,8 @@ export default {
                         startDate: this.$data.startDate,
                         endDate: this.$data.endDate,
                         respondents_size: this.$data.emails.length,
-                        questions: [...this.$data.defaultQuestions, ...this.$data.questions]
+                        questions: [...this.$data.defaultQuestions, ...this.$data.questions],
+                        message: this.$data.message
                     }
                 })
                 .then(res => {
@@ -242,6 +246,9 @@ export default {
             } else {
                 console.log('error')
             }
+        },
+        showMessage() {
+            this.$data.messageVisible = true
         }
     }
 }
@@ -475,6 +482,7 @@ export default {
 
         .adminaddEmail{
             margin-left:5rem;
+            margin-right: 5rem;
             display:flex;
             flex-direction:column;
 
@@ -565,6 +573,7 @@ export default {
             .putMessagediv{
                 margin-left:3rem;
                 margin-bottom:8rem;
+                margin-right: 3rem;
 
                 .putMessage{
                     background-color: #FFFFFF;
@@ -579,6 +588,10 @@ export default {
                     .putMessageicon{
                         margin-right:1rem;
                     }
+                }
+
+                .writeMessage {
+                    width: 100%;
                 }
             }
         }
