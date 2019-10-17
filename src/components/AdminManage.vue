@@ -49,7 +49,8 @@
         <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
           <div v-bind:key="field.key">
             <div v-if="field.colType === 'name'">
-              <span>{{data.item.name}}</span>
+              <span v-if="data.item.name.length <= 20">{{data.item.name}}</span>
+              <span v-else v-b-tooltip="data.item.name" tabindex="0">{{data.item.name.substring(0, 17) + '...'}}</span>
             </div>
             <div v-else-if="field.colType === 'startDate'">
               <span v-if="data.item.startDate">{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
@@ -60,7 +61,8 @@
               <span v-else>-</span>
             </div>
             <div v-else-if="field.colType === 'respondentsSize'">
-              <span>0/{{data.item.respondents_size}}</span>
+              <span v-if="data.item.respondents_size">{{data.item.responses || 0}}/{{data.item.respondents_size}}</span>
+              <span v-else>{{data.item.responses || 0}}</span>
             </div>
             <div v-else-if="field.colType === 'modify'">
               <button><font-awesome-icon icon="pencil-alt" style="font-size:1.5rem;"/></button>
@@ -73,7 +75,7 @@
               <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:#FF0000;"/> </button>
             </div>
           </div>
-        </template> 
+        </template>
       </b-table>
     </div>
     <transition name="slide" mode="in-out">
@@ -143,7 +145,7 @@ export default {
         loaded: false
     }
   },
-  /*computed: {
+  computed: {
     displayedSurveys: function() {
       if(this.display === "archived") {
         return this.$data.surveys.filter(obj => obj.archived)
@@ -151,7 +153,7 @@ export default {
           return this.$data.surveys
         }
       }
-    },*/
+    },
   methods: {
     async getSurveys() {
       const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/all")
@@ -360,6 +362,16 @@ export default {
         display:flex;
         flex-direction:row;
         margin-bottom:1rem;
+
+        #butttonRight{
+          color: #ffffff;
+          border-radius: 5px;
+          padding-right:0.7rem;
+          padding-left:0.7rem;
+          height:auto;
+          margin-top:0.5rem;
+          margin-left:1.8rem;
+        }
       }
       
       .tableDisplayfields{
