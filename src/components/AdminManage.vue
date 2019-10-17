@@ -1,8 +1,8 @@
 <template>
-    <div class="rightsideManage">
-      <div class="rightsideManage-top">
-        <p>{{ $t('message.manageSurveys') }}</p>
-      </div>
+  <div class="rightsideManage">
+    <div class="rightsideManage-top">
+      <p>{{ $t('message.manageSurveys') }}</p>
+    </div>
     <div class="totalinstructionsearch">
       <div class="totalParagraph">
         <p>{{ $t('message.total') }}</p>
@@ -18,69 +18,83 @@
           <font-awesome-icon icon="arrow-right" style="font-size:1.8rem;"/>
         </div>
         <div class="instructiondivtwo">
-        <p class="divtwoHeading">{{ $t('message.reportHeading') }} </p>
-        <p class="divtwoParagraph">{{ $t('message.reportParagraph') }} </p>
-        <div class="reportimageButton"><img src="../images/assessment_24px.png" alt="" style="width:25px; height:25px;"/></div>
+          <p class="divtwoHeading">{{ $t('message.reportHeading') }} </p>
+          <p class="divtwoParagraph">{{ $t('message.reportParagraph') }} </p>
+          <div class="reportimageButton"><img src="../images/assessment_24px.png" alt="" style="width:25px; height:25px;"/></div>
         </div>
       </div>
       <div class="searchbar-div">
-          <p class="paragraphTop">{{ $t('message.searchParagraph') }}</p>
-          <b-input-group size="md" class="search-bar">
-            <span> <font-awesome-icon icon="search" class="iconsearch"/> </span>
-            <b-form-input v-bind:placeholder="$t('message.searchPlaceholder')"></b-form-input>
-          </b-input-group>
+        <p class="paragraphTop">{{ $t('message.searchParagraph') }}</p>
+        <b-input-group size="md" class="search-bar">
+          <span> <font-awesome-icon icon="search" class="iconsearch"/> </span>
+          <b-form-input v-bind:placeholder="$t('message.searchPlaceholder')"></b-form-input>
+        </b-input-group>
       </div>
     </div>
-      <div class="tableandfilter">
-        <div class="buttonstotal">
-          <div>
-            <b-dropdown id="dropdownleft" variant="secondary" text="Kaikki kyselyt" class="m-md-2 dropdownButtonsleft">
-              <b-dropdown-item>item</b-dropdown-item>
-              <b-dropdown-item>item</b-dropdown-item>
-            </b-dropdown>
-          </div>
-          <div>
-            <b-button variant="secondary" @click="toggleDisplay" id="butttonRight">{{ $t('message.archiveButton') }}</b-button>
-          </div>
+    <div class="tableandfilter">
+      <div class="buttonstotal">
+        <div>
+          <b-dropdown id="dropdownleft" variant="secondary" text="Kaikki kyselyt" class="m-md-2 dropdownButtonsleft">
+            <b-dropdown-item>item</b-dropdown-item>
+            <b-dropdown-item>item</b-dropdown-item>
+          </b-dropdown>
         </div>
-        <div class="tableDisplayfields">
-          <b-table hover responsive :items="surveys" :fields="fields" bordered head-variant="light">
-            <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
-              <div v-bind:key="field.key">
-                <div v-if="field.colType === 'name'">
-                  <span>{{data.item.name}}</span>
-                </div>
-                <div v-else-if="field.colType === 'startDate'">
-                  <span>{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
-                </div>
-                <div v-else-if="field.colType === 'endDate'">
-                  <span>{{data.item.endDate | moment('DD/MM/YYYY')}}</span>
-                </div>
-                <div v-else-if="field.colType === 'respondentsSize'">
-                  <span>0/{{data.item.respondents_size}}</span>
-                </div>
-                <div v-else-if="field.colType === 'modify'">
-                  <button> <font-awesome-icon icon="pencil-alt" style="font-size:1.5rem;"/></button>
-                </div>
-                <div v-else-if="field.colType === 'analyze'">
-                  <button> <img src="../images/assessment_24px.png" alt="" style="width:25px; height:25px;"/></button>
-                </div>
-                <div v-else-if="field.colType === 'delete'">
-                  <button @click="archiveSurvey(data.item.surveyId)"> <font-awesome-icon icon="folder" style="font-size:1.6rem; color:grey;"/></button>
-                  <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:#FF0000;"/> </button>
-                </div>
-              </div>
-            </template> 
-          </b-table>
+        <div>
+          <b-button variant="secondary" @click="toggleDisplay" id="butttonRight">{{ $t('message.archiveButton') }}</b-button>
         </div>
       </div>
+    </div>
+    <div class="tableDisplayfields">
+      <b-table hover responsive :items="surveys" :fields="fields" bordered head-variant="light">
+        <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
+          <div v-bind:key="field.key">
+            <div v-if="field.colType === 'name'">
+              <span>{{data.item.name}}</span>
+            </div>
+            <div v-else-if="field.colType === 'startDate'">
+              <span v-if="data.item.startDate">{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
+              <span v-else>-</span>
+            </div>
+            <div v-else-if="field.colType === 'endDate'">
+              <span v-if="data.item.endDate">{{data.item.endDate | moment('DD/MM/YYYY')}}</span>
+              <span v-else>-</span>
+            </div>
+            <div v-else-if="field.colType === 'respondentsSize'">
+              <span>0/{{data.item.respondents_size}}</span>
+            </div>
+            <div v-else-if="field.colType === 'modify'">
+              <button><font-awesome-icon icon="pencil-alt" style="font-size:1.5rem;"/></button>
+            </div>
+            <div v-else-if="field.colType === 'analyze'">
+              <button v-bind:id="`open-${data.item.surveyId}`" @click="openSurveyResults(data.item.surveyId)"><img src="../images/assessment_24px.png" alt="chart" style="width:25px; height:25px;"/></button>
+            </div>
+            <div v-else-if="field.colType === 'delete'">
+              <button @click="archiveSurvey(data.item.surveyId)"> <font-awesome-icon icon="folder" style="font-size:1.6rem; color:grey;"/></button>
+              <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:#FF0000;"/> </button>
+            </div>
+          </div>
+        </template> 
+      </b-table>
+    </div>
+    <transition name="slide" mode="in-out">
+      <SurveyResults 
+        v-if="surveyResultsId"
+        v-on:closeResults="surveyResultsId = null"
+        v-bind:surveyId="surveyResultsId" 
+        v-bind:surveyName="surveys.find(survey => survey.surveyId === surveyResultsId).name"
+      />
+    </transition>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import SurveyResults from './SurveyResults'
 
 export default {
   name: 'admin-manage',
+  components: {
+    SurveyResults
+  },
   data() {
     return {
         fields: [
@@ -114,7 +128,7 @@ export default {
           },
           {
             key: 'control',
-            label: 'Reportti',
+            label: 'Raportti',
             colType: 'analyze'
           },
           {
@@ -124,6 +138,7 @@ export default {
           }
         ],
         surveys: [],
+        surveyResultsId: null,
         display: "archived",
         loaded: false
     }
@@ -165,21 +180,32 @@ export default {
         }
       })
     },
+    openSurveyResults(surveyId) {
+      if (this.surveyResultsId !== null && this.surveyResultsId !== surveyId) {
+        this.surveyResultsId = null
+        setTimeout(() => this.surveyResultsId = surveyId) //trigger component reload
+      } else if (this.surveyResultsId === null) {
+        this.surveyResultsId = surveyId
+      } else {
+        this.surveyResultsId = null
+      }
+    },
     toggleDisplay() {
-      if(this.display === "all") {
+      if (this.display === "all") {
         this.display = "archived"
       } else {
         this.display = "all"
       }
     }
   },
-  mounted() {
+  created() {
     this.getSurveys()
   }
 }  
 </script>
 <style lang="scss">
 .table {
+  margin-bottom: 0;
   tbody {
     tr {
       text-align: center;
@@ -189,9 +215,35 @@ export default {
 
 .rightsideManage{
     background-color:#F9F9FB;
-    width:90%;
+    width:80%;
     margin:1rem;
     box-shadow: 0 5px 5px #787878;
+
+    .slide {
+      &-enter {
+        transform: translateY(-110%);
+
+        &-to {
+          transform: translateY(0);
+        }
+
+        &-active {
+          transition: transform 0.4s;
+        }
+      }
+
+      &-leave {
+        transform: translateY(0);
+
+        &-to {
+          transform: translateY(-110%);
+        }
+
+        &-active {
+          transition: transform 0.4s;
+        }
+      }
+    }
 
     .rightsideManage-top{
         background-color:#350E7E;
