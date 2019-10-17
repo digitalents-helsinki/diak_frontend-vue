@@ -326,8 +326,8 @@ export default {
                         to: this.$data.emails, 
                         id: this.$data.surveyName, 
                         anon: this.$data.surveyAnon,
-                        startDate: this.$data.formattedStartDate,
-                        endDate: this.$data.formattedEndDate,
+                        startDate: this.formattedStartDate,
+                        endDate: this.formattedEndDate,
                         respondents_size: this.$data.emails.length,
                         message: this.$data.message,
                         questions: [...this.$data.questions.map((question, idx) => {
