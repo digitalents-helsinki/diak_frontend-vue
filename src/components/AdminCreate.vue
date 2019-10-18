@@ -64,8 +64,7 @@
                                         v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
                                         v-on:keydown.enter="lockQuestions()"
-                                        v-editable:100="question.name ? $t(`message.${question.name}_title`) : question.title"
-                                        v-bind:contenteditable="editIndex === index"
+                                        v-editable:100="{condition: editIndex === index, content: question.name ? $t(`message.${question.name}_title`) : question.title}"
                                         spellcheck="false" 
                                         class="questionTitle"
                                         v-bind:data-placeholder="question.name ? '' : question.title ? '' : editIndex === index ? $t('message.questionTitlePlaceholder') : $t('message.questionTitlePlaceholder') + ' *'"
@@ -75,8 +74,7 @@
                                         v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
                                         v-on:keydown.enter="lockQuestions()"
-                                        v-editable:200="question.name ? $t(`message.question_base`) + $t(`message.question_${question.name}`) : question.description"
-                                        v-bind:contenteditable="editIndex === index" 
+                                        v-editable:200="{condition: editIndex === index, content: question.name ? $t(`message.question_base`) + $t(`message.question_${question.name}`) : question.description}"
                                         spellcheck="false" 
                                         class="questionDescription"
                                         v-bind:data-placeholder="question.name ? '' : question.description !== null ? '' : editIndex === index ? $t('message.questionDescriptionPlaceholder') : $t('message.questionDescriptionPlaceholder') + ' *'"
@@ -86,8 +84,7 @@
                                         v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
                                         v-on:keydown.enter="lockQuestions()"
-                                        v-editable:1000="question.name ? $t(`message.help_text_${question.name}`) : question.help"
-                                        v-bind:contenteditable="editIndex === index"
+                                        v-editable:1000="{condition: editIndex === index, content: question.name ? $t(`message.help_text_${question.name}`) : question.help}"
                                         spellcheck="false" 
                                         class="questionHelpText"
                                         v-bind:data-placeholder="question.help === null ? $t('message.questionHelpPlaceholder') : ''"
@@ -373,8 +370,9 @@ export default {
     directives: {
         editable: {
             bind(el, binding, vnode) {
-                if (binding.value) el.textContent = binding.value
-                //gets character limit from first modifier
+                if (binding.value.content) el.textContent = binding.value.content
+                if (binding.value.condition) el.contentEditable = true
+                //character limit from directive arg
                 const limit = Number(binding.arg) || Infinity
                 //prevents accidentally pasting html in the field and limits paste length
                 el.addEventListener('paste', e => {
@@ -395,8 +393,12 @@ export default {
             },
             update(el, binding, vnode) {
                 //only updates if element is not focused (prevents caret from jumping around)
-                if (binding.value && document.activeElement !== el) {
-                    el.textContent = binding.value
+                if (binding.value.content && document.activeElement !== el) {
+                    el.textContent = binding.value.content
+                }
+                //set contenteditable attribute to the condition
+                if (binding.value.condition !== el.contentEditable) {
+                    el.contentEditable = binding.value.condition
                 }
             }
         }
