@@ -43,6 +43,7 @@
                   <b-form-select
                     id="genderEnter"
                     :options="gender.fi"
+                     v-model="personalinfo.gender" 
                   ></b-form-select>
                 </b-form-group>
                 <b-form-group
@@ -80,6 +81,7 @@ export default {
       personalinfo: {
         name: null,
         address: null,
+        gender:null,
         phonenumber: null
       }
     }
