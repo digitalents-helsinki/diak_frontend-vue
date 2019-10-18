@@ -207,7 +207,6 @@ export default {
 </script>
 <style lang="scss">
 .table {
-  margin-bottom: 0;
   tbody {
     tr {
       text-align: center;
@@ -218,19 +217,19 @@ export default {
 .rightsideManage{
     background-color:#F9F9FB;
     width:80%;
-    margin:1rem;
+    margin: 1rem;
     box-shadow: 0 5px 5px #787878;
 
     .slide {
       &-enter {
-        transform: translateY(-110%);
+        transform: translateY(100vh);
 
         &-to {
           transform: translateY(0);
         }
 
         &-active {
-          transition: transform 0.4s;
+          transition: transform 0.2s;
         }
       }
 
@@ -238,11 +237,11 @@ export default {
         transform: translateY(0);
 
         &-to {
-          transform: translateY(-110%);
+          transform: translateY(100vh);
         }
 
         &-active {
-          transition: transform 0.4s;
+          transition: transform 0.2s;
         }
       }
     }
@@ -395,6 +394,7 @@ export default {
 @media only screen and (max-width: 1400px) {
     .rightsideManage{
       width:100%;
+      margin-bottom: 0;
     }
 }
 </style>

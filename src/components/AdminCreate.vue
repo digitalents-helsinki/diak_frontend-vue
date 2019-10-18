@@ -393,7 +393,7 @@ export default {
 .rightsideCreate{
     background-color:#FFFFFF;
     width:80%;
-    margin:1rem;
+    margin: 1rem;
     box-shadow: 0 5px 5px #787878;
 
     .rightsideCreate-top{
@@ -896,7 +896,8 @@ export default {
 
 @media only screen and (max-width: 1400px) {
     .rightsideCreate{
-        width:100%;   
+        width:100%;
+        margin-bottom: 0;
     }
 }
 

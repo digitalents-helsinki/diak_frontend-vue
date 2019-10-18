@@ -219,10 +219,11 @@ export default {
 <style lang="scss">
 .mainWrapper {
   position: fixed;
-  width: calc(90% - 2rem);
   max-height: calc(100vh - 2rem);
   margin: 1rem;
   top: 0;
+  left: 10%;
+  right: 10%;
   background-color: white;
   border: 1px solid #dee2e6;
   padding: 1rem;
@@ -269,6 +270,7 @@ export default {
   @media only screen and (max-width: 1400px) {
     .mainWrapper{
       width: calc(100% - 2rem);
+      left: 0;
     }
 }
 </style>
