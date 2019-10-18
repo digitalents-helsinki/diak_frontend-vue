@@ -1,8 +1,5 @@
 <template>
     <div id="maindivInfo">
-      <b-container fluid id="topofPage">
-        <div id="logoPlace"><img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="headerLogo"/></div>
-      </b-container>
       <b-container>
         <div class="infoTopcontent">
           <div id="personalContent">
@@ -14,14 +11,14 @@
                   v-bind:label="$t('message.userName')"
                   label-for="firstandfamilyname"
                 >
-                  <b-form-input id="firstandfamilyname" type="text" name="firstandfamilyname"></b-form-input>
+                  <b-form-input id="firstandfamilyname" v-model="personalinfo.name" type="text" name="firstandfamilyname"></b-form-input>
                 </b-form-group>
                 <b-form-group
                   id="addressField"
                   v-bind:label="$t('message.userAddress')"
                   label-for="enteraddress"
                 >
-                  <b-form-input id="enteraddress" type="text" name="enteraddress"></b-form-input>
+                  <b-form-input id="enteraddress" v-model="personalinfo.address" type="text" name="enteraddress"></b-form-input>
                 </b-form-group>
                 <b-form-group
                   id="ageField"
@@ -53,17 +50,10 @@
                   v-bind:label="$t('message.userPhonenumber')"
                   label-for="enterphonenumber"
                 >
-                  <b-form-input id="enterphonenumber" type="tel" name="enterphonenumber"></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  id="emailaddressField"
-                  v-bind:label="$t('message.userEmailaddress')"
-                  label-for="emailaddressField"
-                >
-                  <b-form-input id="enteremailaddress" type="email" name="emailaddressField"></b-form-input>
+                  <b-form-input id="enterphonenumber" v-model="personalinfo.phonenumber" type="tel" name="enterphonenumber"></b-form-input>
                 </b-form-group>
                 <div id="submitinfoform">
-                  <b-button type="submit" class="submitIncluded">{{ $t('message.ProfilesubmitButton') }}</b-button>
+                  <b-button type="submit" @click="postInfo" class="submitIncluded">{{ $t('message.ProfilesubmitButton') }}</b-button>
                 </div>
               </b-form>
             </div>
@@ -73,7 +63,9 @@
   </div>
 </template>
 <script>
- 
+import axios from 'axios'
+import store from '@/store'
+
 export default {
   name: 'PersonalInfo',
   data() {
@@ -84,7 +76,23 @@ export default {
       },
         gender: {
             fi: ['Mies', 'Nainen', 'Muu']
-        },
+      },
+      personalinfo: {
+        name: null,
+        address: null,
+        phonenumber: null
+      }
+    }
+  },
+  methods: {
+    postInfo() {
+      axios({
+        method: "POST",
+        url: process.env.VUE_APP_BACKEND + "/user/" + store.state.auth.userId + "/info/update",
+        data: {
+          personalinfo: this.$data.personalinfo
+        }
+      })
     }
   }
 }
