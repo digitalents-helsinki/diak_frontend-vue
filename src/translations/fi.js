@@ -63,6 +63,7 @@ export const fi = {
     saveContinue:'Tallenna ja jatka myöhemmin',
     disCard:'Hylkää',
     adminformName:'1. Anna kyselylle nimi.',
+    surveyNameRequired: 'Kyselyllä täytyy olla nimi.',
     radioOption:'2. Onko kysely anonyymi vai autentikoitu?',
     namePlaceholder:'Kirjoita tähän.',
     authenticationRadio:'Autentikoitu',

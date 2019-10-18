@@ -19,6 +19,9 @@
                     name="forminputName"
                     v-bind:placeholder="$t('message.namePlaceholder')"
                 />
+                <b-form-invalid-feedback>
+                    {{$t('message.surveyNameRequired')}}
+                </b-form-invalid-feedback>
             </div>
             <hr class="borderLine">
             <div class="optionValue">
