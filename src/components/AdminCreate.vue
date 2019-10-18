@@ -64,7 +64,7 @@
                                         v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
                                         v-on:keydown.enter="lockQuestions()"
-                                        v-editable="question.name ? $t(`message.${question.name}_title`) : question.title"
+                                        v-editable.100="question.name ? $t(`message.${question.name}_title`) : question.title"
                                         v-bind:contenteditable="editIndex === index"
                                         spellcheck="false" 
                                         class="questionTitle"
@@ -75,7 +75,7 @@
                                         v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
                                         v-on:keydown.enter="lockQuestions()"
-                                        v-editable="question.name ? $t(`message.question_base`) + $t(`message.question_${question.name}`) : question.description"
+                                        v-editable.200="question.name ? $t(`message.question_base`) + $t(`message.question_${question.name}`) : question.description"
                                         v-bind:contenteditable="editIndex === index" 
                                         spellcheck="false" 
                                         class="questionDescription"
@@ -86,7 +86,7 @@
                                         v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
                                         v-on:keydown.enter="lockQuestions()"
-                                        v-editable="question.name ? $t(`message.help_text_${question.name}`) : question.help"
+                                        v-editable.1000="question.name ? $t(`message.help_text_${question.name}`) : question.help"
                                         v-bind:contenteditable="editIndex === index"
                                         spellcheck="false" 
                                         class="questionHelpText"
@@ -372,11 +372,29 @@ export default {
     },
     directives: {
         editable: {
-            //only updates if element is not focused (prevents caret from jumping around)
             bind(el, binding, vnode) {
                 if (binding.value) el.textContent = binding.value
+                //gets character limit from first modifier
+                const limit = Object.keys(binding.modifiers)[0]
+                //prevents accidentally pasting html in the field and limits paste length
+                el.addEventListener('paste', e => {
+                    e.preventDefault();
+                    const remainingLimit = limit - el.textContent.length
+                    const text = e.clipboardData.getData('text/plain').substring(0, remainingLimit);
+                    document.execCommand('inserttext', false, text);
+                });
+                //prevent typing at the limit
+                const allowedKeys = ['BackSpace', 'Delete', 'Down', 'ArrowDown', 'Up', 'ArrowUp', 'Left', 'ArrowLeft', 'Right', 'ArrowRight']
+                el.addEventListener('keydown', e => {
+                    if (!allowedKeys.includes(e.key) && !e.ctrlKey) {
+                        if (e.target.textContent.length >= limit) {
+                            e.preventDefault()
+                        }
+                    }
+                })
             },
             update(el, binding, vnode) {
+                //only updates if element is not focused (prevents caret from jumping around)
                 if (document.activeElement !== el && binding.value && binding.value !== binding.oldValue) {
                     el.textContent = binding.value
                 }
