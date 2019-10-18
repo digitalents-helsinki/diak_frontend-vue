@@ -3,6 +3,9 @@
       <div class="userprofileTop">
         <div class="logoLocation"><img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logoHere"/></div>
       </div>
+      <div v-if="!hasInfo">
+        <personal-info />
+      </div>
       <!--<div class="usernameLogout">
         <div class="user-name">
             <p class="namelocation"> {{ $t('message.userNametesting') }}</p>
@@ -11,7 +14,7 @@
             <button class="btn userlogoutButton">{{ $t('message.logoutButtontranslate') }}</button>
         </div>
       </div>-->
-    <b-container>
+    <b-container v-if="hasInfo">
       <div class="profilecontentUser">
         <div class="profiledivUser">
             <p class="paragraphTop"> {{ $t('message.profileInstruction') }}</p> 
@@ -48,13 +51,16 @@ export default {
   data() {
     return {
       isLogged: false,
-      hasInfo: true,
+      hasInfo: false,
       user: null
     }
   },
   methods: {
     async getUser() {
       this.$data.user = await axios.get(process.env.VUE_APP_BACKEND + "/user/" + store.state.auth.userId)
+      if (this.$data.user.data.name) {
+        this.$data.hasInfo = true
+      }
     },
     getUserSurveys() {
       
