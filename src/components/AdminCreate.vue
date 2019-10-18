@@ -64,7 +64,7 @@
                                         v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
                                         v-on:keydown.enter="lockQuestions()"
-                                        v-editable.100="question.name ? $t(`message.${question.name}_title`) : question.title"
+                                        v-editable:100="question.name ? $t(`message.${question.name}_title`) : question.title"
                                         v-bind:contenteditable="editIndex === index"
                                         spellcheck="false" 
                                         class="questionTitle"
@@ -75,7 +75,7 @@
                                         v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
                                         v-on:keydown.enter="lockQuestions()"
-                                        v-editable.200="question.name ? $t(`message.question_base`) + $t(`message.question_${question.name}`) : question.description"
+                                        v-editable:200="question.name ? $t(`message.question_base`) + $t(`message.question_${question.name}`) : question.description"
                                         v-bind:contenteditable="editIndex === index" 
                                         spellcheck="false" 
                                         class="questionDescription"
@@ -86,7 +86,7 @@
                                         v-on:click.prevent
                                         v-on:dblclick="editQuestion(index)"
                                         v-on:keydown.enter="lockQuestions()"
-                                        v-editable.1000="question.name ? $t(`message.help_text_${question.name}`) : question.help"
+                                        v-editable:1000="question.name ? $t(`message.help_text_${question.name}`) : question.help"
                                         v-bind:contenteditable="editIndex === index"
                                         spellcheck="false" 
                                         class="questionHelpText"
@@ -129,7 +129,7 @@
                         </ul>
                     </div>
                 </div>
-                <div  class="putMessagediv">
+                <div class="putMessagediv">
                     <button v-if="!messageVisible" class="btn putMessage" @click="showMessage"><font-awesome-icon icon="paperclip" class="putMessageicon"/>{{ $t('message.addMessage') }}</button>
                     <input v-if="messageVisible" v-model="message" class="writeMessage" type="text" />
                 </div> 
@@ -375,7 +375,7 @@ export default {
             bind(el, binding, vnode) {
                 if (binding.value) el.textContent = binding.value
                 //gets character limit from first modifier
-                const limit = Object.keys(binding.modifiers)[0]
+                const limit = Number(binding.arg) || Infinity
                 //prevents accidentally pasting html in the field and limits paste length
                 el.addEventListener('paste', e => {
                     e.preventDefault();
@@ -395,7 +395,7 @@ export default {
             },
             update(el, binding, vnode) {
                 //only updates if element is not focused (prevents caret from jumping around)
-                if (document.activeElement !== el && binding.value && binding.value !== binding.oldValue) {
+                if (binding.value && document.activeElement !== el) {
                     el.textContent = binding.value
                 }
             }
