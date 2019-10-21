@@ -180,16 +180,6 @@ export default {
             messageVisible: false
         }
     },
-    computed: {
-        formattedStartDate() {
-            if (this.startDate) return new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate())
-            else return null
-        },
-        formattedEndDate() {
-            if (this.endDate) return new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate(), 23, 59, 59)
-            else return null
-        }
-    },
     components: {
         Datepicker
     },
@@ -326,8 +316,8 @@ export default {
                         to: this.$data.emails, 
                         id: this.$data.surveyName, 
                         anon: this.$data.surveyAnon,
-                        startDate: this.formattedStartDate,
-                        endDate: this.formattedEndDate,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
                         respondents_size: this.$data.emails.length,
                         message: this.$data.message,
                         questions: [...this.$data.questions.map((question, idx) => {
