@@ -43,7 +43,7 @@
                   <b-form-select
                     id="genderEnter"
                     :options="gender.fi"
-                     v-model="personalinfo.gender" 
+                    v-model="personalinfo.gender" 
                   ></b-form-select>
                 </b-form-group>
                 <b-form-group
@@ -54,7 +54,7 @@
                   <b-form-input id="enterphonenumber" v-model="personalinfo.phonenumber" type="tel" name="enterphonenumber"></b-form-input>
                 </b-form-group>
                 <div id="submitinfoform">
-                  <b-button type="submit" @click="postInfo" class="submitIncluded">{{ $t('message.ProfilesubmitButton') }}</b-button>
+                  <b-button type="submit" @click.prevent="postInfo" class="submitIncluded">{{ $t('message.ProfilesubmitButton') }}</b-button>
                 </div>
               </b-form>
             </div>

@@ -71,6 +71,7 @@ export default {
   },
   mounted() {
     this.getUser()
+    this.getUserSurveys()
   }
 }
 </script>
