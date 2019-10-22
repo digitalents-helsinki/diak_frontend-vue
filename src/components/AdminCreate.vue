@@ -34,12 +34,12 @@
                 <p class="date-paragraph">{{ $t('message.dateParagraph') }}</p>
                 <div class="startdateOption">
                     <p> {{ $t('message.startDate') }}</p>
-                    <datepicker v-model="startDate" :language="fi" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+                    <datepicker v-model="startDate" :language="fi" :monday-first="true" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
                     <div class="calendarIcon"><font-awesome-icon icon="calendar-alt"/></div>
                 </div>
                 <div class="enddateOption">
                     <p> {{ $t('message.endDate') }}</p>
-                    <datepicker v-model="endDate" :language="fi" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+                    <datepicker v-model="endDate" :language="fi" :monday-first="true" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
                     <div class="calendarIcon"><font-awesome-icon icon="calendar-alt"/></div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                                         v-editable:200="{condition: editIndex === index, content: question.name ? $t(`message.question_base`) + $t(`message.question_${question.name}`) : question.description}"
                                         spellcheck="false" 
                                         class="questionDescription"
-                                        v-bind:data-placeholder="question.name ? '' : question.description !== null ? '' : editIndex === index ? $t('message.questionDescriptionPlaceholder') : $t('message.questionDescriptionPlaceholder') + ' *'"
+                                        v-bind:data-placeholder="question.name ? '' : question.description ? '' : editIndex === index ? $t('message.questionDescriptionPlaceholder') : $t('message.questionDescriptionPlaceholder') + ' *'"
                                     >{{ }}</b-card-text>
                                     <b-card-text 
                                         v-on:input="saveQuestion($event, index, 'help')"
@@ -90,7 +90,7 @@
                                         v-editable:1000="{condition: editIndex === index, content: question.name ? $t(`message.help_text_${question.name}`) : question.help}"
                                         spellcheck="false" 
                                         class="questionHelpText"
-                                        v-bind:data-placeholder="question.help === null ? $t('message.questionHelpPlaceholder') : ''"
+                                        v-bind:data-placeholder="(question.help === null || question.help === '') ? $t('message.questionHelpPlaceholder') : ''"
                                     >{{ }}</b-card-text>
                                     <div class="questionNumber">{{index + 1}}</div>
                                     <button class="questionButton questionButtonFourth" @click="shiftQuestion(index, 'up')" aria-label="Move question up"><font-awesome-icon class="icon" icon="arrow-up"></font-awesome-icon></button>
@@ -162,7 +162,7 @@ export default {
 
             },
             disabledDates: {
-                to: new Date()
+                to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date)
             },
             fi: fi,
             questions: [],
@@ -178,16 +178,6 @@ export default {
             surveyNameState: null,
             message: null,
             messageVisible: false
-        }
-    },
-    computed: {
-        formattedStartDate() {
-            if (this.startDate) return new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate())
-            else return null
-        },
-        formattedEndDate() {
-            if (this.endDate) return new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate(), 23, 59, 59)
-            else return null
         }
     },
     components: {
@@ -326,8 +316,8 @@ export default {
                         to: this.$data.emails, 
                         id: this.$data.surveyName, 
                         anon: this.$data.surveyAnon,
-                        startDate: this.formattedStartDate,
-                        endDate: this.formattedEndDate,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
                         respondents_size: this.$data.emails.length,
                         message: this.$data.message,
                         questions: [...this.$data.questions.map((question, idx) => {
@@ -385,7 +375,7 @@ export default {
                     document.execCommand('inserttext', false, text);
                 });
                 //prevent typing at the limit
-                const allowedKeys = ['BackSpace', 'Delete', 'Down', 'ArrowDown', 'Up', 'ArrowUp', 'Left', 'ArrowLeft', 'Right', 'ArrowRight']
+                const allowedKeys = ['Home', 'End', 'PageUp', 'PageDown', 'BackSpace', 'Delete', 'Down', 'ArrowDown', 'Up', 'ArrowUp', 'Left', 'ArrowLeft', 'Right', 'ArrowRight']
                 el.addEventListener('keydown', e => {
                     if (!allowedKeys.includes(e.key) && !e.ctrlKey) {
                         if (e.target.textContent.length >= limit) {
@@ -396,7 +386,7 @@ export default {
             },
             update(el, binding, vnode) {
                 //only updates if element is not focused (prevents caret from jumping around)
-                if (binding.value.content && document.activeElement !== el) {
+                if (binding.value.content && binding.value.content !== el.textContent && document.activeElement !== el) {
                     el.textContent = binding.value.content
                 }
                 //set contenteditable attribute to the condition
@@ -655,7 +645,6 @@ export default {
                                 line-height: 1.2;
                                 font-weight: 500;
                                 border-bottom: 1px solid white;
-                                outline: none;
                                 white-space: pre-wrap;
 
                                 &[contenteditable="true"] {
@@ -674,7 +663,6 @@ export default {
 
                             .questionDescription {
                                 border-bottom: 1px solid white;
-                                outline: none;
                                 white-space: pre-wrap;
                                 
                                 &[contenteditable="true"] {
@@ -703,7 +691,6 @@ export default {
                                 font-size:1.2rem;
                                 font-weight:bold;
                                 width: 70%;
-                                outline: none;
                                 border-bottom: 1px solid white;
                                 white-space: pre-wrap;
 

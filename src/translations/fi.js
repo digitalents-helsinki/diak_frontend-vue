@@ -145,6 +145,11 @@ export const fi = {
     reportHeading:'Voit tarkastella ja tulostaa raportin kuvassa näkyvästä painikkeesta.',
     reportParagraph:'Raportti',
     logoutButtontranslate:'Kirjaudu ulos',
-    userNametesting:'User Name'
+    userNametesting:'User Name',
+    modifySurveyHeader: 'Muokkaa kyselyä',
+    modifySurveyTitle: 'Kyselyn nimi:',
+    modifySurveyEndDate: 'Kyselyn päättymispäivä:',
+    modifySurveyCancel: 'Peruuta',
+    modifySurveySubmit: 'Lähetä'
   }
 }
