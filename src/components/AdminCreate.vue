@@ -81,7 +81,7 @@
                                         spellcheck="false" 
                                         class="questionDescription"
                                         v-bind:data-placeholder="question.name ? '' : question.description ? '' : editIndex === index ? $t('message.questionDescriptionPlaceholder') : $t('message.questionDescriptionPlaceholder') + ' *'"
-                                    >{{ }}</b-card-text>
+                                    />
                                     <b-card-text 
                                         v-on:input="saveQuestion($event, index, 'help')"
                                         v-on:click.prevent
@@ -91,7 +91,7 @@
                                         spellcheck="false" 
                                         class="questionHelpText"
                                         v-bind:data-placeholder="(question.help === null || question.help === '') ? $t('message.questionHelpPlaceholder') : ''"
-                                    >{{ }}</b-card-text>
+                                    />
                                     <div class="questionNumber">{{index + 1}}</div>
                                     <button class="questionButton questionButtonFourth" @click="shiftQuestion(index, 'up')" aria-label="Move question up"><font-awesome-icon class="icon" icon="arrow-up"></font-awesome-icon></button>
                                     <button class="questionButton questionButtonThird" @click="shiftQuestion(index, 'down')" aria-label="Move question down"><font-awesome-icon class="icon" icon="arrow-down"></font-awesome-icon></button>
@@ -332,7 +332,11 @@ export default {
                     }
                 })
                 .then(res => {
-                    this.$data.created = true
+                    if (res.data.success) this.$data.created = true
+                    else {
+                        this.$root.$emit('bv::show::popover', 'sendSurveyButton')
+                        setTimeout(() => this.$root.$emit('bv::hide::popover', 'sendSurveyButton'), 5000)
+                    }
                 })
             }
         },
@@ -643,9 +647,9 @@ export default {
                                 margin-top: -0.375rem;
                                 margin-bottom: 0;
                                 line-height: 1.2;
+                                min-height: 1.2rem;
                                 font-weight: 500;
                                 border-bottom: 1px solid white;
-                                white-space: pre-wrap;
 
                                 &[contenteditable="true"] {
                                     border-bottom: 1px dashed rgb(224, 224, 224);
@@ -663,7 +667,7 @@ export default {
 
                             .questionDescription {
                                 border-bottom: 1px solid white;
-                                white-space: pre-wrap;
+                                min-height: 1.5rem;
                                 
                                 &[contenteditable="true"] {
                                     border-bottom: 1px dashed rgb(224, 224, 224);
@@ -688,11 +692,12 @@ export default {
 
                             .questionTitle {
                                 color:#350E7E;
-                                font-size:1.2rem;
+                                line-height: 1.2;
+                                min-height: 1.44rem;
+                                font-size: 1.2rem;
                                 font-weight:bold;
                                 width: 70%;
                                 border-bottom: 1px solid white;
-                                white-space: pre-wrap;
 
                                 &[contenteditable="true"] {
                                     border-bottom: 1px dashed rgb(224, 224, 224);
