@@ -40,12 +40,12 @@
           </b-dropdown>
         </div>
         <div>
-          <b-button variant="secondary" @click="toggleDisplay" id="butttonRight">{{ $t('message.archiveButton') }}</b-button>
+          <b-button variant="secondary" @click="toggleDisplay" id="buttonRight">{{ this.display === "all" ? $t('message.archiveButton') : $t('message.allButton')}}</b-button>
         </div>
       </div>
     </div>
     <div class="tableDisplayfields">
-      <b-table hover responsive :items="surveys" :fields="fields" bordered head-variant="light">
+      <b-table hover responsive :items="displayedSurveys" :fields="fields" bordered head-variant="light">
         <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
           <div v-bind:key="field.key">
             <div v-if="field.colType === 'name'">
@@ -93,15 +93,31 @@
         >
           <b-form-input
             id="surveyNameInput"
-            v-model="modifySurveyName"
+            v-model="modify.surveyName"
             required
-          >
-          </b-form-input>
+          />
         </b-form-group>
         <b-form-group
           :label="$t('message.modifySurveyEndDate')"
         >
-          <datepicker v-model="modifySurveyEndDate" :language="fi" :monday-first="true" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+          <datepicker v-model="modify.surveyEndDate" :language="modify.fi" :monday-first="true" :disabled-dates="modify.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+        </b-form-group>
+        <b-form-group
+          label="Respondents:"
+        >
+        <div style="display: flex; justify-content: flex-start;">
+          <b-input
+            placeholder="Add respondent"
+            style="width: 80%"
+            v-model="modify.currentRespondent"
+          />
+          <b-button @click="addRespondent" style="margin-left: 1rem;">Add<font-awesome-icon style="margin-left: 0.5rem;" icon="plus"></font-awesome-icon></b-button>
+        </div>
+          <ul>
+            <li style="width: 100%;" v-for="(respondent, index) in modify.surveyRespondents" v-bind:key="index">
+              <span style="width: 100%;">{{respondent}}</span>
+            </li>
+          </ul>
         </b-form-group>
       </form>
     </b-modal>
@@ -166,15 +182,18 @@ export default {
         ],
         surveys: [],
         surveyResultsId: null,
-        modifySurveyId: null,
-        modifySurveyName: null,
-        modifySurveyEndDate: null,
-        modifySurveyActive: null,
-        fi: fi,
-        disabledDates: {
-          to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date)
+        modify: {
+          surveyId: null,
+          surveyName: null,
+          surveyEndDate: null,
+          surveyRespondents: null,
+          currentRespondent: null,
+          fi: fi,
+          disabledDates: {
+            to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date)
+          },
         },
-        display: "archived",
+        display: "all",
         loaded: false
     }
   },
@@ -188,11 +207,11 @@ export default {
     },
     modifySurveyBoolean: {
       get: function() {
-        return !!this.modifySurveyId
+        return !!this.modify.surveyId
       },
       set: function() {
-        if (this.modifySurveyId) {
-          this.modifySurveyId = null
+        if (this.modify.surveyId) {
+          this.modify.surveyId = null
         }
       }
     }
@@ -215,9 +234,10 @@ export default {
           id: surveyId
         }
       }).then(res => {
-        const index = this.surveys.findIndex(survey => survey.surveyId === surveyId)
-        if (~index)
-          this.surveys.splice(index, 1)
+        if (res.data === "Survey deleted succesfully") {
+          const index = this.surveys.findIndex(survey => survey.surveyId === surveyId)
+          if (~index) this.surveys.splice(index, 1)
+        }
       })
     },
     archiveSurvey(surveyId) {
@@ -227,6 +247,9 @@ export default {
         data: {
           id: surveyId
         }
+      }).then(res => {
+        console.log(res)
+        if (res.data === "Survey archived succesfully") this.surveys.find(survey => survey.surveyId === surveyId).archived = true
       })
     },
     suspendActivateSurvey(surveyId, status) {
@@ -238,26 +261,36 @@ export default {
           active: status
         }
       }).then(res => {
-        if (res.data !== "No survey found") this.updateSurvey(res.data)
+        if (res.data === "Survey state changed succesfully") this.surveys.find(survey => survey.surveyId === surveyId).active = status
       })
     },
     modifySurvey(surveyId) {
-      if (!this.modifySurveyId) {
-        this.modifySurveyId = surveyId
-        this.modifySurveyName = this.surveys.find(survey => survey.surveyId === surveyId).name
-        this.modifySurveyEndDate = this.surveys.find(survey => survey.surveyId === surveyId).endDate
+      if (!this.modify.surveyId) {
+        const survey = this.surveys.find(survey => survey.surveyId === surveyId)
+        this.modify.surveyId = surveyId
+        this.modify.surveyName = survey.name
+        this.modify.surveyEndDate = survey.endDate
+        if (!survey.anon) this.modify.surveyRespondents = survey.UserGroup.respondents
+        else this.modify.surveyRespondents = []
+      }
+    },
+    addRespondent() {
+      if (!this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.includes(this.modify.currentRespondent)) {
+        this.modify.surveyRespondents.push(this.modify.currentRespondent)
+        this.modify.currentRespondent = null
       }
     },
     handleModifySurveyModal(bvModalEvt) {
       bvModalEvt.preventDefault()
-      if (this.modifySurveyId && this.modifySurveyName) {
+      if (this.modify.surveyId && this.modify.surveyName) {
         axios({
           method: "POST",
           url: process.env.VUE_APP_BACKEND + "/survey/update",
           data: {
-            surveyId: this.modifySurveyId,
-            name: this.modifySurveyName,
-            endDate: this.modifySurveyEndDate
+            surveyId: this.modify.surveyId,
+            name: this.modify.surveyName,
+            endDate: this.modify.surveyEndDate,
+            to: this.modify.surveyRespondents
           }
         })
         .then(res => {
@@ -454,7 +487,7 @@ export default {
         flex-direction:row;
         margin-bottom:1rem;
 
-        #butttonRight{
+        #buttonRight{
           color: #ffffff;
           border-radius: 5px;
           padding-right:0.7rem;

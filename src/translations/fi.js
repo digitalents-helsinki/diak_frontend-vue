@@ -92,6 +92,7 @@ export const fi = {
     total:'Kyselyitä yhteensä',
     searchParagraph:'Etsi kyselyä',
     searchPlaceholder:'Etsi kyselyä nimeltä...',
+    allButton: 'Kaikki kyselyt',
     archiveButton:'Arkistoidut kyselyt',
     loginText:'Kirjaudu sisään',
     usernamePlaceholder:'Käyttäjätunnus',
