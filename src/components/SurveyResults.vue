@@ -1,17 +1,19 @@
 <template>
   <div class="mainWrapper">
-    <h4 class="surveyName">Tulokset: <i>{{surveyName}}</i></h4>
-    <b-button @click="$emit('closeResults')" class="closeButton"><font-awesome-icon icon="times"></font-awesome-icon></b-button>
+    <div class="topContainer">
+      <h4 class="surveyName">Tulokset: <i>{{surveyName}}</i></h4>
+      <b-button @click="$emit('closeResults')" class="closeButton"><font-awesome-icon icon="times"></font-awesome-icon></b-button>
+    </div>
     <div class="SurveyResults" v-if="loaded">
       <div class="chart-container">
-        <bar-chart :avgdata="avg_array" :dvddata="dvd_array" :names="valueFields"></bar-chart>
+        <bar-chart :avgdata="avg_array" :dvddata="dvd_array" :names="valueFields"/>
       </div>
       <div class="text-center">
-        <p>Vastaajien lukumäärä {{respondent_size}}</p>
+        <p>Vastaajien lukumäärä: {{respondent_size}}</p>
       </div>
       <div class="values">
         <div class="labels">
-          <h4>Values</h4>
+          <h4>Kysymykset</h4>
           <p v-for="(value, index) in valueFields" v-bind:key="index">{{value}}</p>
         </div>
         <div class="averages">
@@ -27,14 +29,18 @@
           <p v-for="(value, index) of n_array" v-bind:key="index">{{value}}</p>
         </div>
       </div>
-      <div class="text-center">
-        <downloadexcel
-          class="btn btn-primary"
-          :data="results"
-          :fields="excel_fields"
-          name="tulokset.xls"
-        >Lataa tiedosto</downloadexcel>
-      </div>
+    </div>
+    <div class="botContainer">
+      <downloadexcel
+        class="btn btn-primary"
+        :data="results"
+        :fields="excel_fields"
+        name="tulokset.xls"
+      >Lataa CSV</downloadexcel>
+      <button
+        class="btn btn-primary"
+        @click="downloadPdf"
+      >Lataa PDF</button>
     </div>
     <div class="error" v-if="loadingError || unknownError">
       {{loadingError ? "Fetching survey results failed. Try checking your internet connection." : "Displaying survey results failed unexpectedly"}}
@@ -47,6 +53,7 @@ import BarChart from "../components/BarChart.vue";
 import ErrorBars from "chartjs-plugin-error-bars";
 import downloadexcel from "vue-json-excel";
 import Annotation from 'chartjs-plugin-annotation';
+import jsPDF from 'jspdf'
 
 export default {
   name: "SurveyResults",
@@ -205,6 +212,44 @@ export default {
           axios.defaults.headers.common["authorization"] = this.login_token;
           this.getResults();
         });
+    },
+    downloadPdf() {
+      const canvas = this.$el.querySelector('canvas') //get chart
+      const canvasWidth = canvas.width
+      const canvasHeight = canvas.height
+      const canvasRatio = canvasHeight / canvasWidth
+      const doc = new jsPDF('p','pt','a4')
+      const docWidth = doc.internal.pageSize.width
+      const imgHeight = docWidth * canvasRatio //make chart maintain aspect ratio
+      const chart = this.$el.querySelector('canvas').toDataURL('image/png')
+      doc.setFontSize(20)
+      doc.text(`Tulokset: ${this.surveyName}`, docWidth / 2, 30, 'center')
+      doc.addImage(chart, 'PNG', 10, 60, docWidth - 30, imgHeight - 30 * canvasRatio)
+      doc.setFontSize(12)
+      doc.text(`Vastaajien lukumäärä: ${this.respondent_size}`, docWidth / 2, imgHeight + 90, 'center')
+      doc.setFontSize(16)
+      doc.text(20, imgHeight + 120, 'Kysymykset')
+      doc.text(docWidth / 4 + 20, imgHeight + 120, 'Keskiarvot')
+      doc.text(docWidth / 4 * 2 + 20, imgHeight + 120, 'Keskihajonnat')
+      doc.text(docWidth / 4 * 3 + 20, imgHeight + 120, 'Lukumäärä')
+      doc.setFontSize(12)
+      for (let i = 0, j = 0; i < this.valueFields.length; i++, j++) { //loop through data arrays and add to pdf
+        const y = (() => {
+          //if on first page take chart into account when placing text
+          if (doc.internal.getNumberOfPages() === 1) return imgHeight + 150 + j * 30
+          else return  20 + j * 30
+        })()
+        if (y > doc.internal.pageSize.height - 20) {
+          //if text is about to go off page, add new page and reset back to top
+          doc.addPage()
+          j = 0
+        }
+        doc.text(20, y, this.valueFields[i].length > 20 ? this.valueFields[i].substring(0, 17) + '...' : this.valueFields[i])
+        doc.text(docWidth / 4 + 20, y, typeof this.avg_array[i] === "number" ? this.avg_array[i].toFixed(2).toString() : this.avg_array[i])
+        doc.text(docWidth / 4 * 2 + 20, y, typeof this.dvd_array[i] === "number" ? this.dvd_array[i].toFixed(2).toString() : this.dvd_array[i])
+        doc.text(docWidth / 4 * 3 + 20, y, this.n_array[i].toString())
+      }
+      doc.save(`${this.surveyName}_${this.surveyId}.pdf`)
     }
   },
   components: {
@@ -216,7 +261,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .mainWrapper {
   position: fixed;
   max-height: calc(100vh - 2rem);
@@ -226,39 +271,72 @@ export default {
   right: 10%;
   background-color: white;
   border: 1px solid #dee2e6;
-  padding: 1rem;
-  overflow-y: scroll;
+  display: grid;
+  grid-template-areas:
+    "topbar"
+    "content"
+    "botbar";
+  grid-template-rows: 4rem 1fr 4rem;
 
-  .closeButton {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-  }
+  .topContainer {
+    border-bottom: 1px solid #dee2e6;
+    grid-area: "topbar";
 
-  .surveyName {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 0;
+    .closeButton {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      height: 2rem;
+      width: 2rem;
+      padding: 0;
+
+      svg {
+        width: 16px;
+      }
+    }
+
+    .surveyName {
+      text-align: center;
+      margin-top: 1rem;
+      margin-bottom: 0;
+    }
   }
 
   .SurveyResults {
-    padding: 1rem;
+    grid-area: "content";
+    overflow-y: scroll;
+    padding: 0 1rem;
+    
     .chart-container {
       position: relative;
-      height: 100%;
       width: 100%;
     }
 
     .values {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(50px, 1fr) min-content min-content min-content;
+      grid-column-gap: 1.5rem;
       justify-content: space-around;
 
       .labels {
+        p {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
         h4 {
           color: #212529;
         }
       }
     }
+  }
+
+  .botContainer {
+    grid-area: "botbar";
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-top: 1px solid #dee2e6;
   }
 
   .error {
@@ -267,10 +345,10 @@ export default {
   }
 }
 
-  @media only screen and (max-width: 1400px) {
-    .mainWrapper{
-      width: calc(100% - 2rem);
-      left: 0;
-    }
+@media only screen and (max-width: 1400px) {
+  .mainWrapper {
+    width: calc(100% - 2rem);
+    left: 0;
+  }
 }
 </style>

@@ -43,7 +43,7 @@ export default {
     name: 'admin',
     data() {
         return {
-            activeComponent: 'adminCreate'
+            activeComponent: 'adminManage'
         }
     },
     components: {

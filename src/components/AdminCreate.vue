@@ -379,7 +379,7 @@ export default {
                     document.execCommand('inserttext', false, text);
                 });
                 //prevent typing at the limit
-                const allowedKeys = ['Home', 'End', 'PageUp', 'PageDown', 'BackSpace', 'Delete', 'Down', 'ArrowDown', 'Up', 'ArrowUp', 'Left', 'ArrowLeft', 'Right', 'ArrowRight']
+                const allowedKeys = ['Home', 'End', 'PageUp', 'PageDown', 'Backspace', 'Delete', 'Down', 'ArrowDown', 'Up', 'ArrowUp', 'Left', 'ArrowLeft', 'Right', 'ArrowRight']
                 el.addEventListener('keydown', e => {
                     if (!allowedKeys.includes(e.key) && !e.ctrlKey) {
                         if (e.target.textContent.length >= limit) {
@@ -650,6 +650,7 @@ export default {
                                 min-height: 1.2rem;
                                 font-weight: 500;
                                 border-bottom: 1px solid white;
+                                white-space: pre-wrap;
 
                                 &[contenteditable="true"] {
                                     border-bottom: 1px dashed rgb(224, 224, 224);
@@ -668,6 +669,7 @@ export default {
                             .questionDescription {
                                 border-bottom: 1px solid white;
                                 min-height: 1.5rem;
+                                white-space: pre-wrap;
                                 
                                 &[contenteditable="true"] {
                                     border-bottom: 1px dashed rgb(224, 224, 224);
@@ -698,6 +700,7 @@ export default {
                                 font-weight:bold;
                                 width: 70%;
                                 border-bottom: 1px solid white;
+                                white-space: pre-wrap;
 
                                 &[contenteditable="true"] {
                                     border-bottom: 1px dashed rgb(224, 224, 224);
@@ -705,8 +708,8 @@ export default {
                                     &:not(:focus):before {
                                         content:attr(data-placeholder);
                                         color:grey;
-                                        font-weight: normal;
                                         position: absolute;
+                                        font-weight: normal;
                                         pointer-events: none;
                                     }
                                 }
