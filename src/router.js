@@ -51,6 +51,14 @@ export default new Router({
       }
     },
     {
+      path: '/user',
+      name: 'user',
+      component: User,
+      beforeEnter(to, from, next) {
+        guard(to, from, next)
+      }
+    },
+    {
       path: '/password',
       name: 'password',
       component: Password,
@@ -60,26 +68,35 @@ export default new Router({
       }
     },
     {
-      path: '/user',
-      name: 'user',
-      component: User,
-      beforeEnter: guard
-    },
-    {
       path: '/questionnaire/:surveyId',
       name: 'questionnaire',
       component: Questionnaire,
       props: true
     },
     {
-      path: '/questionnaire/:surveyId/:anonId',
-      name: 'questionnaire',
+      path: '/anon/questionnaire/:surveyId/:userId',
+      name: 'questionnaire-anon',
       component: Questionnaire,
       props: true
     },
     {
-      path: '/user/results/:resultId',
-      name: 'results',
+      path: '/auth/questionnaire/:surveyId/:userId',
+      name: 'questionnaire-auth',
+      component: Questionnaire,
+      props: true,
+      beforeEnter(to, from, next) {
+        guard(to, from, next)
+      }
+    },
+    {
+      path: '/anon/results/:resultId',
+      name: 'results-anon',
+      component: Results,
+      props: true
+    },
+    {
+      path: '/auth/results/:resultId',
+      name: 'results-auth',
       component: Results,
       props: true
     },

@@ -83,7 +83,7 @@ export default {
               store.state.auth.role = 'user'
               store.state.auth.accessToken = res.data.token
               store.state.auth.userId = res.data.userId
-              this.$router.push({ name: 'user' })
+              this.$router.push({ path: '/user/' })
             }
           } else { 
             this.$data.error = true

@@ -43,6 +43,7 @@
       <p>{{resultData.life_as_whole_desc}}</p>
     </div>
   </div>
+  <button @click="signOut">Kirjaudu ulos</button>
 </div>
 </template>
 <script>
@@ -59,10 +60,13 @@ export default {
   methods: {
     getResults() {
       axios
-      .get(process.env.VUE_APP_BACKEND + '/result/' + this.$route.params.resultId)
+      .get(process.env.VUE_APP_BACKEND + '/anon/result/' + this.$route.params.resultId)
       .then(res => {
         this.resultData = res.data[0]
       })
+    },
+    signOut() {
+      this.$router.push({ path: '/' })
     }
   },
   mounted() {

@@ -95,6 +95,7 @@ export default {
           personalinfo: this.$data.personalinfo
         }
       })
+      this.$emit('infoSaved')
     }
   }
 }

@@ -6,7 +6,7 @@
       v-on:toggleModal="toggleModal"
     />
     <div class="questionnaire container text-center shadow-lg">
-     <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>Survey not active</p></b-alert>
+      <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>Survey not active</p></b-alert>
       <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount">
         <b-spinner label="Loading..." />
       </div>
@@ -56,10 +56,11 @@ export default {
       questiondata: [],
       questionnum: 0,
       modal_visible: null,
-      anonId: this.$route.params.anonId,
+      userId: this.$route.params.userId,
       surveyId: this.$route.params.surveyId,
       surveyName: "",
-      errormessage:null
+      errormessage: null,
+      isAnon: null
     };
   },
   computed: {
@@ -138,13 +139,14 @@ export default {
     },
     saveQuestions() {
       //FOR TESTING
-      const post = this.surveyId === "testikysely" ? "/testresult" : "/result"
+      const post = this.surveyId === "testikysely" ? "/testresult/create" : this.isAnon ? "/anon/result/create" : "/auth/result/create"
+      const push = this.isAnon ? '/anon/results' : '/auth/results'
       //
       axios({
         method: "POST",
         url: process.env.VUE_APP_BACKEND + post,
         data: {
-          anonId: this.anonId,
+          anonId: this.userId,
           surveyId: this.surveyId,
           answers: [...this.questiondata]
         }
@@ -152,7 +154,7 @@ export default {
         .then(res => {
           console.log(res)
           if (res.data.status === "ok") {
-            this.$router.push({ path: `/user/results/${this.surveyId}` });
+            this.$router.push({ path: `${push}/${this.surveyId}` });
           }
         })
         .catch(err => {});
@@ -167,6 +169,7 @@ export default {
   },
   created() {
     this.getQuestions()
+    this.isAnon = this.$route.name === 'questionnaire-anon' ? true : false
   }
 };
 </script>
