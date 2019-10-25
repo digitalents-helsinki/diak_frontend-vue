@@ -87,7 +87,7 @@ export default {
       }
     }, 
     calcAvg: (arr) => {
-      return arr.filter(value => typeof value === "number").reduce((acc, val) => acc + val) / arr.filter(value => typeof value === "number").length
+      return arr.filter(value => typeof value === "number").reduce((acc, val) => acc + val, 0) / arr.filter(value => typeof value === "number").length
     }
   },
   props: ['avgdata', 'dvddata', 'names']

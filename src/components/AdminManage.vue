@@ -40,12 +40,12 @@
           </b-dropdown>
         </div>
         <div>
-          <b-button variant="secondary" @click="toggleDisplay" id="butttonRight">{{ $t('message.archiveButton') }}</b-button>
+          <b-button variant="secondary" @click="toggleDisplay" id="buttonRight">{{ this.display === "all" ? $t('message.archiveButton') : $t('message.allButton')}}</b-button>
         </div>
       </div>
     </div>
     <div class="tableDisplayfields">
-      <b-table hover responsive :items="surveys" :fields="fields" bordered head-variant="light">
+      <b-table hover responsive :items="displayedSurveys" :fields="fields" bordered head-variant="light">
         <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
           <div v-bind:key="field.key">
             <div v-if="field.colType === 'name'">
@@ -61,16 +61,15 @@
               <span v-else>-</span>
             </div>
             <div v-else-if="field.colType === 'respondentsSize'">
-              <span v-if="data.item.respondents_size">{{data.item.responses || 0}}/{{data.item.respondents_size}}</span>
-              <span v-else>{{data.item.responses || 0}}</span>
-            </div>
-            <div v-else-if="field.colType === 'modify'">
-              <button><font-awesome-icon icon="pencil-alt" style="font-size:1.5rem;"/></button>
+              <span>{{data.item.responses || 0}}/{{data.item.respondents_size}}</span>
             </div>
             <div v-else-if="field.colType === 'analyze'">
-              <button v-bind:id="`open-${data.item.surveyId}`" @click="openSurveyResults(data.item.surveyId)"><img src="../images/assessment_24px.png" alt="chart" style="width:25px; height:25px;"/></button>
+              <button @click="openSurveyResults(data.item.surveyId)"><img src="../images/assessment_24px.png" alt="chart" style="width:25px; height:25px;"/></button>
             </div>
-            <div v-else-if="field.colType === 'delete'">
+            <div v-else-if="field.colType === 'actions'">
+              <button @click="modifySurvey(data.item.surveyId)"><font-awesome-icon icon="pencil-alt" style="font-size:1.6rem;"/></button>
+              <button v-if="data.item.active" @click="suspendActivateSurvey(data.item.surveyId, false)"><font-awesome-icon icon="stop" style="font-size:1.5rem;"/></button>
+              <button v-else @click="suspendActivateSurvey(data.item.surveyId, true)"><font-awesome-icon icon="play" style="font-size:1.6rem;"/></button>
               <button @click="archiveSurvey(data.item.surveyId)"> <font-awesome-icon icon="folder" style="font-size:1.6rem; color:grey;"/></button>
               <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:#FF0000;"/> </button>
             </div>
@@ -78,6 +77,50 @@
         </template>
       </b-table>
     </div>
+    <b-modal
+      id="modifySurveyModal"
+      :title="$t('message.modifySurveyHeader')"
+      :ok-title="$t('message.modifySurveySubmit')"
+      :cancel-title="$t('message.modifySurveyCancel')"
+      ref="modifySurveyModal"
+      size="xl"
+      v-model="modifySurveyBoolean"
+      @ok="handleModifySurveyModal"
+    >
+      <form>
+        <b-form-group
+          :label="$t('message.modifySurveyTitle')"
+        >
+          <b-form-input
+            id="surveyNameInput"
+            v-model="modify.surveyName"
+            required
+          />
+        </b-form-group>
+        <b-form-group
+          :label="$t('message.modifySurveyEndDate')"
+        >
+          <datepicker v-model="modify.surveyEndDate" :language="modify.fi" :monday-first="true" :disabled-dates="modify.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+        </b-form-group>
+        <b-form-group
+          label="Respondents:"
+        >
+        <div style="display: flex; justify-content: flex-start;">
+          <b-input
+            placeholder="Add respondent"
+            style="width: 80%"
+            v-model="modify.currentRespondent"
+          />
+          <b-button @click="addRespondent" style="margin-left: 1rem;">Add<font-awesome-icon style="margin-left: 0.5rem;" icon="plus"></font-awesome-icon></b-button>
+        </div>
+          <ul>
+            <li style="width: 100%;" v-for="(respondent, index) in modify.surveyRespondents" v-bind:key="index">
+              <span style="width: 100%;">{{respondent}}</span>
+            </li>
+          </ul>
+        </b-form-group>
+      </form>
+    </b-modal>
     <transition name="slide" mode="in-out">
       <SurveyResults 
         v-if="surveyResultsId"
@@ -89,13 +132,16 @@
   </div>
 </template>
 <script>
+import Datepicker from 'vuejs-datepicker'
+import { fi } from 'vuejs-datepicker/dist/locale'
 import axios from 'axios'
 import SurveyResults from './SurveyResults'
 
 export default {
   name: 'admin-manage',
   components: {
-    SurveyResults
+    SurveyResults,
+    Datepicker
   },
   data() {
     return {
@@ -124,41 +170,61 @@ export default {
             colType: 'respondentsSize'
           },
           {
-            key: 'modify',
-            label: 'Muokkaa kyselyä',
-            colType: 'modify' 
-          },
-          {
-            key: 'control',
+            key: 'analyze',
             label: 'Raportti',
             colType: 'analyze'
           },
           {
-            key: 'delete',
-            label: 'Arkistoi tai poista kysely',
-            colType: 'delete'
+            key: 'actions',
+            label: 'Toiminnot',
+            colType: 'actions'
           }
         ],
         surveys: [],
         surveyResultsId: null,
-        display: "archived",
+        modify: {
+          surveyId: null,
+          surveyName: null,
+          surveyEndDate: null,
+          surveyRespondents: null,
+          currentRespondent: null,
+          fi: fi,
+          disabledDates: {
+            to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date)
+          },
+        },
+        display: "all",
         loaded: false
     }
   },
   computed: {
-    displayedSurveys: function() {
-      if(this.display === "archived") {
+    displayedSurveys() {
+      if (this.display === "archived") {
         return this.$data.surveys.filter(obj => obj.archived)
-        } else if (this.display === "all") {
-          return this.$data.surveys
-        }
+      } else if (this.display === "all") {
+        return this.$data.surveys
       }
     },
+    modifySurveyBoolean: {
+      get: function() {
+        return !!this.modify.surveyId
+      },
+      set: function() {
+        if (this.modify.surveyId) {
+          this.modify.surveyId = null
+        }
+      }
+    }
+  },
   methods: {
     async getSurveys() {
       const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/all")
       this.$data.surveys = res.data
       this.$data.loaded = true
+    },
+    updateSurvey(updatedSurvey) {
+      const index = this.surveys.findIndex(survey => survey.surveyId === updatedSurvey.surveyId)
+      if (~index) this.surveys.splice(index, 1, updatedSurvey)
     },
     deleteSurvey(surveyId) {
       axios({
@@ -168,9 +234,10 @@ export default {
           id: surveyId
         }
       }).then(res => {
-        const index = this.surveys.findIndex(survey => survey.surveyId === surveyId)
-        if (~index)
-          this.surveys.splice(index, 1)
+        if (res.data === "Survey deleted succesfully") {
+          const index = this.surveys.findIndex(survey => survey.surveyId === surveyId)
+          if (~index) this.surveys.splice(index, 1)
+        }
       })
     },
     archiveSurvey(surveyId) {
@@ -180,7 +247,58 @@ export default {
         data: {
           id: surveyId
         }
+      }).then(res => {
+        console.log(res)
+        if (res.data === "Survey archived succesfully") this.surveys.find(survey => survey.surveyId === surveyId).archived = true
       })
+    },
+    suspendActivateSurvey(surveyId, status) {
+      axios({
+        method: "POST",
+        url: process.env.VUE_APP_BACKEND + "/survey/suspendactivate",
+        data: {
+          id: surveyId,
+          active: status
+        }
+      }).then(res => {
+        if (res.data === "Survey state changed succesfully") this.surveys.find(survey => survey.surveyId === surveyId).active = status
+      })
+    },
+    modifySurvey(surveyId) {
+      if (!this.modify.surveyId) {
+        const survey = this.surveys.find(survey => survey.surveyId === surveyId)
+        this.modify.surveyId = surveyId
+        this.modify.surveyName = survey.name
+        this.modify.surveyEndDate = survey.endDate
+        if (!survey.anon) this.modify.surveyRespondents = survey.UserGroup.respondents
+        else this.modify.surveyRespondents = []
+      }
+    },
+    addRespondent() {
+      if (!this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.includes(this.modify.currentRespondent)) {
+        this.modify.surveyRespondents.push(this.modify.currentRespondent)
+        this.modify.currentRespondent = null
+      }
+    },
+    handleModifySurveyModal(bvModalEvt) {
+      bvModalEvt.preventDefault()
+      if (this.modify.surveyId && this.modify.surveyName) {
+        axios({
+          method: "POST",
+          url: process.env.VUE_APP_BACKEND + "/survey/update",
+          data: {
+            surveyId: this.modify.surveyId,
+            name: this.modify.surveyName,
+            endDate: this.modify.surveyEndDate,
+            to: this.modify.surveyRespondents
+          }
+        })
+        .then(res => {
+          if (res.data === "Survey update failed") return
+          this.updateSurvey(res.data)
+          this.$nextTick(() => this.$refs.modifySurveyModal.hide())
+        })
+      }
     },
     openSurveyResults(surveyId) {
       if (this.surveyResultsId !== null && this.surveyResultsId !== surveyId) {
@@ -207,6 +325,13 @@ export default {
 </script>
 <style lang="scss">
 .table {
+  thead {
+    tr {
+      th {
+        text-align: center;
+      }
+    }
+  }
   tbody {
     tr {
       text-align: center;
@@ -362,7 +487,7 @@ export default {
         flex-direction:row;
         margin-bottom:1rem;
 
-        #butttonRight{
+        #buttonRight{
           color: #ffffff;
           border-radius: 5px;
           padding-right:0.7rem;

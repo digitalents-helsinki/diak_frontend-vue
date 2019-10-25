@@ -63,6 +63,7 @@ export const fi = {
     saveContinue:'Tallenna ja jatka myöhemmin',
     disCard:'Hylkää',
     adminformName:'1. Anna kyselylle nimi.',
+    surveyNameRequired: 'Kyselyllä täytyy olla nimi.',
     radioOption:'2. Onko kysely anonyymi vai autentikoitu?',
     namePlaceholder:'Kirjoita tähän.',
     authenticationRadio:'Autentikoitu',
@@ -72,7 +73,8 @@ export const fi = {
     endDate:'Päättyy:',
     datePlaceholder:' Valitse päivämäärä',
     questionsParagraph:'4. Muokkaa kysymyksiä.',
-    defaultQuestions:'Oletuskysymykset',
+    addDefaultQuestions:'Lisää oletuskysymykset',
+    removeDefaultQuestions: 'Poista oletuskysymykset',
     questionTitlePlaceholder: 'Aihe',
     questionDescriptionPlaceholder: 'Kysymys',
     questionHelpPlaceholder: 'Ohje',
@@ -91,6 +93,7 @@ export const fi = {
     total:'Kyselyitä yhteensä',
     searchParagraph:'Etsi kyselyä',
     searchPlaceholder:'Etsi kyselyä nimeltä...',
+    allButton: 'Kaikki kyselyt',
     archiveButton:'Arkistoidut kyselyt',
     loginText:'Kirjaudu sisään',
     usernamePlaceholder:'Käyttäjätunnus',
@@ -151,6 +154,11 @@ export const fi = {
     firstandfamilynameInfo:'Etunimi ja sukunimi vaaditaan',
     addressInfo:'Osoite vaaditaan',
     genderInfo:'Sukupuoli vaaditaan',
-    phonenumberInfo:'Puhelinnumero vaaditaan'
+    phonenumberInfo:'Puhelinnumero vaaditaan',
+    modifySurveyHeader: 'Muokkaa kyselyä',
+    modifySurveyTitle: 'Kyselyn nimi:',
+    modifySurveyEndDate: 'Kyselyn päättymispäivä:',
+    modifySurveyCancel: 'Peruuta',
+    modifySurveySubmit: 'Lähetä'
   }
 }
