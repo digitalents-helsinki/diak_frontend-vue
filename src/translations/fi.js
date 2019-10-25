@@ -144,6 +144,13 @@ export const fi = {
     reportHeading:'Voit tarkastella ja tulostaa raportin kuvassa näkyvästä painikkeesta.',
     reportParagraph:'Raportti',
     logoutButtontranslate:'Kirjaudu ulos',
-    userNametesting:'User Name'
+    userNametesting:'User Name',
+    requiredtofill:'Lisää seuraava:',
+    emailInput:'sähköposti vaaditaan',
+    passwordInput:'Salasana vaaditaan',
+    firstandfamilynameInfo:'Etunimi ja sukunimi vaaditaan',
+    addressInfo:'Osoite vaaditaan',
+    genderInfo:'Sukupuoli vaaditaan',
+    phonenumberInfo:'Puhelinnumero vaaditaan'
   }
 }
