@@ -37,7 +37,6 @@
 </template>
 <script>
 import LangMenu from '@/components/Languages.vue';
-
 export default {
   name: 'home',
   components:{
@@ -57,12 +56,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
 p {
   margin-top: 0;
   margin-bottom: 0;
 }
-
 .home {
   background-color: #FFFFFF;
   height: 100%;
@@ -73,7 +70,6 @@ p {
   font-style:normal;
   font-size: 1rem;
   //overflow: hidden;
-
   .main {
     display: flex;
     flex-direction: column;
@@ -81,18 +77,15 @@ p {
     align-items: center;
     text-align: center;
     margin-top: 1rem;
-
     .logoProfile {
       width: 100%;
     }
-
     .textContainer{
       display: flex;
       flex-direction: column;
       margin-top: 1rem;
       margin-bottom:1rem;
       //height: 70vh;
-
       @media screen and (min-width: 1024px) {
         height: 60vh;
       }
@@ -107,7 +100,6 @@ p {
           font-weight:bold;
         }
     }
-
     .text-container {
       background-color: #F7F6F6;
       display: flex;
@@ -115,7 +107,6 @@ p {
       box-shadow: 0 2px 2px lightgray;
       font-size:1rem;
       height: 100%;
-
       div {
         display: flex;
         flex-flow: row nowrap;
@@ -124,16 +115,13 @@ p {
         margin-bottom: 1rem;
         flex: 1;
         align-items: center;
-
         &:first-child{
           margin-top: 1rem;
         }
-
         img {
           height: 25px;
           flex-basis: 20%;
         }
-
         p {
           font-size: 14px;
           margin-left: 2rem;
@@ -160,21 +148,17 @@ p {
   }
 }
 @media screen and (min-width: 575px) { 
-
     .welcomeMessage {
       font-size: 1.1rem !important;
     }
-
     .text-container p {
       font-size: 1rem !important;
     }
-
     button {
      padding:1rem 7rem !important;
     font-size:1.1rem !important;
     } 
   }
-
   @media screen and (min-width: 768px) { 
     .logoProfile{
       width:40rem !important;

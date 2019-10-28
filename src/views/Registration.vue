@@ -11,15 +11,21 @@
             <div class="registerCredentials">
               <b-form>
                 <b-form-group id="regnamefield">
-                  <b-form-input type="email" v-model="registration.email" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')" required>
+                  <b-form-input type="email" v-model="registration.email" :state="registervalidation.email" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')">
                   </b-form-input>
+                  <b-form-invalid-feedback :state="registervalidation.email" class="emailFeedback">
+                  {{ $t('message.emailInput') }}
+                </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group id="regpasswordfield">
-                  <b-form-input type="password" id="password" v-model="registration.password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
+                  <b-form-input type="password" id="password" v-model="registration.password" :state="registervalidation.password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')">
                   </b-form-input>
+                  <b-form-invalid-feedback :state="registervalidation.password"  class="passwordFeedback">
+                  {{ $t('message.passwordInput') }}
+                </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group id="retypefield">
-                  <b-form-input type="password" id="confirmpassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')" required>
+                  <b-form-input type="password" id="confirmpassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')">
                   </b-form-input>
                 </b-form-group>
                 <b-button type="submit" @click.prevent="handleRegistration" class="btn registersubmitButton">{{ $t('message.submitRegister') }}</b-button>
@@ -43,11 +49,25 @@ export default {
       registration: {
         email: null,
         password: null
-      }
+      },
+      registervalidation: {
+        email: null,
+        password: null
+      },
     }
   },
   methods: {
     handleRegistration() {
+      this.registervalidation.email = null
+      if (!this.registration.email) {
+        this.registervalidation.email = false
+        return
+      }
+      this.registervalidation.password = null
+      if (!this.registration.password) {
+        this.registervalidation.password = false
+        return
+      }
       const data = JSON.stringify({
         email: this.registration.email,
         password: this.registration.password
@@ -121,7 +141,7 @@ export default {
         height: 100%;
 
         input{
-          margin-bottom:1rem;
+          margin-bottom:0.1rem;
         }
 
         .registerMessage{
@@ -133,6 +153,14 @@ export default {
           flex-direction:column;
           width:100%;
           padding:1rem;
+        
+          .emailFeedback{
+              font-size:1rem;
+          }
+
+          .passwordFeedback{
+              font-size:1rem;
+          }
 
           .registersubmitButton{
             background-color: #350E7E;
