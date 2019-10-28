@@ -27,27 +27,26 @@
         <p class="paragraphTop">{{ $t('message.searchParagraph') }}</p>
         <b-input-group size="md" class="search-bar">
           <span> <font-awesome-icon icon="search" class="iconsearch"/> </span>
-          <b-form-input v-bind:placeholder="$t('message.searchPlaceholder')"></b-form-input>
+          <b-form-input v-model="searchTerm" v-bind:placeholder="$t('message.searchPlaceholder')"></b-form-input>
         </b-input-group>
       </div>
     </div>
     <div class="tableandfilter">
       <div class="buttonstotal">
-        <div>
-          <b-dropdown id="dropdownleft" variant="secondary" text="Kaikki kyselyt" class="m-md-2 dropdownButtonsleft">
-            <b-dropdown-item>item</b-dropdown-item>
-            <b-dropdown-item>item</b-dropdown-item>
-          </b-dropdown>
-        </div>
-        <div>
-          <b-button variant="secondary" @click="toggleDisplay" id="buttonRight">{{ this.display === "all" ? $t('message.archiveButton') : $t('message.allButton')}}</b-button>
-        </div>
+        <b-dropdown id="dropdownleft" variant="secondary" :text="$t(`message.${display}Button`)" class="m-md-2 dropdownButtonsleft">
+          <b-dropdown-item @click="toggleDisplay('all')">{{$t('message.allButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('active')">{{$t('message.activeButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('inactive')">{{$t('message.inactiveButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('starting')">{{$t('message.startingButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('ended')">{{$t('message.endedButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('archived')">{{$t('message.archivedButton')}}</b-dropdown-item>
+        </b-dropdown>
       </div>
     </div>
     <div class="tableDisplayfields">
       <b-table hover responsive :items="displayedSurveys" :fields="fields" bordered head-variant="light">
         <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
-          <div v-bind:key="field.key">
+          <div v-bind:key="field.key" style="text-align: center">
             <div v-if="field.colType === 'name'">
               <span v-if="data.item.name.length <= 20">{{data.item.name}}</span>
               <span v-else v-b-tooltip="data.item.name" tabindex="0">{{data.item.name.substring(0, 17) + '...'}}</span>
@@ -68,9 +67,9 @@
             </div>
             <div v-else-if="field.colType === 'actions'">
               <button @click="modifySurvey(data.item.surveyId)"><font-awesome-icon icon="pencil-alt" style="font-size:1.6rem;"/></button>
-              <button v-if="data.item.active" @click="suspendActivateSurvey(data.item.surveyId, false)"><font-awesome-icon icon="stop" style="font-size:1.5rem;"/></button>
+              <button v-if="data.item.active" @click="suspendActivateSurvey(data.item.surveyId, false)"><font-awesome-icon icon="stop" style="font-size:1.6rem;"/></button>
               <button v-else @click="suspendActivateSurvey(data.item.surveyId, true)"><font-awesome-icon icon="play" style="font-size:1.6rem;"/></button>
-              <button @click="archiveSurvey(data.item.surveyId)"> <font-awesome-icon icon="folder" style="font-size:1.6rem; color:grey;"/></button>
+              <button @click="archiveSurvey(data.item.surveyId)" :disabled="data.item.archived"><font-awesome-icon :icon="data.item.archived ? 'folder' : 'folder-plus'" style="font-size:1.6rem; color:grey;"/></button>
               <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:#FF0000;"/> </button>
             </div>
           </div>
@@ -80,10 +79,7 @@
     <b-modal
       id="modifySurveyModal"
       :title="$t('message.modifySurveyHeader')"
-      :ok-title="$t('message.modifySurveySubmit')"
-      :cancel-title="$t('message.modifySurveyCancel')"
       ref="modifySurveyModal"
-      size="xl"
       v-model="modifySurveyBoolean"
       @ok="handleModifySurveyModal"
     >
@@ -103,23 +99,57 @@
           <datepicker v-model="modify.surveyEndDate" :language="modify.fi" :monday-first="true" :disabled-dates="modify.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
         </b-form-group>
         <b-form-group
-          label="Respondents:"
+          :label="$t('message.modifySurveyRespondents')"
         >
-        <div style="display: flex; justify-content: flex-start;">
+        <div class="addRespondentDiv">
           <b-input
-            placeholder="Add respondent"
-            style="width: 80%"
+            :placeholder="$t('message.modifySurveyAddRespondent')"
             v-model="modify.currentRespondent"
           />
-          <b-button @click="addRespondent" style="margin-left: 1rem;">Add<font-awesome-icon style="margin-left: 0.5rem;" icon="plus"></font-awesome-icon></b-button>
+          <b-button @click="addRespondent" class="addRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
         </div>
-          <ul>
-            <li style="width: 100%;" v-for="(respondent, index) in modify.surveyRespondents" v-bind:key="index">
-              <span style="width: 100%;">{{respondent}}</span>
-            </li>
-          </ul>
+        <ul class="respondentList" v-if="modify.surveyRespondents.length">
+          <li v-for="(respondent, index) in modify.surveyRespondents" v-bind:key="index">
+            <div class="respondentDiv">
+              <p>{{respondent}}</p>
+              <font-awesome-icon @click="removeRespondent(index)" icon="times"/>
+            </div>
+          </li>
+        </ul>
         </b-form-group>
       </form>
+      <template v-slot:modal-footer="{ ok, cancel }">
+        <b-button @click="cancel()">{{$t('message.modifySurveyCancel')}}</b-button>
+        <b-button @click="ok()" variant="primary" :disabled="!modify.surveyName">{{$t('message.modifySurveySubmit')}}</b-button>
+      </template>
+    </b-modal>
+    <b-modal
+      :title="'Arkistoi kysely'"
+      ref="archiveSurveyModal"
+      v-model="archiveSurveyBoolean"
+      @ok="handleArchiveSurveyModal"
+    >
+      <b-form-group :label="$t('message.archiveSurveyUndoText')">
+        <b-input v-model="archive.inputSurveyName" :placeholder="$t('message.writeSurveyName')"/>
+      </b-form-group>
+      <template v-slot:modal-footer="{ ok, cancel }">
+        <b-button @click="cancel()">{{$t('message.modifySurveyCancel')}}</b-button>
+        <b-button @click="ok()" variant="primary" :disabled="archive.surveyName !== archive.inputSurveyName">{{$t('message.archiveSurveySubmit')}}</b-button>
+      </template>
+    </b-modal>
+    <b-modal
+      :title="$t('message.deleteSurveyHeader')"
+      ref="deleteSurveyModal"
+      v-model="deleteSurveyBoolean"
+      @ok="handleDeleteSurveyModal"
+    >
+      <b-form-group :label="$t('message.deleteSurveyUndoText')">
+        <b-input v-model="del.inputSurveyName" :placeholder="$t('message.writeSurveyName')"/>
+      </b-form-group>
+      <template v-slot:modal-footer="{ ok, cancel }">
+        <b-button @click="cancel()">{{$t('message.modifySurveyCancel')}}</b-button>
+        <b-button @click="ok()" variant="danger" :disabled="del.surveyName !== del.inputSurveyName">{{$t('message.deleteSurveySubmit')}}</b-button>
+      </template>
     </b-modal>
     <transition name="slide" mode="in-out">
       <SurveyResults 
@@ -181,17 +211,28 @@ export default {
           }
         ],
         surveys: [],
+        searchTerm: null,
         surveyResultsId: null,
         modify: {
           surveyId: null,
           surveyName: null,
           surveyEndDate: null,
-          surveyRespondents: null,
+          surveyRespondents: [],
           currentRespondent: null,
           fi: fi,
           disabledDates: {
             to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date)
           },
+        },
+        archive: {
+          surveyId: null,
+          surveyName: null,
+          inputSurveyName: null
+        },
+        del: {
+          surveyId: null,
+          surveyName: null,
+          inputSurveyName: null
         },
         display: "all",
         loaded: false
@@ -199,11 +240,38 @@ export default {
   },
   computed: {
     displayedSurveys() {
-      if (this.display === "archived") {
-        return this.$data.surveys.filter(obj => obj.archived)
-      } else if (this.display === "all") {
-        return this.$data.surveys
+      let displayedSurveys = this.$data.surveys
+      if (this.searchTerm) {
+        displayedSurveys = displayedSurveys.filter(obj => obj.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
       }
+      switch(this.display) {
+        case 'active':
+          displayedSurveys = displayedSurveys.filter(obj => {
+            if (obj.startDate !== null && new Date(obj.startDate).getTime() > Date.now()) return false
+            else if (obj.endDate !== null && new Date(obj.endDate).getTime() < Date.now()) return false
+            else if (!obj.active || obj.archived) return false
+            else return true
+          })
+          break
+        case 'inactive':
+          displayedSurveys = displayedSurveys.filter(obj => {
+            if (!obj.active || obj.archived) return true
+            else if (obj.startDate !== null && new Date(obj.startDate).getTime() < Date.now()) return false
+            else if (obj.endDate !== null && new Date(obj.endDate).getTime() > Date.now()) return false
+            else return true
+          })
+          break
+        case 'starting':
+          displayedSurveys = displayedSurveys.filter(obj => obj.startDate !== null && new Date(obj.startDate).getTime() > Date.now())
+          break
+        case 'ended':
+          displayedSurveys = displayedSurveys.filter(obj => obj.endDate !== null && new Date(obj.endDate).getTime() < Date.now())
+          break
+        case "archived":
+          displayedSurveys = displayedSurveys.filter(obj => obj.archived)
+          break
+      }
+      return displayedSurveys
     },
     modifySurveyBoolean: {
       get: function() {
@@ -212,6 +280,26 @@ export default {
       set: function() {
         if (this.modify.surveyId) {
           this.modify.surveyId = null
+        }
+      }
+    },
+    archiveSurveyBoolean: {
+      get: function() {
+        return !!this.archive.surveyId
+      },
+      set: function() {
+        if (this.archive.surveyId) {
+          this.archive.surveyId = null
+        }
+      }
+    },
+    deleteSurveyBoolean: {
+      get: function() {
+        return !!this.del.surveyId
+      },
+      set: function() {
+        if (this.del.surveyId) {
+          this.del.surveyId = null
         }
       }
     }
@@ -227,30 +315,53 @@ export default {
       if (~index) this.surveys.splice(index, 1, updatedSurvey)
     },
     deleteSurvey(surveyId) {
-      axios({
-        method: "POST",
-        url: process.env.VUE_APP_BACKEND + "/survey/delete",
-        data: {
-          id: surveyId
-        }
-      }).then(res => {
-        if (res.data === "Survey deleted succesfully") {
-          const index = this.surveys.findIndex(survey => survey.surveyId === surveyId)
-          if (~index) this.surveys.splice(index, 1)
-        }
-      })
+      if (!this.del.surveyId) {
+        const survey = this.surveys.find(survey => survey.surveyId === surveyId)
+        this.del.surveyId = surveyId
+        this.del.surveyName = survey.name
+      }
+    },
+    handleDeleteSurveyModal(bvModalEvt) {
+      bvModalEvt.preventDefault()
+      if (this.del.surveyName === this.del.inputSurveyName) {
+        axios({
+          method: "POST",
+          url: process.env.VUE_APP_BACKEND + "/survey/delete",
+          data: {
+            id: this.del.surveyId
+          }
+        }).then(res => {
+          if (res.data === "Survey deleted succesfully") {
+            const index = this.surveys.findIndex(survey => survey.surveyId === this.del.surveyId)
+            if (~index) this.surveys.splice(index, 1)
+            this.$nextTick(() => this.$refs.deleteSurveyModal.hide())
+          }
+        })
+      }
     },
     archiveSurvey(surveyId) {
-      axios({
-        method: "POST",
-        url: process.env.VUE_APP_BACKEND + "/survey/archive",
-        data: {
-          id: surveyId
-        }
-      }).then(res => {
-        console.log(res)
-        if (res.data === "Survey archived succesfully") this.surveys.find(survey => survey.surveyId === surveyId).archived = true
-      })
+      if (!this.archive.surveyId) {
+        const survey = this.surveys.find(survey => survey.surveyId === surveyId)
+        this.archive.surveyId = surveyId
+        this.archive.surveyName = survey.name
+      }
+    },
+    handleArchiveSurveyModal(bvModalEvt) {
+      bvModalEvt.preventDefault()
+      if (this.archive.surveyName === this.archive.inputSurveyName) {
+        axios({
+          method: "POST",
+          url: process.env.VUE_APP_BACKEND + "/survey/archive",
+          data: {
+            id: this.archive.surveyId
+          }
+        }).then(res => {
+          if (res.data === "Survey archived succesfully") {
+            this.surveys.find(survey => survey.surveyId === this.archive.surveyId).archived = true
+            this.$nextTick(() => this.$refs.archiveSurveyModal.hide())
+          }
+        })
+      }
     },
     suspendActivateSurvey(surveyId, status) {
       axios({
@@ -270,15 +381,20 @@ export default {
         this.modify.surveyId = surveyId
         this.modify.surveyName = survey.name
         this.modify.surveyEndDate = survey.endDate
-        if (!survey.anon) this.modify.surveyRespondents = survey.UserGroup.respondents
+        if (!survey.anon) this.modify.surveyRespondents = survey.UserGroup.Users.reduce((arr, user) => [...arr, user.email], [])
         else this.modify.surveyRespondents = []
       }
     },
     addRespondent() {
-      if (!this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.includes(this.modify.currentRespondent)) {
-        this.modify.surveyRespondents.push(this.modify.currentRespondent)
-        this.modify.currentRespondent = null
+      if (!this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.includes(this.modify.currentRespondent) && 
+          !this.modify.surveyRespondents.includes(this.modify.currentRespondent) &&
+          this.modify.currentRespondent) {
+            this.modify.surveyRespondents.push(this.modify.currentRespondent)
+            this.modify.currentRespondent = null
       }
+    },
+    removeRespondent(index) {
+      this.modify.surveyRespondents.splice(index, 1)
     },
     handleModifySurveyModal(bvModalEvt) {
       bvModalEvt.preventDefault()
@@ -310,12 +426,8 @@ export default {
         this.surveyResultsId = null
       }
     },
-    toggleDisplay() {
-      if (this.display === "all") {
-        this.display = "archived"
-      } else {
-        this.display = "all"
-      }
+    toggleDisplay(category) {
+      this.display = category
     }
   },
   created() {
@@ -323,18 +435,47 @@ export default {
   }
 }  
 </script>
-<style lang="scss">
-.table {
-  thead {
-    tr {
-      th {
-        text-align: center;
+<style lang="scss" scoped>
+
+#modifySurveyModal {
+  .addRespondentDiv {
+    display: flex;
+    justify-content: flex-start;
+
+    .addRespondentButton {
+      margin-left: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+
+      svg {
+        margin-left: 0.5rem;
       }
     }
   }
-  tbody {
-    tr {
-      text-align: center;
+
+  .respondentList {
+    max-height: 46vh;
+    overflow-y: scroll;
+    border: 1px solid #dee2e6;
+    padding: 0.7rem 1rem 1rem 1rem;
+
+    li {
+      width: 100%;
+      list-style: none;
+      padding-left: 1rem;
+
+      .respondentDiv {
+        display: flex;
+        position: relative;
+
+        svg {
+          position: absolute;
+          color: crimson;
+          margin-left: -1rem;
+          margin-top: 0.3rem;
+        }
+      }
     }
   }
 }
@@ -388,7 +529,6 @@ export default {
     .totalinstructionsearch{
       background-color:#FFFFFF;
       margin-top:1rem;
-      margin-bottom:3rem;
       width:100%;
       padding-top:1rem;
       padding-bottom:1rem;
@@ -485,9 +625,8 @@ export default {
       .buttonstotal{
         display:flex;
         flex-direction:row;
-        margin-bottom:1rem;
 
-        #buttonRight{
+        .buttonRight{
           color: #ffffff;
           border-radius: 5px;
           padding-right:0.7rem;

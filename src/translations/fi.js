@@ -94,7 +94,11 @@ export const fi = {
     searchParagraph:'Etsi kyselyä',
     searchPlaceholder:'Etsi kyselyä nimeltä...',
     allButton: 'Kaikki kyselyt',
-    archiveButton:'Arkistoidut kyselyt',
+    activeButton: 'Aktiiviset kyselyt',
+    inactiveButton: 'Epäaktiiviset kyselyt',
+    startingButton: 'Alkavat kyselyt',
+    endedButton: 'Päättyneet kyselyt',
+    archivedButton:'Arkistoidut kyselyt',
     loginText:'Kirjaudu sisään',
     usernamePlaceholder:'Käyttäjätunnus',
     passwordPlaceholder:'Salasana',
@@ -151,7 +155,17 @@ export const fi = {
     modifySurveyHeader: 'Muokkaa kyselyä',
     modifySurveyTitle: 'Kyselyn nimi:',
     modifySurveyEndDate: 'Kyselyn päättymispäivä:',
+    modifySurveyRespondents: 'Vastaanottajat:',
+    modifySurveyAddRespondent: 'Lisää vastaanottaja...',
     modifySurveyCancel: 'Peruuta',
-    modifySurveySubmit: 'Lähetä'
+    modifySurveySubmit: 'Lähetä',
+    archiveSurveySubmit: 'Arkistoi',
+    archiveSurveyHeader: 'Arkistoi kysely',
+    archiveSurveyUndoText: 'Arkistointia ei voi tehdä tekemättömäksi.',
+    deleteSurveyHeader: 'Poista kysely',
+    deleteSurveyUndoText: 'Poistamista ei voi tehdä tekemättömäksi.',
+    deleteSurveySubmit: 'Poista',
+    writeSurveyName: 'Kirjoita kyselyn nimi.'
+
   }
 }
