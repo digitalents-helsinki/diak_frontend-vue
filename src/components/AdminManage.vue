@@ -159,6 +159,9 @@
         v-bind:surveyName="surveys.find(survey => survey.surveyId === surveyResultsId).name"
       />
     </transition>
+    <transition name="fade" mode="in-out">
+      <div v-if="surveyResultsId" @click="surveyResultsId = null" class="dark"></div>
+    </transition>
   </div>
 </template>
 <script>
@@ -490,26 +493,58 @@ export default {
 
     .slide {
       &-enter {
-        transform: translateY(100vh);
+        transform: translateY(30vh);
+        opacity: 0;
 
         &-to {
           transform: translateY(0);
+          opacity: 1;
         }
 
         &-active {
-          transition: transform 0.2s;
+          transition-duration: 0.2s;
+          transition-property: transform, opacity;
         }
       }
 
       &-leave {
         transform: translateY(0);
+        opacity: 1;
 
         &-to {
-          transform: translateY(100vh);
+          transform: translateY(30vh);
+          opacity: 0;
         }
 
         &-active {
-          transition: transform 0.2s;
+          transition-duration: 0.2s;
+          transition-property: transform, opacity;
+        }
+      }
+    }
+
+    .fade {
+      &-enter {
+        opacity: 0;
+
+        &-to {
+          opacity: 1;
+        }
+
+        &-active {
+          transition: opacity 0.2s;
+        }
+      }
+
+      &-leave {
+        opacity: 1;
+
+        &-to {
+          opacity: 0;
+        }
+
+        &-active {
+          transition: opacity 0.2s;
         }
       }
     }
@@ -645,6 +680,16 @@ export default {
         }
       }  
     }
+
+  .dark {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    z-index: 5;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
 }
 
 .surveyList {
