@@ -38,7 +38,7 @@ export default {
           else if (typeof obj.custom !== "object" && obj.custom !== undefined) warn(`${obj.name}.custom`)
           else if (obj.custom !== undefined && typeof obj.custom.title !== "string") warn(`${obj.name}.custom.title`)
           else if (obj.custom !== undefined && typeof obj.custom.description !== "string") warn(`${obj.name}.custom.description`)
-          else if (obj.custom !== undefined && typeof obj.custom.help !== "string") warn(`${obj.name}.custom.help`)
+          else if (obj.custom !== undefined && obj.custom.help !== null && typeof obj.custom.help !== "string") warn(`${obj.name}.custom.help`)
           else valid.push(true)
         })
         return valid.length === Object.keys(prop).length

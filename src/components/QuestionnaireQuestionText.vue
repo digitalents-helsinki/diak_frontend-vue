@@ -31,7 +31,7 @@ export default {
         if (typeof prop !== "object" && prop !== undefined) return false
         if (typeof prop !== undefined && typeof prop.title !== "string") return false
         if (typeof prop !== undefined && typeof prop.description !== "string") return false
-        if (typeof prop !== undefined && typeof prop.help !== "string") return false
+        if (typeof prop !== undefined && prop.help !== null && typeof prop.help !== "string") return false
         return true
       }
     },

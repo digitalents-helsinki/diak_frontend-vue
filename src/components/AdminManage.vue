@@ -5,7 +5,7 @@
     </div>
     <div class="totalinstructionsearch">
       <div class="totalParagraph">
-        <p>{{ $t('message.total') }}</p>
+        <p>{{ `${$t('message.total')} ${surveys.length}`}}</p>
       </div>
       <div class="manageInstructions">
         <div class="instructiondivone">
@@ -44,9 +44,9 @@
       </div>
     </div>
     <div class="tableDisplayfields">
-      <b-table hover responsive :items="displayedSurveys" :fields="fields" bordered head-variant="light">
+      <b-table hover responsive :items="displayedSurveys" :fields="fields" bordered head-variant="light" style="text-align: center">
         <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
-          <div v-bind:key="field.key" style="text-align: center">
+          <div v-bind:key="field.key">
             <div v-if="field.colType === 'name'">
               <span v-if="data.item.name.length <= 20">{{data.item.name}}</span>
               <span v-else v-b-tooltip="data.item.name" tabindex="0">{{data.item.name.substring(0, 17) + '...'}}</span>
@@ -68,7 +68,7 @@
             <div v-else-if="field.colType === 'actions'">
               <button @click="modifySurvey(data.item.surveyId)"><font-awesome-icon icon="pencil-alt" style="font-size:1.6rem;"/></button>
               <button v-if="data.item.active" @click="suspendActivateSurvey(data.item.surveyId, false)"><font-awesome-icon icon="stop" style="font-size:1.6rem;"/></button>
-              <button v-else @click="suspendActivateSurvey(data.item.surveyId, true)"><font-awesome-icon icon="play" style="font-size:1.6rem;"/></button>
+              <button v-else @click="suspendActivateSurvey(data.item.surveyId, true)"><font-awesome-icon icon="play" style="font-size:1.6rem; color: green;"/></button>
               <button @click="archiveSurvey(data.item.surveyId)" :disabled="data.item.archived"><font-awesome-icon :icon="data.item.archived ? 'folder' : 'folder-plus'" style="font-size:1.6rem; color:grey;"/></button>
               <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:#FF0000;"/> </button>
             </div>
@@ -319,6 +319,7 @@ export default {
         const survey = this.surveys.find(survey => survey.surveyId === surveyId)
         this.del.surveyId = surveyId
         this.del.surveyName = survey.name
+        this.del.inputSurveyName = null
       }
     },
     handleDeleteSurveyModal(bvModalEvt) {
@@ -344,6 +345,7 @@ export default {
         const survey = this.surveys.find(survey => survey.surveyId === surveyId)
         this.archive.surveyId = surveyId
         this.archive.surveyName = survey.name
+        this.archive.inputSurveyName = null
       }
     },
     handleArchiveSurveyModal(bvModalEvt) {
@@ -523,12 +525,10 @@ export default {
         justify-content:center;
         align-items:center;
         padding-top:1.1rem;
-        margin-bottom:1rem;
     }
 
     .totalinstructionsearch{
       background-color:#FFFFFF;
-      margin-top:1rem;
       width:100%;
       padding-top:1rem;
       padding-bottom:1rem;
