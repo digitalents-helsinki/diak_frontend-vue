@@ -111,7 +111,7 @@ export default {
           const test = await axios.post(process.env.VUE_APP_BACKEND + "/survey/testsurvey/")
           return test.data
         } else if (this.isAnon) {
-          return `/anon/survey/${this.surveyId}`
+          return `/anon/survey/${this.surveyId}/${this.userId}`
         } else {
           return `/auth/survey/${this.surveyId}`
         }
@@ -121,7 +121,7 @@ export default {
         method: 'GET',
         url: process.env.VUE_APP_BACKEND + id,
         headers: {
-          'Authorization': `Bearer ${store.state.auth.accessToken || this.userId}`
+          'Authorization': `Bearer ${this.isAnon ? "" : store.state.auth.accessToken}`
         }
       });
       if (res.data === "survey not active") {
