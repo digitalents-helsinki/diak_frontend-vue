@@ -110,8 +110,10 @@ export default {
         if (this.surveyId === "testikysely") {
           const test = await axios.post(process.env.VUE_APP_BACKEND + "/survey/testsurvey/")
           return test.data
-        } else {
+        } else if (this.isAnon) {
           return `/anon/survey/${this.surveyId}`
+        } else {
+          return `/auth/survey/${this.surveyId}`
         }
       })()
       //
@@ -119,7 +121,7 @@ export default {
         method: 'GET',
         url: process.env.VUE_APP_BACKEND + id,
         headers: {
-          'Authorization': `Bearer ${this.userId}`
+          'Authorization': `Bearer ${store.state.auth.accessToken || this.userId}`
         }
       });
       if (res.data === "survey not active") {

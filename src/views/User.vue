@@ -41,7 +41,7 @@ export default {
       this.$data.pagenum++
     },
     moveToQuestionnaireHelp() {
-      this.$router.push({ name: "questionnaire-help-auth", params: { surveyId: store.state.survey.surveyId }})
+      this.$router.push({ name: "questionnaire-auth", params: { surveyId: store.state.survey.surveyId }})
     }
   },
   components: {
