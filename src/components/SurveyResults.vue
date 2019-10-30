@@ -264,6 +264,7 @@ export default {
 <style lang="scss" scoped>
 .mainWrapper {
   position: fixed;
+  z-index: 1000000000000000;
   max-height: calc(100vh - 2rem);
   margin: 1rem;
   top: 0;

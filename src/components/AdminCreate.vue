@@ -26,8 +26,8 @@
             <hr class="borderLine">
             <div class="optionValue">
                 <label for="choiceRadio" class="optionValuelabel">{{ $t('message.radioOption') }}</label>
-                <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" value=true ><span class="optionValueleft">{{ $t('message.anonymousRadio') }}</span></div>
-                <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" value=false ><span class="optionValueleft">{{ $t('message.authenticationRadio') }}</span></div>
+                <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" :value="true" ><span class="optionValueleft">{{ $t('message.anonymousRadio') }}</span></div>
+                <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" :value="false" ><span class="optionValueleft">{{ $t('message.authenticationRadio') }}</span></div>
             </div>
             <hr class="borderLine">
             <div class="dateOption">

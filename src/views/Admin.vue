@@ -161,11 +161,19 @@ export default {
                     background-color: #353535;
                     color: #FFFFFF;
                     border-radius: 10px;
-                    box-shadow: 0 5px 5px gray;
+                    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
                     width:11.5rem;
                     height:2.5rem;
                     font-weight:bold;
                     margin-left:0.2rem;
+
+                    &:hover {
+                        background-color: darken(#353535, 5%);
+                    }
+
+                    &:focus {
+                        background-color: darken(#353535, 10%);
+                    }
                 }
             }
             .icontextManage {
@@ -184,11 +192,19 @@ export default {
                     background-color: #353535;
                     color: #FFFFFF;
                     border-radius: 10px;
-                    box-shadow: 0 5px 5px gray;
+                    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
                     width:11.5rem;
                     height:2.5rem;
                     font-weight:bold;
                     margin-left:0.2rem;
+
+                    &:hover {
+                        background-color: darken(#353535, 5%);
+                    }
+
+                    &:focus {
+                        background-color: darken(#353535, 10%);
+                    }
                 }
             }
                 /*.produceReport-open {
