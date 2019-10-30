@@ -85,7 +85,13 @@ export default new Router({
       component: Questionnaire,
       props: true,
       beforeEnter(to, from, next) {
-        guard(to, from, next)
+        if (store.state.auth.loggedIn) {
+          next()
+        } else {
+          store.state.survey.surveyId = to.params.surveyId
+          store.state.survey.userId = to.params.userId
+          next('/login')
+        }
       }
     },
     {

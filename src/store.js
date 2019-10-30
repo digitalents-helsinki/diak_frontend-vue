@@ -10,6 +10,10 @@ export default new Vuex.Store({
       accessToken: null,
       role: null,
       userId: null
+    },
+    survey: {
+      surveyId: null,
+      userId: null
     }
   }
 })

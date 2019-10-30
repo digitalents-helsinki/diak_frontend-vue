@@ -1,32 +1,39 @@
 <template>
   <div class="background">
-    <Main
-      v-bind:user="user"
-      v-bind:surveyName="surveyName"
-      v-on:toggleModal="toggleModal"
-    />
-    <div class="questionnaire container text-center shadow-lg">
-      <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>Survey not active</p></b-alert>
-      <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount">
-        <b-spinner label="Loading..." />
+    <div v-if="questionnum === null">
+      <Help
+        v-on:moveToQuestionnaire="questionnum = 0"
+      />
+    </div>
+    <div v-else>
+      <Main
+        v-bind:user="user"
+        v-bind:surveyName="surveyName"
+        v-on:toggleModal="toggleModal"
+      />
+      <div class="questionnaire container text-center shadow-lg">
+        <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>Survey not active</p></b-alert>
+        <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount">
+          <b-spinner label="Loading..." />
+        </div>
+        <form>
+          <transition name="fade" mode="out-in">
+            <Question
+              v-if="currentQuestionData"
+              v-bind:question.sync="currentQuestionData"
+              v-bind:navigation.sync="navigationData"
+              v-on:toggleModal="toggleModal"
+            />
+            <Review 
+              v-else-if="navigationData.questionamount <= questionnum"
+              v-bind:results="questiondata"
+              v-bind:navigation.sync="navigationData"
+              v-on:saveQuestions="saveQuestions"
+              v-on:toggleModal="toggleModal"
+            />
+          </transition>
+        </form>
       </div>
-      <form>
-        <transition name="fade" mode="out-in">
-          <Question
-            v-if="currentQuestionData"
-            v-bind:question.sync="currentQuestionData"
-            v-bind:navigation.sync="navigationData"
-            v-on:toggleModal="toggleModal"
-          />
-          <Review 
-            v-else-if="navigationData.questionamount <= questionnum"
-            v-bind:results="questiondata"
-            v-bind:navigation.sync="navigationData"
-            v-on:saveQuestions="saveQuestions"
-            v-on:toggleModal="toggleModal"
-          />
-        </transition>
-      </form>
     </div>
     <Modals
       v-bind:modal="modal_visible"
@@ -41,6 +48,8 @@ import Main from '@/components/QuestionnaireHeader.vue';
 import Question from "@/components/QuestionnaireQuestion.vue";
 import Review from "@/components/QuestionnaireReview.vue";
 import Modals from '@/components/QuestionnaireModals.vue';
+import Help from '@/components/QuestionnaireHelp.vue'
+import store from '@/store';
 
 export default {
   name: "Questionnaire",
@@ -49,18 +58,19 @@ export default {
     Main,
     Question,
     Review,
-    Modals
+    Modals,
+    Help
   },
   data() {
     return {
       questiondata: [],
-      questionnum: 0,
+      questionnum: null,
       modal_visible: null,
       userId: this.$route.params.userId,
       surveyId: this.$route.params.surveyId,
       surveyName: "",
       errormessage: null,
-      isAnon: null
+      isAnon: this.$route.name === 'questionnaire-anon'
     };
   },
   computed: {
@@ -98,15 +108,20 @@ export default {
       //FOR TESTING
       const id = await (async () => {
         if (this.surveyId === "testikysely") {
-          const test = await axios.post(process.env.VUE_APP_BACKEND + "/testsurvey/")
+          const test = await axios.post(process.env.VUE_APP_BACKEND + "/survey/testsurvey/")
           return test.data
         } else {
-          return this.surveyId
+          return `/anon/survey/${this.surveyId}`
         }
       })()
       //
-      const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/" + id);
-      console.log(res)
+      const res = await axios({
+        method: 'GET',
+        url: process.env.VUE_APP_BACKEND + id,
+        headers: {
+          'Authorization': `Bearer ${this.userId}`
+        }
+      });
       if (res.data === "survey not active") {
         this.errormessage = true;
       }
@@ -145,6 +160,9 @@ export default {
       axios({
         method: "POST",
         url: process.env.VUE_APP_BACKEND + post,
+        headers: {
+          'Authorization': `Bearer ${store.state.auth.accessToken}`
+        },
         data: {
           anonId: this.userId,
           surveyId: this.surveyId,
@@ -152,7 +170,6 @@ export default {
         }
       })
         .then(res => {
-          console.log(res)
           if (res.data.status === "ok") {
             this.$router.push({ path: `${push}/${this.surveyId}` });
           }
@@ -169,7 +186,6 @@ export default {
   },
   created() {
     this.getQuestions()
-    this.isAnon = this.$route.name === 'questionnaire-anon' ? true : false
   }
 };
 </script>

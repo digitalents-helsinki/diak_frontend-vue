@@ -5,15 +5,13 @@
       </div>
       <div>
         <questionnaire-agreement v-if="pagenum === 0" v-on:nextPage="nextPage" />
-        <personal-info v-if="pagenum === 1" v-on:infoSaved="nextPage" />
-        <questionnaire-help v-if="pagenum === 2" v-on:nextPage="moveToQuestionnaire" />
+        <personal-info v-if="pagenum === 1" v-on:infoSaved="moveToQuestionnaireHelp" />
       </div>
   </div>
 </template>
 <script>
 import axios from 'axios'
 import PersonalInfo from '../components/PersonalInfo.vue'
-import QuestionnaireHelp from '../components/QuestionnaireHelp.vue'
 import QuestionnaireAgreement from '../components/QuestionnaireAgreement.vue'
 import store from '@/store'
 
@@ -42,13 +40,12 @@ export default {
     nextPage() {
       this.$data.pagenum++
     },
-    moveToQuestionnaire() {
-      this.$router.push({ name: "questionnaire-auth", params: { surveyId: 'testikysely' } })
+    moveToQuestionnaireHelp() {
+      this.$router.push({ name: "questionnaire-help-auth", params: { surveyId: store.state.survey.surveyId }})
     }
   },
   components: {
     PersonalInfo,
-    QuestionnaireHelp,
     QuestionnaireAgreement
   },
   mounted() {
