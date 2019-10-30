@@ -12,12 +12,18 @@
             <div class="loginCredentials">
             <b-form>
               <b-form-group class="loginfield">
-                <b-form-input type="text" autocomplete="email" id="email" v-model="login.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')" required>
+                <b-form-input type="email" autocomplete="email" id="email" v-model="login.email" :state="loginvalidation.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')">
                 </b-form-input>
+                <b-form-invalid-feedback :state="loginvalidation.email" class="loginemailFeedback">
+                  {{ $t('message.emailInput') }}
+                </b-form-invalid-feedback>
               </b-form-group>
                 <b-form-group class="passwordfield">
-                  <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')" required>
+                  <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" :state="loginvalidation.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')">
                   </b-form-input>
+                  <b-form-invalid-feedback :state="loginvalidation.password" class="loginpasswordFeedback">
+                  {{ $t('message.passwordInput') }}
+                </b-form-invalid-feedback>
                 </b-form-group>
               <b-button type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
             </b-form>
@@ -56,11 +62,25 @@ export default {
         email: null,
         password: null
       },
+      loginvalidation: {
+        email: null,
+        password: null
+      },
       error: false
     }
   },
   methods: {
     handleLogin() {
+      this.loginvalidation.email = null
+      if (!this.login.email) {
+        this.loginvalidation.email = false
+        return
+      }
+      this.loginvalidation.password = null
+      if (!this.login.password) {
+        this.loginvalidation.password = false
+        return
+      }
       const data = JSON.stringify({
         email: this.login.email,
         password: this.login.password
@@ -152,7 +172,7 @@ export default {
         height: 100%;
 
         input{
-          margin-bottom:1rem;
+          margin-bottom:0.1rem;
         }
 
         .loginMessage{
@@ -164,6 +184,14 @@ export default {
           flex-direction:column;
           width:100%;
           padding:1rem;
+
+          .loginemailFeedback{
+            font-size:1rem;
+          }
+
+          .loginpasswordFeedback{
+            font-size:1rem;
+          }
 
           .loginsubmitButton{
             background-color: #350E7E;

@@ -12,6 +12,9 @@
                   label-for="firstandfamilyname"
                 >
                   <b-form-input id="firstandfamilyname" v-model="personalinfo.name" type="text" name="firstandfamilyname"></b-form-input>
+                  <b-form-invalid-feedback :state="infovalidation.name" class="nameRequired">
+                    {{ $t('message.firstandfamilynameInfo') }}
+                  </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group
                   id="addressField"
@@ -19,6 +22,9 @@
                   label-for="enteraddress"
                 >
                   <b-form-input id="enteraddress" v-model="personalinfo.address" type="text" name="enteraddress"></b-form-input>
+                  <b-form-invalid-feedback :state="infovalidation.address" class="addressRequired">
+                    {{ $t('message.addressInfo') }}
+                  </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group
                   id="ageField"
@@ -27,12 +33,21 @@
                 >
                   <div id="birthdayDisplay">
                     <b-form-input id="dayEnter" type="text" name="day" placeholder="01" ></b-form-input>
-                      <b-form-select
+                    <!--<b-form-invalid-feedback :state="infovalidation.day" class="dayRequired">
+                      {{ $t('message.addressInfo') }}
+                    </b-form-invalid-feedback>-->
+                    <b-form-select
                         id="monthEnter"
                         v-model="selected"
                         :options="months.fi"
                     ></b-form-select>
+                    <!--<b-form-invalid-feedback :state="infovalidation.month" class="monthRequired">
+                      {{ $t('message.addressInfo') }}
+                    </b-form-invalid-feedback>-->
                     <b-form-input id="yearEnter" type="text" name="year" placeholder="1990"></b-form-input>
+                    <!--<b-form-invalid-feedback :state="infovalidation.year" class="yearRequired">
+                      {{ $t('message.addressInfo') }}
+                    </b-form-invalid-feedback>-->
                   </div>
                 </b-form-group>
                 <b-form-group
@@ -45,6 +60,9 @@
                     :options="gender.fi"
                     v-model="personalinfo.gender" 
                   ></b-form-select>
+                  <b-form-invalid-feedback :state="infovalidation.gender" class="genderRequired">
+                    {{ $t('message.genderInfo') }}
+                  </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group
                   id="phoneField"
@@ -52,6 +70,9 @@
                   label-for="enterphonenumber"
                 >
                   <b-form-input id="enterphonenumber" v-model="personalinfo.phonenumber" type="tel" name="enterphonenumber"></b-form-input>
+                  <b-form-invalid-feedback :state="infovalidation.phonenumber" class="phonenumberRequired">
+                    {{ $t('message.phonenumberInfo') }}
+                  </b-form-invalid-feedback>
                 </b-form-group>
                 <div id="submitinfoform">
                   <b-button type="submit" @click.prevent="postInfo" class="submitIncluded">{{ $t('message.ProfilesubmitButton') }}</b-button>
@@ -71,14 +92,19 @@ export default {
   name: 'PersonalInfo',
   data() {
     return {
-      selected: 'tammikuu',
       months: {
         fi: ['tammikuu', 'helmikuu', 'maaliskuu','huhtikuu', 'toukokuu', 'kesäkuu','heinäkuu', 'elokuu', 'syyskuu','lokakuu', 'marraskuu', 'joulukuu']
       },
         gender: {
-            fi: ['Mies', 'Nainen', 'Muu']
+          fi: ['Mies', 'Nainen', 'Muu']
       },
       personalinfo: {
+        name: null,
+        address: null,
+        gender:null,
+        phonenumber: null
+      },
+      infovalidation: {
         name: null,
         address: null,
         gender:null,
@@ -88,6 +114,41 @@ export default {
   },
   methods: {
     postInfo() {
+      this.infovalidation.name = null
+      if (!this.personalinfo.name) {
+        this.infovalidation.name = false
+        return
+      }
+      this.infovalidation.address = null
+      if (!this.personalinfo.address) {
+        this.infovalidation.address = false
+        return
+      }
+      /*this.infovalidation.day = null
+      if (!this.personalinfo.day) {
+        this.infovalidation.day = false
+        return
+      }
+      this.infovalidation.month = null
+      if (!this.personalinfo.month) {
+        this.infovalidation.month = false
+        return
+      }
+      this.infovalidation.year = null
+      if (!this.personalinfo.year) {
+        this.infovalidation.year = false
+        return
+      }*/
+      this.infovalidation.gender = null
+      if (!this.personalinfo.gender) {
+        this.infovalidation.gender = false
+        return
+      }
+      this.infovalidation.phonenumber = null
+      if (!this.personalinfo.phonenumber) {
+        this.infovalidation.phonenumber = false
+        return
+      }
       axios({
         method: "POST",
         url: process.env.VUE_APP_BACKEND + "/user/" + store.state.auth.userId + "/info/update",
@@ -150,6 +211,14 @@ export default {
         width:100%;
         padding:1rem;
         margin-bottom:1rem;
+      
+        .nameRequired{
+          font-size:1rem;
+        }
+
+        .addressRequired{
+          font-size:1rem;
+        }
 
         #ageField{
           display:flex;
@@ -163,6 +232,27 @@ export default {
             } 
           }
         }
+
+        /*.dayRequired{
+          font-size:1rem;
+        }
+
+        .monthRequired{
+          font-size:1rem;
+        }
+
+        .yearRequired{
+          font-size:1rem;
+        }*/
+
+        .genderRequired{
+          font-size:1rem;
+        }
+
+        .phonenumberRequired{
+          font-size:1rem;
+        }
+
         #submitinfoform{
           display:flex;
           flex-direction:row;

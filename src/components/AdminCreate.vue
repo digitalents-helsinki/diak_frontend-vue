@@ -26,8 +26,8 @@
             <hr class="borderLine">
             <div class="optionValue">
                 <label for="choiceRadio" class="optionValuelabel">{{ $t('message.radioOption') }}</label>
-                <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" value=true ><span class="optionValueleft">{{ $t('message.anonymousRadio') }}</span></div>
-                <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" value=false ><span class="optionValueleft">{{ $t('message.authenticationRadio') }}</span></div>
+                <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" :value="true" ><span class="optionValueleft">{{ $t('message.anonymousRadio') }}</span></div>
+                <div class="optionValuediv"><input type="radio" v-model="surveyAnon" name="choiceRadio" :value="false" ><span class="optionValueleft">{{ $t('message.authenticationRadio') }}</span></div>
             </div>
             <hr class="borderLine">
             <div class="dateOption">
@@ -47,7 +47,7 @@
             <div class="insertingQuestions">
                 <p class="insertingQuestions-p">{{ $t('message.questionsParagraph')}}</p>
                 <div class="questionsModify-div"> 
-                    <button @click="addDefaultQuestions" class="btn questionsModify-button">{{ $t('message.defaultQuestions') }}<font-awesome-icon icon="key" class="iconButton-key"/></button>
+                    <button @click="addDefaultQuestions" class="btn questionsModify-button">{{ $t(`message.${allDefaultQuestionsExistence ? 'remove' : 'add'}DefaultQuestions`) }}<font-awesome-icon icon="key" class="iconButton-key"/></button>
                 </div>
                 <div id="insertedQuestionsview">
                     <div class="questionlistDiv">
@@ -177,15 +177,8 @@ export default {
             editIndex: null,
             surveyNameState: null,
             message: null,
-            messageVisible: false
-        }
-    },
-    components: {
-        Datepicker
-    },
-    methods: {
-        addDefaultQuestions() {
-            const defaultQuestions = [
+            messageVisible: false,
+            defaultQuestions: [
                 {
                     name: 'health',
                     default: true,
@@ -236,16 +229,28 @@ export default {
                     default: true,
                     questionAnimationId: Math.random()
                 }
-            ];
+            ]
+        }
+    },
+    components: {
+        Datepicker
+    },
+    computed: {
+        allDefaultQuestionsExistence() {
+            return this.defaultQuestions.every(defaultQuestion => this.$data.questions.some(question => question.name === defaultQuestion.name))
+        }
+    },
+    methods: {
+        addDefaultQuestions() {
 
             this.lockQuestions()
 
-            if (defaultQuestions.every(defaultQuestion => this.$data.questions.some(question => question.name === defaultQuestion.name))) {
+            if (this.allDefaultQuestionsExistence) {
                 //delete defaultquestions if all of them exist
-                this.$data.questions = this.$data.questions.filter(question => !defaultQuestions.some(defaultQuestion => defaultQuestion.name === question.name))
+                this.$data.questions = this.$data.questions.filter(question => !this.defaultQuestions.some(defaultQuestion => defaultQuestion.name === question.name))
             } else {
                 //add nonexisting defaultquestions
-                const filteredDefaultQuestions = defaultQuestions.filter(defaultQuestion => !this.$data.questions.some(question => question.name === defaultQuestion.name))
+                const filteredDefaultQuestions = this.defaultQuestions.filter(defaultQuestion => !this.$data.questions.some(question => question.name === defaultQuestion.name))
                 this.$data.questions = [...filteredDefaultQuestions, ...this.$data.questions]
             }
         },
@@ -350,7 +355,6 @@ export default {
         questionAnimation(el) {
             const wrapper = this.$el.querySelector('#insertedQuestionsview')
             const wrapperHeight = getComputedStyle(wrapper).height
-            const questionCardWidth = getComputedStyle(el).width
 
             wrapper.style.height = this.lastWrapperHeight
             el.style.width = this.lastQuestionCardWidth
@@ -366,7 +370,7 @@ export default {
     },
     directives: {
         editable: {
-            bind(el, binding, vnode) {
+            bind(el, binding) {
                 if (binding.value.content) el.textContent = binding.value.content
                 if (binding.value.condition) el.contentEditable = true
                 //character limit from directive arg
@@ -388,7 +392,7 @@ export default {
                     }
                 })
             },
-            update(el, binding, vnode) {
+            update(el, binding) {
                 //only updates if element is not focused (prevents caret from jumping around)
                 if (binding.value.content && binding.value.content !== el.textContent && document.activeElement !== el) {
                     el.textContent = binding.value.content
@@ -399,6 +403,9 @@ export default {
                 }
             }
         }
+    },
+    created() {
+        this.addDefaultQuestions()
     }
 }
 </script>
