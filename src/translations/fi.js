@@ -108,6 +108,7 @@ export const fi = {
     confirmPassword:'Vahvista salasana',
     submitRegister:'Rekisteröidy',
     registrationInfo:'Rekisteröidy jotta voit kirjautua sähköpostillasi ja salasanallasi',
+    minimumLength:'Anna salasanalle vähintään 8 merkkiä',
     passwordText:'Lisää uusi salasana',
     submitPassword:'Lähetä',
     passwordInfo:'',
@@ -149,8 +150,10 @@ export const fi = {
     logoutButtontranslate:'Kirjaudu ulos',
     userNametesting:'User Name',
     requiredtofill:'Lisää seuraava:',
-    emailInput:'sähköposti vaaditaan',
+    emailInput:'Sähköposti vaaditaan',
+    patternInput:'Sähköpostin on oltava muotoa esim: nimi@gmail.com',
     passwordInput:'Salasana vaaditaan',
+    passwordconfirmInput:'Salasanat eivät ole yhteneväisiä',
     firstandfamilynameInfo:'Etunimi ja sukunimi vaaditaan',
     addressInfo:'Osoite vaaditaan',
     genderInfo:'Sukupuoli vaaditaan',
@@ -159,6 +162,8 @@ export const fi = {
     modifySurveyTitle: 'Kyselyn nimi:',
     modifySurveyEndDate: 'Kyselyn päättymispäivä:',
     modifySurveyCancel: 'Peruuta',
-    modifySurveySubmit: 'Lähetä'
+    modifySurveySubmit: 'Lähetä',
+    inputLength:'8 kirjainmerkkiä vaaditaan',
+    invalidLogin:'Sähköpostiosoitteesi tai salasanasi on väärin'
   }
 }
