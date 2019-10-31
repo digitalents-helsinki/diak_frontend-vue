@@ -1,14 +1,14 @@
 <template>
-  <div class="registerationPage">
+  <div class="registrationPage">
     <b-container>
-      <div class="registerationLogo">
+      <div class="registrationLogo">
         <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logo"/>
         <div class="contentWrapper">
           <div class="empty">
           </div>
-          <div class="registerationTitle">
+          <div class="registrationTitle">
             <p class="title">{{ $t('message.registerText') }}</p>
-            <div class="registerationForm">
+            <div class="registrationForm">
               <b-form>
                 <b-form-group id="namefield">
                   <b-form-input type="email" v-model="registration.email" :state="registervalidation.email" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')">
@@ -141,7 +141,7 @@ export default {
 
 </script>
 <style lang="scss" scoped>
-.registerationPage{
+.registrationPage{
   background-color: #FFFFFF;
   width:100%;
   height: 100%;
@@ -152,7 +152,7 @@ export default {
   font-style:normal;
   font-size: 1rem;
 
-  .registerationLogo{
+  .registrationLogo{
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -176,7 +176,7 @@ export default {
         padding: 1rem;
       }
 
-      .registerationTitle{
+      .registrationTitle{
         display: flex;
         flex-direction: column;
         margin-top:1.8rem;
@@ -191,7 +191,7 @@ export default {
           font-size:1.6rem;
         }
 
-        .registerationForm{
+        .registrationForm{
           display:flex;
           flex-direction:column;
           width:100%;
