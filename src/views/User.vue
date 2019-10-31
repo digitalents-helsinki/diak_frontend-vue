@@ -5,7 +5,7 @@
       </div>
       <div>
         <questionnaire-agreement v-if="pagenum === 0" v-on:nextPage="nextPage" />
-        <personal-info v-if="pagenum === 1" v-on:infoSaved="moveToQuestionnaireHelp" />
+        <personal-info v-if="pagenum === 1" v-on:infoSaved="moveToQuestionnaire" />
       </div>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
     nextPage() {
       this.$data.pagenum++
     },
-    moveToQuestionnaireHelp() {
+    moveToQuestionnaire() {
       this.$router.push({ name: "questionnaire-auth", params: { surveyId: store.state.survey.surveyId }})
     }
   },

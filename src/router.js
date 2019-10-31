@@ -95,13 +95,13 @@ export default new Router({
       }
     },
     {
-      path: '/anon/results/:resultId',
+      path: '/anon/results/:resultId/:userId',
       name: 'results-anon',
       component: Results,
       props: true
     },
     {
-      path: '/auth/results/:resultId',
+      path: '/auth/results/:resultId/:userId',
       name: 'results-auth',
       component: Results,
       props: true

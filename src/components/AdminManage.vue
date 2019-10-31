@@ -247,6 +247,8 @@ export default {
       if (this.searchTerm) {
         displayedSurveys = displayedSurveys.filter(obj => obj.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
       }
+
+      //TODO: authenticated and anon surveys
       switch(this.display) {
         case 'active':
           displayedSurveys = displayedSurveys.filter(obj => {

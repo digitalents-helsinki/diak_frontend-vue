@@ -1,39 +1,40 @@
 <template>
-  <div class="background">
-    <div v-if="questionnum === null">
-      <Help
-        v-on:moveToQuestionnaire="questionnum = 0"
-      />
-    </div>
-    <div v-else>
-      <Main
-        v-bind:user="user"
-        v-bind:surveyName="surveyName"
-        v-on:toggleModal="toggleModal"
-      />
-      <div class="questionnaire container text-center shadow-lg">
-        <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>Survey not active</p></b-alert>
-        <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount">
-          <b-spinner label="Loading..." />
-        </div>
-        <form>
-          <transition name="fade" mode="out-in">
-            <Question
-              v-if="currentQuestionData"
-              v-bind:question.sync="currentQuestionData"
-              v-bind:navigation.sync="navigationData"
-              v-on:toggleModal="toggleModal"
-            />
-            <Review 
-              v-else-if="navigationData.questionamount <= questionnum"
-              v-bind:results="questiondata"
-              v-bind:navigation.sync="navigationData"
-              v-on:saveQuestions="saveQuestions"
-              v-on:toggleModal="toggleModal"
-            />
-          </transition>
-        </form>
+<div class="background">
+  <Help
+    v-if="questionnum === null"
+    v-on:moveToQuestionnaire="questionnum = 0"
+  />
+  <div v-else class="background">
+    <Main
+      v-bind:user="user"
+      v-bind:surveyName="surveyName"
+      v-on:toggleModal="toggleModal"
+    />
+    <div class="questionnaire container text-center shadow-lg">
+      <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>{{errormessage}}</p></b-alert>
+      <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount && !result">
+        <b-spinner label="Loading..." />
       </div>
+      <form>
+        <transition name="fade" mode="out-in">
+          <Question
+            v-if="currentQuestionData"
+            v-bind:question.sync="currentQuestionData"
+            v-bind:navigation.sync="navigationData"
+            v-on:toggleModal="toggleModal"
+          />
+          <Review 
+            v-else-if="navigationData.questionamount <= questionnum && !result"
+            v-bind:results="questiondata"
+            v-bind:navigation.sync="navigationData"
+            v-on:saveQuestions="saveQuestions"
+            v-on:toggleModal="toggleModal"
+          />
+          <Result
+            v-else
+          />
+        </transition>
+      </form>
     </div>
     <Modals
       v-bind:modal="modal_visible"
@@ -41,14 +42,16 @@
       v-on:moveHome="moveHome"
     />
   </div>
+</div>
 </template>
 <script>
 import axios from "axios";
+import Help from '@/components/QuestionnaireHelp.vue'
 import Main from '@/components/QuestionnaireHeader.vue';
 import Question from "@/components/QuestionnaireQuestion.vue";
 import Review from "@/components/QuestionnaireReview.vue";
+import Result from "@/components/Result.vue"
 import Modals from '@/components/QuestionnaireModals.vue';
-import Help from '@/components/QuestionnaireHelp.vue'
 import store from '@/store';
 
 export default {
@@ -59,7 +62,8 @@ export default {
     Question,
     Review,
     Modals,
-    Help
+    Help,
+    Result
   },
   data() {
     return {
@@ -70,7 +74,8 @@ export default {
       surveyId: this.$route.params.surveyId,
       surveyName: "",
       errormessage: null,
-      isAnon: this.$route.name === 'questionnaire-anon'
+      isAnon: this.$route.name === 'questionnaire-anon',
+      result: null
     };
   },
   computed: {
@@ -123,10 +128,21 @@ export default {
         headers: {
           'Authorization': `Bearer ${this.isAnon ? "" : store.state.auth.accessToken}`
         }
-      });
-      if (res.data === "survey not active") {
-        this.errormessage = true;
-      }
+      }).catch(err => {
+        if (err.response) {
+          if (err.response.data === "User has already answered the survey") {
+            this.result = true
+            //this.$router.push({ path: `${this.isAnon ? '/anon/results' : '/auth/results'}/${this.surveyId}/${this.userId}` })
+          } else {
+            this.errormessage = err.response.data
+          }
+        }
+        else {
+          this.errormessage = "Unknown error"
+        }
+        throw err
+      })
+
       const reducedData = res.data.Questions.reduce((arr, question) => {
         if(!question.name.endsWith("_custom")) {
           arr[question.number - 1] = {
@@ -173,7 +189,8 @@ export default {
       })
         .then(res => {
           if (res.data.status === "ok") {
-            this.$router.push({ path: `${push}/${this.surveyId}` });
+            //this.$router.push({ path: `${push}/${this.surveyId}/${this.userId}` });
+            this.result = true
           }
         })
         .catch(err => {});

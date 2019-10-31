@@ -1,15 +1,22 @@
 <template>
 <div class="results">
-  <h1>Tallennetut vastauksesi</h1>
+  <h2>Tallennetut vastauksesi</h2>
   <div class="result">
-    <div v-for="(value, index) in resultData" v-bind:key="index">
-      <span v-if="!Object.keys(value)[0].startsWith('custom_')">{{$t(`message.${Object.keys(value)[0]}_title`)}}</span>
-      <span v-else>{{Object.keys(value)[0].substring(7)}}</span>
-      <span>{{Object.values(value)[0] || "-"}}</span>
-      <p>{{resultData.health_desc}}</p>
+    <div class="resultRow" v-for="(value, index) in resultData" v-bind:key="index">
+      <div>
+        <span v-if="!Object.keys(value)[0].startsWith('custom_')">{{$t(`message.${Object.keys(value)[0]}_title`)}}</span>
+        <span v-else>{{Object.keys(value)[0].substring(7)}}</span>
+      </div>
+      <div>
+        <span class="resultValue">{{Object.values(value)[0] || "-"}}</span>
+        <span>{{5}}</span>
+      </div>
     </div>
   </div>
-  <button @click="signOut">Kirjaudu ulos</button>
+  <div class="buttonDiv">
+    <b-button variant="primary">Lähetä</b-button>
+    <b-button @click="signOut">Kirjaudu ulos</b-button>
+  </div>
 </div>
 </template>
 <script>
@@ -26,7 +33,7 @@ export default {
   methods: {
     getResults() {
       axios
-      .get(process.env.VUE_APP_BACKEND + '/anon/result/' + this.$route.params.resultId + '/' + this.$route.params.userId)
+      .get(process.env.VUE_APP_BACKEND + '/anon/result/' + this.$route.params.surveyId + '/' + this.$route.params.userId)
       .then(res => {
         this.resultData = res.data.Questions.reduce((arr, question) => {
           if(!question.name.endsWith("_custom")) {
@@ -56,22 +63,30 @@ export default {
   display: flex;
   flex-flow: column;
   text-align: center;
-  align-items: center;
+  margin-top: 2rem;
 
   .result {
     display: flex;
     flex-flow: row wrap;
     text-align: start;
+    margin-top: 1rem;
 
-    div {
+    .resultRow {
       width: 100%;
       display: flex;
       justify-content: space-between;
 
-      span:nth-child(odd) {
-        flex-basis: 80%;
+      .resultValue {
+        margin-right: 2rem;
       }
     }
+  }
+
+  .buttonDiv {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2rem;
   }
 }
 </style>
