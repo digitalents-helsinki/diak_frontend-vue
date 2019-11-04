@@ -40,7 +40,7 @@
     <Modals
       v-bind:modal="modal_visible"
       v-on:toggleModal="toggleModal"
-      v-on:moveHome="moveHome"
+      v-on:saveUnfinishedAnswers="saveUnfinishedAnswers"
     />
   </div>
 </div>
@@ -150,19 +150,32 @@ export default {
         return
       }
 
-      const reducedData = res.data.Questions.reduce((arr, question) => {
+      const data = (() => {
+        if (res.data.savedAnswers.length) {
+          return res.data.Survey.Questions.map(question => {
+            return {
+              ...question,
+              answer: res.data.savedAnswers.find(obj => obj.QuestionQuestionId === question.questionId)
+            }
+          })
+        } else {
+          return res.data.Survey.Questions
+        }
+      })()
+
+      const reducedData = data.reduce((arr, question) => {
         if(!question.name.endsWith("_custom")) {
           arr[question.number - 1] = {
             name: question.name,
-            val: null,
-            desc: null,
+            val: !question.answer ? null: question.answer.value !== undefined ? question.answer.value : null,
+            desc: !question.answer ? null : question.answer.description !== undefined ? question.answer.description : null,
             id: question.questionId
           }
         } else {
           arr[question.number - 1] = {
             name: question.name,
-            val: null,
-            desc: null,
+            val: !question.answer ? null: question.answer.value !== undefined ? question.answer.value : null,
+            desc: !question.answer ? null : question.answer.description !== undefined ? question.answer.description : null,
             id: question.questionId,
             custom: {
               title: question.title,
@@ -193,14 +206,33 @@ export default {
           surveyId: this.surveyId,
           answers: [...this.questiondata]
         }
-      })
-        .then(res => {
+      }).then(res => {
           if (res.data.status === "ok") {
             //this.$router.push({ path: `${push}/${this.surveyId}/${this.userId}` });
             this.result = true
           }
         })
-        .catch(err => {});
+        .catch(err => console.error(err));
+    },
+    saveUnfinishedAnswers() {
+      const post = this.isAnon ? "/anon/result/save": "/auth/result/save"
+      axios({
+        method: "POST",
+        url: process.env.VUE_APP_BACKEND + post,
+        headers: {
+          'Authorization': `Bearer ${store.state.auth.accessToken}`
+        },
+        data: {
+          anonId: this.userId,
+          surveyId: this.surveyId,
+          answers: [...this.questiondata]
+        }
+      }).then(res => {
+          if (res.data.status === "ok") {
+            this.moveHome()
+          }
+        })
+        .catch(err => console.error(err));
     },
     toggleModal(value) {
       if (this.modal_visible === null) this.modal_visible = value
