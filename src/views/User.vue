@@ -1,8 +1,6 @@
 <template>
   <div class="wrapper">
-      <div class="logo-wrapper">
-        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logo"/>
-      </div>
+      <Header/>
       <div>
         <questionnaire-agreement v-if="pagenum === 0" v-on:nextPage="nextPage" />
         <personal-info v-if="pagenum === 1" v-on:infoSaved="moveToQuestionnaire" />
@@ -13,6 +11,7 @@
 import axios from 'axios'
 import PersonalInfo from '../components/PersonalInfo.vue'
 import QuestionnaireAgreement from '../components/QuestionnaireAgreement.vue'
+import Header from '../components/Header.vue'
 import store from '@/store'
 
 export default {
@@ -46,7 +45,8 @@ export default {
   },
   components: {
     PersonalInfo,
-    QuestionnaireAgreement
+    QuestionnaireAgreement,
+    Header
   },
   mounted() {
     this.getUser()
@@ -55,9 +55,19 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.logo-wrapper {
-  .logo {
-    width: 100px;
+.wrapper {
+  background-color: #F9F9FB;
+  width:100%;
+  display: flex;
+  flex-flow: column nowrap;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style:normal;
+  font-size: 1rem;
+}
+
+@media screen and (min-width: 768px) { 
+  .wrapper{
+    height:100%;
   }
 }
 </style>

@@ -8,6 +8,7 @@
     <Main
       v-bind:user="user"
       v-bind:surveyName="surveyName"
+      v-bind:questionnaire="true"
       v-on:toggleModal="toggleModal"
     />
     <div class="questionnaire container text-center shadow-lg">
@@ -31,7 +32,7 @@
             v-on:toggleModal="toggleModal"
           />
           <Result
-            v-else
+            v-else-if="result"
           />
         </transition>
       </form>
@@ -47,7 +48,7 @@
 <script>
 import axios from "axios";
 import Help from '@/components/QuestionnaireHelp.vue'
-import Main from '@/components/QuestionnaireHeader.vue';
+import Main from '@/components/Header.vue';
 import Question from "@/components/QuestionnaireQuestion.vue";
 import Review from "@/components/QuestionnaireReview.vue";
 import Result from "@/components/Result.vue"
@@ -142,6 +143,12 @@ export default {
         }
         throw err
       })
+      
+      //change this to be less dumb
+      if (res.data.Averages) {
+        this.result = true
+        return
+      }
 
       const reducedData = res.data.Questions.reduce((arr, question) => {
         if(!question.name.endsWith("_custom")) {

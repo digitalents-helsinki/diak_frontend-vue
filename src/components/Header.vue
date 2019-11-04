@@ -2,11 +2,11 @@
   <div class="container-fluid" id="questionnaire-main">
     <div class="questionnaire-top">
       <div id="logodiv">
-        <img id="logotop" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
+        <img :id="questionnaire ? 'logotopQuestionnaire' : 'logotop'" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
       </div>
-      <button @click="$emit('toggleModal', 'help')" class="btn buttonOhjeet">Ohjeet</button>
+      <button v-if="questionnaire" @click="$emit('toggleModal', 'help')" class="btn buttonOhjeet">Ohjeet</button>
     </div>
-    <div class="questionnaire-bottom">
+    <div v-if="questionnaire" class="questionnaire-bottom">
       <span v-if="user">{{user}} | {{surveyName}}</span>
       <span v-else>Anonyymi | {{surveyName}}</span>
     </div>
@@ -15,7 +15,20 @@
 <script>
 export default {
   name: 'QuestionnaireHeader',
-  props: ['user', 'surveyName']
+  props: {
+    user: {
+      type: String,
+      default: ''
+    },
+    surveyName: {
+      type: String,
+      default: ''
+    },
+    questionnaire: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -37,9 +50,13 @@ export default {
     margin-top:1rem;
     
     #logodiv {
-      #logotop {
+      #logotopQuestionnaire {
         width:100%;
         height: 60px;
+      }
+      #logotop {
+        width: 100%;
+        height: 70px;
       }
     }
 

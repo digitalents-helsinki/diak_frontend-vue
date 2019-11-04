@@ -172,7 +172,10 @@ export const fi = {
     deleteSurveyHeader: 'Poista kysely',
     deleteSurveyUndoText: 'Poistamista ei voi tehdä tekemättömäksi.',
     deleteSurveySubmit: 'Poista',
-    writeSurveyName: 'Kirjoita kyselyn nimi.'
-
+    writeSurveyName: 'Kirjoita kyselyn nimi.',
+    questionnaireComparisonTitle: 'Tulostesi vertailu',
+    questionnaireComparisonQuestion: 'Kysymys',
+    questionnaireComparisonAnswer: 'Vastauksesi',
+    questionnaireComparisonAvg: 'Keskiarvo'
   }
 }
