@@ -1,31 +1,34 @@
 <template>
-  <div class="loginmaindiv">
+  <div class="loginPage">
     <b-container>
-      <div class="loginDiv">
+      <div class="pageWrapper">
         <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="loginLogo"/>
-        <div class="logincontentDiv">
-          <div class="spaceLogin">
+        <div class="logincontentWrapper">
+          <div class="empty">
           </div>
           <LangMenu/>
-          <div class="loginContent">
+          <div class="loginTitle">
             <p class="loginMessage">{{ $t('message.loginText') }}</p>
-            <div class="loginCredentials">
+            <div class="loginForm">
             <b-form>
               <b-form-group class="loginfield">
                 <b-form-input type="email" autocomplete="email" id="email" v-model="login.email" :state="loginvalidation.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')">
                 </b-form-input>
-                <b-form-invalid-feedback :state="loginvalidation.email" class="loginemailFeedback">
+                <b-form-invalid-feedback :state="loginvalidation.email" class="emailFeedback">
                   {{ $t('message.emailInput') }}
                 </b-form-invalid-feedback>
               </b-form-group>
                 <b-form-group class="passwordfield">
                   <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" :state="loginvalidation.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')">
                   </b-form-input>
-                  <b-form-invalid-feedback :state="loginvalidation.password" class="loginpasswordFeedback">
+                  <b-form-invalid-feedback :state="loginvalidation.password" class="passwordFeedback">
                   {{ $t('message.passwordInput') }}
                 </b-form-invalid-feedback>
                 </b-form-group>
               <b-button type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
+            <b-form-invalid-feedback :state="loginvalidation.invalidcredentials" class="loginFeedback">
+                  {{ $t('message.invalidLogin') }}
+                </b-form-invalid-feedback>
             </b-form>
           </div>
             <div class="registerandPassword">
@@ -64,7 +67,8 @@ export default {
       },
       loginvalidation: {
         email: null,
-        password: null
+        password: null,
+        invalidcredentials: null
       },
       error: false
     }
@@ -107,6 +111,7 @@ export default {
             }
           } else { 
             this.$data.error = true
+            this.loginvalidation.invalidcredentials = false
           }
         })
     },
@@ -129,7 +134,7 @@ export default {
 
 </script>
 <style lang="scss" scoped>
-.loginmaindiv{
+.loginPage{
   background-color: #FFFFFF;
   width:100%;
   height: 100%;
@@ -140,7 +145,7 @@ export default {
   font-style:normal;
   font-size: 1rem;
 
-  .loginDiv{
+  .pageWrapper{
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -152,19 +157,19 @@ export default {
         width: 100%;
       }
 
-    .logincontentDiv{
+    .logincontentWrapper{
       background-color: #F9F9FB;
       width:100%;
       box-shadow: 0 5px 5px gray;
       margin-bottom:1rem;
     
-      .spaceLogin{
+      .empty{
         background-color:#80CDE6;
         width:100%;
         padding: 1rem;
       }
       
-      .loginContent{
+      .loginTitle{
         display: flex;
         flex-direction: column;
         margin-top:0.1rem;
@@ -179,18 +184,24 @@ export default {
           font-size:1.6rem;
         }
 
-        .loginCredentials{
+        .loginForm{
           display:flex;
           flex-direction:column;
           width:100%;
           padding:1rem;
 
-          .loginemailFeedback{
+          .emailFeedback{
             font-size:1rem;
           }
 
-          .loginpasswordFeedback{
+          .passwordFeedback{
             font-size:1rem;
+          }
+
+          .loginFeedback{
+            font-size:1rem;
+            margin-top:1rem;
+            font-weight:bold;
           }
 
           .loginsubmitButton{
@@ -266,14 +277,14 @@ export default {
   }
 }
 @media screen and (min-width: 768px) { 
-  .loginDiv{
+  .pageWrapper{
     margin-top:1.8rem !important;
   }
   .loginLogo{
     width:29rem !important;
     margin-bottom:1rem;
   }
-  .logincontentDiv {
+  .logincontentWrapper {
     width:30rem !important;
   }
 }

@@ -1,28 +1,29 @@
 <template>
   <div class="home">
     <div class="container main">
-      <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" id="logo" />
+      <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logoProfile" />
       <div class="textContainer">
-        <div class="container-fluid" id="textContainer-top">
-          <p class="welcomeMessage">{{ $t('message.home') }}</p>
+        <div class="container-fluid textContainer-top">
+        <p class="welcomeMessage">{{ $t('message.home') }}</p>
         </div>
         <div class="text-container">
-          <div class="text-container-content">
-            <img src="../images/diak-meter.svg" alt="" />
+        <LangMenu />
+        <div class="text-container-content">
+            <img src="../images/meter.svg" alt="" />
             <p>{{ $t('message.help_text_1') }}</p>
-          </div>
-          <div class="text-container-content">
-            <img src="../images/DiakThumbs.svg" alt="" />
+        </div>
+        <div class="text-container-content">
+            <img src="../images/thumbs.svg" alt="" />
             <p>{{ $t('message.help_text_2') }}</p>
-          </div>
-          <div class="text-container-content">
-            <img src="../images/diak-balance.svg" alt="" />
+        </div>
+        <div class="text-container-content">
+            <img src="../images/balance.svg" alt="" />
             <p>{{ $t('message.help_text_3') }}</p>
-          </div>
-          <div class="text-container-content">
-            <img src="../images/Diak-null.svg" alt="" />
+        </div>
+        <div class="text-container-content">
+            <img src="../images/null.svg" alt="" />
             <p>{{ $t('message.help_text_4') }}</p>
-          </div>
+        </div>
         </div>
         <button @click="$emit('moveToQuestionnaire')" class="btn btn-primary">{{ $t('message.begin') }}</button>
       </div>
@@ -30,12 +31,15 @@
   </div>
 </template>
 <script>
+import LangMenu from '@/components/Languages.vue';
 export default {
-  name: 'home'
+  name: 'questionnaireHelp',
+  components:{
+    LangMenu
+  },
 }
 </script>
 <style lang="scss" scoped>
-
 p {
   margin-top: 0;
   margin-bottom: 0;
@@ -50,7 +54,6 @@ p {
   font-family: Arial, Helvetica, sans-serif;
   font-style:normal;
   font-size: 1rem;
-  //overflow: hidden;
 
   .main {
     display: flex;
@@ -60,7 +63,7 @@ p {
     text-align: center;
     margin-top: 1rem;
 
-    #logo {
+    .logoProfile {
       width: 100%;
     }
 
@@ -75,7 +78,7 @@ p {
         height: 60vh;
       }
         
-      #textContainer-top{
+      .textContainer-top{
         background-color:#80CDE6;
         color:#FFFFFF;
         padding: 0.5rem;
@@ -138,23 +141,19 @@ p {
   }
 }
 @media screen and (min-width: 575px) { 
-
     .welcomeMessage {
       font-size: 1.1rem !important;
     }
-
     .text-container p {
       font-size: 1rem !important;
     }
-
     button {
      padding:1rem 7rem !important;
     font-size:1.1rem !important;
     } 
   }
-
   @media screen and (min-width: 768px) { 
-    #logo{
+    .logoProfile{
       width:40rem !important;
     }
   }
