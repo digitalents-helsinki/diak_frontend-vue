@@ -1,10 +1,10 @@
 <template>
-    <div id="maindivInfo">
+    <div id="personalinfoPage">
       <b-container>
-        <div class="infoTopcontent">
+        <div class="contentWrapper">
           <div id="personalContent">
             <p id="instruction"> {{ $t('message.infoInstruction') }}</p>
-            <div id="infoContentFields">
+            <div id="formWrapper">
               <b-form>
                 <b-form-group
                   id="fullnameField"
@@ -74,7 +74,7 @@
                     {{ $t('message.phonenumberInfo') }}
                   </b-form-invalid-feedback>
                 </b-form-group>
-                <div id="submitinfoform">
+                <div id="submitinfoForm">
                   <b-button type="submit" @click.prevent="postInfo" class="submitIncluded">{{ $t('message.ProfilesubmitButton') }}</b-button>
                 </div>
               </b-form>
@@ -161,7 +161,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-#maindivInfo{
+#personalinfoPage{
   background-color: #F9F9FB;
   width:100%;
   display: flex;
@@ -186,7 +186,7 @@ export default {
       }
     }
   }
-  .infoTopcontent{
+  .contentWrapper{
     #personalContent{
       background-color: #FFFFFF;
       display: flex;
@@ -204,7 +204,7 @@ export default {
         text-align:center;
       }
         
-      #infoContentFields{
+      #formWrapper{
         display:flex;
         flex-direction:column;
         width:100%;
@@ -252,7 +252,7 @@ export default {
           font-size:1rem;
         }
 
-        #submitinfoform{
+        #submitinfoForm{
           display:flex;
           flex-direction:row;
           justify-content:center;
@@ -274,12 +274,12 @@ export default {
   }
 }
 @media screen and (max-width: 360px) { 
-  .infoTopcontent{
+  .infoContent{
     padding:0rem;
   }
 }
 @media screen and (min-width: 768px) { 
-  #maindivInfo{
+  #personalinfoPage{
     height:100%;
   }
 
@@ -288,7 +288,7 @@ export default {
     height:80px !important;
   }
 
-  .infoTopcontent{
+  .contentWrapper{
     display:flex;
     flex-direction:column;
     align-items:center;
