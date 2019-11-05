@@ -4,39 +4,40 @@
       <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logoProfile" />
       <div class="textContainer">
         <div class="container-fluid textContainer-top">
-        <p class="welcomeMessage">{{ $t('message.home') }}</p>
+          <p class="welcomeMessage">{{ $t('message.home') }}</p>
         </div>
         <div class="text-container">
-        <LangMenu />
-        <div class="text-container-content">
+          <LangMenu />
+          <div class="text-container-content">
             <img src="../images/meter.svg" alt="" />
             <p>{{ $t('message.help_text_1') }}</p>
-        </div>
-        <div class="text-container-content">
+          </div>
+          <div class="text-container-content">
             <img src="../images/thumbs.svg" alt="" />
             <p>{{ $t('message.help_text_2') }}</p>
-        </div>
-        <div class="text-container-content">
+          </div>
+          <div class="text-container-content">
             <img src="../images/balance.svg" alt="" />
             <p>{{ $t('message.help_text_3') }}</p>
-        </div>
-        <div class="text-container-content">
+          </div>
+          <div class="text-container-content">
             <img src="../images/null.svg" alt="" />
             <p>{{ $t('message.help_text_4') }}</p>
+          </div>
         </div>
-        </div>
-        <button @click="$emit('moveToQuestionnaire')" class="btn btn-primary">{{ $t('message.begin') }}</button>
+        <button @click.prevent="$emit('moveToQuestionnaire')" class="btn btn-primary">{{ $t('message.begin') }}</button>
       </div>
     </div>
   </div>
 </template>
 <script>
 import LangMenu from '@/components/Languages.vue';
+
 export default {
   name: 'questionnaireHelp',
   components:{
     LangMenu
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>

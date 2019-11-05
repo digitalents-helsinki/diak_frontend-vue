@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Home from '@/views/Home.vue'
 import store from '@/store'
 import Questionnaire from '@/views/Questionnaire.vue'
-import Results from '@/views/Results.vue'
 import SurveyResults from '@/views/SurveyResults.vue'
 import Admin from '@/views/Admin.vue'
 import Login from '@/views/Login.vue'
@@ -80,7 +79,7 @@ export default new Router({
       props: true
     },
     {
-      path: '/auth/questionnaire/:surveyId/:userId',
+      path: '/auth/questionnaire/:surveyId/:userId?',
       name: 'questionnaire-auth',
       component: Questionnaire,
       props: true,
@@ -93,18 +92,6 @@ export default new Router({
           next('/login')
         }
       }
-    },
-    {
-      path: '/anon/results/:resultId/:userId',
-      name: 'results-anon',
-      component: Results,
-      props: true
-    },
-    {
-      path: '/auth/results/:resultId/:userId',
-      name: 'results-auth',
-      component: Results,
-      props: true
     },
     {
       path: '/admin/surveyresults/:surveyId',

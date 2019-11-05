@@ -45,7 +45,7 @@ export default {
         this.resultData = res.data.Result.Questions.reduce((arr, question) => {
           arr[question.number - 1] = {
             [comparisonQuestion]: !question.name.endsWith("_custom") ? this.$t(`message.${question.name}_title`) : question.title,
-            [comparisonAnswer]: question.Answers[0].value || '-',
+            [comparisonAnswer]: question.Answers[0].value !== null ? question.Answers[0].value : '-',
             [comparisonAvg]: (avg => avg ? Number(avg).toFixed(2) : '-')(res.data.Averages.find(obj => obj.number === question.number).answerAvg)
           }
           return arr
@@ -74,8 +74,7 @@ export default {
       }
     },
     signOut() {
-      //this doesn't work if the route has been previously pushed with name
-      this.$router.push({ name: '/' })
+      this.$router.push({ path: '/' })
     }
   },
   created() {

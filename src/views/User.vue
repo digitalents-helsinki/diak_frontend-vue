@@ -40,7 +40,7 @@ export default {
       this.$data.pagenum++
     },
     moveToQuestionnaire() {
-      this.$router.push({ name: "questionnaire-auth", params: { surveyId: store.state.survey.surveyId }})
+      this.$router.push({ path: `/auth/questionnaire/${store.state.survey.surveyId}/` })
     }
   },
   components: {
