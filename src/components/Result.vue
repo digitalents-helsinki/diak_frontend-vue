@@ -17,7 +17,6 @@
 </template>
 <script>
 import axios from 'axios'
-import store from '@/store'
 
 export default {
   name: 'results',
@@ -36,7 +35,7 @@ export default {
         method: 'GET', 
         url: `${process.env.VUE_APP_BACKEND}/${this.auth ? 'auth' : 'anon'}/result/${this.$route.params.surveyId}/${this.auth ? '' : this.$route.params.userId}`,
         headers: {
-          'Authorization': `Bearer ${store.state.auth.accessToken}`
+          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
         }
       }).then(res => {
         const comparisonQuestion = this.$t('message.questionnaireComparisonQuestion')
@@ -58,7 +57,7 @@ export default {
           method: "POST",
           url: `${process.env.VUE_APP_BACKEND }/${this.auth ? 'auth' : 'anon'}/emailresult`,
           headers: {
-            'Authorization': `Bearer ${store.state.auth.accessToken}`
+            'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
           },
           data: {
             anonId: this.$route.params.userId,
@@ -74,6 +73,7 @@ export default {
       }
     },
     signOut() {
+      this.$store.commit('logout')
       this.$router.push({ path: '/' })
     }
   },

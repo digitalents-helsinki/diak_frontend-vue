@@ -86,7 +86,6 @@
 </template>
 <script>
 import axios from 'axios'
-import store from '@/store'
 
 export default {
   name: 'PersonalInfo',
@@ -151,7 +150,7 @@ export default {
       }
       axios({
         method: "POST",
-        url: process.env.VUE_APP_BACKEND + "/user/" + store.state.auth.userId + "/info/update",
+        url: process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.auth.userId + "/info/update",
         data: {
           personalinfo: this.$data.personalinfo
         }

@@ -51,7 +51,6 @@
 </template>
 <script>
 import axios from 'axios'
-import store from '@/store'
 import LangMenu from '@/components/Languages.vue';
 
 export default {
@@ -98,15 +97,19 @@ export default {
         .then(res => {
           if (res.data.success) {
             if (res.data.role === 'admin') {
-              store.state.auth.loggedIn = true
-              store.state.auth.role = 'admin'
-              store.state.auth.accessToken = res.data.token
+              this.$store.commit('login', {
+                loggedIn: true,
+                role: 'admin',
+                accessToken: res.data.token
+              })
               this.$router.push({ name: 'admin' })
             } else {
-              store.state.auth.loggedIn = true
-              store.state.auth.role = 'user'
-              store.state.auth.accessToken = res.data.token
-              store.state.auth.userId = res.data.userId
+              this.$store.commit('login', {
+                loggedIn: true,
+                role: 'user',
+                accessToken: res.data.token,
+                userId: res.data.userId
+              })
               this.$router.push({ path: '/user/' })
             }
           } else { 
@@ -119,7 +122,7 @@ export default {
       this.$gAuth
         .signIn()
         .then(gUser => {
-          store.state.auth.loggedIn = true
+          //store.state.auth.loggedIn = true
           this.$router.push({ name: 'user' })
         })
     },

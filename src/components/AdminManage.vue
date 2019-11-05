@@ -35,6 +35,8 @@
       <div class="buttonstotal">
         <b-dropdown id="dropdownleft" variant="secondary" :text="$t(`message.${display}Button`)" class="m-md-2 dropdownButtonsleft">
           <b-dropdown-item @click="toggleDisplay('all')">{{$t('message.allButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('anonymous')">{{$t('message.anonymousButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('authenticated')">{{$t('message.authenticatedButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('active')">{{$t('message.activeButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('inactive')">{{$t('message.inactiveButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('starting')">{{$t('message.startingButton')}}</b-dropdown-item>
@@ -248,8 +250,13 @@ export default {
         displayedSurveys = displayedSurveys.filter(obj => obj.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
       }
 
-      //TODO: authenticated and anon surveys
       switch(this.display) {
+        case 'anonymous': 
+          displayedSurveys = displayedSurveys.filter(obj => obj.anon)
+          break
+        case 'authenticated':
+          displayedSurveys = displayedSurveys.filter(obj => !obj.anon)
+          break
         case 'active':
           displayedSurveys = displayedSurveys.filter(obj => {
             if (obj.startDate !== null && new Date(obj.startDate).getTime() > Date.now()) return false

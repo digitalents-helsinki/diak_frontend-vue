@@ -12,7 +12,6 @@ import axios from 'axios'
 import PersonalInfo from '../components/PersonalInfo.vue'
 import QuestionnaireAgreement from '../components/QuestionnaireAgreement.vue'
 import Header from '../components/Header.vue'
-import store from '@/store'
 
 export default {
   name: 'user',
@@ -27,20 +26,20 @@ export default {
   },
   methods: {
     async getUser() {
-      this.$data.user = await axios.get(process.env.VUE_APP_BACKEND + "/user/" + store.state.auth.userId)
+      this.$data.user = await axios.get(process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.auth.userId)
       if (this.$data.user.data.name) {
         this.$data.hasInfo = true
       }
     },
     async getUserSurveys() {
-      this.$data.surveys = await axios.get(process.env.VUE_APP_BACKEND + "/surveys/" + store.state.auth.userId)
+      this.$data.surveys = await axios.get(process.env.VUE_APP_BACKEND + "/surveys/" + this.$store.state.auth.userId)
       this.$data.surveys = this.$data.surveys.data.Surveys
     },
     nextPage() {
       this.$data.pagenum++
     },
     moveToQuestionnaire() {
-      this.$router.push({ path: `/auth/questionnaire/${store.state.survey.surveyId}/` })
+      this.$router.push({ path: `/auth/questionnaire/${this.$store.state.survey.surveyId}/` })
     }
   },
   components: {

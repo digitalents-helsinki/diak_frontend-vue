@@ -94,6 +94,8 @@ export const fi = {
     searchParagraph:'Etsi kyselyä',
     searchPlaceholder:'Etsi kyselyä nimeltä...',
     allButton: 'Kaikki kyselyt',
+    anonymousButton: 'Anonyymit kyselyt',
+    authenticatedButton: 'Autentikoidut kyselyt',
     activeButton: 'Aktiiviset kyselyt',
     inactiveButton: 'Epäaktiiviset kyselyt',
     startingButton: 'Alkavat kyselyt',

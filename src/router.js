@@ -12,11 +12,19 @@ import User from '@/views/User.vue'
 
 Vue.use(Router)
 
-function guard(to, from, next) {
-  if(store.state.auth.loggedIn) {
+function loginGuard(to, from, next) {
+  if (store.state.auth.loggedIn) {
     next()
   } else {
     next('/login')
+  }
+}
+
+function loggedInGuard(to, from, next) {
+  if (!store.state.auth.loggedIn) {
+    next()
+  } else {
+    next('/user')
   }
 }
 
@@ -38,7 +46,8 @@ export default new Router({
       props: true,
       meta: {
         quest: true
-      }
+      },
+      beforeEnter: loggedInGuard
     },
     {
       path: '/registration',
@@ -53,9 +62,7 @@ export default new Router({
       path: '/user',
       name: 'user',
       component: User,
-      beforeEnter(to, from, next) {
-        guard(to, from, next)
-      }
+      beforeEnter: loginGuard
     },
     {
       path: '/password',
@@ -87,8 +94,10 @@ export default new Router({
         if (store.state.auth.loggedIn) {
           next()
         } else {
-          store.state.survey.surveyId = to.params.surveyId
-          store.state.survey.userId = to.params.userId
+          store.commit('setSurvey', {
+            surveyId: to.params.surveyId,
+            userId: to.params.userId
+          })
           next('/login')
         }
       }

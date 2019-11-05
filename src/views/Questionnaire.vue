@@ -53,7 +53,6 @@ import Question from "@/components/QuestionnaireQuestion.vue";
 import Review from "@/components/QuestionnaireReview.vue";
 import Result from "@/components/Result.vue"
 import Modals from '@/components/QuestionnaireModals.vue';
-import store from '@/store';
 
 export default {
   name: "Questionnaire",
@@ -127,7 +126,7 @@ export default {
         method: 'GET',
         url: process.env.VUE_APP_BACKEND + id,
         headers: {
-          'Authorization': `Bearer ${this.isAnon ? "" : store.state.auth.accessToken}`
+          'Authorization': `Bearer ${this.isAnon ? "" : this.$store.state.auth.accessToken}`
         }
       }).catch(err => {
         if (err.response) {
@@ -199,7 +198,7 @@ export default {
         method: "POST",
         url: process.env.VUE_APP_BACKEND + post,
         headers: {
-          'Authorization': `Bearer ${store.state.auth.accessToken}`
+          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
         },
         data: {
           anonId: this.userId,
@@ -220,7 +219,7 @@ export default {
         method: "POST",
         url: process.env.VUE_APP_BACKEND + post,
         headers: {
-          'Authorization': `Bearer ${store.state.auth.accessToken}`
+          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
         },
         data: {
           anonId: this.userId,
@@ -239,6 +238,7 @@ export default {
       else this.modal_visible = null
     },
     moveHome() {
+      this.$store.commit('logout')
       this.$router.push({ path: "/" });
     }
   },
