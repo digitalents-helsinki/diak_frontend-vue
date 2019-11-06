@@ -169,6 +169,7 @@ export const fi = {
     modifySurveyHeader: 'Muokkaa kyselyä',
     modifySurveyTitle: 'Kyselyn nimi:',
     modifySurveyEndDate: 'Kyselyn päättymispäivä:',
+    modifySurveyActivity: 'Kyselyyn on mahdollista vastata',
     modifySurveyRespondents: 'Vastaanottajat:',
     modifySurveyAddRespondent: 'Lisää vastaanottaja...',
     modifySurveyCancel: 'Peruuta',
