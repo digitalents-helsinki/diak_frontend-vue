@@ -1,39 +1,72 @@
 <template>
   <div class="wrapper">
-      <Header/>
-      <div>
-        <questionnaire-agreement v-if="pagenum === 0" v-on:nextPage="nextPage" />
-        <personal-info v-if="pagenum === 1" v-on:infoSaved="moveToQuestionnaire" />
-      </div>
+    <div>
+      <ConfidentialityNotice
+        v-if="pagenum === 0 && isFirstTime" 
+        v-on:nextPage="nextPage"
+      />
+      <PersonalInfo
+        v-else
+        v-bind:personalinfo="personalinfo"
+        v-bind:isFirstTime="isFirstTime"
+        v-on:updateInfo="updateInfo"
+        v-on:infoSaved="moveToQuestionnaire"
+      />
+    </div>
   </div>
 </template>
 <script>
 import axios from 'axios'
 import PersonalInfo from '../components/PersonalInfo.vue'
-import QuestionnaireAgreement from '../components/QuestionnaireAgreement.vue'
-import Header from '../components/Header.vue'
+import ConfidentialityNotice from '../components/ConfidentialityNotice.vue'
 
 export default {
   name: 'user',
+  components: {
+    PersonalInfo,
+    ConfidentialityNotice
+  },
   data() {
     return {
       isLogged: false,
       hasInfo: false,
       user: null,
       surveys: null,
-      pagenum: 0
+      pagenum: 0,
+      isFirstTime: false,
+      personalinfo: {
+        name: null,
+        address: null,
+        birthdate: null,
+        gender:null,
+        phonenumber: null
+      }
     }
   },
   methods: {
     async getUser() {
-      this.$data.user = await axios.get(process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.auth.userId)
-      if (this.$data.user.data.name) {
-        this.$data.hasInfo = true
-      }
+      axios({
+        method: "GET",
+        url: process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.auth.userId,
+        headers: {
+          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
+        }
+      }).then(res => {
+        if (res.status === 200) {
+          this.isFirstTime = !res.data.name
+          this.personalinfo.name = res.data.name
+          this.personalinfo.address = res.data.address
+          this.personalinfo.birthdate = res.data.birth_date
+          this.personalinfo.gender = res.data.gender
+          this.personalinfo.phonenumber = res.data.phone_number
+        }
+      }).catch(err => {
+        if (err.response) this.error = err.response.data
+        throw err
+      })
     },
-    async getUserSurveys() {
-      this.$data.surveys = await axios.get(process.env.VUE_APP_BACKEND + "/surveys/" + this.$store.state.auth.userId)
-      this.$data.surveys = this.$data.surveys.data.Surveys
+    updateInfo(object) {
+      Object.assign(this.personalinfo, object)
     },
     nextPage() {
       this.$data.pagenum++
@@ -42,20 +75,14 @@ export default {
       this.$router.push({ path: `/auth/questionnaire/${this.$store.state.survey.surveyId}/` })
     }
   },
-  components: {
-    PersonalInfo,
-    QuestionnaireAgreement,
-    Header
-  },
-  mounted() {
+  created() {
     this.getUser()
-    this.getUserSurveys()
   }
 }
 </script>
 <style lang="scss" scoped>
 .wrapper {
-  background-color: #F9F9FB;
+  background-color: white;
   width:100%;
   display: flex;
   flex-flow: column nowrap;

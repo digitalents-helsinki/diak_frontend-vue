@@ -5,7 +5,7 @@
     v-on:moveToQuestionnaire="questionnum = 0"
   />
   <div v-else class="background">
-    <Main
+    <Header
       v-bind:user="user"
       v-bind:surveyName="surveyName"
       v-bind:questionnaire="true"
@@ -37,18 +37,18 @@
         </transition>
       </form>
     </div>
+    </div>
     <Modals
       v-bind:modal="modal_visible"
       v-on:toggleModal="toggleModal"
       v-on:saveUnfinishedAnswers="saveUnfinishedAnswers"
     />
-  </div>
 </div>
 </template>
 <script>
 import axios from "axios";
 import Help from '@/components/QuestionnaireHelp.vue'
-import Main from '@/components/Header.vue';
+import Header from '@/components/Header.vue';
 import Question from "@/components/QuestionnaireQuestion.vue";
 import Review from "@/components/QuestionnaireReview.vue";
 import Result from "@/components/Result.vue"
@@ -58,7 +58,7 @@ export default {
   name: "Questionnaire",
   props: ['user'],
   components: {
-    Main,
+    Header,
     Question,
     Review,
     Modals,

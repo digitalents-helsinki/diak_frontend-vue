@@ -56,7 +56,7 @@ export default {
       }
       #logotop {
         width: 100%;
-        height: 70px;
+        height: 90px;
       }
     }
 

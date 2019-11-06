@@ -2,8 +2,8 @@
     <div id="maindivInfo">
       <b-container>
         <div class="infoTopcontent">
-          <div id="personalContent">
-            <p id="instruction"> {{ $t('message.infoInstruction') }}</p>
+          <div id="personalContent" class="shadow-lg">
+            <p id="instruction">{{isFirstTime ? $t('message.infoInstruction') : $t('message.infoInstructionOld')}}</p>
             <div id="infoContentFields">
               <b-form>
                 <b-form-group
@@ -11,7 +11,7 @@
                   v-bind:label="$t('message.userName')"
                   label-for="firstandfamilyname"
                 >
-                  <b-form-input id="firstandfamilyname" v-model="personalinfo.name" type="text" name="firstandfamilyname"></b-form-input>
+                  <b-form-input id="firstandfamilyname" @input="$emit('updateInfo', {name: $event})" :value="personalinfo.name" type="text" name="firstandfamilyname"></b-form-input>
                   <b-form-invalid-feedback :state="infovalidation.name" class="nameRequired">
                     {{ $t('message.firstandfamilynameInfo') }}
                   </b-form-invalid-feedback>
@@ -21,7 +21,7 @@
                   v-bind:label="$t('message.userAddress')"
                   label-for="enteraddress"
                 >
-                  <b-form-input id="enteraddress" v-model="personalinfo.address" type="text" name="enteraddress"></b-form-input>
+                  <b-form-input id="enteraddress" @input="$emit('updateInfo', {address: $event})" :value="personalinfo.address" type="text" name="enteraddress"></b-form-input>
                   <b-form-invalid-feedback :state="infovalidation.address" class="addressRequired">
                     {{ $t('message.addressInfo') }}
                   </b-form-invalid-feedback>
@@ -31,24 +31,10 @@
                   v-bind:label="$t('message.userAge')"
                   label-for="birthday"
                 >
-                  <div id="birthdayDisplay">
-                    <b-form-input id="dayEnter" type="text" name="day" placeholder="01" ></b-form-input>
-                    <!--<b-form-invalid-feedback :state="infovalidation.day" class="dayRequired">
-                      {{ $t('message.addressInfo') }}
-                    </b-form-invalid-feedback>-->
-                    <b-form-select
-                        id="monthEnter"
-                        v-model="selected"
-                        :options="months.fi"
-                    ></b-form-select>
-                    <!--<b-form-invalid-feedback :state="infovalidation.month" class="monthRequired">
-                      {{ $t('message.addressInfo') }}
-                    </b-form-invalid-feedback>-->
-                    <b-form-input id="yearEnter" type="text" name="year" placeholder="1990"></b-form-input>
-                    <!--<b-form-invalid-feedback :state="infovalidation.year" class="yearRequired">
-                      {{ $t('message.addressInfo') }}
-                    </b-form-invalid-feedback>-->
-                  </div>
+                  <Datepicker id="birthday" @input="$emit('updateInfo', {birthdate: $event})" :value="personalinfo.birthdate" :language="fi" :monday-first="true" v-bind:placeholder="$t('message.datePlaceholder')"></Datepicker>
+                <b-form-invalid-feedback :state="infovalidation.birthdate" class="birthDateRequired">
+                    {{ $t('message.birthDateInfo') }}
+                </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group
                   id="genderField"
@@ -58,7 +44,8 @@
                   <b-form-select
                     id="genderEnter"
                     :options="gender.fi"
-                    v-model="personalinfo.gender" 
+                    @input="$emit('updateInfo', {gender: $event})"
+                    :value="personalinfo.gender"
                   ></b-form-select>
                   <b-form-invalid-feedback :state="infovalidation.gender" class="genderRequired">
                     {{ $t('message.genderInfo') }}
@@ -69,12 +56,13 @@
                   v-bind:label="$t('message.userPhonenumber')"
                   label-for="enterphonenumber"
                 >
-                  <b-form-input id="enterphonenumber" v-model="personalinfo.phonenumber" type="tel" name="enterphonenumber"></b-form-input>
+                  <b-form-input id="enterphonenumber" @input="$emit('updateInfo', {phonenumber: $event})" :value="personalinfo.phonenumber" type="tel" name="enterphonenumber"></b-form-input>
                   <b-form-invalid-feedback :state="infovalidation.phonenumber" class="phonenumberRequired">
                     {{ $t('message.phonenumberInfo') }}
                   </b-form-invalid-feedback>
                 </b-form-group>
                 <div id="submitinfoform">
+                  <p v-if="error">{{error}}</p>
                   <b-button type="submit" @click.prevent="postInfo" class="submitIncluded">{{ $t('message.ProfilesubmitButton') }}</b-button>
                 </div>
               </b-form>
@@ -86,83 +74,77 @@
 </template>
 <script>
 import axios from 'axios'
+import Datepicker from 'vuejs-datepicker'
+import { fi } from 'vuejs-datepicker/dist/locale'
 
 export default {
   name: 'PersonalInfo',
+  props: {
+    personalinfo: {
+      type: Object,
+      required: true
+    },
+    isFirstTime: {
+      type: Boolean,
+      required: true
+    }
+  },
+  components: {
+    Datepicker
+  },
   data() {
     return {
+      fi: fi,
       months: {
         fi: ['tammikuu', 'helmikuu', 'maaliskuu','huhtikuu', 'toukokuu', 'kesäkuu','heinäkuu', 'elokuu', 'syyskuu','lokakuu', 'marraskuu', 'joulukuu']
       },
-        gender: {
-          fi: ['Mies', 'Nainen', 'Muu']
-      },
-      personalinfo: {
-        name: null,
-        address: null,
-        gender:null,
-        phonenumber: null
+      gender: {
+        fi: ['Mies', 'Nainen', 'Muu']
       },
       infovalidation: {
         name: null,
         address: null,
+        birthdate: null,
         gender:null,
         phonenumber: null
-      }
+      },
+      error: null
     }
   },
   methods: {
     postInfo() {
-      this.infovalidation.name = null
-      if (!this.personalinfo.name) {
-        this.infovalidation.name = false
-        return
-      }
-      this.infovalidation.address = null
-      if (!this.personalinfo.address) {
-        this.infovalidation.address = false
-        return
-      }
-      /*this.infovalidation.day = null
-      if (!this.personalinfo.day) {
-        this.infovalidation.day = false
-        return
-      }
-      this.infovalidation.month = null
-      if (!this.personalinfo.month) {
-        this.infovalidation.month = false
-        return
-      }
-      this.infovalidation.year = null
-      if (!this.personalinfo.year) {
-        this.infovalidation.year = false
-        return
-      }*/
-      this.infovalidation.gender = null
-      if (!this.personalinfo.gender) {
-        this.infovalidation.gender = false
-        return
-      }
-      this.infovalidation.phonenumber = null
-      if (!this.personalinfo.phonenumber) {
-        this.infovalidation.phonenumber = false
-        return
-      }
-      axios({
-        method: "POST",
-        url: process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.auth.userId + "/info/update",
-        data: {
-          personalinfo: this.$data.personalinfo
+      Object.keys(this.infovalidation).forEach(key => {
+        if (this.personalinfo[key]) {
+          this.infovalidation[key] = true
+        } else {
+          this.infovalidation[key] = false
         }
       })
-      this.$emit('infoSaved')
+      if (Object.values(this.infovalidation).every(value => value)) {
+        axios({
+          method: "POST",
+          url: process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.auth.userId + "/info/update",
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
+          },
+          data: {
+            personalinfo: this.personalinfo
+          }
+        }).then(res => {
+          if (res.status === 200) this.$emit('infoSaved')
+        }).catch(err => {
+          if (err.response) this.error = err.response.data
+          throw err
+        })
+      }
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+
 #maindivInfo{
-  background-color: #F9F9FB;
+  background-color: white;
   width:100%;
   display: flex;
   flex-flow: column nowrap;
@@ -189,18 +171,19 @@ export default {
   .infoTopcontent{
     #personalContent{
       background-color: #FFFFFF;
+      border-radius: 15px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       width:100%;
       box-shadow: 0 5px 5px gray;
-      margin-top: 1.8rem;
+      margin-top: 1rem;
       margin-bottom:1rem;
+      padding: 0.5rem;
 
       #instruction{
         font-size:1.1rem;
-        text-align:left;
-        margin:1rem 0;
+        margin:1rem auto;
         text-align:center;
       }
         
@@ -219,30 +202,10 @@ export default {
           font-size:1rem;
         }
 
-        #ageField{
-          display:flex;
-          flex-direction:column;
-          margin-bottom:1rem;
-
-          #birthdayDisplay{
-            #monthEnter{
-              margin-top:0.1rem;
-              margin-bottom:0.1rem;
-            } 
-          }
-        }
-
-        /*.dayRequired{
+        .birthDateRequired{
           font-size:1rem;
         }
 
-        .monthRequired{
-          font-size:1rem;
-        }
-
-        .yearRequired{
-          font-size:1rem;
-        }*/
 
         .genderRequired{
           font-size:1rem;
@@ -295,6 +258,7 @@ export default {
   }
   
   #personalContent {
+    margin-top: 1.8rem;
     width:38rem !important;
   }
 }
