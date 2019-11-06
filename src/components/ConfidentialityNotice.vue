@@ -1,6 +1,6 @@
 <template>
   <div class="noticePage">
-      <div class="contentWrapper shadow-lg">
+      <div class="contentWrapper">
         <div class="noticeWrapper">
           <p class="heading">Confidentiality Notice</p>
           <p class="content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.  </p>
@@ -25,7 +25,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .noticePage {
-  background-color: white;
+  background-color: #F9F9FB;
   width:100%;
   height:100%;
   display: flex;
@@ -37,7 +37,6 @@ export default {
 
   .contentWrapper {
     background-color:#FFFFFF;
-    border-radius: 15px;
     width:100%;
     display: flex;
     flex-direction: column;

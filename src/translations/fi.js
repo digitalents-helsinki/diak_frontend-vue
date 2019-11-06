@@ -160,7 +160,7 @@ export const fi = {
     emailInput:'Sähköposti vaaditaan',
     patternInput:'Sähköpostin on oltava muotoa esim: nimi@gmail.com',
     passwordInput:'Salasana vaaditaan',
-    passwordconfirmInput:'Salasanat eivät ole yhteneväisiä',
+    passwordconfirmInput:'Salasanat eivät täsmää',
     firstandfamilynameInfo:'Etunimi ja sukunimi vaaditaan',
     addressInfo:'Osoite vaaditaan',
     birthDateInfo: 'Syntymäaika vaaditaan',
