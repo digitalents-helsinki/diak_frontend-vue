@@ -2,7 +2,10 @@
     <div id="personalinfoPage">
       <b-container>
         <div class="contentWrapper">
+        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logo"/>
           <div id="personalContent">
+          <div class="empty">
+          </div>
             <p id="instruction"> {{isFirstTime ? $t('message.infoInstruction') : $t('message.infoInstructionOld')}}</p>
             <div id="formWrapper">
               <b-form>
@@ -143,7 +146,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 #personalinfoPage{
-  background-color: #F9F9FB;
+  background-color: #FFFFFF;
   width:100%;
   display: flex;
   flex-flow: column nowrap;
@@ -168,17 +171,27 @@ export default {
     }
   }
   .contentWrapper{
+    margin-top:1rem;
+    
+    .logo{
+      width: 100%;
+    }
+
     #personalContent{
-      background-color: #FFFFFF;
-      border-radius: 15px;
+      background-color: #F9F9FB;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       width:100%;
       box-shadow: 0 5px 5px gray;
-      margin-top: 1rem;
+      margin-top: 0.1rem;
       margin-bottom:1rem;
-      padding: 0.5rem;
+
+      .empty{
+        background-color:#80CDE6;
+        width:100%;
+        padding: 1rem;
+      }
 
       #instruction{
         font-size:1.1rem;
@@ -245,9 +258,9 @@ export default {
     height:100%;
   }
 
-  #logoPlace #headerLogo{
-    width:100% !important;
-    height:80px !important;
+  .logo{
+    width:37rem !important;
+    margin-bottom:1rem;
   }
 
   .contentWrapper{

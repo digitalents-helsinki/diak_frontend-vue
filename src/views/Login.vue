@@ -151,7 +151,7 @@ export default {
   .pageWrapper{
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background-color: #FFFFFF;
     align-items: center;
     text-align: center;
     margin-top: 0.1rem;

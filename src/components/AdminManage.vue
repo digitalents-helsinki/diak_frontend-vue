@@ -631,9 +631,6 @@ export default {
             text-align:center;
             padding:0.1rem;
           }
-
-          .reportimageButton{
-          }
         }
       }
 
