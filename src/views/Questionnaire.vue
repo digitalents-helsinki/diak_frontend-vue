@@ -1,49 +1,49 @@
 <template>
-<div class="background">
-  <Help
-    v-if="questionnum === null"
-    v-on:moveToQuestionnaire="questionnum = 0"
-  />
-  <div v-else class="background">
-    <Header
-      v-bind:user="user"
-      v-bind:surveyName="surveyName"
-      v-bind:questionnaire="true"
-      v-on:toggleModal="toggleModal"
+  <div class="background">
+    <Help
+      v-if="questionnum === null"
+      v-on:moveToQuestionnaire="questionnum = 0"
     />
-    <div class="questionnaire container text-center shadow-lg">
-      <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>{{errormessage}}</p></b-alert>
-      <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount && !result">
-        <b-spinner label="Loading..." />
+    <div v-else class="background">
+      <Header
+        v-bind:user="user"
+        v-bind:surveyName="surveyName"
+        v-bind:questionnaire="true"
+        v-on:toggleModal="toggleModal"
+      />
+      <div class="questionnaire container text-center shadow-lg">
+        <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>{{errormessage}}</p></b-alert>
+        <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount && !result">
+          <b-spinner label="Loading..." />
+        </div>
+        <form>
+          <transition name="fade" mode="out-in">
+            <Question
+              v-if="currentQuestionData"
+              v-bind:question.sync="currentQuestionData"
+              v-bind:navigation.sync="navigationData"
+              v-on:toggleModal="toggleModal"
+            />
+            <Review 
+              v-else-if="navigationData.questionamount <= questionnum && !result"
+              v-bind:results="questiondata"
+              v-bind:navigation.sync="navigationData"
+              v-on:saveQuestions="saveQuestions"
+              v-on:toggleModal="toggleModal"
+            />
+            <Result
+              v-else-if="result"
+            />
+          </transition>
+        </form>
       </div>
-      <form>
-        <transition name="fade" mode="out-in">
-          <Question
-            v-if="currentQuestionData"
-            v-bind:question.sync="currentQuestionData"
-            v-bind:navigation.sync="navigationData"
-            v-on:toggleModal="toggleModal"
-          />
-          <Review 
-            v-else-if="navigationData.questionamount <= questionnum && !result"
-            v-bind:results="questiondata"
-            v-bind:navigation.sync="navigationData"
-            v-on:saveQuestions="saveQuestions"
-            v-on:toggleModal="toggleModal"
-          />
-          <Result
-            v-else-if="result"
-          />
-        </transition>
-      </form>
-    </div>
-    </div>
-    <Modals
-      v-bind:modal="modal_visible"
-      v-on:toggleModal="toggleModal"
-      v-on:saveUnfinishedAnswers="saveUnfinishedAnswers"
-    />
-</div>
+      </div>
+      <Modals
+        v-bind:modal="modal_visible"
+        v-on:toggleModal="toggleModal"
+        v-on:saveUnfinishedAnswers="saveUnfinishedAnswers"
+      />
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -51,7 +51,7 @@ import Help from '@/components/QuestionnaireHelp.vue'
 import Header from '@/components/Header.vue';
 import Question from "@/components/QuestionnaireQuestion.vue";
 import Review from "@/components/QuestionnaireReview.vue";
-import Result from "@/components/Result.vue"
+import Result from "@/components/QuestionnaireResult.vue"
 import Modals from '@/components/QuestionnaireModals.vue';
 
 export default {

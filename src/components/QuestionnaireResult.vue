@@ -8,7 +8,7 @@
     <p v-else>Tuloksesi on lähetetty sähköpostiisi</p>
     <p class="error" v-if="this.error">{{"Sähköpostin lähettäminen epäonnistui: " + this.error}}</p>
     <div v-if="!emailSent" class="emailDiv">
-      <b-input v-model="email" :state="(email && !!email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null" placeholder="Sähköpostiosoitteesi"/>
+      <b-input v-model="email" type="email" autocomplete="email" :state="(email && !!email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null" placeholder="Sähköpostiosoitteesi"/>
       <b-button :disabled="!email || !email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)" @click="sendEmail" variant="primary">Lähetä</b-button>
     </div>
   </div>

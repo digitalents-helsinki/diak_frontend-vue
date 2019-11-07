@@ -1,28 +1,30 @@
 <template>
-  <div class="wrapper">
-    <div>
-      <ConfidentialityNotice
-        v-if="pagenum === 0 && isFirstTime" 
-        v-on:nextPage="nextPage"
-      />
-      <PersonalInfo
-        v-else
-        v-bind:personalinfo="personalinfo"
-        v-bind:isFirstTime="isFirstTime"
-        v-on:updateInfo="updateInfo"
-        v-on:infoSaved="moveToQuestionnaire"
-      />
-    </div>
-  </div>
+    <LogoBox>
+      <template v-slot:content>
+        <ConfidentialityNotice
+          v-if="pagenum === 0 && isFirstTime" 
+          v-on:nextPage="nextPage"
+        />
+        <PersonalInfo
+          v-else
+          v-bind:personalinfo="personalinfo"
+          v-bind:isFirstTime="isFirstTime"
+          v-on:updateInfo="updateInfo"
+          v-on:moveToQuestionnaire="moveToQuestionnaire"
+        />
+      </template>
+    </LogoBox>
 </template>
 <script>
 import axios from 'axios'
+import LogoBox from '@/components/LogoBox.vue'
 import PersonalInfo from '../components/PersonalInfo.vue'
 import ConfidentialityNotice from '../components/ConfidentialityNotice.vue'
 
 export default {
   name: 'user',
   components: {
+    LogoBox,
     PersonalInfo,
     ConfidentialityNotice
   },
@@ -40,7 +42,8 @@ export default {
         birthdate: null,
         gender:null,
         phonenumber: null
-      }
+      },
+      error: null
     }
   },
   methods: {
@@ -81,19 +84,4 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.wrapper {
-  background-color: white;
-  width:100%;
-  display: flex;
-  flex-flow: column nowrap;
-  font-family: Arial, Helvetica, sans-serif;
-  font-style:normal;
-  font-size: 1rem;
-}
-
-@media screen and (min-width: 768px) { 
-  .wrapper{
-    height:100%;
-  }
-}
 </style>

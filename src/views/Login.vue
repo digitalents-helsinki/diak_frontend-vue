@@ -1,61 +1,56 @@
 <template>
-  <div class="loginPage">
-    <b-container>
-      <div class="pageWrapper">
-        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="loginLogo"/>
-        <div class="logincontentWrapper">
-          <div class="empty">
-          </div>
-          <LangMenu/>
-          <div class="loginTitle">
-            <p class="loginMessage">{{ $t('message.loginText') }}</p>
-            <div class="loginForm">
-            <b-form>
-              <b-form-group class="loginfield">
-                <b-form-input type="email" autocomplete="email" id="email" v-model="login.email" :state="loginvalidation.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')">
-                </b-form-input>
-                <b-form-invalid-feedback :state="loginvalidation.email" class="emailFeedback">
-                  {{ $t('message.emailInput') }}
-                </b-form-invalid-feedback>
-              </b-form-group>
-                <b-form-group class="passwordfield">
-                  <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" :state="loginvalidation.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')">
-                  </b-form-input>
-                  <b-form-invalid-feedback :state="loginvalidation.password" class="passwordFeedback">
-                  {{ $t('message.passwordInput') }}
-                </b-form-invalid-feedback>
-                </b-form-group>
-              <b-button type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
-            <b-form-invalid-feedback :state="loginvalidation.invalidcredentials" class="loginFeedback">
-                  {{ $t('message.invalidLogin') }}
-                </b-form-invalid-feedback>
-            </b-form>
-          </div>
-            <div class="registerandPassword">
-                <p class="changePassword" @click="handlePasswordClick">{{ $t('message.newPassword') }}</p>
-                <p class="registration" @click="handleRegisterClick">{{ $t('message.registrationLink') }}</p>
-            </div>
-            <p class="otherWay">{{ $t('message.loginwithother') }}</p>
-            <div class="loginOtherway">
-              <b-button class="loginFacebookButton"><font-awesome-icon :icon="['fab', 'facebook']" style="font-size:1.6rem; margin-right:0.6rem;"/>Facebook</b-button>
-              <b-button class="loginGoogleButton" @click="handleGSignIn"><font-awesome-icon :icon="['fab', 'google']" style="font-size:1.6rem; margin-right:0.6rem;"/>Google</b-button>
-            </div>
-          </div>
+  <LogoBox size="small">
+    <template v-slot:content>
+      <LangMenu />
+      <div class="loginTitle">
+        <p class="loginMessage">{{ $t('message.loginText') }}</p>
+        <div class="loginForm">
+        <b-form>
+          <b-form-group class="loginfield">
+            <b-form-input type="email" autocomplete="email" id="email" v-model="login.email" :state="loginvalidation.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')">
+            </b-form-input>
+            <b-form-invalid-feedback :state="loginvalidation.email" class="emailFeedback">
+              {{ $t('message.emailInput') }}
+            </b-form-invalid-feedback>
+          </b-form-group>
+            <b-form-group class="passwordfield">
+              <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" :state="loginvalidation.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')">
+              </b-form-input>
+              <b-form-invalid-feedback :state="loginvalidation.password" class="passwordFeedback">
+              {{ $t('message.passwordInput') }}
+            </b-form-invalid-feedback>
+            </b-form-group>
+          <b-button type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
+        <b-form-invalid-feedback :state="loginvalidation.invalidcredentials" class="loginFeedback">
+              {{ $t('message.invalidLogin') }}
+            </b-form-invalid-feedback>
+        </b-form>
+      </div>
+        <div class="registerandPassword">
+            <p class="changePassword" @click="handlePasswordClick">{{ $t('message.newPassword') }}</p>
+            <p class="registration" @click="handleRegisterClick">{{ $t('message.registrationLink') }}</p>
+        </div>
+        <p class="otherWay">{{ $t('message.loginwithother') }}</p>
+        <div class="loginOtherway">
+          <b-button class="loginFacebookButton"><font-awesome-icon :icon="['fab', 'facebook']" style="font-size:1.6rem; margin-right:0.6rem;"/>Facebook</b-button>
+          <b-button class="loginGoogleButton" @click="handleGSignIn"><font-awesome-icon :icon="['fab', 'google']" style="font-size:1.6rem; margin-right:0.6rem;"/>Google</b-button>
         </div>
       </div>
-    </b-container>
-  </div>
+    </template>
+  </LogoBox>
 <!--<div class="login">
   <button class="btn" @click="handleSignIn">Kirjaudu sisään</button>
 </div>-->
 </template>
 <script>
 import axios from 'axios'
+import LogoBox from '@/components/LogoBox.vue'
 import LangMenu from '@/components/Languages.vue';
 
 export default {
   name: 'login',
-  components:{
+  components: {
+    LogoBox,
     LangMenu
   },
   data() {
@@ -74,50 +69,46 @@ export default {
   },
   methods: {
     handleLogin() {
-      this.loginvalidation.email = null
-      if (!this.login.email) {
-        this.loginvalidation.email = false
-        return
-      }
-      this.loginvalidation.password = null
-      if (!this.login.password) {
-        this.loginvalidation.password = false
-        return
-      }
+      Object.keys(this.loginvalidation).forEach(key => this.loginvalidation[key] = null)
+      if (!this.login.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) this.loginvalidation.email = false
+      if (!this.login.password) this.loginvalidation.password = false
+
       const data = JSON.stringify({
         email: this.login.email,
         password: this.login.password
       })
-      axios
-        .post(process.env.VUE_APP_BACKEND + "/signin", data, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          if (res.data.success) {
-            if (res.data.role === 'admin') {
-              this.$store.commit('login', {
-                loggedIn: true,
-                role: 'admin',
-                accessToken: res.data.token
-              })
-              this.$router.push({ name: 'admin' })
-            } else {
-              this.$store.commit('login', {
-                loggedIn: true,
-                role: 'user',
-                accessToken: res.data.token,
-                userId: res.data.userId
-              })
-              this.$router.push({ path: '/user/' })
+      
+      if (Object.values(this.loginvalidation).every(value => value === null)) {
+        axios.post(process.env.VUE_APP_BACKEND + "/signin", data, {
+            headers: {
+              "Content-Type": "application/json"
             }
-          } else { 
-            this.$data.error = true
-            this.loginvalidation.invalidcredentials = false
+          }).then(res => {
+            if (res.data.success) {
+              if (res.data.role === 'admin') {
+                this.$store.commit('login', {
+                  loggedIn: true,
+                  role: 'admin',
+                  accessToken: res.data.token
+                })
+                this.$router.push({ name: 'admin' })
+              } else {
+                this.$store.commit('login', {
+                  loggedIn: true,
+                  role: 'user',
+                  accessToken: res.data.token,
+                  userId: res.data.userId
+                })
+                this.$router.push({ path: '/user/' })
+              }
+            } else { 
+              this.$data.error = true
+              this.loginvalidation.invalidcredentials = false
+            }
           }
-        })
-    },
+        )
+      }
+    }, 
     handleGSignIn() {
       this.$gAuth
         .signIn()
@@ -137,40 +128,8 @@ export default {
 
 </script>
 <style lang="scss" scoped>
-.loginPage{
-  background-color: #FFFFFF;
-  width:100%;
-  height: 100%;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-  font-family: Arial, Helvetica, sans-serif;
-  font-style:normal;
-  font-size: 1rem;
 
-  .pageWrapper{
-    display: flex;
-    flex-direction: column;
-    background-color: #FFFFFF;
-    align-items: center;
-    text-align: center;
-    margin-top: 0.1rem;
-      
-      .loginLogo{
-        width: 100%;
-      }
-
-    .logincontentWrapper{
-      background-color: #F9F9FB;
-      width:100%;
-      box-shadow: 0 5px 5px gray;
-      margin-bottom:1rem;
     
-      .empty{
-        background-color:#80CDE6;
-        width:100%;
-        padding: 1rem;
-      }
       
       .loginTitle{
         display: flex;
@@ -183,7 +142,8 @@ export default {
           margin-bottom:0.1rem;
         }
 
-        .loginMessage{
+        .loginMessage {
+          align-self: center;
           font-size:1.6rem;
         }
 
@@ -191,7 +151,7 @@ export default {
           display:flex;
           flex-direction:column;
           width:100%;
-          padding:1rem;
+          padding: 1rem;
 
           .emailFeedback{
             font-size:1rem;
@@ -220,6 +180,8 @@ export default {
             align-self: center;
             line-height:2;
             width:16rem;
+            display: block;
+            margin: 0 auto;
           }
         }
 
@@ -242,9 +204,10 @@ export default {
           }
         }
 
-        .otherWay{
+        .otherWay {
           font-size:1rem;
           padding:0.1rem;
+          align-self: center;
         }
         
         .loginOtherway{
@@ -276,19 +239,4 @@ export default {
           }
         }
       }
-    }
-  }
-}
-@media screen and (min-width: 768px) { 
-  .pageWrapper{
-    margin-top:1.8rem !important;
-  }
-  .loginLogo{
-    width:29rem !important;
-    margin-bottom:1rem;
-  }
-  .logincontentWrapper {
-    width:30rem !important;
-  }
-}
 </style>
