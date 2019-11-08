@@ -95,8 +95,7 @@ export default new Router({
           next()
         } else {
           store.commit('setSurvey', {
-            surveyId: to.params.surveyId,
-            userId: to.params.userId
+            surveyId: to.params.surveyId
           })
           next('/login')
         }

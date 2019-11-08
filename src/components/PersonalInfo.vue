@@ -60,7 +60,16 @@
         </b-form-group>
         <div id="submitinfoForm">
           <p v-if="error">{{error}}</p>
-          <b-button type="submit" @click.prevent="postInfo" class="submitIncluded">{{ $t('message.ProfilesubmitButton') }}</b-button>
+          <b-button @click.prevent="signOut" class="submitIncluded">
+            {{ 'Kirjaudu Ulos' }}
+          </b-button>
+          <b-button v-if="!this.$store.state.survey.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
+            {{ $t('message.ProfilesubmitButton') }}
+            <b-spinner v-if="infoSaved" class="saver" small/>
+          </b-button>
+          <b-button v-else type="submit" @click.prevent="postInfo" class="submitIncluded">
+            {{ 'Jatka' }}
+          </b-button>
         </div>
       </b-form>
     </div>
@@ -142,6 +151,7 @@ export default {
               this.$emit('moveToQuestionnaire')
             } else {
               this.infoSaved = true
+              setTimeout(() => this.infoSaved = false, 1000)
             }
           }
         }).catch(err => {
@@ -149,6 +159,10 @@ export default {
           throw err
         })
       }
+    },
+    signOut() {
+      this.$store.commit('logout')
+      this.$router.push({ path: '/' })
     }
   }
 }
@@ -165,7 +179,7 @@ export default {
   display:flex;
   flex-direction:column;
   width:100%;
-  padding: 1rem;
+  padding: 1rem 1rem 0 1rem;
   text-align: start;
   
   .nameRequired {
@@ -190,11 +204,16 @@ export default {
   }
 
   #submitinfoForm {
-    display:flex;
-    flex-direction:row;
-    justify-content:center;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-evenly;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+    }
 
     .submitIncluded {
+      position: relative;
       background-color: #350E7E;
       font-weight:bold;
       color:#FFFFFF;
@@ -202,8 +221,15 @@ export default {
       box-shadow: 0 5px 5px gray;
       line-height: 2;
       align-self: center;
-      padding: 0.5rem 6rem;
+      padding: 0.5rem 2rem;
       font-size: 1rem;
+      margin-bottom: 1rem;
+      
+      .saver {
+        position: absolute;
+        right: 0.75rem;
+        top: 1rem;
+      }
     }
   }
 }

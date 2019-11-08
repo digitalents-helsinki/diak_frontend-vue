@@ -30,13 +30,11 @@ const auth = {
 
 const survey = {
   state: {
-    surveyId: null,
-    userId: null
+    surveyId: null
   },
   mutations: {
     setSurvey(state, surveyData) {
       state.surveyId = surveyData.surveyId
-      state.userId = surveyData.userId
     }
   }
 }

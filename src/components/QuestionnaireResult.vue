@@ -7,10 +7,12 @@
     <label v-if="!emailSent">Voit lähettää vastauksesi sähköpostiisi</label>
     <p v-else>Tuloksesi on lähetetty sähköpostiisi</p>
     <p class="error" v-if="this.error">{{"Sähköpostin lähettäminen epäonnistui: " + this.error}}</p>
-    <div v-if="!emailSent" class="emailDiv">
+    <b-input-group v-if="!emailSent">
       <b-input v-model="email" type="email" autocomplete="email" :state="(email && !!email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null" placeholder="Sähköpostiosoitteesi"/>
-      <b-button :disabled="!email || !email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)" @click="sendEmail" variant="primary">Lähetä</b-button>
-    </div>
+      <b-input-group-append>
+        <b-button :disabled="!email || !email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)" @click="sendEmail" variant="primary">Lähetä</b-button>
+      </b-input-group-append>
+    </b-input-group>
   </div>
   <b-button class="logout" @click="signOut">Kirjaudu ulos</b-button>
 </div>
@@ -94,11 +96,6 @@ export default {
     width: 100%;
     margin-top: 2rem;
     margin-bottom: 2rem;
-
-    .emailDiv {
-      display: flex;
-      justify-content: space-around;
-    }
 
     .error {
       color: crimson;

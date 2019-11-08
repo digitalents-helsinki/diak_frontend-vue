@@ -7,7 +7,7 @@
       <button v-if="questionnaire" @click="$emit('toggleModal', 'help')" class="btn buttonOhjeet">Ohjeet</button>
     </div>
     <div v-if="questionnaire" class="questionnaire-bottom">
-      <span v-if="user">{{user}} | {{surveyName}}</span>
+      <span v-if="this.$store.state.auth.loggedIn">Autentikoitu | {{surveyName}}</span>
       <span v-else>Anonyymi | {{surveyName}}</span>
     </div>
   </div>
@@ -16,10 +16,6 @@
 export default {
   name: 'QuestionnaireHeader',
   props: {
-    user: {
-      type: String,
-      default: ''
-    },
     surveyName: {
       type: String,
       default: ''

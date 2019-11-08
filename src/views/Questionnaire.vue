@@ -1,7 +1,8 @@
 <template>
-  <div class="background">
-    <Help
+  <div :class="questionnum !== null ? 'background' : ''">
+    <Introduction
       v-if="questionnum === null"
+      v-bind:surveyName="surveyName"
       v-on:moveToQuestionnaire="questionnum = 0"
     />
     <div v-else class="background">
@@ -47,7 +48,7 @@
 </template>
 <script>
 import axios from "axios";
-import Help from '@/components/QuestionnaireHelp.vue'
+import Introduction from '@/components/QuestionnaireIntroduction.vue'
 import Header from '@/components/Header.vue';
 import Question from "@/components/QuestionnaireQuestion.vue";
 import Review from "@/components/QuestionnaireReview.vue";
@@ -62,7 +63,7 @@ export default {
     Question,
     Review,
     Modals,
-    Help,
+    Introduction,
     Result
   },
   data() {
@@ -142,12 +143,6 @@ export default {
         }
         throw err
       })
-      
-      //change this to be less dumb
-      if (res.data.Averages) {
-        this.result = true
-        return
-      }
 
       const data = (() => {
         if (res.data.savedAnswers.length) {
@@ -186,7 +181,7 @@ export default {
         return arr
       }, []).filter(question => question)
 
-      this.surveyName = res.data.name
+      this.surveyName = res.data.Survey.name
       this.questiondata = reducedData
     },
     saveQuestions() {
