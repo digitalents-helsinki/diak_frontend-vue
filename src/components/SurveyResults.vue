@@ -92,17 +92,7 @@ export default {
   methods: {
     async getResults() {
       try {
-        //FOR TESTING
-        const id = await (async () => {
-          if (this.surveyId === "testikysely") {
-            const test = await axios.post(process.env.VUE_APP_BACKEND + "/testsurvey/")
-            return test.data
-          } else {
-            return this.surveyId
-          }
-        })()
-        //
-        const res = await axios.get(process.env.VUE_APP_BACKEND + "/results/" + id).catch(err => {
+        const res = await axios.get(process.env.VUE_APP_BACKEND + "/results/" + this.surveyId).catch(err => {
           console.error(err)
           throw new Error("fetch failed")
         })

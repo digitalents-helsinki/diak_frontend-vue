@@ -71,11 +71,8 @@ export default {
       questiondata: [],
       questionnum: null,
       modal_visible: null,
-      userId: this.$route.params.userId,
-      surveyId: this.$route.params.surveyId,
       surveyName: "",
       errormessage: null,
-      isAnon: this.$route.name === 'questionnaire-anon',
       result: null
     };
   },
@@ -111,29 +108,27 @@ export default {
   },
   methods: {
     async getQuestions() {
+
       //FOR TESTING
-      const id = await (async () => {
-        if (this.surveyId === "testikysely") {
-          const test = await axios.post(process.env.VUE_APP_BACKEND + "/survey/testsurvey/")
-          return test.data
-        } else if (this.isAnon) {
-          return `/anon/survey/${this.surveyId}/${this.userId}`
-        } else {
-          return `/auth/survey/${this.surveyId}`
-        }
-      })()
+      if (this.$route.name === "testsurvey") {
+        const params = await axios.post(process.env.VUE_APP_BACKEND + "/testsurvey/")
+        if (params.status === 200) this.$router.push({ path: `/anon/questionnaire/${params.data.surveyId}/${params.data.anonId}` })
+      }
       //
+
+      const isAnon = this.$route.name === 'questionnaire-anon'
+
       const res = await axios({
         method: 'GET',
-        url: process.env.VUE_APP_BACKEND + id,
+        url: process.env.VUE_APP_BACKEND + `/${isAnon ? 'anon' : 'auth'}/survey/${this.$route.params.surveyId}/${isAnon ? this.$route.params.anonId : ''}`,
         headers: {
-          'Authorization': `Bearer ${this.isAnon ? "" : this.$store.state.auth.accessToken}`
+          'Authorization': `Bearer ${isAnon ? "" : this.$store.state.auth.accessToken}`
         }
       }).catch(err => {
         if (err.response) {
           if (err.response.data === "User has already answered the survey") {
             this.result = true
-            //this.$router.push({ path: `${this.isAnon ? '/anon/results' : '/auth/results'}/${this.surveyId}/${this.userId}` })
+            //this.$router.push({ path: `${isAnon ? '/anon/results' : '/auth/results'}/${this.$route.params.surveyId}/${this.$route.params.userId}` })
           } else {
             this.errormessage = err.response.data
           }
@@ -185,10 +180,11 @@ export default {
       this.questiondata = reducedData
     },
     saveQuestions() {
-      //FOR TESTING
-      const post = this.surveyId === "testikysely" ? "/testresult/create" : this.isAnon ? "/anon/result/create" : "/auth/result/create"
-      const push = this.isAnon ? '/anon/results' : '/auth/results'
-      //
+
+      const isAnon = this.$route.name === 'questionnaire-anon'
+      const post = isAnon ? "/anon/result/create" : "/auth/result/create"
+      const push = isAnon ? '/anon/results' : '/auth/results'
+
       axios({
         method: "POST",
         url: process.env.VUE_APP_BACKEND + post,
@@ -196,20 +192,20 @@ export default {
           'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
         },
         data: {
-          anonId: this.userId,
-          surveyId: this.surveyId,
+          anonId: this.$route.params.anonId,
+          surveyId: this.$route.params.surveyId,
           answers: [...this.questiondata]
         }
       }).then(res => {
           if (res.data.status === "ok") {
-            //this.$router.push({ path: `${push}/${this.surveyId}/${this.userId}` });
+            //this.$router.push({ path: `${push}/${this.$route.params.surveyId}/${this.$route.params.userId}` });
             this.result = true
           }
         })
         .catch(err => console.error(err));
     },
     saveUnfinishedAnswers() {
-      const post = this.isAnon ? "/anon/result/save": "/auth/result/save"
+      const post = this.$route.name === 'questionnaire-anon' ? "/anon/result/save": "/auth/result/save"
       axios({
         method: "POST",
         url: process.env.VUE_APP_BACKEND + post,
@@ -217,8 +213,8 @@ export default {
           'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
         },
         data: {
-          anonId: this.userId,
-          surveyId: this.surveyId,
+          anonId: this.$route.params.anonId,
+          surveyId: this.$route.params.surveyId,
           answers: [...this.questiondata]
         }
       }).then(res => {

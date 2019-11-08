@@ -5,8 +5,8 @@
       <div class="textContainer">
         <LangMenu />
         <h2>Testaa kyselyä</h2>
-        <button @click="handleUserClick" class="btn btn-primary">Autentikoitu kysely</button>
-        <button @click="handleTestQuestionnaireClick" class="btn btn-primary">Anonyymi kysely</button>
+        <button @click="handleUserClick" class="btn btn-primary">Kirjaudu sisään</button>
+        <button @click="handleTestQuestionnaireClick" class="btn btn-primary">Anonyymi testikysely</button>
         <button @click="handleAdminClick" class="btn btn-primary">Siirry hallinnointinäkymään</button>
       </div>
     </div>

@@ -74,13 +74,13 @@ export default new Router({
       }
     },
     {
-      path: '/questionnaire/:surveyId',
-      name: 'questionnaire',
+      path: '/questionnaire/testikysely',
+      name: 'testsurvey',
       component: Questionnaire,
       props: true
     },
     {
-      path: '/anon/questionnaire/:surveyId/:userId',
+      path: '/anon/questionnaire/:surveyId/:anonId',
       name: 'questionnaire-anon',
       component: Questionnaire,
       props: true

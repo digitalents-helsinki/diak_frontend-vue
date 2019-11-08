@@ -4,17 +4,18 @@
   <b-table small striped responsive :items="resultData">
   </b-table>
   <div class="bottomDiv">
-    <label v-if="!emailSent">Voit lähettää vastauksesi sähköpostiisi</label>
-    <p v-else>Tuloksesi on lähetetty sähköpostiisi</p>
+    <label v-if="!auth && !emailSent">Voit lähettää vastauksesi sähköpostiisi</label>
+    <p v-else-if="emailSent">Tuloksesi on lähetetty sähköpostiisi</p>
     <p class="error" v-if="this.error">{{"Sähköpostin lähettäminen epäonnistui: " + this.error}}</p>
-    <b-input-group v-if="!emailSent">
+    <b-input-group v-if="!auth && !emailSent">
       <b-input v-model="email" type="email" autocomplete="email" :state="(email && !!email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null" placeholder="Sähköpostiosoitteesi"/>
       <b-input-group-append>
         <b-button :disabled="!email || !email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)" @click="sendEmail" variant="primary">Lähetä</b-button>
       </b-input-group-append>
     </b-input-group>
+    <b-button v-else-if="!emailSent" @click="sendEmail" variant="primary">Lähetä sähköpostiisi</b-button>
   </div>
-  <b-button class="logout" @click="signOut">Kirjaudu ulos</b-button>
+  <b-button v-if="auth" class="logout" @click="signOut">Kirjaudu ulos</b-button>
 </div>
 </template>
 <script>
@@ -24,18 +25,22 @@ export default {
   name: 'results',
   data() {
     return {
-      auth: this.$route.name.includes('auth'),
       resultData: null,
       email: null,
       emailSent: false,
       error: null
     }
   },
+  computed: {
+    auth() {
+      return this.$route.name.includes('auth')
+    }
+  },
   methods: {
     getResults() {
       axios({
         method: 'GET', 
-        url: `${process.env.VUE_APP_BACKEND}/${this.auth ? 'auth' : 'anon'}/result/${this.$route.params.surveyId}/${this.auth ? '' : this.$route.params.userId}`,
+        url: `${process.env.VUE_APP_BACKEND}/${this.auth ? 'auth' : 'anon'}/result/${this.$route.params.surveyId}/${this.auth ? '' : this.$route.params.anonId}`,
         headers: {
           'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
         }
@@ -54,7 +59,7 @@ export default {
       })
     },
     sendEmail() {
-      if (this.email && this.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)){
+      if (this.auth || (this.email && this.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/))){
         axios({
           method: "POST",
           url: `${process.env.VUE_APP_BACKEND }/${this.auth ? 'auth' : 'anon'}/emailresult`,
@@ -62,7 +67,7 @@ export default {
             'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
           },
           data: {
-            anonId: this.$route.params.userId,
+            anonId: this.$route.params.anonId,
             surveyId: this.$route.params.surveyId,
             email: this.email
           }
