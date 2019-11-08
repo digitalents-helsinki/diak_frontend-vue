@@ -35,6 +35,8 @@
       <div class="buttonstotal">
         <b-dropdown id="dropdownleft" variant="secondary" :text="$t(`message.${display}Button`)" class="m-md-2 dropdownButtonsleft">
           <b-dropdown-item @click="toggleDisplay('all')">{{$t('message.allButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('anonymous')">{{$t('message.anonymousButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('authenticated')">{{$t('message.authenticatedButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('active')">{{$t('message.activeButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('inactive')">{{$t('message.inactiveButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('starting')">{{$t('message.startingButton')}}</b-dropdown-item>
@@ -67,8 +69,6 @@
             </div>
             <div v-else-if="field.colType === 'actions'">
               <button @click="modifySurvey(data.item.surveyId)"><font-awesome-icon icon="pencil-alt" style="font-size:1.6rem;"/></button>
-              <button v-if="data.item.active" @click="suspendActivateSurvey(data.item.surveyId, false)"><font-awesome-icon icon="stop" style="font-size:1.6rem;"/></button>
-              <button v-else @click="suspendActivateSurvey(data.item.surveyId, true)"><font-awesome-icon icon="play" style="font-size:1.6rem; color: green;"/></button>
               <button @click="archiveSurvey(data.item.surveyId)" :disabled="data.item.archived"><font-awesome-icon :icon="data.item.archived ? 'folder' : 'folder-plus'" style="font-size:1.6rem; color:grey;"/></button>
               <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:#FF0000;"/> </button>
             </div>
@@ -98,21 +98,32 @@
         >
           <datepicker v-model="modify.surveyEndDate" :language="modify.fi" :monday-first="true" :disabled-dates="modify.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
         </b-form-group>
+        <b-form-group>
+          <b-form-checkbox
+            v-model="modify.surveyActivity"
+            switch
+          >
+            {{$t('message.modifySurveyActivity')}}
+          </b-form-checkbox>
+        </b-form-group>
         <b-form-group
           :label="$t('message.modifySurveyRespondents')"
+          style="margin-bottom: 0;"
         >
-        <div class="addRespondentDiv">
+        <b-input-group>
           <b-input
             :placeholder="$t('message.modifySurveyAddRespondent')"
             v-model="modify.currentRespondent"
           />
-          <b-button @click="addRespondent" class="addRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
-        </div>
+          <b-input-group-append>
+            <b-button @click="addRespondent" class="addRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
+          </b-input-group-append>
+        </b-input-group>
         <ul class="respondentList" v-if="modify.surveyRespondents.length">
-          <li v-for="(respondent, index) in modify.surveyRespondents" v-bind:key="index">
+          <li v-for="(respondent, index) in modify.surveyRespondents" v-bind:key="index" :style="modify.surveyAnonymity ? 'padding-left: 0;' : 'padding-left: 1rem;'">
             <div class="respondentDiv">
               <p>{{respondent}}</p>
-              <font-awesome-icon @click="removeRespondent(index)" icon="times"/>
+              <font-awesome-icon v-if="!modify.surveyAnonymity" @click="removeRespondent(index)" icon="times"/>
             </div>
           </li>
         </ul>
@@ -152,7 +163,7 @@
       </template>
     </b-modal>
     <transition name="slide" mode="in-out">
-      <SurveyResults 
+      <SurveyResults
         v-if="surveyResultsId"
         v-on:closeResults="surveyResultsId = null"
         v-bind:surveyId="surveyResultsId" 
@@ -220,11 +231,12 @@ export default {
           surveyId: null,
           surveyName: null,
           surveyEndDate: null,
+          surveyActivity: null,
           surveyRespondents: [],
           currentRespondent: null,
           fi: fi,
           disabledDates: {
-            to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date)
+            to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
           },
         },
         archive: {
@@ -247,10 +259,17 @@ export default {
       if (this.searchTerm) {
         displayedSurveys = displayedSurveys.filter(obj => obj.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
       }
+
       switch(this.display) {
+        case 'anonymous': 
+          displayedSurveys = displayedSurveys.filter(obj => obj.anon)
+          break
+        case 'authenticated':
+          displayedSurveys = displayedSurveys.filter(obj => !obj.anon)
+          break
         case 'active':
           displayedSurveys = displayedSurveys.filter(obj => {
-            if (obj.startDate !== null && new Date(obj.startDate).getTime() > Date.now()) return false
+            if (obj.startDate !== null && Date.now() < new Date(obj.startDate).getTime()) return false
             else if (obj.endDate !== null && new Date(obj.endDate).getTime() < Date.now()) return false
             else if (!obj.active || obj.archived) return false
             else return true
@@ -259,13 +278,13 @@ export default {
         case 'inactive':
           displayedSurveys = displayedSurveys.filter(obj => {
             if (!obj.active || obj.archived) return true
-            else if (obj.startDate !== null && new Date(obj.startDate).getTime() < Date.now()) return false
-            else if (obj.endDate !== null && new Date(obj.endDate).getTime() > Date.now()) return false
-            else return true
+            else if (obj.startDate !== null && new Date(obj.startDate).getTime() < Date.now()) return true
+            else if (obj.endDate !== null && Date.now() < new Date(obj.endDate).getTime()) return true
+            else return false
           })
           break
         case 'starting':
-          displayedSurveys = displayedSurveys.filter(obj => obj.startDate !== null && new Date(obj.startDate).getTime() > Date.now())
+          displayedSurveys = displayedSurveys.filter(obj => obj.startDate !== null && Date.now() < new Date(obj.startDate).getTime())
           break
         case 'ended':
           displayedSurveys = displayedSurveys.filter(obj => obj.endDate !== null && new Date(obj.endDate).getTime() < Date.now())
@@ -368,26 +387,16 @@ export default {
         })
       }
     },
-    suspendActivateSurvey(surveyId, status) {
-      axios({
-        method: "POST",
-        url: process.env.VUE_APP_BACKEND + "/survey/suspendactivate",
-        data: {
-          id: surveyId,
-          active: status
-        }
-      }).then(res => {
-        if (res.data === "Survey state changed succesfully") this.surveys.find(survey => survey.surveyId === surveyId).active = status
-      })
-    },
     modifySurvey(surveyId) {
       if (!this.modify.surveyId) {
         const survey = this.surveys.find(survey => survey.surveyId === surveyId)
         this.modify.surveyId = surveyId
+        this.modify.surveyAnonymity = survey.anon
         this.modify.surveyName = survey.name
         this.modify.surveyEndDate = survey.endDate
+        this.modify.surveyActivity = survey.active
         if (!survey.anon) this.modify.surveyRespondents = survey.UserGroup.Users.reduce((arr, user) => [...arr, user.email], [])
-        else this.modify.surveyRespondents = []
+        else this.modify.surveyRespondents = survey.UserGroup.respondents
       }
     },
     addRespondent() {
@@ -411,6 +420,7 @@ export default {
             surveyId: this.modify.surveyId,
             name: this.modify.surveyName,
             endDate: this.modify.surveyEndDate,
+            active: this.modify.surveyActivity,
             to: this.modify.surveyRespondents
           }
         })
@@ -443,32 +453,26 @@ export default {
 <style lang="scss" scoped>
 
 #modifySurveyModal {
-  .addRespondentDiv {
+  .addRespondentButton {
+    margin-bottom: 1rem;
     display: flex;
-    justify-content: flex-start;
+    align-items: center;
 
-    .addRespondentButton {
-      margin-left: 1rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-
-      svg {
-        margin-left: 0.5rem;
-      }
+    svg {
+      margin-left: 0.5rem;
     }
   }
 
   .respondentList {
-    max-height: 46vh;
+    max-height: 38vh;
     overflow-y: scroll;
     border: 1px solid #dee2e6;
-    padding: 0.7rem 1rem 1rem 1rem;
+    border-radius: 0.25rem;
+    padding: 0.7rem 1rem 0 1rem;
 
     li {
       width: 100%;
       list-style: none;
-      padding-left: 1rem;
 
       .respondentDiv {
         display: flex;
@@ -626,9 +630,6 @@ export default {
             font-weight:bold;
             text-align:center;
             padding:0.1rem;
-          }
-
-          .reportimageButton{
           }
         }
       }

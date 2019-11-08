@@ -1,11 +1,6 @@
 <template>
-  <div class="registrationPage">
-    <b-container>
-      <div class="registrationLogo">
-        <img src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" class="logo"/>
-        <div class="contentWrapper">
-          <div class="empty">
-          </div>
+<LogoBox size="small">
+  <template v-slot:content>
           <div class="registrationTitle">
             <p class="title">{{ $t('message.registerText') }}</p>
             <div class="registrationForm">
@@ -47,16 +42,18 @@
             <p class="passwordinfo">{{ $t('message.minimumLength') }}</p>
             <div class="backtologindiv"><p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p></div>
           </div>
-        </div>
-      </div>
-    </b-container>
-  </div>
+  </template>
+</LogoBox>
 </template>
 <script>
 import axios from 'axios'
+import LogoBox from '@/components/LogoBox.vue'
 
 export default {
   name: 'registration',
+  components: {
+    LogoBox
+  },
   data() {
     return {
       registration: {
@@ -141,40 +138,6 @@ export default {
 
 </script>
 <style lang="scss" scoped>
-.registrationPage{
-  background-color: #FFFFFF;
-  width:100%;
-  height: 100%;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-  font-family: Arial, Helvetica, sans-serif;
-  font-style:normal;
-  font-size: 1rem;
-
-  .registrationLogo{
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    align-items: center;
-    text-align: center;
-    margin-top: 1rem;
-      
-    .logo{
-      width: 100%;
-    }
-
-    .contentWrapper{
-      background-color: #F9F9FB;
-      width:100%;
-      box-shadow: 0 5px 5px gray;
-      margin-bottom:1rem;
-    
-      .empty{
-        background-color:#80CDE6;
-        width:100%;
-        padding: 1rem;
-      }
 
       .registrationTitle{
         display: flex;
@@ -247,16 +210,4 @@ export default {
           }
         }
       }
-    }
-  }
-}
-@media screen and (min-width: 768px) { 
-  .logo{
-    width:29rem !important;
-    margin-bottom:1rem;
-  }
-  .contentWrapper{
-    width:30rem !important;
-  }
-}
 </style>
