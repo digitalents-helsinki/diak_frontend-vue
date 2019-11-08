@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Home from '@/views/Home.vue'
 import store from '@/store'
 import Questionnaire from '@/views/Questionnaire.vue'
-import Results from '@/views/Results.vue'
 import SurveyResults from '@/views/SurveyResults.vue'
 import Admin from '@/views/Admin.vue'
 import Login from '@/views/Login.vue'
@@ -13,11 +12,19 @@ import User from '@/views/User.vue'
 
 Vue.use(Router)
 
-function guard(to, from, next) {
-  if(store.state.auth.loggedIn) {
+function loginGuard(to, from, next) {
+  if (store.state.auth.loggedIn) {
     next()
   } else {
     next('/login')
+  }
+}
+
+function loggedInGuard(to, from, next) {
+  if (!store.state.auth.loggedIn) {
+    next()
+  } else {
+    next('/user')
   }
 }
 
@@ -39,7 +46,8 @@ export default new Router({
       props: true,
       meta: {
         quest: true
-      }
+      },
+      beforeEnter: loggedInGuard
     },
     {
       path: '/registration',
@@ -51,6 +59,12 @@ export default new Router({
       }
     },
     {
+      path: '/user',
+      name: 'user',
+      component: User,
+      beforeEnter: loginGuard
+    },
+    {
       path: '/password',
       name: 'password',
       component: Password,
@@ -60,28 +74,32 @@ export default new Router({
       }
     },
     {
-      path: '/user',
-      name: 'user',
-      component: User,
-      beforeEnter: guard
-    },
-    {
-      path: '/questionnaire/:surveyId',
-      name: 'questionnaire',
+      path: '/questionnaire/testikysely',
+      name: 'testsurvey',
       component: Questionnaire,
       props: true
     },
     {
-      path: '/questionnaire/:surveyId/:anonId',
-      name: 'questionnaire',
+      path: '/anon/questionnaire/:surveyId/:anonId',
+      name: 'questionnaire-anon',
       component: Questionnaire,
       props: true
     },
     {
-      path: '/user/results/:resultId',
-      name: 'results',
-      component: Results,
-      props: true
+      path: '/auth/questionnaire/:surveyId/:userId?',
+      name: 'questionnaire-auth',
+      component: Questionnaire,
+      props: true,
+      beforeEnter(to, from, next) {
+        if (store.state.auth.loggedIn) {
+          next()
+        } else {
+          store.commit('setSurvey', {
+            surveyId: to.params.surveyId
+          })
+          next('/login')
+        }
+      }
     },
     {
       path: '/admin/surveyresults/:surveyId',

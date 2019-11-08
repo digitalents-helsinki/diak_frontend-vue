@@ -92,17 +92,10 @@ export default {
   methods: {
     async getResults() {
       try {
-        //FOR TESTING
-        const id = await (async () => {
-          if (this.surveyId === "testikysely") {
-            const test = await axios.post(process.env.VUE_APP_BACKEND + "/testsurvey/")
-            return test.data
-          } else {
-            return this.surveyId
-          }
-        })()
-        //
-        const res = await axios.get(process.env.VUE_APP_BACKEND + "/results/" + id).catch(err => { throw new Error("fetch failed") })
+        const res = await axios.get(process.env.VUE_APP_BACKEND + "/results/" + this.surveyId).catch(err => {
+          console.error(err)
+          throw new Error("fetch failed")
+        })
 
         this.values = res.data.Questions.reduce((arr, question) => {
           arr[question.number - 1] = question.name
@@ -167,6 +160,7 @@ export default {
         this.results = results
         this.loaded = true;
       } catch(err) {
+        console.error(err)
         if (err.message === "fetch failed") {
           this.loadingError = true
         } else {

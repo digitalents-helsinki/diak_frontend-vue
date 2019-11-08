@@ -7,11 +7,11 @@
       </div>
       <div class="cancel-container" v-if="modal === 'cancel'">
         <div>
-          <button class="btn btn-primary">{{ $t('message.cancel_save') }}</button>
+          <button @click.prevent="$emit('saveUnfinishedAnswers')" class="btn btn-primary">{{ $t('message.cancel_save') }}</button>
         </div>
         <div>
           <button
-            @click.prevent="$emit('moveHome')"
+            @click.prevent="$emit('toggleModal', null)"
             class="btn btn-primary"
           >{{ $t('message.cancel_discard') }}</button>
         </div>

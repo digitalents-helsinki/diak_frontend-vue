@@ -1,26 +1,3 @@
-/*
-<div class="container-fluid" id="textContainer-top">
-  <p class="welcomeMessage">{{ $t('message.home') }}</p>
-</div>
-<div class="text-container">
-  <div class="text-container-content">
-    <img src="../images/diak-meter.svg" alt="" />
-    <p>{{ $t('message.help_text_1') }}</p>
-  </div>
-  <div class="text-container-content">
-    <img src="../images/DiakThumbs.svg" alt="" />
-    <p>{{ $t('message.help_text_2') }}</p>
-  </div>
-  <div class="text-container-content">
-    <img src="../images/diak-balance.svg" alt="" />
-    <p>{{ $t('message.help_text_3') }}</p>
-  </div>
-  <div class="text-container-content">
-    <img src="../images/Diak-null.svg" alt="" />
-    <p>{{ $t('message.help_text_4') }}</p>
-  </div>
-</div>
-*/
 <template>
   <div class="home">
     <div class="container main">
@@ -28,8 +5,8 @@
       <div class="textContainer">
         <LangMenu />
         <h2>Testaa kyselyä</h2>
-        <button @click="handleUserClick" class="btn btn-primary">Siirry käyttäjänäkymään</button>
-        <button @click="handleTestQuestionnaireClick" class="btn btn-primary">Siirry testikyselyyn</button>
+        <button @click="handleUserClick" class="btn btn-primary">Kirjaudu sisään</button>
+        <button @click="handleTestQuestionnaireClick" class="btn btn-primary">Anonyymi testikysely</button>
         <button @click="handleAdminClick" class="btn btn-primary">Siirry hallinnointinäkymään</button>
       </div>
     </div>
@@ -44,7 +21,7 @@ export default {
   },
   methods: {
     handleUserClick() {
-      this.$router.push({ path: '/user' })
+      this.$router.push({ path: '/login' })
     },
     handleAdminClick() {
       this.$router.push({ path: '/admin' })
@@ -155,8 +132,8 @@ p {
       font-size: 1rem !important;
     }
     button {
-     padding:1rem 7rem !important;
-    font-size:1.1rem !important;
+      padding:1rem 7rem !important;
+      font-size:1.1rem !important;
     } 
   }
   @media screen and (min-width: 768px) { 
