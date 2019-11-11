@@ -253,7 +253,7 @@ export default {
             if (val !== null) {
                 const fileReader = new FileReader()
                 fileReader.onload = e => {
-                    this.$data.emails = [...new Set([...this.$data.emails, ...e.target.result.split('\n').filter(email => email)])]
+                    this.$data.emails = [...new Set([...this.$data.emails, ...e.target.result.split(/\r?\n/).filter(email => email)])]
                     this.$data.groupInputFile = null
                 }
                 fileReader.readAsText(val)
