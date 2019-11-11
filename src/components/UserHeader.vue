@@ -14,7 +14,7 @@
 </template>
 <script>
 export default {
-  name: 'QuestionnaireHeader',
+  name: 'UserHeader',
   props: {
     surveyName: {
       type: String,

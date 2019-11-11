@@ -36,7 +36,7 @@ import LogoBox from '@/components/LogoBox.vue'
 import LangMenu from '@/components/Languages.vue';
 
 export default {
-  name: 'questionnaireHelp',
+  name: 'questionnaireIntroduction',
   components:{
     LogoBox,
     LangMenu
