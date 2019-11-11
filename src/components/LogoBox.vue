@@ -54,6 +54,8 @@ export default {
       width:100%;
       box-shadow: 0 5px 5px gray;
       margin-bottom: 1rem;
+      border-radius: 15px;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
 
       .topbar {
         background-color:#80CDE6;
@@ -62,6 +64,7 @@ export default {
         color: #343434;
         font-weight: bold;
         font-size: 1.2rem;
+        border-radius: 15px 15px 0 0;
 
         &:empty {
           padding: 1rem 0;

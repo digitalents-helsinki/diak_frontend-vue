@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div @click="$emit('toggleModal', null)" class="dim-background" v-show="modal">
+    <div @click.self="$emit('toggleModal', null)" class="dim-background" v-show="modal">
       <div class="help-container" v-if="modal === 'help'">
         <p>{{ $t('message.help_text_1') }}</p>
         <p>{{ $t('message.help_text_2') }}</p>

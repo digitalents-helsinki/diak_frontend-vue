@@ -9,7 +9,7 @@
           <LangMenu class="language"/>
           <h3 class="survey-name">{{surveyName}}</h3>
         </div>
-        <p class="introduction-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p class="introduction-text">{{ surveyMessage }}</p>
         <div class="text-container-content">
           <img src="../images/meter.svg" alt="" />
           <p>{{ $t('message.help_text_1') }}</p>
@@ -27,13 +27,13 @@
           <p>{{ $t('message.help_text_4') }}</p>
         </div>
       </div>
-      <button @click.prevent="$emit('moveToQuestionnaire')" class="btn">{{ $t('message.begin') }}</button>
+      <button @click.prevent="$emit('moveToQuestionnaire')">{{ $t('message.begin') }}</button>
     </template>
   </LogoBox>
 </template>
 <script>
 import LogoBox from '@/components/LogoBox.vue'
-import LangMenu from '@/components/Languages.vue';
+import LangMenu from '@/components/Languages.vue'
 
 export default {
   name: 'questionnaireHelp',
@@ -45,6 +45,10 @@ export default {
     surveyName: {
       type: String,
       required: true
+    },
+    surveyMessage: {
+      type: String,
+      default: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     }
   }
 }
@@ -117,6 +121,7 @@ export default {
         padding: 0.5rem 3rem;
         font-size: 1rem;
         margin-bottom: 1rem;
+        border: none;
 
         &:hover {
           color: #FFFFFF;
@@ -128,6 +133,11 @@ export default {
   .text-container p {
     font-size: 1rem !important;
   }
+
+  p.introduction-text {
+    font-size: 1.3rem !important;
+  }
+
   .survey-name-container {
     grid-auto-flow: column !important;
     grid-template-columns: 1fr max-content;
