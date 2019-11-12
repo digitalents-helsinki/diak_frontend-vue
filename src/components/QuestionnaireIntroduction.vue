@@ -45,8 +45,8 @@ export default {
   },
   computed: {
     ...mapState({
-      surveyName: state => state.questionnaire.survey.name,
-      surveyMessage: state => state.questionnaire.survey.message
+      surveyName: state => state.questionnaire.surveyData.name,
+      surveyMessage: state => state.questionnaire.surveyData.message
     })
   }
 }

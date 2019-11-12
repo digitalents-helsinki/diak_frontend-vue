@@ -30,7 +30,7 @@ export default {
       state.surveyData.questions = survey
     },
     setSurveyResult(state, result) {
-      state.result = result
+      state.surveyData.result = result
     },
     setError(state, err) {
       if (err.response) {
@@ -43,7 +43,7 @@ export default {
   },
   actions: {
     async fetchSurvey(context) {
-      const res = await axios({
+      const { data: { Survey, savedAnswers, Result, Averages } } = await axios({
         method: 'GET',
         url: process.env.VUE_APP_BACKEND + `/${context.state.fetch.anon ? 'anon' : 'auth'}/survey/${context.state.fetch.surveyId}/${context.state.fetch.anon ? context.state.fetch.anonId : ''}`,
         headers: {
@@ -54,12 +54,32 @@ export default {
         throw err
       })
 
-      context.commit('setSurveyInfo', {
-        name: res.data.name || res.data.Result.name,
-        message: res.data.message || res.data.Result.message
-      })
-      if (res.config.url !== res.request.responseURL) context.commit('setSurveyResult', res.data) //check for result redirect
-      else context.commit('setSurveyQuestions', res.data.Questions)
+      if (!Survey) { //check for result redirect
+        context.commit('setSurveyInfo', {
+          name: Result.name,
+          message: Result.message
+        })
+        context.commit('setSurveyResult', { Result, Averages })
+      } else {
+        const Questions = (() => {
+          if (savedAnswers && savedAnswers.length) {
+            return Survey.Questions.map(question => {
+              return {
+                ...question,
+                answer: savedAnswers.find(obj => obj.QuestionQuestionId === question.questionId)
+              }
+            })
+          } else {
+            return Survey.Questions
+          }
+        })()
+        context.commit('setSurveyInfo', {
+          name: Survey.name,
+          message: Survey.message
+        })
+        context.commit('setSurveyQuestions', Questions)
+      }
+
     },
     async fetchResult(context) {
       const res = await axios({

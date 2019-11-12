@@ -63,7 +63,7 @@
           <b-button @click.prevent="signOut" class="submitIncluded">
             {{ 'Kirjaudu Ulos' }}
           </b-button>
-          <b-button v-if="!this.$store.state.questionnaire.data.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
+          <b-button v-if="!this.$store.state.questionnaire.fetch.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.ProfilesubmitButton') }}
             <b-spinner v-if="infoSaved" class="saver" small/>
           </b-button>
@@ -117,7 +117,7 @@ export default {
   },
   computed: {
     instruction() {
-      if (this.$store.state.questionnaire.data.surveyId) {
+      if (this.$store.state.questionnaire.fetch.surveyId) {
         if (this.isFirstTime) return this.$t('message.infoInstruction')
         else return this.$t('message.infoInstructionOld')
       } else {
@@ -147,7 +147,7 @@ export default {
           }
         }).then(res => {
           if (res.status === 200) {
-            if (this.$store.state.questionnaire.data.surveyId) {
+            if (this.$store.state.questionnaire.fetch.surveyId) {
               this.$emit('moveToQuestionnaire')
             } else {
               this.infoSaved = true

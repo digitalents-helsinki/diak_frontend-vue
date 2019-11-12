@@ -40,11 +40,11 @@ export default {
       const comparisonQuestion = this.$t('message.questionnaireComparisonQuestion')
       const comparisonAnswer = this.$t('message.questionnaireComparisonAnswer')
       const comparisonAvg = this.$t('message.questionnaireComparisonAvg')
-      this.resultData = this.$store.state.questionnaire.result.Result.Questions.reduce((arr, question) => {
+      this.resultData = this.$store.state.questionnaire.surveyData.result.Result.Questions.reduce((arr, question) => {
         arr[question.number - 1] = {
           [comparisonQuestion]: !question.name.endsWith("_custom") ? this.$t(`message.${question.name}_title`) : question.title,
           [comparisonAnswer]: question.Answers[0].value !== null ? question.Answers[0].value : '-',
-          [comparisonAvg]: (avg => avg ? Number(avg).toFixed(2) : '-')(this.$store.state.questionnaire.result.Averages.find(obj => obj.number === question.number).answerAvg)
+          [comparisonAvg]: (avg => avg ? Number(avg).toFixed(2) : '-')(this.$store.state.questionnaire.surveyData.result.Averages.find(obj => obj.number === question.number).answerAvg)
         }
         return arr
       }, []).filter(question => question)
@@ -55,7 +55,7 @@ export default {
           method: "POST",
           url: `${process.env.VUE_APP_BACKEND }/${this.auth ? 'auth' : 'anon'}/emailresult`,
           headers: {
-            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+            'Authorization': `Bearer ${this.auth ? this.$store.state.authentication.accessToken : ''}`
           },
           data: {
             anonId: this.$route.params.anonId,
