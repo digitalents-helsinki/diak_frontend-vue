@@ -113,7 +113,7 @@ export default {
       this.$gAuth
         .signIn()
         .then(gUser => {
-          //store.state.auth.loggedIn = true
+          //store.state.authentication.loggedIn = true
           this.$router.push({ name: 'user' })
         })
     },

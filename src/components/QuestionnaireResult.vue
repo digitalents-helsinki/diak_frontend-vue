@@ -1,8 +1,7 @@
 <template>
 <div class="results">
   <h2>{{$t('message.questionnaireComparisonTitle')}}</h2>
-  <b-table small striped responsive :items="resultData">
-  </b-table>
+  <b-table small striped responsive :items="resultData"/>
   <div class="bottomDiv">
     <label v-if="!auth && !emailSent">Voit lähettää vastauksesi sähköpostiisi</label>
     <p v-else-if="emailSent">Tuloksesi on lähetetty sähköpostiisi</p>
@@ -38,25 +37,17 @@ export default {
   },
   methods: {
     getResults() {
-      axios({
-        method: 'GET', 
-        url: `${process.env.VUE_APP_BACKEND}/${this.auth ? 'auth' : 'anon'}/result/${this.$route.params.surveyId}/${this.auth ? '' : this.$route.params.anonId}`,
-        headers: {
-          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
+      const comparisonQuestion = this.$t('message.questionnaireComparisonQuestion')
+      const comparisonAnswer = this.$t('message.questionnaireComparisonAnswer')
+      const comparisonAvg = this.$t('message.questionnaireComparisonAvg')
+      this.resultData = this.$store.state.questionnaire.result.Result.Questions.reduce((arr, question) => {
+        arr[question.number - 1] = {
+          [comparisonQuestion]: !question.name.endsWith("_custom") ? this.$t(`message.${question.name}_title`) : question.title,
+          [comparisonAnswer]: question.Answers[0].value !== null ? question.Answers[0].value : '-',
+          [comparisonAvg]: (avg => avg ? Number(avg).toFixed(2) : '-')(this.$store.state.questionnaire.result.Averages.find(obj => obj.number === question.number).answerAvg)
         }
-      }).then(res => {
-        const comparisonQuestion = this.$t('message.questionnaireComparisonQuestion')
-        const comparisonAnswer = this.$t('message.questionnaireComparisonAnswer')
-        const comparisonAvg = this.$t('message.questionnaireComparisonAvg')
-        this.resultData = res.data.Result.Questions.reduce((arr, question) => {
-          arr[question.number - 1] = {
-            [comparisonQuestion]: !question.name.endsWith("_custom") ? this.$t(`message.${question.name}_title`) : question.title,
-            [comparisonAnswer]: question.Answers[0].value !== null ? question.Answers[0].value : '-',
-            [comparisonAvg]: (avg => avg ? Number(avg).toFixed(2) : '-')(res.data.Averages.find(obj => obj.number === question.number).answerAvg)
-          }
-          return arr
-        }, []).filter(question => question)
-      })
+        return arr
+      }, []).filter(question => question)
     },
     sendEmail() {
       if (this.auth || (this.email && this.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/))){
@@ -64,7 +55,7 @@ export default {
           method: "POST",
           url: `${process.env.VUE_APP_BACKEND }/${this.auth ? 'auth' : 'anon'}/emailresult`,
           headers: {
-            'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           },
           data: {
             anonId: this.$route.params.anonId,

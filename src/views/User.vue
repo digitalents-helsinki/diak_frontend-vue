@@ -50,9 +50,9 @@ export default {
     async getUser() {
       axios({
         method: "GET",
-        url: process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.auth.userId,
+        url: process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.authentication.userId,
         headers: {
-          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
+          'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
         }
       }).then(res => {
         if (res.status === 200) {
@@ -75,11 +75,12 @@ export default {
       this.$data.pagenum++
     },
     moveToQuestionnaire() {
-      this.$router.push({ path: `/auth/questionnaire/${this.$store.state.survey.surveyId}/` })
+      this.$router.push({ path: `/auth/questionnaire/${this.$store.state.questionnaire.fetch.surveyId}/` })
     }
   },
   created() {
     this.getUser()
+    this.$store.dispatch('questionnaire/fetchSurvey')
   }
 }
 </script>

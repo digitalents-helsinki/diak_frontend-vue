@@ -1,23 +1,16 @@
 <template>
   <div :class="questionnum !== null ? 'background' : ''">
     <Introduction
-      v-if="questionnum === null"
-      v-bind:surveyName="surveyName"
-      v-bind:surveyMessage="surveyMessage"
+      v-if="questionnum === null && !this.$store.state.questionnaire.result"
       v-on:moveToQuestionnaire="questionnum = 0"
     />
     <div v-else class="background">
       <Header
         v-bind:user="user"
-        v-bind:surveyName="surveyName"
         v-bind:questionnaire="true"
         v-on:toggleModal="toggleModal"
       />
       <div class="questionnaire container text-center shadow-lg">
-        <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>{{errormessage}}</p></b-alert>
-        <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount && !result">
-          <b-spinner label="Loading..." />
-        </div>
         <form>
           <transition name="fade" mode="out-in">
             <Question
@@ -27,14 +20,14 @@
               v-on:toggleModal="toggleModal"
             />
             <Review 
-              v-else-if="navigationData.questionamount <= questionnum && !result"
+              v-else-if="navigationData.questionamount <= questionnum && !this.$store.state.questionnaire.result"
               v-bind:results="questiondata"
               v-bind:navigation.sync="navigationData"
               v-on:saveQuestions="saveQuestions"
               v-on:toggleModal="toggleModal"
             />
             <Result
-              v-else-if="result"
+              v-else-if="this.$store.state.questionnaire.result"
             />
           </transition>
         </form>
@@ -71,11 +64,7 @@ export default {
     return {
       questiondata: [],
       questionnum: null,
-      modal_visible: null,
-      surveyName: "",
-      surveyMessage: "",
-      errormessage: null,
-      result: null
+      modal_visible: null
     };
   },
   computed: {
@@ -109,7 +98,7 @@ export default {
     }
   },
   methods: {
-    async getQuestions() {
+    async testQuestionnaire() {
 
       //FOR TESTING
       if (this.$route.name === "testsurvey") {
@@ -117,45 +106,10 @@ export default {
         if (params.status === 200) this.$router.push({ path: `/anon/questionnaire/${params.data.surveyId}/${params.data.anonId}` })
       }
       //
-
-      const isAnon = this.$route.name === 'questionnaire-anon'
-
-      const res = await axios({
-        method: 'GET',
-        url: process.env.VUE_APP_BACKEND + `/${isAnon ? 'anon' : 'auth'}/survey/${this.$route.params.surveyId}/${isAnon ? this.$route.params.anonId : ''}`,
-        headers: {
-          'Authorization': `Bearer ${isAnon ? "" : this.$store.state.auth.accessToken}`
-        }
-      }).catch(err => {
-        if (err.response) {
-          if (err.response.data === "User has already answered the survey") {
-            this.result = true
-            //this.$router.push({ path: `${isAnon ? '/anon/results' : '/auth/results'}/${this.$route.params.surveyId}/${this.$route.params.userId}` })
-          } else {
-            this.errormessage = err.response.data
-          }
-        }
-        else {
-          this.errormessage = "Unknown error"
-        }
-        throw err
-      })
-
-      const data = (() => {
-        if (res.data.savedAnswers.length) {
-          return res.data.Survey.Questions.map(question => {
-            return {
-              ...question,
-              answer: res.data.savedAnswers.find(obj => obj.QuestionQuestionId === question.questionId)
-            }
-          })
-        } else {
-          return res.data.Survey.Questions
-        }
-      })()
-
-      const reducedData = data.reduce((arr, question) => {
-        if(!question.name.endsWith("_custom")) {
+    },
+    reduceSurveyData() {
+      if (this.$store.state.questionnaire.surveyData.questions) this.questiondata = this.$store.state.questionnaire.surveyData.questions.reduce((arr, question) => {
+        if (!question.name.endsWith("_custom")) {
           arr[question.number - 1] = {
             name: question.name,
             val: !question.answer ? null: question.answer.value !== undefined ? question.answer.value : null,
@@ -177,10 +131,6 @@ export default {
         }
         return arr
       }, []).filter(question => question)
-
-      this.surveyName = res.data.Survey.name
-      this.surveyMessage = res.data.Survey.message
-      this.questiondata = reducedData
     },
     saveQuestions() {
 
@@ -192,7 +142,7 @@ export default {
         method: "POST",
         url: process.env.VUE_APP_BACKEND + post,
         headers: {
-          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
+          'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
         },
         data: {
           anonId: this.$route.params.anonId,
@@ -201,8 +151,7 @@ export default {
         }
       }).then(res => {
           if (res.data.status === "ok") {
-            //this.$router.push({ path: `${push}/${this.$route.params.surveyId}/${this.$route.params.userId}` });
-            this.result = true
+            this.$store.dispatch('questionnaire/fetchResult')
           }
         })
         .catch(err => console.error(err));
@@ -213,7 +162,7 @@ export default {
         method: "POST",
         url: process.env.VUE_APP_BACKEND + post,
         headers: {
-          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
+          'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
         },
         data: {
           anonId: this.$route.params.anonId,
@@ -237,7 +186,10 @@ export default {
     }
   },
   created() {
-    this.getQuestions()
+    //FOR TESTING
+    this.testQuestionnaire()
+    //
+    this.reduceSurveyData()
   }
 };
 </script>
@@ -275,21 +227,6 @@ export default {
   overflow: auto;
   overflow-x: hidden; //transition
   border-radius: 14px;
-
-  .errormessageDisplay{
-    margin-top:2rem;
-
-    p{
-      margin-top:1rem !important;
-    }
-  }
-  
-  .loader-spinner-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 85%;
-  }
 
   @media screen and (min-width: 1024px) {
     width: 60vw;

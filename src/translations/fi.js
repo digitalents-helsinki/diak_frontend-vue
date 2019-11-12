@@ -189,6 +189,7 @@ export const fi = {
     questionnaireComparisonQuestion: 'Kysymys',
     questionnaireComparisonAnswer: 'Vastauksesi',
     questionnaireComparisonAvg: 'Keskiarvo',
-    browseFiles: 'Selaa'
+    browseFiles: 'Selaa',
+    somethingWentWrong: 'Jokin meni pieleen...'
   }
 }

@@ -63,7 +63,7 @@
           <b-button @click.prevent="signOut" class="submitIncluded">
             {{ 'Kirjaudu Ulos' }}
           </b-button>
-          <b-button v-if="!this.$store.state.survey.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
+          <b-button v-if="!this.$store.state.questionnaire.data.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.ProfilesubmitButton') }}
             <b-spinner v-if="infoSaved" class="saver" small/>
           </b-button>
@@ -117,7 +117,7 @@ export default {
   },
   computed: {
     instruction() {
-      if (this.$store.state.survey.surveyId) {
+      if (this.$store.state.questionnaire.data.surveyId) {
         if (this.isFirstTime) return this.$t('message.infoInstruction')
         else return this.$t('message.infoInstructionOld')
       } else {
@@ -138,16 +138,16 @@ export default {
       if (Object.values(this.infovalidation).every(value => value === null)) {
         axios({
           method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.auth.userId + "/info/update",
+          url: process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.authentication.userId + "/info/update",
           headers: {
-            'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           },
           data: {
             personalinfo: this.personalinfo
           }
         }).then(res => {
           if (res.status === 200) {
-            if (this.$store.state.survey.surveyId) {
+            if (this.$store.state.questionnaire.data.surveyId) {
               this.$emit('moveToQuestionnaire')
             } else {
               this.infoSaved = true
