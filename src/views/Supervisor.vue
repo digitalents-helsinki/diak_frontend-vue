@@ -73,7 +73,7 @@ export default {
           password: this.$data.supervisor_password
         }
       }).then(result => {
-        if (result.data.success === 'true') {
+        if (result.data.success === true) {
           this.loggedIn = true
         } else {
         }
