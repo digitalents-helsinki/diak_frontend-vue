@@ -3,24 +3,49 @@
     <div class="rightsideManage-top">
       <p>{{ $t('message.manageSurveys') }}</p>
     </div>
-    <div class="totalinstructionsearch">
+    <div class="totalinstructionsearch shadow-sm">
       <div class="totalParagraph">
         <p>{{ `${$t('message.total')} ${surveys.length}`}}</p>
       </div>
       <div class="manageInstructions">
-        <div class="instructiondivone">
-          <p class="divoneHeading">{{ $t('message.instructionsHeading') }} </p>
-          <p class="divoneParagraph">{{ $t('message.InstructionPone') }} </p>
-          <p class="divoneParagraph">{{ $t('message.InstructionPtwo') }} </p>
-          <p class="divoneParagraph">{{ $t('message.InstructionPthree') }} </p>
+        <div class="action-instructions">
+          <h3 class="instructionsTitle">Toiminnot</h3>
+          <div class="instructiondiv">
+            <font-awesome-icon icon="pencil-alt"/><p>Tästä voit muokata kyselyä</p>
+          </div>
+          <div class="instructiondiv">
+            <font-awesome-icon icon="folder" style="color:grey;"/><p>Tästä voit arkistoida kyselyn</p>
+          </div>
+          <div class="instructiondiv">
+            <font-awesome-icon icon="chart-bar" /><p>Tästä voit tarkastella kyselyn raporttia</p>
+          </div>
+          <div class="instructiondiv">
+            <font-awesome-icon icon="times" style="color:#FF0000;"/><p>Tästä voit poistaa kyselyn kokonaan</p>
+          </div>
         </div>
-        <div class="arrowbetweendivs">
-          <font-awesome-icon icon="arrow-right" style="font-size:1.8rem;"/>
-        </div>
-        <div class="instructiondivtwo">
-          <p class="divtwoHeading">{{ $t('message.reportHeading') }} </p>
-          <p class="divtwoParagraph">{{ $t('message.reportParagraph') }} </p>
-          <div class="reportimageButton"><img src="../images/assessment_24px.png" alt="" style="width:25px; height:25px;"/></div>
+        <div class="indicator-instructions">
+          <h3 class="instructionsTitle">Informaatio</h3>
+          <div class="instructiondiv">
+            <p><font-awesome-icon icon="user-slash" class="instruction-icon" />Anonyymi</p>
+          </div>
+          <div class="instructiondiv">
+            <p><font-awesome-icon icon="user-check" class="instruction-icon" />Autentikoitu</p>
+          </div>
+          <div class="instructiondiv">
+            <p class="active-instruction">Aktiivinen</p>
+          </div>
+          <div class="instructiondiv">
+            <p class="starting-instruction">Alkava</p>
+          </div>
+          <div class="instructiondiv">
+            <p class="ended-instruction">Päättynyt</p>
+          </div>
+          <div class="instructiondiv">
+            <p class="prevented-instruction">Estetty</p>
+          </div>
+          <div class="instructiondiv">
+            <p class="archived-instruction">Arkistoitu</p>
+          </div>
         </div>
       </div>
       <div class="searchbar-div">
@@ -46,12 +71,18 @@
       </div>
     </div>
     <div class="tableDisplayfields">
-      <b-table hover responsive :items="displayedSurveys" :fields="fields" bordered head-variant="light" style="text-align: center">
+      <b-table hover responsive :items="filteredSurveys" :fields="fields" head-variant="light" table-class="surveyTable shadow-sm">
         <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
-          <div v-bind:key="field.key">
+          <div v-bind:key="field.key" class="surveyTableCel">
             <div v-if="field.colType === 'name'">
-              <span v-if="data.item.name.length <= 20">{{data.item.name}}</span>
-              <span v-else v-b-tooltip="data.item.name" tabindex="0">{{data.item.name.substring(0, 17) + '...'}}</span>
+              <span v-if="data.item.name.length <= 20" class="surveyName" :data-indicatorcolor="data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'">
+                <font-awesome-icon :icon="data.item.anon ? 'user-slash' : 'user-check'" class="indicator-icon"/>
+                {{data.item.name}}
+              </span>
+              <span v-else v-b-tooltip="data.item.name" tabindex="0" class="surveyName" :data-indicatorcolor="data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'">
+                <font-awesome-icon :icon="data.item.anon ? 'user-slash' : 'user-check'" class="indicator-icon"/>
+                {{data.item.name.substring(0, 17) + '...'}}
+              </span>
             </div>
             <div v-else-if="field.colType === 'startDate'">
               <span v-if="data.item.startDate">{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
@@ -65,12 +96,12 @@
               <span>{{data.item.responses || 0}}/{{data.item.respondents_size}}</span>
             </div>
             <div v-else-if="field.colType === 'analyze'">
-              <button @click="openSurveyResults(data.item.surveyId)"><img src="../images/assessment_24px.png" alt="chart" style="width:25px; height:25px;"/></button>
+              <button @click="openSurveyResults(data.item.surveyId)" class="tableButton"><font-awesome-icon icon="chart-bar" class="tableButtonIcon" /></button>
             </div>
-            <div v-else-if="field.colType === 'actions'">
-              <button @click="modifySurvey(data.item.surveyId)"><font-awesome-icon icon="pencil-alt" style="font-size:1.6rem;"/></button>
-              <button @click="archiveSurvey(data.item.surveyId)" :disabled="data.item.archived"><font-awesome-icon :icon="data.item.archived ? 'folder' : 'folder-plus'" style="font-size:1.6rem; color:grey;"/></button>
-              <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:#FF0000;"/> </button>
+            <div v-else-if="field.colType === 'actions'" class="actionsCel">
+              <button v-if="!data.item.archived" @click="modifySurvey(data.item.surveyId)" class="tableButton modifyButton"><font-awesome-icon icon="pencil-alt" class="tableButtonIcon" /></button>
+              <button v-if="!data.item.archived" @click="archiveSurvey(data.item.surveyId)" :disabled="data.item.archived" class="tableButton archiveButton"><font-awesome-icon icon='folder' class="tableButtonIcon"/></button>
+              <button @click="deleteSurvey(data.item.surveyId)" class="tableButton deleteButton"> <font-awesome-icon icon="times" class="tableButtonIcon"/></button>
             </div>
           </div>
         </template>
@@ -254,46 +285,37 @@ export default {
     }
   },
   computed: {
-    displayedSurveys() {
-      let displayedSurveys = this.$data.surveys
-      if (this.searchTerm) {
-        displayedSurveys = displayedSurveys.filter(obj => obj.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
+    computedSurveys() {
+      return this.$data.surveys.map(survey => {
+        return {
+          ...survey,
+          open: 
+            (survey.startDate === null || new Date(survey.startDate).getTime() < Date.now()) &&
+            (survey.endDate === null || Date.now() < new Date(survey.endDate).getTime()) &&
+            survey.active && !survey.archived,
+          starting: survey.startDate !== null && Date.now() < new Date(survey.startDate).getTime(),
+          ended: survey.endDate !== null && new Date(survey.endDate) < Date.now()
+        }
+      }).sort((a, b) => a.archived - b.archived)
+    },
+    filteredSurveys() {
+      const surveysToBeFiltered = (() => {
+        if (this.searchTerm) return this.computedSurveys.filter(obj => obj.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
+        else return this.computedSurveys
+      })()
+
+      const filters = {
+        all: (surveys) => surveys,
+        anonymous: (surveys) => surveys.filter(obj => obj.anon),
+        authenticated: (surveys) => surveys.filter(obj => !obj.anon),
+        active: (surveys) => surveys.filter(obj => obj.open),
+        inactive: (surveys) => surveys.filter(obj => !obj.open),
+        starting: (surveys) => surveys.filter(obj => obj.starting),
+        ended: (surveys) => surveys.filter(obj => obj.ended),
+        archived: (surveys) => surveys.filter(obj => obj.archived)
       }
 
-      switch(this.display) {
-        case 'anonymous': 
-          displayedSurveys = displayedSurveys.filter(obj => obj.anon)
-          break
-        case 'authenticated':
-          displayedSurveys = displayedSurveys.filter(obj => !obj.anon)
-          break
-        case 'active':
-          displayedSurveys = displayedSurveys.filter(obj => {
-            if (obj.startDate !== null && Date.now() < new Date(obj.startDate).getTime()) return false
-            else if (obj.endDate !== null && new Date(obj.endDate).getTime() < Date.now()) return false
-            else if (!obj.active || obj.archived) return false
-            else return true
-          })
-          break
-        case 'inactive':
-          displayedSurveys = displayedSurveys.filter(obj => {
-            if (!obj.active || obj.archived) return true
-            else if (obj.startDate !== null && new Date(obj.startDate).getTime() < Date.now()) return true
-            else if (obj.endDate !== null && Date.now() < new Date(obj.endDate).getTime()) return true
-            else return false
-          })
-          break
-        case 'starting':
-          displayedSurveys = displayedSurveys.filter(obj => obj.startDate !== null && Date.now() < new Date(obj.startDate).getTime())
-          break
-        case 'ended':
-          displayedSurveys = displayedSurveys.filter(obj => obj.endDate !== null && new Date(obj.endDate).getTime() < Date.now())
-          break
-        case "archived":
-          displayedSurveys = displayedSurveys.filter(obj => obj.archived)
-          break
-      }
-      return displayedSurveys
+      return filters[this.display](surveysToBeFiltered)
     },
     modifySurveyBoolean: {
       get: function() {
@@ -452,6 +474,128 @@ export default {
 </script>
 <style lang="scss" scoped>
 
+.tableDisplayfields /deep/ .surveyTable {
+  background-color: white;
+  color: #353535;
+  text-align: center;
+
+  td {
+    vertical-align: middle;
+  }
+
+  th {
+    background-color: #8E8998;
+    color: white;
+    width: max-content;
+
+    &[aria-sort="ascending"], &[aria-sort="descending"] {
+      background-color: #666070;
+    }
+  }
+
+  .surveyTableCel {
+    display: grid;
+    margin: auto;
+    align-items: center;
+    width: max-content;
+  }
+
+  [aria-colindex="1"] .surveyTableCel {
+    margin: initial;
+  }
+
+  .surveyName {
+    font-weight: bold;
+    color: #350E7E;
+
+    .indicator-icon {
+      color: #212529;
+      width: 1rem;
+      height: 1rem;
+      margin-right: 0.25rem;
+    }
+
+    &[data-indicatorcolor="green"]:before {
+      content: "\26AB";
+      margin-right: 0.5rem;
+      color: rgb(0, 194, 0);
+    }
+
+    &[data-indicatorcolor="orange"]:before {
+      content: '\26AB';
+      margin-right: 0.5rem;
+      color: orange;
+    }
+
+    &[data-indicatorcolor="yellow"]:before {
+      content: "\26AB";
+      margin-right: 0.5rem;
+      color: yellow;
+    }
+
+    &[data-indicatorcolor="red"]:before {
+      content: "\26AB";
+      margin-right: 0.5rem;
+      color: crimson;
+    }
+
+    &[data-indicatorcolor="grey"]:before {
+      content: "\26AB";
+      margin-right: 0.5rem;
+      color: grey;
+    }
+  }
+
+  .actionsCel {
+    display: grid;
+    justify-self: center;
+    width: 8rem;
+    grid-auto-flow: column;
+    grid-column-gap: 0.5rem;
+    justify-items: end;
+
+    .modifyButton {
+      grid-column: 1 / 2;
+    }
+
+    .archiveButton {
+      grid-column: 2 / 3;
+      color: grey;
+    }
+
+    .deleteButton {
+      grid-column: 3 / 4;
+      color: #FF0000;
+    }
+  }
+
+  .tableButton {
+    background-color: white;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    max-width: fit-content;
+    max-height: fit-content;
+    padding: 0.4rem;
+    line-height: 0;
+    transition: background-color 150ms ease-in-out;
+    
+    &Icon {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    &:not([disabled]) {
+      &:hover {
+        background-color: darken(white, 5%);
+      }
+
+      &:focus, &:active {
+        background-color: darken(white, 10%);
+      }
+    }
+  }
+}
+
 #modifySurveyModal {
   .addRespondentButton {
     margin-bottom: 1rem;
@@ -580,56 +724,75 @@ export default {
         }
       
       .manageInstructions{
-        display:flex;
-        flex-direction:row;
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        grid-column-gap: 2rem;
         margin-right:1rem;
         margin-bottom:1.8rem;
         margin-left:1rem;
-      
-        .instructiondivone{
-          border:1px solid #787878;
-          padding:1rem 1.8rem;
-          margin-right:1rem;
-          font-size:1rem;
 
-          .divoneHeading{
-            font-size:1.1rem;
-            font-weight:bold;
+        .indicator-instructions {
 
+          .instructiondiv {
+            padding: 0.2rem 1rem;
           }
-          .divoneParagraph{
-            font-size:1.1rem;
-            margin-left:1rem;
+
+          .instruction-icon {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.5rem;
+          }
+
+          .active-instruction:before {
+            content: "\26AB";
+            margin-right: 0.5rem;
+            color: rgb(0, 194, 0);
+          }
+
+          .prevented-instruction:before {
+            content: "\26AB";
+            margin-right: 0.5rem;
+            color: crimson;
+          }
+
+          .starting-instruction:before {
+            content: "\26AB";
+            margin-right: 0.5rem;
+            color: yellow;
+          }
+
+          .ended-instruction:before {
+            content: "\26AB";
+            margin-right: 0.5rem;
+            color: orange;
+          }
+
+          .archived-instruction:before {
+            content: "\26AB";
+            margin-right: 0.5rem;
+            color: grey;
           }
         }
 
-        .arrowbetweendivs{
-          padding:1rem;
-          margin-right:1rem;
-          display:flex;
-          align-items:center;
-          justify-content:center;
+        .instructionsTitle {
+          grid-column: 1 / 3;
+          color: #350E7E;
+          font-size: 1.5rem;
         }
 
-        .instructiondivtwo{
-          border:1px solid grey;
+        .instructiondiv{
           padding:1rem;
           display:flex;
-          flex-direction:column;
-          align-items:center;
-
-          .divtwoHeading{
-            font-size:1.1rem;
-            font-weight:bold;
+          align-items: center;
+          
+          p {
+            margin-bottom: 0;
           }
 
-          .divtwoParagraph{
-            background-color:lightgrey;
-            width:8rem;
-            font-size:1.1rem;
-            font-weight:bold;
-            text-align:center;
-            padding:0.1rem;
+          svg, img {
+            margin-right: 1rem;
+            height: 1.5rem;
+            width: 1.5rem;
           }
         }
       }
@@ -662,23 +825,18 @@ export default {
         display:flex;
         flex-direction:row;
 
-        .buttonRight{
-          color: #ffffff;
-          border-radius: 5px;
-          padding-right:0.7rem;
-          padding-left:0.7rem;
-          height:auto;
-          margin-top:0.5rem;
-          margin-left:1.8rem;
+        .dropdownButtonsleft {
+
+          & /deep/ button {
+            background-color: white;
+            color: #353535;
+            border: 1px solid #ced4da;
+          }
         }
       }
       
-      .tableDisplayfields{
+      .tableDisplayfields {
         background-color:#FFFFFF;
-
-        .iconButton-times{
-          margin-left:0.5rem;
-        }
       }  
     }
 
@@ -702,10 +860,10 @@ export default {
   }
 }
 @media only screen and (max-width: 1400px) {
-    .rightsideManage{
-      width:100%;
-      margin-bottom: 0;
-    }
+  .rightsideManage{
+    width:100%;
+    margin-bottom: 0;
+  }
 }
 </style>
 
