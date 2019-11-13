@@ -81,7 +81,7 @@ export const fi = {
     addQuestions:'Lisää',
     emailParagraph:'5. Lähetä kysely.',
     emailtopparagrapgh:'Vastaanottajat:',
-    moreEmail:'Lisää vastaanottaja ryhmä',
+    moreEmail:'Lisää vastaanottajaryhmä',
     insertmoreEmail:'Lisää',
     emailPlaceholder:'Kirjoita tähän vastaanottajan sähköpostiosoite...',
     addMessage:'Lisää viesti',
@@ -188,6 +188,7 @@ export const fi = {
     questionnaireComparisonTitle: 'Tulostesi vertailu',
     questionnaireComparisonQuestion: 'Kysymys',
     questionnaireComparisonAnswer: 'Vastauksesi',
-    questionnaireComparisonAvg: 'Keskiarvo'
+    questionnaireComparisonAvg: 'Keskiarvo',
+    browseFiles: 'Selaa'
   }
 }

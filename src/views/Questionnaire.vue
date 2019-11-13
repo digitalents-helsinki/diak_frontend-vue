@@ -3,6 +3,7 @@
     <Introduction
       v-if="questionnum === null"
       v-bind:surveyName="surveyName"
+      v-bind:surveyMessage="surveyMessage"
       v-on:moveToQuestionnaire="questionnum = 0"
     />
     <div v-else class="background">
@@ -72,6 +73,7 @@ export default {
       questionnum: null,
       modal_visible: null,
       surveyName: "",
+      surveyMessage: "",
       errormessage: null,
       result: null
     };
@@ -177,6 +179,7 @@ export default {
       }, []).filter(question => question)
 
       this.surveyName = res.data.Survey.name
+      this.surveyMessage = res.data.Survey.message
       this.questiondata = reducedData
     },
     saveQuestions() {

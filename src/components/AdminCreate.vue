@@ -92,6 +92,11 @@
                                         class="questionHelpText"
                                         v-bind:data-placeholder="(question.help === null || question.help === '') ? $t('message.questionHelpPlaceholder') : ''"
                                     />
+                                    <div v-if="!question.name && editIndex === index" class="charLimits">
+                                        <div>{{question.title ? question.title.length : '0'}}/100</div>
+                                        <div>{{question.description ? question.description.length : '0'}}/200</div>
+                                        <div>{{question.help ? question.help.length : '0'}}/1000</div>
+                                    </div>
                                     <div class="questionNumber">{{index + 1}}</div>
                                     <button class="questionButton questionButtonFourth" @click="shiftQuestion(index, 'up')" aria-label="Move question up"><font-awesome-icon class="icon" icon="arrow-up"></font-awesome-icon></button>
                                     <button class="questionButton questionButtonThird" @click="shiftQuestion(index, 'down')" aria-label="Move question down"><font-awesome-icon class="icon" icon="arrow-down"></font-awesome-icon></button>
@@ -112,26 +117,33 @@
                 <div class="emailTop">
                     <p> {{ $t('message.emailtopparagrapgh') }} </p>
                     <div class="moreroundedButton">
-                        <button class="btn moreEmail-button"><font-awesome-icon icon="users" class="iconmoreEmail"/>{{ $t('message.moreEmail') }}</button>
+                        <font-awesome-icon icon="users" class="iconmoreEmail"/>
+                        <b-form-file v-model="groupInputFile" accept="text/plain;charset=UTF-8" :browse-text="$t('message.browseFiles')" class="btn moreEmail-button" :placeholder="$t('message.moreEmail')"></b-form-file>
                         <button class="btn roundedButton"> ? </button>
                     </div>
                 </div>
                 <div class="emailContent">
                     <div class="emailcontentTop">
-                        <input v-model="email" type="email" class="writeinEmail" v-bind:placeholder="$t('message.emailPlaceholder')"/>
-                        <button @click="addEmail" class="insertemailButton">{{ $t('message.insertmoreEmail') }}<font-awesome-icon icon="plus" class="moreemailPlus"/></button>
+                        <b-input-group class="writeinEmail">
+                            <b-input v-model="email" type="email" v-bind:placeholder="$t('message.emailPlaceholder')"/>
+                            <b-input-group-append>
+                                <b-button @click="addEmail" class="insertemailButton">{{ $t('message.insertmoreEmail') }}<font-awesome-icon icon="plus" class="moreemailPlus"/></b-button>
+                            </b-input-group-append>
+                        </b-input-group>
                     </div>
                     <div class="emaillistDiv">
                         <ul class="emailList">
                             <li v-for="(email, index) in emails" v-bind:key="index">
-                                <span>{{email}}</span><button @click="removeEmail(index)">X</button>
+                                <div class="emailDiv">
+                                    <font-awesome-icon @click="removeEmail(index)" icon="times"/><span>{{email}}</span>
+                                </div>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="putMessagediv">
                     <button v-if="!messageVisible" class="btn putMessage" @click="showMessage"><font-awesome-icon icon="paperclip" class="putMessageicon"/>{{ $t('message.addMessage') }}</button>
-                    <input v-if="messageVisible" v-model="message" class="writeMessage" type="text" />
+                    <b-textarea v-if="messageVisible" v-model="message" class="writeMessage" type="text" />
                 </div> 
                 <div class="bottom-buttons">
                     <button class="btn savecontinueBottom">{{ $t('message.saveContinue') }}</button>
@@ -178,6 +190,7 @@ export default {
             surveyNameState: null,
             message: null,
             messageVisible: false,
+            groupInputFile: null,
             defaultQuestions: [
                 {
                     name: 'health',
@@ -238,6 +251,18 @@ export default {
     computed: {
         allDefaultQuestionsExistence() {
             return this.defaultQuestions.every(defaultQuestion => this.$data.questions.some(question => question.name === defaultQuestion.name))
+        }
+    },
+    watch: {
+        groupInputFile(val) {
+            if (val !== null) {
+                const fileReader = new FileReader()
+                fileReader.onload = e => {
+                    this.$data.emails = [...new Set([...this.$data.emails, ...e.target.result.split(/\r?\n/).filter(email => email)])]
+                    this.$data.groupInputFile = null
+                }
+                fileReader.readAsText(val)
+            }
         }
     },
     methods: {
@@ -302,8 +327,10 @@ export default {
             this.$data.questions.splice(index, 1)
         },
         addEmail() {
-            this.$data.emails.push(this.$data.email)
-            this.$data.email = null
+            if (!this.$data.emails.includes(this.$data.email)) {
+                this.$data.emails.push(this.$data.email)
+                this.$data.email = null
+            }
         },
         removeEmail(index) {
             this.$data.emails.splice(index, 1)
@@ -764,6 +791,17 @@ export default {
                                     right: 7rem;
                                 }
                             }
+
+                            .charLimits {
+                                position: absolute;
+                                bottom: 0;
+                                right: 1rem;
+                                display: grid;
+                                grid-auto-flow: column;
+                                grid-column-gap: 1rem;
+                                font-size: 0.8rem;
+                                color: rgb(118, 118, 118);
+                            }
                         }
                     }
                 }
@@ -797,14 +835,10 @@ export default {
                     margin-right:6rem;
 
                     .moreEmail-button{
-                        background-color: #FFFFFF;
-                        color: #000000;
-                        border:1px solid lightgrey;
-                        border-radius: 10px;
-                        width:16rem;
-                        height:auto;
+                        width: fit-content;
                         box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.05);
-                        margin-left:1.8rem;
+                        margin-left:1rem;
+                        text-align: left;
 
                         .iconmoreEmail{
                             margin-right:1rem;
@@ -827,19 +861,16 @@ export default {
                 margin-right:5rem;
                 margin-left:5rem;
                 margin-bottom:2rem;
-                border:1px solid #C0C0C0;
+                border-radius: 15px;
 
                 .emailcontentTop{
                     display:flex;
                     flex-direction:row;
                     justify-content:space-around;
                     margin-bottom:2rem;
-                    background-color:#FFFFFF;
-                    padding-top:1rem;
-                    padding-bottom:1rem;
+                    justify-content: flex-start;
 
                     .writeinEmail{
-                        width:25rem;
                     }
                         
                     .insertemailButton{
@@ -852,10 +883,22 @@ export default {
                     .emailList{
                         li {
                             width: 350px;
-                            padding: 15px 0;
+                            margin-bottom: 1rem;
                             list-style: none;
                             display: flex;
                             justify-content: space-between;
+
+                            .emailDiv {
+                                display: flex;
+                                position: relative;
+
+                                svg {
+                                    position: absolute;
+                                    color: crimson;
+                                    margin-left: -1rem;
+                                    margin-top: 0.3rem;
+                                }
+                            }
                         }
                     }
                 }
@@ -930,6 +973,10 @@ export default {
     #insertedQuestionsview{
         margin-left:0.1rem !important;
     }
+
+    .emailTop {
+        flex-direction: column !important;
+    } 
 
     .questionsModify-div {
         margin-left: 0.1rem !important;
