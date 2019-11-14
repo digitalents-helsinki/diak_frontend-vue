@@ -4,49 +4,58 @@
       <p>{{ $t('message.manageSurveys') }}</p>
     </div>
     <div class="totalinstructionsearch shadow-sm">
-      <div class="totalParagraph">
-        <p>{{ `${$t('message.total')} ${surveys.length}`}}</p>
+      <div class="totalSurveysContainer">
+        <p class="totalParagraph">{{ `${$t('message.total')}: ${surveys.length}`}}</p>
+        <font-awesome-icon @click="showTotalDetailed = !showTotalDetailed" :icon="showTotalDetailed ? 'chevron-left' : 'chevron-right'" class="chevron"/>
+        <transition name="slider-width">
+          <div v-if="showTotalDetailed" class="moreDetailsContainer">
+            <p class="totalParagraph">{{ `Käynnissä: ${filteredSurveys.active.length}` }}</p>
+            <p class="totalParagraph">{{ `Tulossa: ${filteredSurveys.starting.length}` }}</p>
+            <p class="totalParagraph">{{ `Päättynyt: ${filteredSurveys.ended.length}` }}</p>
+            <p class="totalParagraph">{{ `Suljettu: ${filteredSurveys.closed.length}` }}</p>
+            <p class="totalParagraph">{{ `Arkistoitu: ${filteredSurveys.archived.length}` }}</p>
+          </div>
+        </transition>
       </div>
       <div class="manageInstructions">
-        <div class="action-instructions">
-          <h3 class="instructionsTitle">Toiminnot</h3>
-          <div class="instructiondiv">
-            <font-awesome-icon icon="pencil-alt"/><p>Tästä voit muokata kyselyä</p>
+        <b-badge @click="showInstructions = !showInstructions" class="instructionsTitle">Info<font-awesome-icon :icon="showInstructions ? 'chevron-left' : 'chevron-right'"/></b-badge>
+        <transition name="slider-width">
+          <div v-if="showInstructions" class="instructions-container">
+            <div class="instructiondiv">
+              <font-awesome-icon icon="chart-bar" style="color:#353535;"/><p>Kyselyn tulokset</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="pencil-alt" style="color:#353535;"/><p>Muokkaa kyselyä</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="folder" style="color:grey;"/><p>Arkistoi kysely</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="times" style="color:#FF0000;"/><p>Poista kysely</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="user-slash" class="instruction-indicator-icon" /><p>Anonyymi</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="user-check" class="instruction-indicator-icon" /><p>Autentikoitu</p>
+            </div>
+            <div class="instructiondiv">
+              <p class="active-instruction">Käynnissä</p>
+            </div>
+            <div class="instructiondiv">
+              <p class="starting-instruction">Tuleva</p>
+            </div>
+            <div class="instructiondiv">
+              <p class="ended-instruction">Päättynyt</p>
+            </div>
+            <div class="instructiondiv">
+              <p class="prevented-instruction">Suljettu</p>
+            </div>
+            <div class="instructiondiv">
+              <p class="archived-instruction">Arkistoitu</p>
+            </div>
           </div>
-          <div class="instructiondiv">
-            <font-awesome-icon icon="folder" style="color:grey;"/><p>Tästä voit arkistoida kyselyn</p>
-          </div>
-          <div class="instructiondiv">
-            <font-awesome-icon icon="chart-bar" /><p>Tästä voit tarkastella kyselyn raporttia</p>
-          </div>
-          <div class="instructiondiv">
-            <font-awesome-icon icon="times" style="color:#FF0000;"/><p>Tästä voit poistaa kyselyn kokonaan</p>
-          </div>
-        </div>
-        <div class="indicator-instructions">
-          <h3 class="instructionsTitle">Informaatio</h3>
-          <div class="instructiondiv">
-            <p><font-awesome-icon icon="user-slash" class="instruction-icon" />Anonyymi</p>
-          </div>
-          <div class="instructiondiv">
-            <p><font-awesome-icon icon="user-check" class="instruction-icon" />Autentikoitu</p>
-          </div>
-          <div class="instructiondiv">
-            <p class="active-instruction">Aktiivinen</p>
-          </div>
-          <div class="instructiondiv">
-            <p class="starting-instruction">Alkava</p>
-          </div>
-          <div class="instructiondiv">
-            <p class="ended-instruction">Päättynyt</p>
-          </div>
-          <div class="instructiondiv">
-            <p class="prevented-instruction">Estetty</p>
-          </div>
-          <div class="instructiondiv">
-            <p class="archived-instruction">Arkistoitu</p>
-          </div>
-        </div>
+        </transition>
       </div>
       <div class="searchbar-div">
         <p class="paragraphTop">{{ $t('message.searchParagraph') }}</p>
@@ -63,7 +72,7 @@
           <b-dropdown-item @click="toggleDisplay('anonymous')">{{$t('message.anonymousButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('authenticated')">{{$t('message.authenticatedButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('active')">{{$t('message.activeButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('inactive')">{{$t('message.inactiveButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('closed')">{{$t('message.closedButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('starting')">{{$t('message.startingButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('ended')">{{$t('message.endedButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('archived')">{{$t('message.archivedButton')}}</b-dropdown-item>
@@ -71,7 +80,7 @@
       </div>
     </div>
     <div class="tableDisplayfields">
-      <b-table hover responsive :items="filteredSurveys" :fields="fields" head-variant="light" table-class="surveyTable shadow-sm">
+      <b-table hover responsive :items="filteredSurveys[this.display]" :fields="fields" head-variant="light" table-class="surveyTable shadow-sm">
         <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
           <div v-bind:key="field.key" class="surveyTableCel">
             <div v-if="field.colType === 'name'">
@@ -281,6 +290,8 @@ export default {
           inputSurveyName: null
         },
         display: "all",
+        showTotalDetailed: false,
+        showInstructions: true,
         loaded: false
     }
   },
@@ -304,18 +315,18 @@ export default {
         else return this.computedSurveys
       })()
 
-      const filters = {
-        all: (surveys) => surveys,
-        anonymous: (surveys) => surveys.filter(obj => obj.anon),
-        authenticated: (surveys) => surveys.filter(obj => !obj.anon),
-        active: (surveys) => surveys.filter(obj => obj.open),
-        inactive: (surveys) => surveys.filter(obj => !obj.open),
-        starting: (surveys) => surveys.filter(obj => obj.starting),
-        ended: (surveys) => surveys.filter(obj => obj.ended),
-        archived: (surveys) => surveys.filter(obj => obj.archived)
-      }
+      const nonArchivedSurveys = surveysToBeFiltered.filter(obj => !obj.archived)
 
-      return filters[this.display](surveysToBeFiltered)
+      return {
+        all: surveysToBeFiltered,
+        anonymous: surveysToBeFiltered.filter(obj => obj.anon),
+        authenticated: surveysToBeFiltered.filter(obj => !obj.anon),
+        active: nonArchivedSurveys.filter(obj => obj.open),
+        closed: nonArchivedSurveys.filter(obj => !obj.active),
+        starting: nonArchivedSurveys.filter(obj => obj.starting),
+        ended: nonArchivedSurveys.filter(obj => obj.ended),
+        archived: surveysToBeFiltered.filter(obj => obj.archived)
+      }
     },
     modifySurveyBoolean: {
       get: function() {
@@ -639,6 +650,18 @@ export default {
     margin: 1rem;
     box-shadow: 0 5px 5px #787878;
 
+    .slider-width-enter, .slider-width-leave-to {
+      max-width: 0;
+    }
+
+    .slider-width-enter-to, .slider-width-leave {
+      max-width: 100vw;
+    }
+
+    .slider-width-enter-active, .slider-width-leave-active {
+      transition: max-width 150ms ease-in-out;
+    }
+
     .slide {
       &-enter {
         transform: translateY(30vh);
@@ -710,80 +733,120 @@ export default {
         padding-top:1.1rem;
     }
 
-    .totalinstructionsearch{
+    .totalinstructionsearch {
       background-color:#FFFFFF;
       width:100%;
       padding-top:1rem;
       padding-bottom:1rem;
 
-      .totalParagraph{
-        font-size:1rem;
-        color:#787878;
-        margin-left:1rem;
-        margin-bottom:1.8rem;
+      .totalSurveysContainer {
+        display: flex;
+        font-size: 1rem;
+        color: #787878;
+        margin-left: 1rem;
+
+        .moreDetailsContainer {
+          display: flex;
+          white-space: nowrap;
+          overflow: hidden;
         }
+
+        .totalParagraph {
+          margin-right: 2rem;
+
+          &:first-of-type {
+            margin-right: 1rem;
+          }
+        }
+
+        .chevron {
+          margin-right: 1rem;
+          font-size: 0.75rem;
+          margin-top: 0.33rem;
+          
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
       
       .manageInstructions{
         display: grid;
         grid-template-columns: max-content 1fr;
-        grid-column-gap: 2rem;
         margin-right:1rem;
-        margin-bottom:1.8rem;
         margin-left:1rem;
+        height: 8rem;
 
-        .indicator-instructions {
+        .instructions-container {
+          display: grid;
+          grid-auto-flow: column;
+          overflow: hidden;
+          grid-template-columns: repeat(3, max-content);
+          grid-template-rows: repeat(4, max-content);
+          width: max-content;
+        }
 
-          .instructiondiv {
-            padding: 0.2rem 1rem;
+        .active-instruction:before {
+          content: "\26AB";
+          margin-right: 0.5rem;
+          color: rgb(0, 194, 0);
+        }
+
+        .prevented-instruction:before {
+          content: "\26AB";
+          margin-right: 0.5rem;
+          color: crimson;
+        }
+
+        .starting-instruction:before {
+          content: "\26AB";
+          margin-right: 0.5rem;
+          color: yellow;
+        }
+
+        .ended-instruction:before {
+          content: "\26AB";
+          margin-right: 0.5rem;
+          color: orange;
+        }
+
+        .archived-instruction:before {
+          content: "\26AB";
+          margin-right: 0.5rem;
+          color: grey;
+        }
+        
+
+        .instructionsTitle {
+          align-self: baseline;
+          color: #350E7E;
+          background-color: white;
+          border: 1px solid #ced4da;
+          font-size: 1.5rem;
+
+          &:hover {
+            cursor: pointer;
           }
 
-          .instruction-icon {
+          svg {
+            font-size: 0.75rem;
+            margin-bottom: 0.125rem;
+            margin-left: 0.25rem;
+          }
+        }
+
+        .instructiondiv{
+          padding: 0.2rem 1rem;
+          display:flex;
+          align-items: center;
+
+          .instruction-indicator-icon {
+            color: #212529;
             width: 1rem;
             height: 1rem;
             margin-right: 0.5rem;
           }
 
-          .active-instruction:before {
-            content: "\26AB";
-            margin-right: 0.5rem;
-            color: rgb(0, 194, 0);
-          }
-
-          .prevented-instruction:before {
-            content: "\26AB";
-            margin-right: 0.5rem;
-            color: crimson;
-          }
-
-          .starting-instruction:before {
-            content: "\26AB";
-            margin-right: 0.5rem;
-            color: yellow;
-          }
-
-          .ended-instruction:before {
-            content: "\26AB";
-            margin-right: 0.5rem;
-            color: orange;
-          }
-
-          .archived-instruction:before {
-            content: "\26AB";
-            margin-right: 0.5rem;
-            color: grey;
-          }
-        }
-
-        .instructionsTitle {
-          grid-column: 1 / 3;
-          color: #350E7E;
-          font-size: 1.5rem;
-        }
-
-        .instructiondiv{
-          padding:1rem;
-          display:flex;
-          align-items: center;
           
           p {
             margin-bottom: 0;
