@@ -9,6 +9,7 @@ import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import Password from '@/views/Password.vue'
 import User from '@/views/User.vue'
+import Supervisor from '@/views/Supervisor.vue'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
       meta: {
         quest: true
       }
+    },
+    {
+      path: '/supervisor',
+      name: 'supervisor',
+      component: Supervisor
     },
     {
       path: '/login',
