@@ -16,6 +16,7 @@
                     v-model="surveyName"
                     v-bind:state="surveyNameState === null ? null : surveyName ? true : false"
                     type="text"
+                    maxlength="100"
                     name="forminputName"
                     v-bind:placeholder="$t('message.namePlaceholder')"
                 />
