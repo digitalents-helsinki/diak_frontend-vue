@@ -1,6 +1,6 @@
 <template>
 <div class="adminPage">
-    <div class="menuContent">
+    <div class="menuContent shadow-sm">
         <div class="menuContentlogo">
             <div class="imagelocation">
                 <img class="logoPlace" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" >

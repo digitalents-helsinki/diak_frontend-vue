@@ -43,7 +43,7 @@
 <script>
 import axios from "axios";
 import Introduction from '@/components/QuestionnaireIntroduction.vue'
-import Header from '@/components/Header.vue';
+import Header from '@/components/UserHeader.vue';
 import Question from "@/components/QuestionnaireQuestion.vue";
 import Review from "@/components/QuestionnaireReview.vue";
 import Result from "@/components/QuestionnaireResult.vue"

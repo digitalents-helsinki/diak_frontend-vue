@@ -28,7 +28,7 @@
           v-bind:label="$t('message.userAge')"
           label-for="birthday"
         >
-          <Datepicker id="birthday" @input="$emit('updateInfo', {birthdate: $event})" :value="personalinfo.birthdate" :language="fi" :monday-first="true" v-bind:placeholder="$t('message.datePlaceholder')"></Datepicker>
+          <Datepicker id="birthday" @input="$emit('updateInfo', {birthdate: $event})" :value="personalinfo.birthdate" :language="fi" :monday-first="true" initial-view="year" calendar-class="ageCalendar" v-bind:placeholder="$t('message.datePlaceholder')"></Datepicker>
         <b-form-invalid-feedback :state="infovalidation.birthdate" class="birthDateRequired">
             {{ $t('message.birthDateInfo') }}
         </b-form-invalid-feedback>
@@ -181,7 +181,11 @@ export default {
   width:100%;
   padding: 1rem 1rem 0 1rem;
   text-align: start;
-  
+
+  & /deep/ .ageCalendar {
+    max-width: calc(100vw - 2rem);
+  }
+
   .nameRequired {
     font-size:1rem;
   }

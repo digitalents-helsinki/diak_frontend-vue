@@ -92,6 +92,11 @@
                                         class="questionHelpText"
                                         v-bind:data-placeholder="(question.help === null || question.help === '') ? $t('message.questionHelpPlaceholder') : ''"
                                     />
+                                    <div v-if="!question.name && editIndex === index" class="charLimits">
+                                        <div>{{question.title ? question.title.length : '0'}}/100</div>
+                                        <div>{{question.description ? question.description.length : '0'}}/200</div>
+                                        <div>{{question.help ? question.help.length : '0'}}/1000</div>
+                                    </div>
                                     <div class="questionNumber">{{index + 1}}</div>
                                     <button class="questionButton questionButtonFourth" @click="shiftQuestion(index, 'up')" aria-label="Move question up"><font-awesome-icon class="icon" icon="arrow-up"></font-awesome-icon></button>
                                     <button class="questionButton questionButtonThird" @click="shiftQuestion(index, 'down')" aria-label="Move question down"><font-awesome-icon class="icon" icon="arrow-down"></font-awesome-icon></button>
@@ -785,6 +790,17 @@ export default {
                                 &Fourth {
                                     right: 7rem;
                                 }
+                            }
+
+                            .charLimits {
+                                position: absolute;
+                                bottom: 0;
+                                right: 1rem;
+                                display: grid;
+                                grid-auto-flow: column;
+                                grid-column-gap: 1rem;
+                                font-size: 0.8rem;
+                                color: rgb(118, 118, 118);
                             }
                         }
                     }
