@@ -42,24 +42,24 @@ export default {
     }
   },
   actions: {
-    async fetchSurvey(context) {
+    async fetchSurvey({ state, rootState, commit }) {
       const { data: { Survey, savedAnswers, Result, Averages } } = await axios({
         method: 'GET',
-        url: process.env.VUE_APP_BACKEND + `/${context.state.fetch.anon ? 'anon' : 'auth'}/survey/${context.state.fetch.surveyId}/${context.state.fetch.anon ? context.state.fetch.anonId : ''}`,
+        url: process.env.VUE_APP_BACKEND + `/${state.fetch.anon ? 'anon' : 'auth'}/survey/${state.fetch.surveyId}/${state.fetch.anon ? state.fetch.anonId : ''}`,
         headers: {
-          'Authorization': `Bearer ${context.state.fetch.anon ? "" : context.rootState.authentication.accessToken}`
+          'Authorization': `Bearer ${state.fetch.anon ? "" : rootState.authentication.accessToken}`
         }
       }).catch(err => {
-        context.commit('setError', err)
+        commit('setError', err)
         throw err
       })
 
       if (!Survey) { //check for result redirect
-        context.commit('setSurveyInfo', {
+        commit('setSurveyInfo', {
           name: Result.name,
           message: Result.message
         })
-        context.commit('setSurveyResult', { Result, Averages })
+        commit('setSurveyResult', { Result, Averages })
       } else {
         const Questions = (() => {
           if (savedAnswers && savedAnswers.length) {
@@ -73,27 +73,27 @@ export default {
             return Survey.Questions
           }
         })()
-        context.commit('setSurveyInfo', {
+        commit('setSurveyInfo', {
           name: Survey.name,
           message: Survey.message
         })
-        context.commit('setSurveyQuestions', Questions)
+        commit('setSurveyQuestions', Questions)
       }
 
     },
-    async fetchResult(context) {
+    async fetchResult({ state, rootState, commit }) {
       const res = await axios({
         method: 'GET', 
-        url: `${process.env.VUE_APP_BACKEND}/${context.state.fetch.anon ?  'anon': 'auth'}/result/${context.state.fetch.surveyId}/${context.state.fetch.anon ? context.state.fetch.anonId : ''}`,
+        url: `${process.env.VUE_APP_BACKEND}/${state.fetch.anon ?  'anon': 'auth'}/result/${state.fetch.surveyId}/${state.fetch.anon ? state.fetch.anonId : ''}`,
         headers: {
-          'Authorization': `Bearer ${context.rootState.authentication.accessToken}`
+          'Authorization': `Bearer ${rootState.authentication.accessToken}`
         }
       }).catch(err => {
-        context.commit('setError', err)
+        commit('setError', err)
         throw err
       })
 
-      context.commit('setSurveyResult', res.data)
+      commit('setSurveyResult', res.data)
     }
   }
 }
