@@ -15,10 +15,10 @@
       />
       <div class="questionnaire container text-center shadow-lg">
         <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>{{errormessage}}</p></b-alert>
-        <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount && !result">
+        <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount && !result || resultSending">
           <b-spinner label="Loading..." />
         </div>
-        <form>
+        <form v-if="!resultSending">
           <transition name="fade" mode="out-in">
             <Question
               v-if="currentQuestionData"
@@ -75,7 +75,8 @@ export default {
       surveyName: "",
       surveyMessage: "",
       errormessage: null,
-      result: null
+      result: null,
+      resultSending: false
     };
   },
   computed: {
@@ -183,11 +184,10 @@ export default {
       this.questiondata = reducedData
     },
     saveQuestions() {
-
+      this.resultSending = true
       const isAnon = this.$route.name === 'questionnaire-anon'
       const post = isAnon ? "/anon/result/create" : "/auth/result/create"
       const push = isAnon ? '/anon/results' : '/auth/results'
-
       axios({
         method: "POST",
         url: process.env.VUE_APP_BACKEND + post,
@@ -202,10 +202,11 @@ export default {
       }).then(res => {
           if (res.data.status === "ok") {
             //this.$router.push({ path: `${push}/${this.$route.params.surveyId}/${this.$route.params.userId}` });
+            this.resultSending = false
             this.result = true
           }
         })
-        .catch(err => console.error(err));
+      .catch(err => console.error(err));
     },
     saveUnfinishedAnswers() {
       const post = this.$route.name === 'questionnaire-anon' ? "/anon/result/save": "/auth/result/save"
