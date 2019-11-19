@@ -1,10 +1,11 @@
 <template>
   <LogoBox size="large">
     <template v-slot:topbar>
-      {{ $store.state.questionnaire.errorMessage ? $t('message.somethingWentWrong') : $t('message.home') }}
+      {{ $store.getters['questionnaire/errorDisplay'] ? $t('message.somethingWentWrong') : $t('message.home') }}
     </template>
     <template v-slot:content>
-      <b-alert v-if="$store.state.questionnaire.errorMessage" show variant="danger" class="errorMessageDisplay"><p>{{$store.state.questionnaire.errorMessage}}</p></b-alert>
+      <b-alert v-if="$store.getters['questionnaire/errorDisplay']" show variant="danger" class="errorMessageDisplay" style="border: none; border-radius: 0 0 15px 15px;"><p>{{$store.state.questionnaire.error.message}}</p></b-alert>
+      <b-spinner v-else-if="$store.getters['questionnaire/errorDisplay'] === null" class="m-5"/>
       <div v-else class="text-container">
         <div class="survey-name-container">
           <LangMenu class="language"/>

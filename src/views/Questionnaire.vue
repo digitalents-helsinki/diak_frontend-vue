@@ -21,7 +21,7 @@
             />
             <Review 
               v-else-if="navigationData.questionamount <= questionnum && !this.$store.state.questionnaire.surveyData.result"
-              v-bind:results="questiondata"
+              v-bind:results="questionData"
               v-bind:navigation.sync="navigationData"
               v-on:saveQuestions="saveQuestions"
               v-on:toggleModal="toggleModal"
@@ -62,25 +62,27 @@ export default {
   },
   data() {
     return {
-      questiondata: [],
       questionnum: null,
       modal_visible: null
     };
   },
   computed: {
+    questionData() {
+      return this.$store.state.questionnaire.surveyData.questionData
+    },
     currentQuestionData: {
       get: function() {
-        if (this.questiondata[this.questionnum]) {
-          return this.questiondata[this.questionnum]
+        if (this.questionData && this.questionnum !== null && this.questionData[this.questionnum]) {
+          return this.questionData[this.questionnum]
         } else {
           return null
         }
       },
       set: function(keyValueArr) {
-        //set correct questiondata property
+        //set correct questiondata property in store
         const [ key, value ] = keyValueArr
-        if (this.questiondata[this.questionnum].propertyIsEnumerable(key)) {
-          this.questiondata[this.questionnum][key] = value
+        if (this.questionData[this.questionnum].propertyIsEnumerable(key)) {
+          this.$store.commit('questionnaire/answerQuestion', [key, value, this.questionnum])
         }
       }
     },
@@ -88,7 +90,7 @@ export default {
       get: function() {
         return ({
           questionnum: this.questionnum,
-          questionamount: this.questiondata.length || this.questionnum + 1
+          questionamount: this.questionData ? this.questionData.length : this.questionnum + 1
         })
       },
       set: function(operator) {
@@ -107,31 +109,6 @@ export default {
       }
       //
     },
-    reduceSurveyData() {
-      if (this.$store.state.questionnaire.surveyData.questions) this.questiondata = this.$store.state.questionnaire.surveyData.questions.reduce((arr, question) => {
-        if (!question.name.endsWith("_custom")) {
-          arr[question.number - 1] = {
-            name: question.name,
-            val: !question.answer ? null: question.answer.value !== undefined ? question.answer.value : null,
-            desc: !question.answer ? null : question.answer.description !== undefined ? question.answer.description : null,
-            id: question.questionId
-          }
-        } else {
-          arr[question.number - 1] = {
-            name: question.name,
-            val: !question.answer ? null: question.answer.value !== undefined ? question.answer.value : null,
-            desc: !question.answer ? null : question.answer.description !== undefined ? question.answer.description : null,
-            id: question.questionId,
-            custom: {
-              title: question.title,
-              description: question.description,
-              help: question.help
-            }
-          }
-        }
-        return arr
-      }, []).filter(question => question)
-    },
     saveQuestions() {
 
       const isAnon = this.$route.name === 'questionnaire-anon'
@@ -147,14 +124,13 @@ export default {
         data: {
           anonId: this.$route.params.anonId,
           surveyId: this.$route.params.surveyId,
-          answers: [...this.questiondata]
+          answers: [...this.questionData]
         }
       }).then(res => {
           if (res.data.status === "ok") {
             this.$store.dispatch('questionnaire/fetchResult')
           }
         })
-        .catch(err => console.error(err));
     },
     saveUnfinishedAnswers() {
       const post = this.$route.name === 'questionnaire-anon' ? "/anon/result/save": "/auth/result/save"
@@ -167,14 +143,13 @@ export default {
         data: {
           anonId: this.$route.params.anonId,
           surveyId: this.$route.params.surveyId,
-          answers: [...this.questiondata]
+          answers: [...this.questionData]
         }
       }).then(res => {
           if (res.data.status === "ok") {
             this.moveHome()
           }
         })
-        .catch(err => console.error(err));
     },
     toggleModal(value) {
       if (this.modal_visible === null) this.modal_visible = value
@@ -189,7 +164,6 @@ export default {
     //FOR TESTING
     this.testQuestionnaire()
     //
-    this.reduceSurveyData()
   }
 };
 </script>
