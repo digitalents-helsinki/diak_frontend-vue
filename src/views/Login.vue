@@ -89,7 +89,8 @@ export default {
                 this.$store.commit('login', {
                   loggedIn: true,
                   role: 'admin',
-                  accessToken: res.data.token
+                  accessToken: res.data.token,
+                  userId: res.data.userId
                 })
                 this.$router.push({ name: 'admin' })
               } else {

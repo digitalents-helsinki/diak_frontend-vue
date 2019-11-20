@@ -180,6 +180,7 @@ import Datepicker from 'vuejs-datepicker'
 import { fi } from 'vuejs-datepicker/dist/locale'
 import axios from 'axios'
 import SurveyResults from './SurveyResults'
+import store from '@/store'
 
 export default {
   name: 'admin-manage',
@@ -328,7 +329,7 @@ export default {
   },
   methods: {
     async getSurveys() {
-      const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/all")
+      const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/" + store.state.auth.userId)
       this.$data.surveys = res.data
       this.$data.loaded = true
     },
