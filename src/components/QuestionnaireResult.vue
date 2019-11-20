@@ -7,7 +7,7 @@
     <p v-else-if="emailSent">Tuloksesi on lähetetty sähköpostiisi</p>
     <p class="error" v-if="this.error">{{"Sähköpostin lähettäminen epäonnistui: " + this.error}}</p>
     <b-input-group v-if="!auth && !emailSent">
-      <b-input v-model="email" type="email" autocomplete="email" :state="(email && !!email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null" placeholder="Sähköpostiosoitteesi"/>
+      <b-input v-model="email" type="email" autocomplete="email" :state="(email && email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null" placeholder="Sähköpostiosoitteesi"/>
       <b-input-group-append>
         <b-button :disabled="!email || !email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)" @click="sendEmail" variant="primary">Lähetä</b-button>
       </b-input-group-append>
@@ -24,7 +24,6 @@ export default {
   name: 'results',
   data() {
     return {
-      resultData: null,
       email: null,
       emailSent: false,
       error: null
@@ -33,22 +32,25 @@ export default {
   computed: {
     auth() {
       return this.$route.name.includes('auth')
+    },
+    resultData() {
+      if (this.$store.state.questionnaire.surveyData.resultData) {
+        const comparisonQuestion = this.$t('message.questionnaireComparisonQuestion')
+        const comparisonAnswer = this.$t('message.questionnaireComparisonAnswer')
+        const comparisonAvg = this.$t('message.questionnaireComparisonAvg')
+        return this.$store.state.questionnaire.surveyData.resultData.map(question => {
+          return {
+            [comparisonQuestion]: !question.name.endsWith("_custom") ? this.$t(`message.${question.name}_title`) : question.title,
+            [comparisonAnswer]: question.answer,
+            [comparisonAvg]: question.avg
+          }
+        })
+      } else {
+        return null
+      }
     }
   },
   methods: {
-    getResults() {
-      const comparisonQuestion = this.$t('message.questionnaireComparisonQuestion')
-      const comparisonAnswer = this.$t('message.questionnaireComparisonAnswer')
-      const comparisonAvg = this.$t('message.questionnaireComparisonAvg')
-      this.resultData = this.$store.state.questionnaire.surveyData.result.Result.Questions.reduce((arr, question) => {
-        arr[question.number - 1] = {
-          [comparisonQuestion]: !question.name.endsWith("_custom") ? this.$t(`message.${question.name}_title`) : question.title,
-          [comparisonAnswer]: question.Answers[0].value !== null ? question.Answers[0].value : '-',
-          [comparisonAvg]: (avg => avg ? Number(avg).toFixed(2) : '-')(this.$store.state.questionnaire.surveyData.result.Averages.find(obj => obj.number === question.number).answerAvg)
-        }
-        return arr
-      }, []).filter(question => question)
-    },
     sendEmail() {
       if (this.auth || (this.email && this.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/))){
         axios({
@@ -74,9 +76,6 @@ export default {
       this.$store.commit('logout')
       this.$router.push({ path: '/' })
     }
-  },
-  created() {
-    this.getResults()
   }
 }
 </script>

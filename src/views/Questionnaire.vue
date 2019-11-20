@@ -1,7 +1,7 @@
 <template>
   <div :class="questionnum !== null ? 'background' : ''">
     <Introduction
-      v-if="questionnum === null && !this.$store.state.questionnaire.surveyData.result"
+      v-if="questionnum === null && !this.$store.state.questionnaire.surveyData.resultData"
       v-on:moveToQuestionnaire="questionnum = 0"
     />
     <div v-else class="background">
@@ -20,14 +20,14 @@
               v-on:toggleModal="toggleModal"
             />
             <Review 
-              v-else-if="navigationData.questionamount <= questionnum && !this.$store.state.questionnaire.surveyData.result"
+              v-else-if="navigationData.questionamount <= questionnum && !this.$store.state.questionnaire.surveyData.resultData"
               v-bind:results="questionData"
               v-bind:navigation.sync="navigationData"
               v-on:saveQuestions="saveQuestions"
               v-on:toggleModal="toggleModal"
             />
             <Result
-              v-else-if="this.$store.state.questionnaire.surveyData.result"
+              v-else-if="this.$store.state.questionnaire.surveyData.resultData"
             />
           </transition>
         </form>

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import Cookies from 'js-cookie'
 import authentication from './modules/authentication'
+import user from './modules/user'
 import questionnaire from './modules/questionnaire'
 
 Vue.use(Vuex)
@@ -22,12 +23,13 @@ const vuexCookie = new VuexPersistence({
 const vuexSession = new VuexPersistence({
   storage: sessionStorage,
   modules: ['questionnaire'],
-  filter: mutation => mutation.type === 'setSurveyData'
+  filter: mutation => ['questionnaire/setSurveyMetaData'].includes(mutation.type)
 })
 
 export default new Vuex.Store({
   modules: {
     authentication,
+    user,
     questionnaire
   },
   plugins: [vuexCookie.plugin, vuexSession.plugin]

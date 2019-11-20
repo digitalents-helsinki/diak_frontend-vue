@@ -28,8 +28,8 @@
           v-bind:label="$t('message.userAge')"
           label-for="birthday"
         >
-          <Datepicker id="birthday" @input="$emit('updateInfo', {birthdate: $event})" :value="personalinfo.birthdate" :language="fi" :monday-first="true" initial-view="year" calendar-class="ageCalendar" v-bind:placeholder="$t('message.datePlaceholder')"></Datepicker>
-        <b-form-invalid-feedback :state="infovalidation.birthdate" class="birthDateRequired">
+          <Datepicker id="birthday" @input="$emit('updateInfo', {birthDate: $event})" :value="personalinfo.birthDate" :language="fi" :monday-first="true" initial-view="year" calendar-class="ageCalendar" v-bind:placeholder="$t('message.datePlaceholder')"></Datepicker>
+        <b-form-invalid-feedback :state="infovalidation.birthDate" class="birthDateRequired">
             {{ $t('message.birthDateInfo') }}
         </b-form-invalid-feedback>
         </b-form-group>
@@ -53,8 +53,8 @@
           v-bind:label="$t('message.userPhonenumber')"
           label-for="enterphonenumber"
         >
-          <b-form-input id="enterphonenumber" @input="$emit('updateInfo', {phonenumber: $event})" :value="personalinfo.phonenumber" type="tel" name="enterphonenumber"></b-form-input>
-          <b-form-invalid-feedback :state="infovalidation.phonenumber" class="phonenumberRequired">
+          <b-form-input id="enterphonenumber" @input="$emit('updateInfo', {phoneNumber: $event})" :value="personalinfo.phoneNumber" type="tel" name="enterphonenumber"></b-form-input>
+          <b-form-invalid-feedback :state="infovalidation.phoneNumber" class="phonenumberRequired">
             {{ $t('message.phonenumberInfo') }}
           </b-form-invalid-feedback>
         </b-form-group>
@@ -63,7 +63,7 @@
           <b-button @click.prevent="signOut" class="submitIncluded">
             {{ 'Kirjaudu Ulos' }}
           </b-button>
-          <b-button v-if="!this.$store.state.questionnaire.fetch.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
+          <b-button v-if="!this.$store.state.questionnaire.meta.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.ProfilesubmitButton') }}
             <b-spinner v-if="infoSaved" class="saver" small/>
           </b-button>
@@ -107,9 +107,9 @@ export default {
       infovalidation: {
         name: null,
         address: null,
-        birthdate: null,
+        birthDate: null,
         gender: null,
-        phonenumber: null
+        phoneNumber: null
       },
       infoSaved: null,
       error: null
@@ -117,7 +117,7 @@ export default {
   },
   computed: {
     instruction() {
-      if (this.$store.state.questionnaire.fetch.surveyId) {
+      if (this.$store.state.questionnaire.meta.surveyId) {
         if (this.isFirstTime) return this.$t('message.infoInstruction')
         else return this.$t('message.infoInstructionOld')
       } else {
@@ -136,28 +136,30 @@ export default {
         }
       })
       if (Object.values(this.infovalidation).every(value => value === null)) {
-        axios({
-          method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.authentication.userId + "/info/update",
-          headers: {
-            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
-          },
-          data: {
-            personalinfo: this.personalinfo
-          }
-        }).then(res => {
-          if (res.status === 200) {
-            if (this.$store.state.questionnaire.fetch.surveyId) {
-              this.$emit('moveToQuestionnaire')
-            } else {
-              this.infoSaved = true
-              setTimeout(() => this.infoSaved = false, 1000)
+        this.infoSaved = true
+        try {
+          axios({
+            method: "POST",
+            url: process.env.VUE_APP_BACKEND + "/user/info/update",
+            headers: {
+              'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+            },
+            data: {
+              personalinfo: this.personalinfo
             }
-          }
-        }).catch(err => {
-          if (err.response) this.error = err.response.data
-          throw err
-        })
+          }).then(res => {
+            if (res.status === 200) {
+              if (this.$store.state.questionnaire.meta.surveyId) {
+                this.$emit('moveToQuestionnaire')
+              }
+            }
+          })
+        } catch(err) {
+            if (err.response) this.error = err.response.data
+            throw err
+        } finally {
+          setTimeout(() => this.infoSaved = false, 1000)
+        }
       }
     },
     signOut() {

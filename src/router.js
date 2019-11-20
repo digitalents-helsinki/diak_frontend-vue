@@ -67,7 +67,14 @@ export default new Router({
       path: '/user',
       name: 'user',
       component: User,
-      beforeEnter: loginGuard
+      async beforeEnter(to, from, next) {
+        if (store.state.authentication.loggedIn) {
+          await store.dispatch('user/fetchUserInfo')
+          next()
+        } else {
+          next('/login')
+        }
+      }
     },
     {
       path: '/password',
@@ -90,7 +97,7 @@ export default new Router({
       component: Questionnaire,
       props: true,
       async beforeEnter(to, from, next) {
-        store.commit('questionnaire/setSurveyFetch', {
+        store.commit('questionnaire/setSurveyMetaData', {
           surveyId: to.params.surveyId,
           anonId: to.params.anonId,
           anon: true
@@ -105,7 +112,7 @@ export default new Router({
       component: Questionnaire,
       props: true,
       async beforeEnter(to, from, next) {
-        store.commit('questionnaire/setSurveyFetch', {
+        store.commit('questionnaire/setSurveyMetaData', {
           surveyId: to.params.surveyId,
           anon: false
         })
