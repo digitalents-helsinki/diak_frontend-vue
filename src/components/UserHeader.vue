@@ -7,19 +7,16 @@
       <button v-if="questionnaire" @click="$emit('toggleModal', 'help')" class="btn buttonOhjeet">Ohjeet</button>
     </div>
     <div v-if="questionnaire" class="questionnaire-bottom">
-      <span v-if="this.$store.state.auth.loggedIn">Autentikoitu | {{surveyName}}</span>
-      <span v-else>Anonyymi | {{surveyName}}</span>
+      <span>{{ this.$store.state.questionnaire.meta.anon ? 'Anonyymi' : 'Autentikoitu'}} | {{this.$store.state.questionnaire.surveyData.name}}</span>
     </div>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  name: 'UserHeader',
+  name: 'Header',
   props: {
-    surveyName: {
-      type: String,
-      default: ''
-    },
     questionnaire: {
       type: Boolean,
       default: false

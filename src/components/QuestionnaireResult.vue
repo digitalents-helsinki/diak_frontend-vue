@@ -1,14 +1,13 @@
 <template>
 <div class="results">
   <h2>{{$t('message.questionnaireComparisonTitle')}}</h2>
-  <b-table small striped responsive :items="resultData">
-  </b-table>
+  <b-table small striped responsive :items="resultData"/>
   <div class="bottomDiv">
     <label v-if="!auth && !emailSent">Voit lähettää vastauksesi sähköpostiisi</label>
     <p v-else-if="emailSent">Tuloksesi on lähetetty sähköpostiisi</p>
     <p class="error" v-if="this.error">{{"Sähköpostin lähettäminen epäonnistui: " + this.error}}</p>
     <b-input-group v-if="!auth && !emailSent">
-      <b-input v-model="email" type="email" autocomplete="email" :state="(email && !!email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null" placeholder="Sähköpostiosoitteesi"/>
+      <b-input v-model="email" type="email" autocomplete="email" :state="(email && email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null" placeholder="Sähköpostiosoitteesi"/>
       <b-input-group-append>
         <b-button :disabled="!email || !email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)" @click="sendEmail" variant="primary">Lähetä</b-button>
       </b-input-group-append>
@@ -25,7 +24,6 @@ export default {
   name: 'results',
   data() {
     return {
-      resultData: null,
       email: null,
       emailSent: false,
       error: null
@@ -34,37 +32,32 @@ export default {
   computed: {
     auth() {
       return this.$route.name.includes('auth')
-    }
-  },
-  methods: {
-    getResults() {
-      axios({
-        method: 'GET', 
-        url: `${process.env.VUE_APP_BACKEND}/${this.auth ? 'auth' : 'anon'}/result/${this.$route.params.surveyId}/${this.auth ? '' : this.$route.params.anonId}`,
-        headers: {
-          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
-        }
-      }).then(res => {
+    },
+    resultData() {
+      if (this.$store.state.questionnaire.surveyData.resultData) {
         const comparisonQuestion = this.$t('message.questionnaireComparisonQuestion')
         const comparisonAnswer = this.$t('message.questionnaireComparisonAnswer')
         const comparisonAvg = this.$t('message.questionnaireComparisonAvg')
-        this.resultData = res.data.Result.Questions.reduce((arr, question) => {
-          arr[question.number - 1] = {
+        return this.$store.state.questionnaire.surveyData.resultData.map(question => {
+          return {
             [comparisonQuestion]: !question.name.endsWith("_custom") ? this.$t(`message.${question.name}_title`) : question.title,
-            [comparisonAnswer]: question.Answers[0].value !== null ? question.Answers[0].value : '-',
-            [comparisonAvg]: (avg => avg ? Number(avg).toFixed(2) : '-')(res.data.Averages.find(obj => obj.number === question.number).answerAvg)
+            [comparisonAnswer]: question.answer,
+            [comparisonAvg]: question.avg
           }
-          return arr
-        }, []).filter(question => question)
-      })
-    },
+        })
+      } else {
+        return null
+      }
+    }
+  },
+  methods: {
     sendEmail() {
       if (this.auth || (this.email && this.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/))){
         axios({
           method: "POST",
           url: `${process.env.VUE_APP_BACKEND }/${this.auth ? 'auth' : 'anon'}/emailresult`,
           headers: {
-            'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
+            'Authorization': `Bearer ${this.auth ? this.$store.state.authentication.accessToken : ''}`
           },
           data: {
             anonId: this.$route.params.anonId,
@@ -83,9 +76,6 @@ export default {
       this.$store.commit('logout')
       this.$router.push({ path: '/' })
     }
-  },
-  created() {
-    this.getResults()
   }
 }
 </script>

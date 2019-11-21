@@ -158,7 +158,7 @@ export const fi = {
     passwordInput:'Salasana vaaditaan',
     passwordconfirmInput:'Salasanat eivät täsmää',
     firstandfamilynameInfo:'Etunimi ja sukunimi vaaditaan',
-    addressInfo:'Osoite vaaditaan',
+    postNumberInfo:'Postinumero vaaditaan',
     birthDateInfo: 'Syntymäaika vaaditaan',
     genderInfo:'Sukupuoli vaaditaan',
     phonenumberInfo:'Puhelinnumero vaaditaan',
@@ -184,6 +184,7 @@ export const fi = {
     questionnaireComparisonAnswer: 'Vastauksesi',
     questionnaireComparisonAvg: 'Keskiarvo',
     browseFiles: 'Selaa',
+    somethingWentWrong: 'Jokin meni pieleen...',
     instructionInfo:'Hei, täytäthän lyhyen tietolomakkeen ennenkuin jatkat eteenpäin.',
     anonymousUser:'Ikä',
     ageInfo:'Ikä vaaditaan'
