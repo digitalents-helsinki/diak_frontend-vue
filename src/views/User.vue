@@ -38,7 +38,7 @@ export default {
       isFirstTime: false,
       personalinfo: {
         name: null,
-        address: null,
+        postnumber: null,
         birthdate: null,
         gender:null,
         phonenumber: null
@@ -58,7 +58,7 @@ export default {
         if (res.status === 200) {
           this.isFirstTime = !res.data.name
           this.personalinfo.name = res.data.name
-          this.personalinfo.address = res.data.address
+          this.personalinfo.postnumber = res.data.post_number
           this.personalinfo.birthdate = res.data.birth_date
           this.personalinfo.gender = res.data.gender
           this.personalinfo.phonenumber = res.data.phone_number

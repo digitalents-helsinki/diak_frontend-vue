@@ -125,7 +125,7 @@ export const fi = {
     noSurveyInfoInstructionOld: 'Voit tarkistaa henkilötietojesi olevan oikein.',
     ProfilesubmitButton:'Tallenna',
     userName:'Etunimi ja sukunimi',
-    userAddress:'Osoite',
+    userPostnumber:'Postinumero',
     userAge:'Syntymäaika',
     userGender:'Sukupuoli',
     userPhonenumber:'Puhelinnumero',
@@ -189,6 +189,9 @@ export const fi = {
     questionnaireComparisonQuestion: 'Kysymys',
     questionnaireComparisonAnswer: 'Vastauksesi',
     questionnaireComparisonAvg: 'Keskiarvo',
-    browseFiles: 'Selaa'
+    browseFiles: 'Selaa',
+    instructionInfo:'Hei, täytäthän lyhyen tietolomakkeen ennenkuin jatkat eteenpäin.',
+    anonymousUser:'Ikä',
+    ageInfo:'Ikä vaaditaan'
   }
 }
