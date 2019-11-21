@@ -165,6 +165,7 @@
 import axios from 'axios'
 import Datepicker from 'vuejs-datepicker'
 import { fi } from 'vuejs-datepicker/dist/locale'
+import store from '@/store'
 
 export default {
     name: 'admin-create',
@@ -347,7 +348,8 @@ export default {
                     url: process.env.VUE_APP_BACKEND + "/survey/create",
                     data: { 
                         to: this.$data.emails, 
-                        id: this.$data.surveyName, 
+                        id: this.$data.surveyName,
+                        ownerId: store.state.auth.userId,
                         anon: this.$data.surveyAnon,
                         startDate: this.startDate,
                         endDate: this.endDate,

@@ -115,7 +115,8 @@ export default new Router({
     {
       path: '/admin',
       name: 'admin',
-      component: Admin
+      component: Admin,
+      beforeEnter: loginGuard
     }
   ]
 })
