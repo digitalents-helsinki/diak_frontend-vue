@@ -8,7 +8,7 @@
           v-bind:label="$t('message.userName')"
           label-for="firstandfamilyname"
         >
-          <b-form-input id="firstandfamilyname" @input="$emit('updateInfo', {name: $event})" :value="personalinfo.name" type="text" name="firstandfamilyname"></b-form-input>
+          <b-form-input id="firstandfamilyname" @input="$emit('updateInfo', {name: $event})" :value="personalInfo.name" type="text" name="firstandfamilyname"></b-form-input>
           <b-form-invalid-feedback :state="infovalidation.name" class="nameRequired">
             {{ $t('message.firstandfamilynameInfo') }}
           </b-form-invalid-feedback>
@@ -18,9 +18,9 @@
           v-bind:label="$t('message.userPostnumber')"
           label-for="enterpostnumber"
         >
-          <b-form-input id="enterpostnumber" @input="$emit('updateInfo', {postNumber: $event})" :value="personalinfo.postNumber" type="text" name="enterpostnumber"></b-form-input>
+          <b-form-input id="enterpostnumber" @input="$emit('updateInfo', {postNumber: $event})" :value="personalInfo.postNumber" type="text" name="enterpostnumber"></b-form-input>
           <b-form-invalid-feedback :state="infovalidation.postNumber" class="postnumberRequired">
-            {{ $t('message.postnumberInfo') }}
+            {{ $t('message.postNumberInfo') }}
           </b-form-invalid-feedback>
         </b-form-group>
         <b-form-group
@@ -28,7 +28,7 @@
           v-bind:label="$t('message.userAge')"
           label-for="birthday"
         >
-          <Datepicker id="birthday" @input="$emit('updateInfo', {birthDate: $event})" :value="personalinfo.birthDate" :language="fi" :monday-first="true" initial-view="year" calendar-class="ageCalendar" v-bind:placeholder="$t('message.datePlaceholder')"></Datepicker>
+          <Datepicker id="birthday" @input="$emit('updateInfo', {birthDate: $event})" :value="personalInfo.birthDate" :language="fi" :monday-first="true" initial-view="year" calendar-class="ageCalendar" v-bind:placeholder="$t('message.datePlaceholder')"></Datepicker>
         <b-form-invalid-feedback :state="infovalidation.birthDate" class="birthDateRequired">
             {{ $t('message.birthDateInfo') }}
         </b-form-invalid-feedback>
@@ -42,7 +42,7 @@
             id="genderEnter"
             :options="gender.fi"
             @input="$emit('updateInfo', {gender: $event})"
-            :value="personalinfo.gender"
+            :value="personalInfo.gender"
           ></b-form-select>
           <b-form-invalid-feedback :state="infovalidation.gender" class="genderRequired">
             {{ $t('message.genderInfo') }}
@@ -53,7 +53,7 @@
           v-bind:label="$t('message.userPhonenumber')"
           label-for="enterphonenumber"
         >
-          <b-form-input id="enterphonenumber" @input="$emit('updateInfo', {phoneNumber: $event})" :value="personalinfo.phoneNumber" type="tel" name="enterphonenumber"></b-form-input>
+          <b-form-input id="enterphonenumber" @input="$emit('updateInfo', {phoneNumber: $event})" :value="personalInfo.phoneNumber" type="tel" name="enterphonenumber"></b-form-input>
           <b-form-invalid-feedback :state="infovalidation.phoneNumber" class="phonenumberRequired">
             {{ $t('message.phonenumberInfo') }}
           </b-form-invalid-feedback>
@@ -83,7 +83,7 @@ import { fi } from 'vuejs-datepicker/dist/locale'
 export default {
   name: 'PersonalInfo',
   props: {
-    personalinfo: {
+    personalInfo: {
       type: Object,
       required: true
     },
@@ -106,8 +106,8 @@ export default {
       },
       infovalidation: {
         name: null,
-        postnumber: null,
-        birthdate: null,
+        postNumber: null,
+        birthDate: null,
         gender: null,
         phoneNumber: null
       },
@@ -129,7 +129,7 @@ export default {
   methods: {
     postInfo() {
       Object.keys(this.infovalidation).forEach(key => {
-        if (this.personalinfo[key]) {
+        if (this.personalInfo[key]) {
           this.infovalidation[key] = null
         } else {
           this.infovalidation[key] = false
@@ -145,7 +145,7 @@ export default {
               'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
             },
             data: {
-              personalinfo: this.personalinfo
+              personalInfo: this.personalInfo
             }
           }).then(res => {
             if (res.status === 200) {

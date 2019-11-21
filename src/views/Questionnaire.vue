@@ -11,7 +11,7 @@
         v-on:toggleModal="toggleModal"
       />
       <div class="questionnaire container text-center shadow-lg">
-        <div class="loader-spinner-container" v-if="!currentQuestionData && questionnum < navigationData.questionamount && !result || resultSending">
+        <div class="loader-spinner-container" v-if="questionnum !== null && !currentQuestionData && questionnum < navigationData.questionamount || resultSending">
           <b-spinner label="Loading..." />
         </div>
         <form v-if="!resultSending">

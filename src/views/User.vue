@@ -7,7 +7,7 @@
         />
         <PersonalInfo
           v-else
-          v-bind:personalinfo="personalInfo"
+          v-bind:personalInfo="personalInfo"
           v-bind:isFirstTime="isFirstTime"
           v-on:updateInfo="updateInfo"
           v-on:moveToQuestionnaire="moveToQuestionnaire"

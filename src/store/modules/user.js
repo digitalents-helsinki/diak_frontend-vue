@@ -23,7 +23,7 @@ export default {
     },
     setAuthUserPersonalInfo(state, personalInfo) {
       state.authUser.personalInfo.name = personalInfo.name
-      state.authUser.personalInfo.postNumber = personalInfo.postNumber
+      state.authUser.personalInfo.postNumber = personalInfo.post_number
       state.authUser.personalInfo.birthDate = personalInfo.birth_date
       state.authUser.personalInfo.gender = personalInfo.gender
       state.authUser.personalInfo.phoneNumber = personalInfo.phone_number
