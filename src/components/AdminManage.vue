@@ -361,7 +361,7 @@ export default {
   },
   methods: {
     async getSurveys() {
-      const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/all")
+      const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/" + this.$store.state.authentication.userId)
       this.$data.surveys = res.data
       this.$data.loaded = true
     },

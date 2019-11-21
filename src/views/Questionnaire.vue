@@ -11,7 +11,10 @@
         v-on:toggleModal="toggleModal"
       />
       <div class="questionnaire container text-center shadow-lg">
-        <form>
+        <div class="loader-spinner-container" v-if="!currentQuestionData && questionnum < navigationData.questionamount && !result || resultSending">
+          <b-spinner label="Loading..." />
+        </div>
+        <form v-if="!resultSending">
           <transition name="fade" mode="out-in">
             <Question
               v-if="currentQuestionData"
@@ -63,7 +66,8 @@ export default {
   data() {
     return {
       questionnum: null,
-      modal_visible: null
+      modal_visible: null,
+      resultSending: false
     };
   },
   computed: {
@@ -110,27 +114,31 @@ export default {
       //
     },
     saveQuestions() {
-
+      this.resultSending = true
       const isAnon = this.$route.name === 'questionnaire-anon'
       const post = isAnon ? "/anon/result/create" : "/auth/result/create"
-      const push = isAnon ? '/anon/results' : '/auth/results'
-
-      axios({
-        method: "POST",
-        url: process.env.VUE_APP_BACKEND + post,
-        headers: {
-          'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
-        },
-        data: {
-          anonId: this.$route.params.anonId,
-          surveyId: this.$route.params.surveyId,
-          answers: [...this.questionData]
-        }
-      }).then(res => {
+      try {
+        axios({
+          method: "POST",
+          url: process.env.VUE_APP_BACKEND + post,
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+          },
+          data: {
+            anonId: this.$route.params.anonId,
+            surveyId: this.$route.params.surveyId,
+            answers: [...this.questionData]
+          }
+        }).then(res => {
           if (res.data.status === "ok") {
             this.$store.dispatch('questionnaire/fetchResult')
           }
         })
+      } catch(err) {
+        throw err
+      } finally {
+        this.resultSending = false
+      }
     },
     saveUnfinishedAnswers() {
       const post = this.$route.name === 'questionnaire-anon' ? "/anon/result/save": "/auth/result/save"

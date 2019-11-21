@@ -14,13 +14,13 @@
           </b-form-invalid-feedback>
         </b-form-group>
         <b-form-group
-          id="addressField"
-          v-bind:label="$t('message.userAddress')"
-          label-for="enteraddress"
+          id="postnumberField"
+          v-bind:label="$t('message.userPostnumber')"
+          label-for="enterpostnumber"
         >
-          <b-form-input id="enteraddress" @input="$emit('updateInfo', {address: $event})" :value="personalinfo.address" type="text" name="enteraddress"></b-form-input>
-          <b-form-invalid-feedback :state="infovalidation.address" class="addressRequired">
-            {{ $t('message.addressInfo') }}
+          <b-form-input id="enterpostnumber" @input="$emit('updateInfo', {postNumber: $event})" :value="personalinfo.postNumber" type="text" name="enterpostnumber"></b-form-input>
+          <b-form-invalid-feedback :state="infovalidation.postNumber" class="postnumberRequired">
+            {{ $t('message.postnumberInfo') }}
           </b-form-invalid-feedback>
         </b-form-group>
         <b-form-group
@@ -106,8 +106,8 @@ export default {
       },
       infovalidation: {
         name: null,
-        address: null,
-        birthDate: null,
+        postnumber: null,
+        birthdate: null,
         gender: null,
         phoneNumber: null
       },
@@ -192,7 +192,7 @@ export default {
     font-size:1rem;
   }
 
-  .addressRequired {
+  .postnumberRequired {
     font-size:1rem;
   }
 

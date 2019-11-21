@@ -10,7 +10,7 @@ export default {
       firstTime: null,
       personalInfo: {
         name: null,
-        address: null,
+        postNumber: null,
         birthDate: null,
         gender: null,
         phoneNumber: null
@@ -23,7 +23,7 @@ export default {
     },
     setAuthUserPersonalInfo(state, personalInfo) {
       state.authUser.personalInfo.name = personalInfo.name
-      state.authUser.personalInfo.address = personalInfo.address
+      state.authUser.personalInfo.postNumber = personalInfo.postNumber
       state.authUser.personalInfo.birthDate = personalInfo.birth_date
       state.authUser.personalInfo.gender = personalInfo.gender
       state.authUser.personalInfo.phoneNumber = personalInfo.phone_number

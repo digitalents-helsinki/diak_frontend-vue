@@ -16,6 +16,7 @@
                     v-model="surveyName"
                     v-bind:state="surveyNameState === null ? null : surveyName ? true : false"
                     type="text"
+                    maxlength="100"
                     name="forminputName"
                     v-bind:placeholder="$t('message.namePlaceholder')"
                 />
@@ -346,7 +347,8 @@ export default {
                     url: process.env.VUE_APP_BACKEND + "/survey/create",
                     data: { 
                         to: this.$data.emails, 
-                        id: this.$data.surveyName, 
+                        id: this.$data.surveyName,
+                        ownerId: this.$store.state.authentication.userId,
                         anon: this.$data.surveyAnon,
                         startDate: this.startDate,
                         endDate: this.endDate,
