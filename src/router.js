@@ -12,9 +12,12 @@ import Supervisor from '@/views/Supervisor.vue'
 
 Vue.use(Router)
 
-function loginGuard(to, from, next) {
-  if (store.state.authentication.loggedIn) {
-    next()
+/* passes error into next in async guards */
+const wrapAsync = fn => (...args) => Promise.resolve(fn(...args)).catch(args[2])
+
+function adminGuard(to, from, next) {
+  if (store.state.authentication.role === 'admin') {
+    next() 
   } else {
     next('/login')
   }
@@ -28,7 +31,7 @@ function loggedInGuard(to, from, next) {
   }
 }
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -96,39 +99,46 @@ export default new Router({
       name: 'questionnaire-anon',
       component: Questionnaire,
       props: true,
-      async beforeEnter(to, from, next) {
+      beforeEnter: wrapAsync(async (to, from, next) => {
         store.commit('questionnaire/setSurveyMetaData', {
           surveyId: to.params.surveyId,
           anonId: to.params.anonId,
           anon: true
         })
-        await store.dispatch('questionnaire/fetchSurvey').catch(err => console.error(err))
+        await store.dispatch('questionnaire/fetchSurvey')
         next()
-      }
+      })
     },
     {
       path: '/auth/questionnaire/:surveyId/:userId?',
       name: 'questionnaire-auth',
       component: Questionnaire,
       props: true,
-      async beforeEnter(to, from, next) {
+      beforeEnter: wrapAsync(async (to, from, next) => {
         store.commit('questionnaire/setSurveyMetaData', {
           surveyId: to.params.surveyId,
           anon: false
         })
         if (store.state.authentication.loggedIn) {
-          await store.dispatch('questionnaire/fetchSurvey').catch(err => console.error(err))
+          await store.dispatch('questionnaire/fetchSurvey')
           next()
         } else {
           next('/login')
         }
-      }
+      })
     },
     {
       path: '/admin',
       name: 'admin',
       component: Admin,
-      beforeEnter: loginGuard
+      beforeEnter: adminGuard
     }
   ]
 })
+
+router.onError(err => {
+  console.error(err)
+  router.replace('/error')
+})
+
+export default router

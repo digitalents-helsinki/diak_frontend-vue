@@ -345,6 +345,9 @@ export default {
                 axios({
                     method: "POST",
                     url: process.env.VUE_APP_BACKEND + "/survey/create",
+                    headers: {
+                        'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+                    },
                     data: { 
                         to: this.$data.emails, 
                         id: this.$data.surveyName,

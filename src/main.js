@@ -7,7 +7,7 @@ import VueI18n from 'vue-i18n'
 import VueMoment from 'vue-moment'
 import { messages } from './translation'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle} from '@fortawesome/free-solid-svg-icons'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
 import { faPencilAlt} from '@fortawesome/free-solid-svg-icons'
@@ -55,6 +55,7 @@ library.add(faUserSlash)
 library.add(faUserCheck)
 library.add(faChevronRight)
 library.add(faChevronLeft)
+library.add(faCircle)
 
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {

@@ -92,7 +92,13 @@ export default {
   methods: {
     async getResults() {
       try {
-        const res = await axios.get(process.env.VUE_APP_BACKEND + "/results/" + this.surveyId).catch(err => {
+        const res = await axios({
+          method: 'GET', 
+          url: process.env.VUE_APP_BACKEND + "/admin/results/" + this.surveyId,
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+          }
+        }).catch(err => {
           console.error(err)
           throw new Error("fetch failed")
         })

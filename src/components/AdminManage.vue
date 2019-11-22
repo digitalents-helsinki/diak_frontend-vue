@@ -40,19 +40,19 @@
               <font-awesome-icon icon="user-check" class="instruction-indicator-icon" /><p>Autentikoitu</p>
             </div>
             <div class="instructiondiv">
-              <p class="active-instruction">Käynnissä</p>
+              <font-awesome-icon icon="circle" style="color: rgb(0, 194, 0);" class="instruction-indicator-icon-circle" /><p>Käynnissä</p>
             </div>
             <div class="instructiondiv">
-              <p class="starting-instruction">Tuleva</p>
+              <font-awesome-icon icon="circle" style="color: yellow;" class="instruction-indicator-icon-circle" /><p>Tuleva</p>
             </div>
             <div class="instructiondiv">
-              <p class="ended-instruction">Päättynyt</p>
+              <font-awesome-icon icon="circle" style="color: orange;" class="instruction-indicator-icon-circle" /><p>Päättynyt</p>
             </div>
             <div class="instructiondiv">
-              <p class="prevented-instruction">Suljettu</p>
+              <font-awesome-icon icon="circle" style="color: crimson;" class="instruction-indicator-icon-circle" /><p>Suljettu</p>
             </div>
             <div class="instructiondiv">
-              <p class="archived-instruction">Arkistoitu</p>
+              <font-awesome-icon icon="circle" style="color: grey;" class="instruction-indicator-icon-circle" /><p>Arkistoitu</p>
             </div>
           </div>
         </transition>
@@ -84,11 +84,13 @@
         <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
           <div v-bind:key="field.key" class="surveyTableCel">
             <div v-if="field.colType === 'name'">
-              <span v-if="data.item.name.length <= 20" class="surveyName" :data-indicatorcolor="data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'">
+              <span v-if="data.item.name.length <= 20" class="surveyName">
+                <font-awesome-icon icon="circle" class="indicator-icon" :data-indicatorcolor="data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'"/>
                 <font-awesome-icon :icon="data.item.anon ? 'user-slash' : 'user-check'" class="indicator-icon"/>
                 {{data.item.name}}
               </span>
-              <span v-else v-b-tooltip="data.item.name" tabindex="0" class="surveyName" :data-indicatorcolor="data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'">
+              <span v-else v-b-tooltip="data.item.name" tabindex="0" class="surveyName">
+                <font-awesome-icon icon="circle" class="indicator-icon" :data-indicatorcolor="data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'"/>
                 <font-awesome-icon :icon="data.item.anon ? 'user-slash' : 'user-check'" class="indicator-icon"/>
                 {{data.item.name.substring(0, 17) + '...'}}
               </span>
@@ -361,8 +363,14 @@ export default {
   },
   methods: {
     async getSurveys() {
-      const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/" + this.$store.state.authentication.userId)
-      this.$data.surveys = res.data
+      const { data } = await axios({
+        method: 'GET', 
+        url: process.env.VUE_APP_BACKEND + "/admin/survey/all",
+        headers: {
+          'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+        }
+      })
+      this.$data.surveys = data
       this.$data.loaded = true
     },
     updateSurvey(updatedSurvey) {
@@ -524,36 +532,31 @@ export default {
       width: 1rem;
       height: 1rem;
       margin-right: 0.25rem;
-    }
 
-    &[data-indicatorcolor="green"]:before {
-      content: "\26AB";
-      margin-right: 0.5rem;
-      color: rgb(0, 194, 0);
-    }
+      &[data-icon="circle"] {
+        width: 0.5rem;
+        margin-right: 0.5rem;
 
-    &[data-indicatorcolor="orange"]:before {
-      content: '\26AB';
-      margin-right: 0.5rem;
-      color: orange;
-    }
+        &[data-indicatorcolor="green"] {
+          color: rgb(0, 194, 0);
+        }
 
-    &[data-indicatorcolor="yellow"]:before {
-      content: "\26AB";
-      margin-right: 0.5rem;
-      color: yellow;
-    }
+        &[data-indicatorcolor="orange"] {
+          color: orange;
+        }
 
-    &[data-indicatorcolor="red"]:before {
-      content: "\26AB";
-      margin-right: 0.5rem;
-      color: crimson;
-    }
+        &[data-indicatorcolor="yellow"] {
+          color: yellow;
+        }
 
-    &[data-indicatorcolor="grey"]:before {
-      content: "\26AB";
-      margin-right: 0.5rem;
-      color: grey;
+        &[data-indicatorcolor="red"] {
+          color: crimson;
+        }
+
+        &[data-indicatorcolor="grey"]:before {
+          color: grey;
+        }
+      }
     }
   }
 
@@ -845,8 +848,12 @@ export default {
             width: 1rem;
             height: 1rem;
             margin-right: 0.5rem;
-          }
 
+            &-circle {
+              width: 0.5rem;
+              transform: translateX(25%);
+            }
+          }
           
           p {
             margin-bottom: 0;

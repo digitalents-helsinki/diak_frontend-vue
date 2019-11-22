@@ -78,7 +78,7 @@ export default {
       }, [])
       state.surveyData.questionData = questionData
     },
-    setSurveyResult(state, { Result, Averages }) {
+    setSurveyResultData(state, { Result, Averages }) {
       const resultData = Result.Questions.reduce((arr, question) => {
         arr[question.number - 1] = {
           name: question.name,
@@ -138,7 +138,7 @@ export default {
           message: Result.message
         })
 
-        commit('setSurveyResult', { Result, Averages })
+        commit('setSurveyResultData', { Result, Averages })
       } else {
         commit('setSurveyInfo', {
           name: Survey.name,
@@ -161,7 +161,7 @@ export default {
         throw err
       })
 
-      commit('setSurveyResult', data)
+      commit('setSurveyResultData', data)
     }
   }
 }
