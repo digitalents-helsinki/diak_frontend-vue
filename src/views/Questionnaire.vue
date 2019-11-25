@@ -276,6 +276,7 @@ export default {
   overflow: auto;
   overflow-x: hidden; //transition
   border-radius: 14px;
+  -webkit-tap-highlight-color: transparent;
 
   .errormessageDisplay{
     margin-top:2rem;
