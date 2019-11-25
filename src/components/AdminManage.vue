@@ -156,6 +156,8 @@
           <b-input
             :placeholder="$t('message.modifySurveyAddRespondent')"
             v-model="modify.currentRespondent"
+            :state="(modify.currentRespondent && modify.currentRespondent.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null"
+            type="email"
           />
           <b-input-group-append>
             <b-button @click="addRespondent" class="addRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
@@ -449,7 +451,8 @@ export default {
     addRespondent() {
       if (!this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.includes(this.modify.currentRespondent) && 
           !this.modify.surveyRespondents.includes(this.modify.currentRespondent) &&
-          this.modify.currentRespondent) {
+          this.modify.currentRespondent &&
+          this.modify.currentRespondent.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
             this.modify.surveyRespondents.push(this.modify.currentRespondent)
             this.modify.currentRespondent = null
       }

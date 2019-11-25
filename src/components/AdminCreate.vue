@@ -120,13 +120,13 @@
                     <div class="moreroundedButton">
                         <font-awesome-icon icon="users" class="iconmoreEmail"/>
                         <b-form-file v-model="groupInputFile" accept="text/plain;charset=UTF-8" :browse-text="$t('message.browseFiles')" class="btn moreEmail-button" :placeholder="$t('message.moreEmail')"></b-form-file>
-                        <button class="btn roundedButton"> ? </button>
+                        <button class="btn roundedButton" v-b-popover.focus="'Voit antaa vastaajat listana. Lista on yksinkertainen tekstitiedosto (.txt), jossa sähköpostisoitteet ovat peräkkäin yksi osoite per rivi.'" > ? </button>
                     </div>
                 </div>
                 <div class="emailContent">
                     <div class="emailcontentTop">
                         <b-input-group class="writeinEmail">
-                            <b-input v-model="email" type="email" v-bind:placeholder="$t('message.emailPlaceholder')"/>
+                            <b-input v-model="email" type="email" :state="(email && email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null" v-bind:placeholder="$t('message.emailPlaceholder')"/>
                             <b-input-group-append>
                                 <b-button @click="addEmail" class="insertemailButton">{{ $t('message.insertmoreEmail') }}<font-awesome-icon icon="plus" class="moreemailPlus"/></b-button>
                             </b-input-group-append>
@@ -259,7 +259,20 @@ export default {
             if (val !== null) {
                 const fileReader = new FileReader()
                 fileReader.onload = e => {
-                    this.$data.emails = [...new Set([...this.$data.emails, ...e.target.result.split(/\r?\n/).filter(email => email)])]
+                    const emails = [...new Set([...this.$data.emails, ...e.target.result.split(/\r?\n/).filter(email => email)])]
+                    this.$data.emails = emails.filter(email => {
+                        if (email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
+                            return true
+                        } else {
+                            this.$bvToast.toast(`${email}`, {
+                                title: 'Epäkelpo sähköpostiosoite',
+                                toaster: 'b-toaster-bottom-right',
+                                variant: 'danger',
+                                noAutoHide: true
+                            })
+                            return false
+                        }
+                    })
                     this.$data.groupInputFile = null
                 }
                 fileReader.readAsText(val)
@@ -328,7 +341,7 @@ export default {
             this.$data.questions.splice(index, 1)
         },
         addEmail() {
-            if (!this.$data.emails.includes(this.$data.email)) {
+            if (!this.$data.emails.includes(this.$data.email) && this.$data.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
                 this.$data.emails.push(this.$data.email)
                 this.$data.email = null
             }
@@ -879,6 +892,7 @@ export default {
                     }
                         
                     .insertemailButton{
+                        background-color: #353535;
                         .moreemailPlus{
                             margin-left:1rem;
                         }
