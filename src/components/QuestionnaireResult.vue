@@ -15,6 +15,7 @@
     <b-button v-else-if="!emailSent" @click="sendEmail" variant="primary">Lähetä sähköpostiisi</b-button>
   </div>
   <b-button v-if="auth" class="logout" @click="signOut">Kirjaudu ulos</b-button>
+  <b-button v-else class="logout" @click="$router.push({ path: '/' })">Etusivulle</b-button>
 </div>
 </template>
 <script>
