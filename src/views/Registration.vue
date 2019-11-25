@@ -1,47 +1,47 @@
 <template>
 <LogoBox size="small">
   <template v-slot:content>
-          <div class="registrationTitle">
-            <p class="title">{{ $t('message.registerText') }}</p>
-            <div class="registrationForm">
-              <b-form>
-                <b-form-group id="namefield">
-                  <b-form-input type="email" v-model="registration.email" :state="registervalidation.email" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')">
-                  </b-form-input>
-                  <b-form-invalid-feedback :state="registervalidation.email" class="emailFeedback">
-                  {{ $t('message.emailInput') }}
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback :state="registervalidation.emailpattern" class="emailFeedback">
-                  {{ $t('message.patternInput') }}
-                  </b-form-invalid-feedback>
-                  </b-form-group>
-                  <b-form-group id="passwordfield">
-                  <b-form-input type="password" id="password" v-model="registration.password" :state="registervalidation.password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')">
-                  </b-form-input>
-                  <b-form-invalid-feedback :state="registervalidation.password.required" class="passwordFeedback">
-                  {{ $t('message.passwordInput') }}
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback :state="registervalidation.password.passwordlength" class="passwordFeedback">
-                  {{ $t('message.inputLength') }}
-                   </b-form-invalid-feedback>
-                </b-form-group>
-                <b-form-group id="retypefield">
-                  <b-form-input type="password" id="confirmpassword" v-model="registration.retypepassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')">
-                  </b-form-input>
-                  <b-form-invalid-feedback :state="registervalidation.retypepassword.required" class="passwordFeedback">
-                  {{ $t('message.passwordInput') }}
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback :state="registervalidation.confirmpassword" class="passwordFeedback">
-                  {{ $t('message.passwordconfirmInput') }}
-                   </b-form-invalid-feedback>
-                </b-form-group>
-                <b-button type="submit" @click.prevent="handleRegistration" class="btn registersubmitButton">{{ $t('message.submitRegister') }}</b-button>
-              </b-form>
-            </div>
-            <p class="registerinfo">{{ $t('message.registrationInfo') }}</p>
-            <p class="passwordinfo">{{ $t('message.minimumLength') }}</p>
-            <div class="backtologindiv"><p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p></div>
-          </div>
+    <div class="registrationTitle">
+      <p class="title">{{ $t('message.registerText') }}</p>
+      <div class="registrationForm">
+        <b-form>
+          <b-form-group id="namefield">
+            <b-form-input type="email" v-model="registration.email" :state="registervalidation.email" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')">
+            </b-form-input>
+            <b-form-invalid-feedback :state="registervalidation.email" class="emailFeedback">
+            {{ $t('message.emailInput') }}
+            </b-form-invalid-feedback>
+            <b-form-invalid-feedback :state="registervalidation.emailpattern" class="emailFeedback">
+            {{ $t('message.patternInput') }}
+            </b-form-invalid-feedback>
+            </b-form-group>
+            <b-form-group id="passwordfield">
+            <b-form-input type="password" id="password" v-model="registration.password" :state="registervalidation.password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')">
+            </b-form-input>
+            <b-form-invalid-feedback :state="registervalidation.password.required" class="passwordFeedback">
+            {{ $t('message.passwordInput') }}
+            </b-form-invalid-feedback>
+            <b-form-invalid-feedback :state="registervalidation.password.passwordlength" class="passwordFeedback">
+            {{ $t('message.inputLength') }}
+             </b-form-invalid-feedback>
+          </b-form-group>
+          <b-form-group id="retypefield">
+            <b-form-input type="password" id="confirmpassword" v-model="registration.retypepassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')">
+            </b-form-input>
+            <b-form-invalid-feedback :state="registervalidation.retypepassword.required" class="passwordFeedback">
+            {{ $t('message.passwordInput') }}
+            </b-form-invalid-feedback>
+            <b-form-invalid-feedback :state="registervalidation.confirmpassword" class="passwordFeedback">
+            {{ $t('message.passwordconfirmInput') }}
+             </b-form-invalid-feedback>
+          </b-form-group>
+          <b-button type="submit" @click.prevent="handleRegistration" class="btn registersubmitButton">{{ $t('message.submitRegister') }}</b-button>
+        </b-form>
+      </div>
+      <p class="registerinfo">{{ $t('message.registrationInfo') }}</p>
+      <p class="passwordinfo">{{ $t('message.minimumLength') }}</p>
+      <div class="backtologindiv"><p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p></div>
+    </div>
   </template>
 </LogoBox>
 </template>
@@ -118,7 +118,7 @@ export default {
             "Content-Type": "application/json"
           }
         }).then(res => {
-          if (res.data.success) {
+          if (res.status === 201) {
             this.$router.push({ name: 'login' })
           }
         })
