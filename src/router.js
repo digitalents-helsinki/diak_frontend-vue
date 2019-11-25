@@ -70,9 +70,9 @@ const router = new Router({
       path: '/user',
       name: 'user',
       component: User,
-      async beforeEnter(to, from, next) {
+      beforeEnter: (to, from, next) => {
         if (store.state.authentication.loggedIn) {
-          await store.dispatch('user/fetchUserInfo')
+          store.dispatch('user/fetchUserInfo')
           next()
         } else {
           next('/login')
@@ -99,33 +99,36 @@ const router = new Router({
       name: 'questionnaire-anon',
       component: Questionnaire,
       props: true,
-      beforeEnter: wrapAsync(async (to, from, next) => {
+      beforeEnter: (to, from, next) => {
         store.commit('questionnaire/setSurveyMetaData', {
           surveyId: to.params.surveyId,
           anonId: to.params.anonId,
           anon: true
         })
-        await store.dispatch('questionnaire/fetchSurvey')
+        store.dispatch('questionnaire/fetchSurvey')
         next()
-      })
+      }
     },
     {
       path: '/auth/questionnaire/:surveyId/:userId?',
       name: 'questionnaire-auth',
       component: Questionnaire,
       props: true,
-      beforeEnter: wrapAsync(async (to, from, next) => {
+      beforeEnter: (to, from, next) => {
         store.commit('questionnaire/setSurveyMetaData', {
           surveyId: to.params.surveyId,
           anon: false
         })
         if (store.state.authentication.loggedIn) {
-          await store.dispatch('questionnaire/fetchSurvey')
-          next()
+          if (from.name === 'user') {
+            next()
+          } else {
+            next('/user')
+          }
         } else {
           next('/login')
         }
-      })
+      }
     },
     {
       path: '/admin',

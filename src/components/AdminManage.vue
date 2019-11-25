@@ -391,6 +391,9 @@ export default {
         axios({
           method: "POST",
           url: process.env.VUE_APP_BACKEND + "/survey/delete",
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+          },
           data: {
             id: this.del.surveyId
           }
@@ -417,6 +420,9 @@ export default {
         axios({
           method: "POST",
           url: process.env.VUE_APP_BACKEND + "/survey/archive",
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+          },
           data: {
             id: this.archive.surveyId
           }
@@ -456,7 +462,10 @@ export default {
       if (this.modify.surveyId && this.modify.surveyName) {
         axios({
           method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/survey/update",
+          url: process.env.VUE_APP_BACKEND + "/admin/survey/update",
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+          },
           data: {
             surveyId: this.modify.surveyId,
             name: this.modify.surveyName,
@@ -553,7 +562,7 @@ export default {
           color: crimson;
         }
 
-        &[data-indicatorcolor="grey"]:before {
+        &[data-indicatorcolor="grey"] {
           color: grey;
         }
       }
