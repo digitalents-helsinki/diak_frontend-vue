@@ -74,6 +74,7 @@ export default {
 
         .survey-name {
           font-style: italic;
+          word-break: break-all;
         }
 
         .language {

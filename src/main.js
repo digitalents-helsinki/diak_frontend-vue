@@ -5,6 +5,8 @@ import store from './store/index'
 import BootstrapVue from 'bootstrap-vue'
 import VueI18n from 'vue-i18n'
 import VueMoment from 'vue-moment'
+import moment from 'moment'
+import 'moment/locale/fi'
 import { messages } from './translation'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle} from '@fortawesome/free-solid-svg-icons'
@@ -28,7 +30,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(VueI18n)
-Vue.use(VueMoment)
+Vue.use(VueMoment, {
+  moment
+})
 
 library.add(faTimesCircle)
 library.add(faAngleDown)
