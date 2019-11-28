@@ -7,9 +7,9 @@
     <p v-else-if="emailSent">Tuloksesi on lähetetty sähköpostiisi</p>
     <p class="error" v-if="this.error">{{"Sähköpostin lähettäminen epäonnistui: " + this.error}}</p>
     <b-input-group v-if="!auth && !emailSent">
-      <b-input v-model="email" type="email" autocomplete="email" :state="(email && email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null" placeholder="Sähköpostiosoitteesi"/>
+      <b-input v-model="email" type="email" autocomplete="email" placeholder="Sähköpostiosoitteesi"/>
       <b-input-group-append>
-        <b-button :disabled="!email || !email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)" @click="sendEmail" variant="primary">Lähetä</b-button>
+        <b-button :disabled="!email || !email.match(/.+@.+/)" @click="sendEmail" variant="primary">Lähetä</b-button>
       </b-input-group-append>
     </b-input-group>
     <b-button v-else-if="!emailSent" @click="sendEmail" variant="primary">Lähetä sähköpostiisi</b-button>
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     sendEmail() {
-      if (this.auth || (this.email && this.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/))){
+      if (this.auth || (this.email && this.email.match(/.+@.+/))){
         axios({
           method: "POST",
           url: `${process.env.VUE_APP_BACKEND }/${this.auth ? 'auth' : 'anon'}/emailresult`,

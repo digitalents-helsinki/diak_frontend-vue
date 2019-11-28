@@ -84,7 +84,7 @@ export default {
         return
       }
       this.registervalidation.emailpattern = null      
-      if (!this.registration.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
+      if (!this.registration.email.match(/.+@.+/)) {
         this.registervalidation.emailpattern = false
         return
       }

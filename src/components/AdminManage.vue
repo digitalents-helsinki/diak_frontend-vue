@@ -157,11 +157,10 @@
           <b-input
             :placeholder="$t('message.modifySurveyAddRespondent')"
             v-model="modify.currentRespondent"
-            :state="(modify.currentRespondent && modify.currentRespondent.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null"
             type="email"
           />
           <b-input-group-append>
-            <b-button @click="addRespondent" class="addRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
+            <b-button @click="addRespondent" :disabled="!modify.currentRespondent || !modify.currentRespondent.match(/.+@.+/)" class="addRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
           </b-input-group-append>
         </b-input-group>
         <ul class="respondentList" v-if="modify.surveyRespondents.length">
@@ -340,6 +339,11 @@ export default {
       set: function() {
         if (this.modify.surveyId) {
           this.modify.surveyId = null
+          this.modify.surveyName = null
+          this.modify.surveyEndDate = null
+          this.modify.surveyActivity = null
+          this.modify.surveyRespondents = []
+          this.modify.currentRespondent = null
         }
       }
     },
@@ -350,6 +354,8 @@ export default {
       set: function() {
         if (this.archive.surveyId) {
           this.archive.surveyId = null
+          this.archive.surveyName = null
+          this.archive.inputSurveyName = null
         }
       }
     },
@@ -360,6 +366,8 @@ export default {
       set: function() {
         if (this.del.surveyId) {
           this.del.surveyId = null
+          this.del.surveyName = null,
+          this.del.inputSurveyName = null
         }
       }
     }
@@ -456,10 +464,10 @@ export default {
       }
     },
     addRespondent() {
-      if (!this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.includes(this.modify.currentRespondent) && 
-          !this.modify.surveyRespondents.includes(this.modify.currentRespondent) &&
+      if (!this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.some(email => email.toLowerCase() === this.modify.currentRespondent.toLowerCase()) && 
+          !this.modify.surveyRespondents.some(email => email.toLowerCase() === this.modify.currentRespondent.toLowerCase()) &&
           this.modify.currentRespondent &&
-          this.modify.currentRespondent.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
+          this.modify.currentRespondent.match(/.+@.+/)) {
             this.modify.surveyRespondents.push(this.modify.currentRespondent)
             this.modify.currentRespondent = null
       }

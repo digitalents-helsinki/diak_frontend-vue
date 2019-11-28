@@ -126,9 +126,9 @@
                 <div class="emailContent">
                     <div class="emailcontentTop">
                         <b-input-group class="writeinEmail">
-                            <b-input v-model="email" type="email" :state="(email && email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) ? true : null" v-bind:placeholder="$t('message.emailPlaceholder')"/>
+                            <b-input v-model="email" type="email" v-bind:placeholder="$t('message.emailPlaceholder')"/>
                             <b-input-group-append>
-                                <b-button @click="addEmail" class="insertemailButton">{{ $t('message.insertmoreEmail') }}<font-awesome-icon icon="plus" class="moreemailPlus"/></b-button>
+                                <b-button @click="addEmail" :disabled="!email || !email.match(/.+@.+/)" class="insertemailButton">{{ $t('message.insertmoreEmail') }}<font-awesome-icon icon="plus" class="moreemailPlus"/></b-button>
                             </b-input-group-append>
                         </b-input-group>
                     </div>
@@ -259,20 +259,34 @@ export default {
             if (val !== null) {
                 const fileReader = new FileReader()
                 fileReader.onload = e => {
-                    const emails = [...new Set([...this.$data.emails, ...e.target.result.split(/\r?\n/).filter(email => email)])]
-                    this.$data.emails = emails.filter(email => {
-                        if (email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
-                            return true
-                        } else {
+                    const emails = [...this.$data.emails, ...e.target.result.split(/\r?\n/).filter(email => email)]
+                    
+                    let valid = true
+
+                    emails.forEach((email, index) => {
+                        if (!email.match(/.+@.+/)) {
                             this.$bvToast.toast(`${email}`, {
                                 title: 'Epäkelpo sähköpostiosoite',
                                 toaster: 'b-toaster-bottom-right',
                                 variant: 'danger',
                                 noAutoHide: true
                             })
-                            return false
+                            valid = false
                         }
+                        emails.forEach((Email, Index) => {
+                            if (index !== Index && email === Email && email.match(/.+@.+/) && Email.match(/.+@.+/)) {
+                                this.$bvToast.toast(`${email} - ${Email}`, {
+                                    title: 'Sähköposteissa kaksoiskappaleet',
+                                    toaster: 'b-toaster-bottom-right',
+                                    variant: 'danger',
+                                    noAutoHide: true
+                                })
+                                valid = false
+                            }
+                        })
                     })
+                    
+                    if (valid) this.$data.emails = emails
                     this.$data.groupInputFile = null
                 }
                 fileReader.readAsText(val)
@@ -341,7 +355,8 @@ export default {
             this.$data.questions.splice(index, 1)
         },
         addEmail() {
-            if (!this.$data.emails.includes(this.$data.email) && this.$data.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
+            if (!this.$data.emails.some(email => email.toLowerCase() === this.$data.email.toLowerCase()) 
+            && this.$data.email.match(/.+@.+/)) {
                 this.$data.emails.push(this.$data.email)
                 this.$data.email = null
             }
@@ -357,7 +372,7 @@ export default {
             } else {
                 axios({
                     method: "POST",
-                    url: process.env.VUE_APP_BACKEND + "/survey/create",
+                    url: process.env.VUE_APP_BACKEND + "/admin/survey/create",
                     headers: {
                         'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
                     },
@@ -382,11 +397,13 @@ export default {
                     }
                 })
                 .then(res => {
-                    if (res.data.success) this.$data.created = true
-                    else {
-                        this.$root.$emit('bv::show::popover', 'sendSurveyButton')
-                        setTimeout(() => this.$root.$emit('bv::hide::popover', 'sendSurveyButton'), 5000)
-                    }
+                    if (res.status === 200) this.$data.created = true
+                }).catch(err => {
+                    this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+                        title: this.$t('message.errorToastTitle'),
+                        toaster: 'b-toaster-bottom-right',
+                        variant: 'danger'
+                    })
                 })
             }
         },
@@ -900,6 +917,9 @@ export default {
                 }
                 .emaillistDiv{
                     .emailList{
+                        max-height: 50vh;
+                        overflow-y: scroll;
+
                         li {
                             width: 350px;
                             margin-bottom: 1rem;

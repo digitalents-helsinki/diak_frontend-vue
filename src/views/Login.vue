@@ -70,7 +70,7 @@ export default {
   methods: {
     handleLogin() {
       Object.keys(this.loginvalidation).forEach(key => this.loginvalidation[key] = null)
-      if (!this.login.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) this.loginvalidation.email = false
+      if (!this.login.email.match(/.+@.+/)) this.loginvalidation.email = false
       if (!this.login.password) this.loginvalidation.password = false
 
       const data = JSON.stringify({
