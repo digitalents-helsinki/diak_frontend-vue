@@ -187,6 +187,7 @@ export const fi = {
     somethingWentWrong: 'Jokin meni pieleen...',
     instructionInfo:'Hei, täytäthän lyhyen tietolomakkeen ennenkuin jatkat eteenpäin.',
     anonymousUser:'Ikä',
-    ageInfo:'Ikä vaaditaan'
+    ageInfo:'Ikä vaaditaan',
+    errorToastTitle: 'Virhe'
   }
 }

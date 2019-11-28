@@ -392,20 +392,23 @@ export default {
       bvModalEvt.preventDefault()
       if (this.del.surveyName === this.del.inputSurveyName) {
         axios({
-          method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/survey/delete",
+          method: "DELETE",
+          url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.del.surveyId + "/delete",
           headers: {
             'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
-          },
-          data: {
-            id: this.del.surveyId
           }
         }).then(res => {
-          if (res.data === "Survey deleted succesfully") {
+          if (res.status === 204) {
             const index = this.surveys.findIndex(survey => survey.surveyId === this.del.surveyId)
             if (~index) this.surveys.splice(index, 1)
             this.$nextTick(() => this.$refs.deleteSurveyModal.hide())
           }
+        }).catch(err => {
+          this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+            title: this.$t('message.errorToastTitle'),
+            toaster: 'b-toaster-bottom-right',
+            variant: 'danger'
+          })
         })
       }
     },
@@ -421,19 +424,22 @@ export default {
       bvModalEvt.preventDefault()
       if (this.archive.surveyName === this.archive.inputSurveyName) {
         axios({
-          method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/survey/archive",
+          method: "PATCH",
+          url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.archive.surveyId + "/archive",
           headers: {
             'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
-          },
-          data: {
-            id: this.archive.surveyId
           }
         }).then(res => {
-          if (res.data === "Survey archived succesfully") {
+          if (res.status === 204) {
             this.surveys.find(survey => survey.surveyId === this.archive.surveyId).archived = true
             this.$nextTick(() => this.$refs.archiveSurveyModal.hide())
           }
+        }).catch(err => {
+          this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+            title: this.$t('message.errorToastTitle'),
+            toaster: 'b-toaster-bottom-right',
+            variant: 'danger'
+          })
         })
       }
     },
@@ -465,13 +471,12 @@ export default {
       bvModalEvt.preventDefault()
       if (this.modify.surveyId && this.modify.surveyName) {
         axios({
-          method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/admin/survey/update",
+          method: "PATCH",
+          url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.modify.surveyId + "/update",
           headers: {
             'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           },
           data: {
-            surveyId: this.modify.surveyId,
             name: this.modify.surveyName,
             endDate: this.modify.surveyEndDate,
             active: this.modify.surveyActivity,
@@ -479,9 +484,16 @@ export default {
           }
         })
         .then(res => {
-          if (res.data === "Survey update failed") return
-          this.updateSurvey(res.data)
-          this.$nextTick(() => this.$refs.modifySurveyModal.hide())
+          if (res.status === 200) {
+            this.updateSurvey(res.data)
+            this.$nextTick(() => this.$refs.modifySurveyModal.hide())
+          }
+        }).catch(err => {
+          this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+            title: this.$t('message.errorToastTitle'),
+            toaster: 'b-toaster-bottom-right',
+            variant: 'danger'
+          })
         })
       }
     },
