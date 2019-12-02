@@ -24,40 +24,24 @@ export default {
     return {
       pagenum: 0,
       isFirstTime: false,
-      anonymousinfo: {
-        age:null,
-        Gender:null,
-      },
       error: null
     }
   },
+  computed: {
+    anonymousinfo() {
+      return this.$store.state.user.anonUser.anonymousinfo
+    }
+  },
   methods: {
-    async getUser() {
-      axios({
-        method: "GET",
-        url: process.env.VUE_APP_BACKEND + "/anonuser/" + this.$store.state.auth.userId,
-      }).then(res => {
-        if (res.status === 200) {
-          this.anonymousinfo.age = res.data.age
-          this.anonymousinfo.Gender = res.data.gender
-        }
-      }).catch(err => {
-        if (err.response) this.error = err.response.data
-        throw err
-      })
-    },
     updateInfo(object) {
-      Object.assign(this.anonymousinfo, object)
+      this.$store.commit('user/updateAnonUserPersonalInfo', object)
     },
     nextPage() {
       this.$data.pagenum++
     },
     moveToQuestionnaire() {
-      this.$router.push({ path: `/anon/questionnaire/${this.$store.state.survey.surveyId}/` })
+      this.$router.push({ path: `/anon/questionnaire/${this.$store.state.questionnaire.meta.surveyId}/${this.$store.state.questionnaire.meta.anonId}` })
     }
-  },
-  created() {
-    this.getUser()
   }
 }
 </script>

@@ -187,6 +187,10 @@ export const fi = {
     somethingWentWrong: 'Jokin meni pieleen...',
     instructionInfo:'Hei, täytäthän lyhyen tietolomakkeen ennenkuin jatkat eteenpäin.',
     anonymousUser:'Ikä',
-    ageInfo:'Ikä vaaditaan'
+    ageInfo:'Ikä vaaditaan',
+    submitandcontinuebutton:'Tallenna ja jatka',
+    recoveryEmail:'Sähköpostiosoite',
+    recoveryInfo:'Recover your forgotten password through adding your email address in the input field',
+  check:'Palauta unohtunut salasana lisäämällä sähköpostiosoitteesi syöttökenttään'
   }
 }

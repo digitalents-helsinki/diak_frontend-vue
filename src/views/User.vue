@@ -42,6 +42,9 @@ export default {
   computed: {
     personalInfo() {
       return this.$store.state.user.authUser.personalInfo
+    },
+    isFirstTime() {
+      return this.$store.state.user.authUser.firstTime
     }
   },
   methods: {
