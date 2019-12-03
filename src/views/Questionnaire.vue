@@ -1,21 +1,17 @@
 <template>
   <div :class="questionnum !== null ? 'background' : ''">
     <Introduction
-      v-if="questionnum === null"
-      v-bind:surveyName="surveyName"
-      v-bind:surveyMessage="surveyMessage"
+      v-if="questionnum === null && !this.$store.state.questionnaire.surveyData.resultData"
       v-on:moveToQuestionnaire="questionnum = 0"
     />
     <div v-else class="background">
       <Header
         v-bind:user="user"
-        v-bind:surveyName="surveyName"
         v-bind:questionnaire="true"
         v-on:toggleModal="toggleModal"
       />
       <div class="questionnaire container text-center shadow-lg">
-        <b-alert v-if="errormessage" show variant="danger" class="errormessageDisplay"><p>{{errormessage}}</p></b-alert>
-        <div class="loader-spinner-container" v-else-if="!currentQuestionData && questionnum < navigationData.questionamount && !result || resultSending">
+        <div class="loader-spinner-container" v-if="questionnum !== null && !currentQuestionData && questionnum < navigationData.questionamount || resultSending">
           <b-spinner label="Loading..." />
         </div>
         <form v-if="!resultSending">
@@ -27,14 +23,14 @@
               v-on:toggleModal="toggleModal"
             />
             <Review 
-              v-else-if="navigationData.questionamount <= questionnum && !result"
-              v-bind:results="questiondata"
+              v-else-if="navigationData.questionamount <= questionnum && !this.$store.state.questionnaire.surveyData.resultData"
+              v-bind:results="questionData"
               v-bind:navigation.sync="navigationData"
               v-on:saveQuestions="saveQuestions"
               v-on:toggleModal="toggleModal"
             />
             <Result
-              v-else-if="result"
+              v-else-if="this.$store.state.questionnaire.surveyData.resultData"
             />
           </transition>
         </form>
@@ -69,30 +65,28 @@ export default {
   },
   data() {
     return {
-      questiondata: [],
       questionnum: null,
       modal_visible: null,
-      surveyName: "",
-      surveyMessage: "",
-      errormessage: null,
-      result: null,
       resultSending: false
     };
   },
   computed: {
+    questionData() {
+      return this.$store.state.questionnaire.surveyData.questionData
+    },
     currentQuestionData: {
       get: function() {
-        if (this.questiondata[this.questionnum]) {
-          return this.questiondata[this.questionnum]
+        if (this.questionData && this.questionnum !== null && this.questionData[this.questionnum]) {
+          return this.questionData[this.questionnum]
         } else {
           return null
         }
       },
       set: function(keyValueArr) {
-        //set correct questiondata property
+        //set correct questiondata property in store
         const [ key, value ] = keyValueArr
-        if (this.questiondata[this.questionnum].propertyIsEnumerable(key)) {
-          this.questiondata[this.questionnum][key] = value
+        if (this.questionData[this.questionnum].propertyIsEnumerable(key)) {
+          this.$store.commit('questionnaire/answerQuestion', [key, value, this.questionnum])
         }
       }
     },
@@ -100,7 +94,7 @@ export default {
       get: function() {
         return ({
           questionnum: this.questionnum,
-          questionamount: this.questiondata.length || this.questionnum + 1
+          questionamount: this.questionData ? this.questionData.length : this.questionnum + 1
         })
       },
       set: function(operator) {
@@ -110,7 +104,7 @@ export default {
     }
   },
   methods: {
-    async getQuestions() {
+    async testQuestionnaire() {
 
       //FOR TESTING
       if (this.$route.name === "testsurvey") {
@@ -118,95 +112,33 @@ export default {
         if (params.status === 200) this.$router.push({ path: `/anon/questionnaire/${params.data.surveyId}/${params.data.anonId}` })
       }
       //
-
-      const isAnon = this.$route.name === 'questionnaire-anon'
-
-      const res = await axios({
-        method: 'GET',
-        url: process.env.VUE_APP_BACKEND + `/${isAnon ? 'anon' : 'auth'}/survey/${this.$route.params.surveyId}/${isAnon ? this.$route.params.anonId : ''}`,
-        headers: {
-          'Authorization': `Bearer ${isAnon ? "" : this.$store.state.auth.accessToken}`
-        }
-      }).catch(err => {
-        if (err.response) {
-          if (err.response.data === "User has already answered the survey") {
-            this.result = true
-            //this.$router.push({ path: `${isAnon ? '/anon/results' : '/auth/results'}/${this.$route.params.surveyId}/${this.$route.params.userId}` })
-          } else {
-            this.errormessage = err.response.data
-          }
-        }
-        else {
-          this.errormessage = "Unknown error"
-        }
-        throw err
-      })
-
-      const data = (() => {
-        if (res.data.savedAnswers.length) {
-          return res.data.Survey.Questions.map(question => {
-            return {
-              ...question,
-              answer: res.data.savedAnswers.find(obj => obj.QuestionQuestionId === question.questionId)
-            }
-          })
-        } else {
-          return res.data.Survey.Questions
-        }
-      })()
-
-      const reducedData = data.reduce((arr, question) => {
-        if(!question.name.endsWith("_custom")) {
-          arr[question.number - 1] = {
-            name: question.name,
-            val: !question.answer ? null: question.answer.value !== undefined ? question.answer.value : null,
-            desc: !question.answer ? null : question.answer.description !== undefined ? question.answer.description : null,
-            id: question.questionId
-          }
-        } else {
-          arr[question.number - 1] = {
-            name: question.name,
-            val: !question.answer ? null: question.answer.value !== undefined ? question.answer.value : null,
-            desc: !question.answer ? null : question.answer.description !== undefined ? question.answer.description : null,
-            id: question.questionId,
-            custom: {
-              title: question.title,
-              description: question.description,
-              help: question.help
-            }
-          }
-        }
-        return arr
-      }, []).filter(question => question)
-
-      this.surveyName = res.data.Survey.name
-      this.surveyMessage = res.data.Survey.message
-      this.questiondata = reducedData
     },
     saveQuestions() {
       this.resultSending = true
       const isAnon = this.$route.name === 'questionnaire-anon'
       const post = isAnon ? "/anon/result/create" : "/auth/result/create"
-      const push = isAnon ? '/anon/results' : '/auth/results'
-      axios({
-        method: "POST",
-        url: process.env.VUE_APP_BACKEND + post,
-        headers: {
-          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
-        },
-        data: {
-          anonId: this.$route.params.anonId,
-          surveyId: this.$route.params.surveyId,
-          answers: [...this.questiondata]
-        }
-      }).then(res => {
+      try {
+        axios({
+          method: "POST",
+          url: process.env.VUE_APP_BACKEND + post,
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+          },
+          data: {
+            anonId: this.$route.params.anonId,
+            surveyId: this.$route.params.surveyId,
+            answers: [...this.questionData]
+          }
+        }).then(res => {
           if (res.data.status === "ok") {
-            //this.$router.push({ path: `${push}/${this.$route.params.surveyId}/${this.$route.params.userId}` });
-            this.resultSending = false
-            this.result = true
+            this.$store.dispatch('questionnaire/fetchResult')
           }
         })
-      .catch(err => console.error(err));
+      } catch(err) {
+        throw err
+      } finally {
+        this.resultSending = false
+      }
     },
     saveUnfinishedAnswers() {
       const post = this.$route.name === 'questionnaire-anon' ? "/anon/result/save": "/auth/result/save"
@@ -214,19 +146,18 @@ export default {
         method: "POST",
         url: process.env.VUE_APP_BACKEND + post,
         headers: {
-          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
+          'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
         },
         data: {
           anonId: this.$route.params.anonId,
           surveyId: this.$route.params.surveyId,
-          answers: [...this.questiondata]
+          answers: [...this.questionData]
         }
       }).then(res => {
           if (res.data.status === "ok") {
             this.moveHome()
           }
         })
-        .catch(err => console.error(err));
     },
     toggleModal(value) {
       if (this.modal_visible === null) this.modal_visible = value
@@ -238,7 +169,9 @@ export default {
     }
   },
   created() {
-    this.getQuestions()
+    //FOR TESTING
+    this.testQuestionnaire()
+    //
   }
 };
 </script>
@@ -276,21 +209,6 @@ export default {
   overflow: auto;
   overflow-x: hidden; //transition
   border-radius: 14px;
-
-  .errormessageDisplay{
-    margin-top:2rem;
-
-    p{
-      margin-top:1rem !important;
-    }
-  }
-  
-  .loader-spinner-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 85%;
-  }
 
   @media screen and (min-width: 1024px) {
     width: 60vw;

@@ -8,7 +8,7 @@
           v-bind:label="$t('message.userName')"
           label-for="firstandfamilyname"
         >
-          <b-form-input id="firstandfamilyname" @input="$emit('updateInfo', {name: $event})" :value="personalinfo.name" type="text" name="firstandfamilyname"></b-form-input>
+          <b-form-input id="firstandfamilyname" @input="$emit('updateInfo', {name: $event})" :value="personalInfo.name" type="text" name="firstandfamilyname"></b-form-input>
           <b-form-invalid-feedback :state="infovalidation.name" class="nameRequired">
             {{ $t('message.firstandfamilynameInfo') }}
           </b-form-invalid-feedback>
@@ -18,9 +18,9 @@
           v-bind:label="$t('message.userPostnumber')"
           label-for="enterpostnumber"
         >
-          <b-form-input id="enterpostnumber" @input="$emit('updateInfo', {postnumber: $event})" :value="personalinfo.postnumber" type="text" name="enterpostnumber"></b-form-input>
-          <b-form-invalid-feedback :state="infovalidation.postnumber" class="postnumberRequired">
-            {{ $t('message.postnumberInfo') }}
+          <b-form-input id="enterpostnumber" @input="$emit('updateInfo', {postNumber: $event})" :value="personalInfo.postNumber" type="text" name="enterpostnumber"></b-form-input>
+          <b-form-invalid-feedback :state="infovalidation.postNumber" class="postnumberRequired">
+            {{ $t('message.postNumberInfo') }}
           </b-form-invalid-feedback>
         </b-form-group>
         <b-form-group
@@ -28,8 +28,8 @@
           v-bind:label="$t('message.userAge')"
           label-for="birthday"
         >
-          <Datepicker id="birthday" @input="$emit('updateInfo', {birthdate: $event})" :value="personalinfo.birthdate" :language="fi" :monday-first="true" v-bind:placeholder="$t('message.datePlaceholder')"></Datepicker>
-        <b-form-invalid-feedback :state="infovalidation.birthdate" class="birthDateRequired">
+          <Datepicker id="birthday" @input="$emit('updateInfo', {birthDate: $event})" :value="personalInfo.birthDate" :language="fi" :monday-first="true" initial-view="year" calendar-class="ageCalendar" v-bind:placeholder="$t('message.datePlaceholder')"></Datepicker>
+        <b-form-invalid-feedback :state="infovalidation.birthDate" class="birthDateRequired">
             {{ $t('message.birthDateInfo') }}
         </b-form-invalid-feedback>
         </b-form-group>
@@ -42,7 +42,7 @@
             id="genderEnter"
             :options="gender.fi"
             @input="$emit('updateInfo', {gender: $event})"
-            :value="personalinfo.gender"
+            :value="personalInfo.gender"
           ></b-form-select>
           <b-form-invalid-feedback :state="infovalidation.gender" class="genderRequired">
             {{ $t('message.genderInfo') }}
@@ -53,8 +53,8 @@
           v-bind:label="$t('message.userPhonenumber')"
           label-for="enterphonenumber"
         >
-          <b-form-input id="enterphonenumber" @input="$emit('updateInfo', {phonenumber: $event})" :value="personalinfo.phonenumber" type="tel" name="enterphonenumber"></b-form-input>
-          <b-form-invalid-feedback :state="infovalidation.phonenumber" class="phonenumberRequired">
+          <b-form-input id="enterphonenumber" @input="$emit('updateInfo', {phoneNumber: $event})" :value="personalInfo.phoneNumber" type="tel" name="enterphonenumber"></b-form-input>
+          <b-form-invalid-feedback :state="infovalidation.phoneNumber" class="phonenumberRequired">
             {{ $t('message.phonenumberInfo') }}
           </b-form-invalid-feedback>
         </b-form-group>
@@ -63,7 +63,7 @@
           <b-button @click.prevent="signOut" class="submitIncluded">
             {{ 'Kirjaudu Ulos' }}
           </b-button>
-          <b-button v-if="!this.$store.state.survey.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
+          <b-button v-if="!this.$store.state.questionnaire.meta.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.ProfilesubmitButton') }}
             <b-spinner v-if="infoSaved" class="saver" small/>
           </b-button>
@@ -83,7 +83,7 @@ import { fi } from 'vuejs-datepicker/dist/locale'
 export default {
   name: 'PersonalInfo',
   props: {
-    personalinfo: {
+    personalInfo: {
       type: Object,
       required: true
     },
@@ -106,10 +106,10 @@ export default {
       },
       infovalidation: {
         name: null,
-        postnumber: null,
-        birthdate: null,
+        postNumber: null,
+        birthDate: null,
         gender: null,
-        phonenumber: null
+        phoneNumber: null
       },
       infoSaved: null,
       error: null
@@ -117,7 +117,7 @@ export default {
   },
   computed: {
     instruction() {
-      if (this.$store.state.survey.surveyId) {
+      if (this.$store.state.questionnaire.meta.surveyId) {
         if (this.isFirstTime) return this.$t('message.infoInstruction')
         else return this.$t('message.infoInstructionOld')
       } else {
@@ -129,35 +129,37 @@ export default {
   methods: {
     postInfo() {
       Object.keys(this.infovalidation).forEach(key => {
-        if (this.personalinfo[key]) {
+        if (this.personalInfo[key]) {
           this.infovalidation[key] = null
         } else {
           this.infovalidation[key] = false
         }
       })
       if (Object.values(this.infovalidation).every(value => value === null)) {
-        axios({
-          method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.auth.userId + "/info/update",
-          headers: {
-            'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
-          },
-          data: {
-            personalinfo: this.personalinfo
-          }
-        }).then(res => {
-          if (res.status === 200) {
-            if (this.$store.state.survey.surveyId) {
-              this.$emit('moveToQuestionnaire')
-            } else {
-              this.infoSaved = true
-              setTimeout(() => this.infoSaved = false, 1000)
+        this.infoSaved = true
+        try {
+          axios({
+            method: "POST",
+            url: process.env.VUE_APP_BACKEND + "/user/info/update",
+            headers: {
+              'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+            },
+            data: {
+              personalInfo: this.personalInfo
             }
-          }
-        }).catch(err => {
-          if (err.response) this.error = err.response.data
-          throw err
-        })
+          }).then(res => {
+            if (res.status === 200) {
+              if (this.$store.state.questionnaire.meta.surveyId) {
+                this.$emit('moveToQuestionnaire')
+              }
+            }
+          })
+        } catch(err) {
+            if (err.response) this.error = err.response.data
+            throw err
+        } finally {
+          setTimeout(() => this.infoSaved = false, 1000)
+        }
       }
     },
     signOut() {
@@ -181,7 +183,11 @@ export default {
   width:100%;
   padding: 1rem 1rem 0 1rem;
   text-align: start;
-  
+
+  & /deep/ .ageCalendar {
+    max-width: calc(100vw - 2rem);
+  }
+
   .nameRequired {
     font-size:1rem;
   }

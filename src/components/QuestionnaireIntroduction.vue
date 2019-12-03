@@ -1,10 +1,12 @@
 <template>
   <LogoBox size="large">
     <template v-slot:topbar>
-      {{ $t('message.home') }}
+      {{ $store.getters['questionnaire/errorDisplay'] ? $t('message.somethingWentWrong') : $t('message.home') }}
     </template>
     <template v-slot:content>
-      <div class="text-container">
+      <b-alert v-if="$store.getters['questionnaire/errorDisplay']" show variant="danger" class="errorMessageDisplay" style="border: none; border-radius: 0 0 15px 15px;"><p>{{$store.state.questionnaire.error.message}}</p></b-alert>
+      <b-spinner v-else-if="$store.getters['questionnaire/errorDisplay'] === null" class="m-5"/>
+      <div v-else class="text-container">
         <div class="survey-name-container">
           <LangMenu class="language"/>
           <h3 class="survey-name">{{surveyName}}</h3>
@@ -26,14 +28,15 @@
           <img src="../images/null.svg" alt="" />
           <p>{{ $t('message.help_text_4') }}</p>
         </div>
+        <button @click.prevent="$emit('moveToQuestionnaire')">{{ $t('message.begin') }}</button>
       </div>
-      <button @click.prevent="$emit('moveToQuestionnaire')">{{ $t('message.begin') }}</button>
     </template>
   </LogoBox>
 </template>
 <script>
 import LogoBox from '@/components/LogoBox.vue'
 import LangMenu from '@/components/Languages.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'questionnaireIntroduction',
@@ -41,19 +44,23 @@ export default {
     LogoBox,
     LangMenu
   },
-  props: {
-    surveyName: {
-      type: String,
-      required: true
-    },
-    surveyMessage: {
-      type: String,
-      default: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    }
+  computed: {
+    ...mapState({
+      surveyName: state => state.questionnaire.surveyData.name,
+      surveyMessage: state => state.questionnaire.surveyData.message
+    })
   }
 }
 </script>
 <style lang="scss" scoped>
+
+    .errorMessageDisplay {
+      margin-bottom: 0;
+      p {
+        margin-top:1rem !important;
+      }
+    }
+
     .text-container {
       display: flex;
       flex-direction: column;
@@ -67,6 +74,7 @@ export default {
 
         .survey-name {
           font-style: italic;
+          word-break: break-all;
         }
 
         .language {

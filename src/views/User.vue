@@ -7,7 +7,7 @@
         />
         <PersonalInfo
           v-else
-          v-bind:personalinfo="personalinfo"
+          v-bind:personalInfo="personalInfo"
           v-bind:isFirstTime="isFirstTime"
           v-on:updateInfo="updateInfo"
           v-on:moveToQuestionnaire="moveToQuestionnaire"
@@ -36,50 +36,27 @@ export default {
       surveys: null,
       pagenum: 0,
       isFirstTime: false,
-      personalinfo: {
-        name: null,
-        postnumber: null,
-        birthdate: null,
-        gender:null,
-        phonenumber: null
-      },
       error: null
     }
   },
+  computed: {
+    personalInfo() {
+      return this.$store.state.user.authUser.personalInfo
+    }
+  },
   methods: {
-    async getUser() {
-      axios({
-        method: "GET",
-        url: process.env.VUE_APP_BACKEND + "/user/" + this.$store.state.auth.userId,
-        headers: {
-          'Authorization': `Bearer ${this.$store.state.auth.accessToken}`
-        }
-      }).then(res => {
-        if (res.status === 200) {
-          this.isFirstTime = !res.data.name
-          this.personalinfo.name = res.data.name
-          this.personalinfo.postnumber = res.data.post_number
-          this.personalinfo.birthdate = res.data.birth_date
-          this.personalinfo.gender = res.data.gender
-          this.personalinfo.phonenumber = res.data.phone_number
-        }
-      }).catch(err => {
-        if (err.response) this.error = err.response.data
-        throw err
-      })
-    },
     updateInfo(object) {
-      Object.assign(this.personalinfo, object)
+      this.$store.commit('user/updateAuthUserPersonalInfo', object)
     },
     nextPage() {
       this.$data.pagenum++
     },
     moveToQuestionnaire() {
-      this.$router.push({ path: `/auth/questionnaire/${this.$store.state.survey.surveyId}/` })
+      this.$router.push({ path: `/auth/questionnaire/${this.$store.state.questionnaire.meta.surveyId}/` })
     }
   },
   created() {
-    this.getUser()
+    this.$store.dispatch('questionnaire/fetchSurvey')
   }
 }
 </script>

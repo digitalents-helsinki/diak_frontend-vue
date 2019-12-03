@@ -1,13 +1,15 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import store from './store/index'
 import BootstrapVue from 'bootstrap-vue'
 import VueI18n from 'vue-i18n'
 import VueMoment from 'vue-moment'
+import moment from 'moment'
+import 'moment/locale/fi'
 import { messages } from './translation'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faPlay, faStop, faFolderPlus} from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle} from '@fortawesome/free-solid-svg-icons'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
 import { faPencilAlt} from '@fortawesome/free-solid-svg-icons'
@@ -28,7 +30,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(VueI18n)
-Vue.use(VueMoment)
+Vue.use(VueMoment, {
+  moment
+})
 
 library.add(faTimesCircle)
 library.add(faAngleDown)
@@ -50,9 +54,12 @@ library.add(faSave)
 library.add(faKey)
 library.add(faArrowUp)
 library.add(faArrowDown)
-library.add(faPlay)
-library.add(faStop)
-library.add(faFolderPlus)
+library.add(faChartBar)
+library.add(faUserSlash)
+library.add(faUserCheck)
+library.add(faChevronRight)
+library.add(faChevronLeft)
+library.add(faCircle)
 
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {

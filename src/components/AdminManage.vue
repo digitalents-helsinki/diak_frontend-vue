@@ -3,25 +3,59 @@
     <div class="rightsideManage-top">
       <p>{{ $t('message.manageSurveys') }}</p>
     </div>
-    <div class="totalinstructionsearch">
-      <div class="totalParagraph">
-        <p>{{ `${$t('message.total')} ${surveys.length}`}}</p>
+    <div class="totalinstructionsearch shadow-sm">
+      <div class="totalSurveysContainer">
+        <p class="totalParagraph">{{ `${$t('message.total')}: ${surveys.length}`}}</p>
+        <font-awesome-icon @click="showTotalDetailed = !showTotalDetailed" :icon="showTotalDetailed ? 'chevron-left' : 'chevron-right'" class="chevron"/>
+        <transition name="slider-width">
+          <div v-if="showTotalDetailed" class="moreDetailsContainer">
+            <p class="totalParagraph">{{ `Käynnissä: ${filteredSurveys.active.length}` }}</p>
+            <p class="totalParagraph">{{ `Tulossa: ${filteredSurveys.starting.length}` }}</p>
+            <p class="totalParagraph">{{ `Päättynyt: ${filteredSurveys.ended.length}` }}</p>
+            <p class="totalParagraph">{{ `Suljettu: ${filteredSurveys.closed.length}` }}</p>
+            <p class="totalParagraph">{{ `Arkistoitu: ${filteredSurveys.archived.length}` }}</p>
+          </div>
+        </transition>
       </div>
       <div class="manageInstructions">
-        <div class="instructiondivone">
-          <p class="divoneHeading">{{ $t('message.instructionsHeading') }} </p>
-          <p class="divoneParagraph">{{ $t('message.InstructionPone') }} </p>
-          <p class="divoneParagraph">{{ $t('message.InstructionPtwo') }} </p>
-          <p class="divoneParagraph">{{ $t('message.InstructionPthree') }} </p>
-        </div>
-        <div class="arrowbetweendivs">
-          <font-awesome-icon icon="arrow-right" style="font-size:1.8rem;"/>
-        </div>
-        <div class="instructiondivtwo">
-          <p class="divtwoHeading">{{ $t('message.reportHeading') }} </p>
-          <p class="divtwoParagraph">{{ $t('message.reportParagraph') }} </p>
-          <div class="reportimageButton"><img src="../images/assessment_24px.png" alt="" style="width:25px; height:25px;"/></div>
-        </div>
+        <b-badge @click="showInstructions = !showInstructions" class="instructionsTitle">Info<font-awesome-icon :icon="showInstructions ? 'chevron-left' : 'chevron-right'"/></b-badge>
+        <transition name="slider-width">
+          <div v-if="showInstructions" class="instructions-container">
+            <div class="instructiondiv">
+              <font-awesome-icon icon="chart-bar" style="color:#353535;"/><p>Kyselyn tulokset</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="pencil-alt" style="color:#353535;"/><p>Muokkaa kyselyä</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="folder" style="color:grey;"/><p>Arkistoi kysely</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="times" style="color:#FF0000;"/><p>Poista kysely</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="user-slash" class="instruction-indicator-icon" /><p>Anonyymi</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="user-check" class="instruction-indicator-icon" /><p>Autentikoitu</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="circle" style="color: rgb(0, 194, 0);" class="instruction-indicator-icon-circle" /><p>Käynnissä</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="circle" style="color: yellow;" class="instruction-indicator-icon-circle" /><p>Tuleva</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="circle" style="color: orange;" class="instruction-indicator-icon-circle" /><p>Päättynyt</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="circle" style="color: crimson;" class="instruction-indicator-icon-circle" /><p>Suljettu</p>
+            </div>
+            <div class="instructiondiv">
+              <font-awesome-icon icon="circle" style="color: grey;" class="instruction-indicator-icon-circle" /><p>Arkistoitu</p>
+            </div>
+          </div>
+        </transition>
       </div>
       <div class="searchbar-div">
         <p class="paragraphTop">{{ $t('message.searchParagraph') }}</p>
@@ -38,20 +72,28 @@
           <b-dropdown-item @click="toggleDisplay('anonymous')">{{$t('message.anonymousButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('authenticated')">{{$t('message.authenticatedButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('active')">{{$t('message.activeButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('inactive')">{{$t('message.inactiveButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('starting')">{{$t('message.startingButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('ended')">{{$t('message.endedButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('closed')">{{$t('message.closedButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('archived')">{{$t('message.archivedButton')}}</b-dropdown-item>
         </b-dropdown>
       </div>
     </div>
     <div class="tableDisplayfields">
-      <b-table hover responsive :items="displayedSurveys" :fields="fields" bordered head-variant="light" style="text-align: center">
+      <b-table hover responsive :items="filteredSurveys[this.display]" :fields="fields" head-variant="light" table-class="surveyTable shadow-sm">
         <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
-          <div v-bind:key="field.key">
+          <div v-bind:key="field.key" class="surveyTableCel">
             <div v-if="field.colType === 'name'">
-              <span v-if="data.item.name.length <= 20">{{data.item.name}}</span>
-              <span v-else v-b-tooltip="data.item.name" tabindex="0">{{data.item.name.substring(0, 17) + '...'}}</span>
+              <span v-if="data.item.name.length <= 20" class="surveyName">
+                <font-awesome-icon icon="circle" class="indicator-icon" :data-indicatorcolor="data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'"/>
+                <font-awesome-icon :icon="data.item.anon ? 'user-slash' : 'user-check'" class="indicator-icon"/>
+                {{data.item.name}}
+              </span>
+              <span v-else v-b-tooltip="data.item.name" tabindex="0" class="surveyName">
+                <font-awesome-icon icon="circle" class="indicator-icon" :data-indicatorcolor="data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'"/>
+                <font-awesome-icon :icon="data.item.anon ? 'user-slash' : 'user-check'" class="indicator-icon"/>
+                {{data.item.name.substring(0, 17) + '...'}}
+              </span>
             </div>
             <div v-else-if="field.colType === 'startDate'">
               <span v-if="data.item.startDate">{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
@@ -65,12 +107,12 @@
               <span>{{data.item.responses || 0}}/{{data.item.respondents_size}}</span>
             </div>
             <div v-else-if="field.colType === 'analyze'">
-              <button @click="openSurveyResults(data.item.surveyId)"><img src="../images/assessment_24px.png" alt="chart" style="width:25px; height:25px;"/></button>
+              <button @click="openSurveyResults(data.item.surveyId)" class="tableButton"><font-awesome-icon icon="chart-bar" class="tableButtonIcon" /></button>
             </div>
-            <div v-else-if="field.colType === 'actions'">
-              <button @click="modifySurvey(data.item.surveyId)"><font-awesome-icon icon="pencil-alt" style="font-size:1.6rem;"/></button>
-              <button @click="archiveSurvey(data.item.surveyId)" :disabled="data.item.archived"><font-awesome-icon :icon="data.item.archived ? 'folder' : 'folder-plus'" style="font-size:1.6rem; color:grey;"/></button>
-              <button class="iconButton-times" @click="deleteSurvey(data.item.surveyId)"> <font-awesome-icon icon="times" style="font-size:1.6rem; color:#FF0000;"/> </button>
+            <div v-else-if="field.colType === 'actions'" class="actionsCel">
+              <button v-if="!data.item.archived" @click="modifySurvey(data.item.surveyId)" class="tableButton modifyButton"><font-awesome-icon icon="pencil-alt" class="tableButtonIcon" /></button>
+              <button v-if="!data.item.archived" @click="archiveSurvey(data.item.surveyId)" :disabled="data.item.archived" class="tableButton archiveButton"><font-awesome-icon icon='folder' class="tableButtonIcon"/></button>
+              <button @click="deleteSurvey(data.item.surveyId)" class="tableButton deleteButton"> <font-awesome-icon icon="times" class="tableButtonIcon"/></button>
             </div>
           </div>
         </template>
@@ -90,6 +132,7 @@
           <b-form-input
             id="surveyNameInput"
             v-model="modify.surveyName"
+            maxlength="100"
             required
           />
         </b-form-group>
@@ -114,9 +157,10 @@
           <b-input
             :placeholder="$t('message.modifySurveyAddRespondent')"
             v-model="modify.currentRespondent"
+            type="email"
           />
           <b-input-group-append>
-            <b-button @click="addRespondent" class="addRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
+            <b-button @click="addRespondent" :disabled="!modify.currentRespondent || !modify.currentRespondent.match(/.+@.+/)" class="addRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
           </b-input-group-append>
         </b-input-group>
         <ul class="respondentList" v-if="modify.surveyRespondents.length">
@@ -180,7 +224,6 @@ import Datepicker from 'vuejs-datepicker'
 import { fi } from 'vuejs-datepicker/dist/locale'
 import axios from 'axios'
 import SurveyResults from './SurveyResults'
-import store from '@/store'
 
 export default {
   name: 'admin-manage',
@@ -251,50 +294,43 @@ export default {
           inputSurveyName: null
         },
         display: "all",
+        showTotalDetailed: false,
+        showInstructions: true,
         loaded: false
     }
   },
   computed: {
-    displayedSurveys() {
-      let displayedSurveys = this.$data.surveys
-      if (this.searchTerm) {
-        displayedSurveys = displayedSurveys.filter(obj => obj.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
-      }
+    computedSurveys() {
+      return this.$data.surveys.map(survey => {
+        return {
+          ...survey,
+          open: 
+            (survey.startDate === null || new Date(survey.startDate).getTime() < Date.now()) &&
+            (survey.endDate === null || Date.now() < new Date(survey.endDate).getTime()) &&
+            survey.active && !survey.archived,
+          starting: survey.startDate !== null && Date.now() < new Date(survey.startDate).getTime(),
+          ended: survey.endDate !== null && new Date(survey.endDate) < Date.now()
+        }
+      }).sort((a, b) => a.archived - b.archived)
+    },
+    filteredSurveys() {
+      const surveysToBeFiltered = (() => {
+        if (this.searchTerm) return this.computedSurveys.filter(obj => obj.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
+        else return this.computedSurveys
+      })()
 
-      switch(this.display) {
-        case 'anonymous': 
-          displayedSurveys = displayedSurveys.filter(obj => obj.anon)
-          break
-        case 'authenticated':
-          displayedSurveys = displayedSurveys.filter(obj => !obj.anon)
-          break
-        case 'active':
-          displayedSurveys = displayedSurveys.filter(obj => {
-            if (obj.startDate !== null && Date.now() < new Date(obj.startDate).getTime()) return false
-            else if (obj.endDate !== null && new Date(obj.endDate).getTime() < Date.now()) return false
-            else if (!obj.active || obj.archived) return false
-            else return true
-          })
-          break
-        case 'inactive':
-          displayedSurveys = displayedSurveys.filter(obj => {
-            if (!obj.active || obj.archived) return true
-            else if (obj.startDate !== null && new Date(obj.startDate).getTime() < Date.now()) return true
-            else if (obj.endDate !== null && Date.now() < new Date(obj.endDate).getTime()) return true
-            else return false
-          })
-          break
-        case 'starting':
-          displayedSurveys = displayedSurveys.filter(obj => obj.startDate !== null && Date.now() < new Date(obj.startDate).getTime())
-          break
-        case 'ended':
-          displayedSurveys = displayedSurveys.filter(obj => obj.endDate !== null && new Date(obj.endDate).getTime() < Date.now())
-          break
-        case "archived":
-          displayedSurveys = displayedSurveys.filter(obj => obj.archived)
-          break
+      const nonArchivedSurveys = surveysToBeFiltered.filter(obj => !obj.archived)
+
+      return {
+        all: surveysToBeFiltered,
+        anonymous: surveysToBeFiltered.filter(obj => obj.anon),
+        authenticated: surveysToBeFiltered.filter(obj => !obj.anon),
+        active: nonArchivedSurveys.filter(obj => obj.open),
+        closed: nonArchivedSurveys.filter(obj => !obj.active),
+        starting: nonArchivedSurveys.filter(obj => obj.starting),
+        ended: nonArchivedSurveys.filter(obj => obj.ended),
+        archived: surveysToBeFiltered.filter(obj => obj.archived)
       }
-      return displayedSurveys
     },
     modifySurveyBoolean: {
       get: function() {
@@ -303,6 +339,11 @@ export default {
       set: function() {
         if (this.modify.surveyId) {
           this.modify.surveyId = null
+          this.modify.surveyName = null
+          this.modify.surveyEndDate = null
+          this.modify.surveyActivity = null
+          this.modify.surveyRespondents = []
+          this.modify.currentRespondent = null
         }
       }
     },
@@ -313,6 +354,8 @@ export default {
       set: function() {
         if (this.archive.surveyId) {
           this.archive.surveyId = null
+          this.archive.surveyName = null
+          this.archive.inputSurveyName = null
         }
       }
     },
@@ -323,14 +366,22 @@ export default {
       set: function() {
         if (this.del.surveyId) {
           this.del.surveyId = null
+          this.del.surveyName = null,
+          this.del.inputSurveyName = null
         }
       }
     }
   },
   methods: {
     async getSurveys() {
-      const res = await axios.get(process.env.VUE_APP_BACKEND + "/survey/" + store.state.auth.userId)
-      this.$data.surveys = res.data
+      const { data } = await axios({
+        method: 'GET', 
+        url: process.env.VUE_APP_BACKEND + "/admin/survey/all",
+        headers: {
+          'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+        }
+      })
+      this.$data.surveys = data
       this.$data.loaded = true
     },
     updateSurvey(updatedSurvey) {
@@ -349,17 +400,23 @@ export default {
       bvModalEvt.preventDefault()
       if (this.del.surveyName === this.del.inputSurveyName) {
         axios({
-          method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/survey/delete",
-          data: {
-            id: this.del.surveyId
+          method: "DELETE",
+          url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.del.surveyId + "/delete",
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           }
         }).then(res => {
-          if (res.data === "Survey deleted succesfully") {
+          if (res.status === 204) {
             const index = this.surveys.findIndex(survey => survey.surveyId === this.del.surveyId)
             if (~index) this.surveys.splice(index, 1)
             this.$nextTick(() => this.$refs.deleteSurveyModal.hide())
           }
+        }).catch(err => {
+          this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+            title: this.$t('message.errorToastTitle'),
+            toaster: 'b-toaster-bottom-right',
+            variant: 'danger'
+          })
         })
       }
     },
@@ -375,16 +432,22 @@ export default {
       bvModalEvt.preventDefault()
       if (this.archive.surveyName === this.archive.inputSurveyName) {
         axios({
-          method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/survey/archive",
-          data: {
-            id: this.archive.surveyId
+          method: "PATCH",
+          url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.archive.surveyId + "/archive",
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           }
         }).then(res => {
-          if (res.data === "Survey archived succesfully") {
+          if (res.status === 204) {
             this.surveys.find(survey => survey.surveyId === this.archive.surveyId).archived = true
             this.$nextTick(() => this.$refs.archiveSurveyModal.hide())
           }
+        }).catch(err => {
+          this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+            title: this.$t('message.errorToastTitle'),
+            toaster: 'b-toaster-bottom-right',
+            variant: 'danger'
+          })
         })
       }
     },
@@ -401,9 +464,10 @@ export default {
       }
     },
     addRespondent() {
-      if (!this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.includes(this.modify.currentRespondent) && 
-          !this.modify.surveyRespondents.includes(this.modify.currentRespondent) &&
-          this.modify.currentRespondent) {
+      if (!this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.some(email => email.toLowerCase() === this.modify.currentRespondent.toLowerCase()) && 
+          !this.modify.surveyRespondents.some(email => email.toLowerCase() === this.modify.currentRespondent.toLowerCase()) &&
+          this.modify.currentRespondent &&
+          this.modify.currentRespondent.match(/.+@.+/)) {
             this.modify.surveyRespondents.push(this.modify.currentRespondent)
             this.modify.currentRespondent = null
       }
@@ -415,10 +479,12 @@ export default {
       bvModalEvt.preventDefault()
       if (this.modify.surveyId && this.modify.surveyName) {
         axios({
-          method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/survey/update",
+          method: "PATCH",
+          url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.modify.surveyId + "/update",
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+          },
           data: {
-            surveyId: this.modify.surveyId,
             name: this.modify.surveyName,
             endDate: this.modify.surveyEndDate,
             active: this.modify.surveyActivity,
@@ -426,9 +492,16 @@ export default {
           }
         })
         .then(res => {
-          if (res.data === "Survey update failed") return
-          this.updateSurvey(res.data)
-          this.$nextTick(() => this.$refs.modifySurveyModal.hide())
+          if (res.status === 200) {
+            this.updateSurvey(res.data)
+            this.$nextTick(() => this.$refs.modifySurveyModal.hide())
+          }
+        }).catch(err => {
+          this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+            title: this.$t('message.errorToastTitle'),
+            toaster: 'b-toaster-bottom-right',
+            variant: 'danger'
+          })
         })
       }
     },
@@ -452,6 +525,123 @@ export default {
 }  
 </script>
 <style lang="scss" scoped>
+
+.tableDisplayfields /deep/ .surveyTable {
+  background-color: white;
+  color: #353535;
+  text-align: center;
+
+  td {
+    vertical-align: middle;
+  }
+
+  th {
+    background-color: #8E8998;
+    color: white;
+    width: max-content;
+
+    &[aria-sort="ascending"], &[aria-sort="descending"] {
+      background-color: #666070;
+    }
+  }
+
+  .surveyTableCel {
+    display: grid;
+    margin: auto;
+    align-items: center;
+    width: max-content;
+  }
+
+  [aria-colindex="1"] .surveyTableCel {
+    margin: initial;
+  }
+
+  .surveyName {
+    font-weight: bold;
+    color: #350E7E;
+
+    .indicator-icon {
+      color: #212529;
+      width: 1rem;
+      height: 1rem;
+      margin-right: 0.25rem;
+
+      &[data-icon="circle"] {
+        width: 0.5rem;
+        margin-right: 0.5rem;
+
+        &[data-indicatorcolor="green"] {
+          color: rgb(0, 194, 0);
+        }
+
+        &[data-indicatorcolor="orange"] {
+          color: orange;
+        }
+
+        &[data-indicatorcolor="yellow"] {
+          color: yellow;
+        }
+
+        &[data-indicatorcolor="red"] {
+          color: crimson;
+        }
+
+        &[data-indicatorcolor="grey"] {
+          color: grey;
+        }
+      }
+    }
+  }
+
+  .actionsCel {
+    display: grid;
+    justify-self: center;
+    width: 8rem;
+    grid-auto-flow: column;
+    grid-column-gap: 0.5rem;
+    justify-items: end;
+
+    .modifyButton {
+      grid-column: 1 / 2;
+    }
+
+    .archiveButton {
+      grid-column: 2 / 3;
+      color: grey;
+    }
+
+    .deleteButton {
+      grid-column: 3 / 4;
+      color: #FF0000;
+    }
+  }
+
+  .tableButton {
+    background-color: white;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    max-width: fit-content;
+    max-height: fit-content;
+    padding: 0.4rem;
+    line-height: 0;
+    transition: background-color 150ms ease-in-out;
+    
+    &Icon {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    &:not([disabled]) {
+      &:hover {
+        background-color: darken(white, 5%);
+      }
+
+      &:focus, &:active {
+        background-color: darken(white, 10%);
+      }
+    }
+  }
+}
 
 #modifySurveyModal {
   .addRespondentButton {
@@ -495,6 +685,18 @@ export default {
     width:80%;
     margin: 1rem;
     box-shadow: 0 5px 5px #787878;
+
+    .slider-width-enter, .slider-width-leave-to {
+      max-width: 0;
+    }
+
+    .slider-width-enter-to, .slider-width-leave {
+      max-width: 100vw;
+    }
+
+    .slider-width-enter-active, .slider-width-leave-active {
+      transition: max-width 150ms ease-in-out;
+    }
 
     .slide {
       &-enter {
@@ -567,70 +769,133 @@ export default {
         padding-top:1.1rem;
     }
 
-    .totalinstructionsearch{
+    .totalinstructionsearch {
       background-color:#FFFFFF;
       width:100%;
       padding-top:1rem;
       padding-bottom:1rem;
 
-      .totalParagraph{
-        font-size:1rem;
-        color:#787878;
-        margin-left:1rem;
-        margin-bottom:1.8rem;
+      .totalSurveysContainer {
+        display: flex;
+        font-size: 1rem;
+        color: #787878;
+        margin-left: 1rem;
+
+        .moreDetailsContainer {
+          display: flex;
+          white-space: nowrap;
+          overflow: hidden;
         }
+
+        .totalParagraph {
+          margin-right: 2rem;
+
+          &:first-of-type {
+            margin-right: 1rem;
+          }
+        }
+
+        .chevron {
+          margin-right: 1rem;
+          font-size: 0.75rem;
+          margin-top: 0.33rem;
+          
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
       
       .manageInstructions{
-        display:flex;
-        flex-direction:row;
+        display: grid;
+        grid-template-columns: max-content 1fr;
         margin-right:1rem;
-        margin-bottom:1.8rem;
         margin-left:1rem;
-      
-        .instructiondivone{
-          border:1px solid #787878;
-          padding:1rem 1.8rem;
-          margin-right:1rem;
-          font-size:1rem;
+        height: 8rem;
 
-          .divoneHeading{
-            font-size:1.1rem;
-            font-weight:bold;
+        .instructions-container {
+          display: grid;
+          grid-auto-flow: column;
+          overflow: hidden;
+          grid-template-columns: repeat(3, max-content);
+          grid-template-rows: repeat(4, max-content);
+          width: max-content;
+        }
 
+        .active-instruction:before {
+          content: "\26AB";
+          margin-right: 0.5rem;
+          color: rgb(0, 194, 0);
+        }
+
+        .prevented-instruction:before {
+          content: "\26AB";
+          margin-right: 0.5rem;
+          color: crimson;
+        }
+
+        .starting-instruction:before {
+          content: "\26AB";
+          margin-right: 0.5rem;
+          color: yellow;
+        }
+
+        .ended-instruction:before {
+          content: "\26AB";
+          margin-right: 0.5rem;
+          color: orange;
+        }
+
+        .archived-instruction:before {
+          content: "\26AB";
+          margin-right: 0.5rem;
+          color: grey;
+        }
+        
+
+        .instructionsTitle {
+          align-self: baseline;
+          color: #350E7E;
+          background-color: white;
+          border: 1px solid #ced4da;
+          font-size: 1.5rem;
+
+          &:hover {
+            cursor: pointer;
           }
-          .divoneParagraph{
-            font-size:1.1rem;
-            margin-left:1rem;
+
+          svg {
+            font-size: 0.75rem;
+            margin-bottom: 0.125rem;
+            margin-left: 0.25rem;
           }
         }
 
-        .arrowbetweendivs{
-          padding:1rem;
-          margin-right:1rem;
+        .instructiondiv{
+          padding: 0.2rem 1rem;
           display:flex;
-          align-items:center;
-          justify-content:center;
-        }
+          align-items: center;
 
-        .instructiondivtwo{
-          border:1px solid grey;
-          padding:1rem;
-          display:flex;
-          flex-direction:column;
-          align-items:center;
+          .instruction-indicator-icon {
+            color: #212529;
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.5rem;
 
-          .divtwoHeading{
-            font-size:1.1rem;
-            font-weight:bold;
+            &-circle {
+              width: 0.5rem;
+              transform: translateX(25%);
+            }
+          }
+          
+          p {
+            margin-bottom: 0;
           }
 
-          .divtwoParagraph{
-            background-color:lightgrey;
-            width:8rem;
-            font-size:1.1rem;
-            font-weight:bold;
-            text-align:center;
-            padding:0.1rem;
+          svg, img {
+            margin-right: 1rem;
+            height: 1.5rem;
+            width: 1.5rem;
           }
         }
       }
@@ -663,23 +928,18 @@ export default {
         display:flex;
         flex-direction:row;
 
-        .buttonRight{
-          color: #ffffff;
-          border-radius: 5px;
-          padding-right:0.7rem;
-          padding-left:0.7rem;
-          height:auto;
-          margin-top:0.5rem;
-          margin-left:1.8rem;
+        .dropdownButtonsleft {
+
+          & /deep/ button {
+            background-color: white;
+            color: #353535;
+            border: 1px solid #ced4da;
+          }
         }
       }
       
-      .tableDisplayfields{
+      .tableDisplayfields {
         background-color:#FFFFFF;
-
-        .iconButton-times{
-          margin-left:0.5rem;
-        }
       }  
     }
 
@@ -703,10 +963,10 @@ export default {
   }
 }
 @media only screen and (max-width: 1400px) {
-    .rightsideManage{
-      width:100%;
-      margin-bottom: 0;
-    }
+  .rightsideManage{
+    width:100%;
+    margin-bottom: 0;
+  }
 }
 </style>
 

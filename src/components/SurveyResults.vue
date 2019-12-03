@@ -1,49 +1,59 @@
 <template>
   <div class="mainWrapper">
-    <div class="topContainer">
-      <h4 class="surveyName">Tulokset: <i>{{surveyName}}</i></h4>
-      <b-button @click="$emit('closeResults')" class="closeButton"><font-awesome-icon icon="times"></font-awesome-icon></b-button>
-    </div>
-    <div class="SurveyResults" v-if="loaded">
-      <div class="chart-container">
-        <bar-chart :avgdata="avg_array" :dvddata="dvd_array" :names="valueFields"/>
-      </div>
-      <div class="text-center">
-        <p>Vastaajien lukumäärä: {{respondent_size}}</p>
-      </div>
-      <div class="values">
-        <div class="labels">
-          <h4>Kysymykset</h4>
-          <p v-for="(value, index) in valueFields" v-bind:key="index">{{value}}</p>
-        </div>
-        <div class="averages">
-          <h4>Keskiarvot</h4>
-          <p v-for="(value, index) of avg_array" v-bind:key="index">{{typeof value === "number" ? value.toFixed(2) : value}}</p>
-        </div>
-        <div class="stds">
-          <h4>Keskihajonnat</h4>
-          <p v-for="(value, index) of dvd_array" v-bind:key="index">{{typeof value === "number" ? value.toFixed(2) : value}}</p>
-        </div>
-        <div class="ns">
-          <h4>Lukumäärä</h4>
-          <p v-for="(value, index) of n_array" v-bind:key="index">{{value}}</p>
+    <div class="subsidiaryWrapper">
+      <div class="topContainer">
+        <h4 class="surveyName">Tulokset: <i>{{surveyName}}</i></h4>
+        <b-button @click="$emit('closeResults')" class="closeButton"><font-awesome-icon icon="times"></font-awesome-icon></b-button>
+        <div class="downloadButtons"> 
+          <downloadexcel
+            class="btn btn-primary csvButton"
+            :data="results"
+            :fields="excel_fields"
+            type="csv"
+            :name="`${surveyName}_${surveyId}_tulokset.xls`"
+          >
+            CSV
+          </downloadexcel>
+          <button
+            class="btn btn-primary pdfButton"
+            @click="downloadPdf"
+          >
+            PDF
+          </button>
         </div>
       </div>
-    </div>
-    <div class="botContainer">
-      <downloadexcel
-        class="btn btn-primary"
-        :data="results"
-        :fields="excel_fields"
-        name="tulokset.xls"
-      >Lataa CSV</downloadexcel>
-      <button
-        class="btn btn-primary"
-        @click="downloadPdf"
-      >Lataa PDF</button>
-    </div>
-    <div class="error" v-if="loadingError || unknownError">
-      {{loadingError ? "Fetching survey results failed. Try checking your internet connection." : "Displaying survey results failed unexpectedly"}}
+      <div class="SurveyResults" v-if="loaded">
+        <div class="chart-container">
+          <bar-chart :avgdata="avg_array" :dvddata="dvd_array" :names="valueFields"/>
+        </div>
+        <div class="text-center">
+          <p>Vastaajien lukumäärä: {{respondent_size}}</p>
+        </div>
+        <div class="values">
+          <div class="labels">
+            <h4>Kysymykset</h4>
+            <p v-for="(value, index) in valueFields" v-bind:key="index">{{value}}</p>
+          </div>
+          <div class="averages">
+            <h4>Keskiarvot</h4>
+            <p v-for="(value, index) of avg_array" v-bind:key="index">{{typeof value === "number" ? value.toFixed(2) : value}}</p>
+          </div>
+          <div class="stds">
+            <h4>Keskihajonnat</h4>
+            <p v-for="(value, index) of dvd_array" v-bind:key="index">{{typeof value === "number" ? value.toFixed(2) : value}}</p>
+          </div>
+          <div class="ns">
+            <h4>Lukumäärä</h4>
+            <p v-for="(value, index) of n_array" v-bind:key="index">{{value}}</p>
+          </div>
+        </div>
+      </div>
+      <div v-else class="d-flex justify-content-center">
+        <b-spinner class="m-5"/>
+      </div>
+      <div class="error" v-if="loadingError || unknownError">
+        {{loadingError ? "Fetching survey results failed. Try checking your internet connection." : "Displaying survey results failed unexpectedly"}}
+      </div>
     </div>
   </div>
 </template>
@@ -86,13 +96,19 @@ export default {
   },
   computed: {
     valueFields() {
-      return Object.keys(this.excel_fields).filter(key => !key.endsWith('teksti'))
+      return Object.keys(this.excel_fields).filter(key => !key.endsWith('teksti') && !['postinumero', 'ikä', 'nimi', 'sukupuoli', 'vastausaika'].includes(key))
     }
   },
   methods: {
     async getResults() {
       try {
-        const res = await axios.get(process.env.VUE_APP_BACKEND + "/results/" + this.surveyId).catch(err => {
+        const res = await axios({
+          method: 'GET', 
+          url: process.env.VUE_APP_BACKEND + "/admin/results/" + this.surveyId,
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+          }
+        }).catch(err => {
           console.error(err)
           throw new Error("fetch failed")
         })
@@ -139,6 +155,24 @@ export default {
             }
           }
         }, {});
+        if (res.data.anon) {
+          this.excel_fields = {
+            vastausaika: 'answeredAt',
+            ...this.excel_fields,
+            ikä: 'age',
+            sukupuoli: 'gender'
+          }
+        } else {
+          this.excel_fields = {
+            vastausaika: 'answeredAt',
+            ...this.excel_fields,
+            nimi: 'name',
+            postinumero: 'postal_code',
+            sukupuoli: 'gender',
+            ikä: 'age',
+          }
+        }
+        
         const answers = res.data.Questions.flatMap(question => question.Answers)
         const questions = res.data.Questions.map(question => {
           return {
@@ -146,16 +180,43 @@ export default {
             name: question.name
           }
         });
-        const users = [...new Set(res.data.Questions[0].Answers.map(answer => answer.UserUserId || answer.AnonUserId))]
+        const users = [...new Set(res.data.Questions[0].Answers.map(answer => answer.User || answer.AnonUser))]
         const results = users.map(user => {
-          return questions.reduce((obj, question) => {
-            return {
-              ...obj,
-              [question.name]: answers.find(answer => (answer.UserUserId === user || answer.AnonUserId === user) && answer.QuestionQuestionId === question.id).value,
-              [question.name + '_desc']: answers.find(answer => (answer.UserUserId === user || answer.AnonUserId === user) && answer.QuestionQuestionId === question.id).description
+          let answeredAt
+          const questionData = questions.reduce((obj, question) => {
+            const answer = answers.find(answer => (answer.UserUserId === user.userId || answer.AnonUserId === user.id) && answer.QuestionQuestionId === question.id)
+            answeredAt = answer.updatedAt
+            if (answer.User) {
+              return {
+                ...obj,
+                [question.name]: answer.value,
+                [question.name + '_desc']: answer.description,
+                postal_code: answer.User.postal_number,
+                age: answer.User.age,
+                name: answer.User.name,
+                gender: answer.User.gender
+              }
+            } else {
+              return {
+                ...obj,
+                [question.name]: answer.value,
+                [question.name + '_desc']: answer.description,
+                age: answer.AnonUser.age,
+                gender: answer.AnonUser.gender
+              }
             }
           }, {})
+
+          return {
+            ...questionData,
+            postal_code: user.postal_number,
+            age: user.age,
+            name: user.name,
+            gender: user.gender,
+            answeredAt: this.$moment(answeredAt).format('Do MMMM YYYY, kk:mm:ss')
+          }
         });
+        
         this.respondent_size = users.length
         this.results = results
         this.loaded = true;
@@ -256,87 +317,111 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
 .mainWrapper {
   position: fixed;
   z-index: 1000000000000000;
-  max-height: calc(100vh - 2rem);
+  height: calc(100vh - 2rem);
   margin: 1rem;
   top: 0;
   left: 10%;
   right: 10%;
   background-color: white;
-  border: 1px solid #dee2e6;
-  display: grid;
-  grid-template-areas:
-    "topbar"
-    "content"
-    "botbar";
-  grid-template-rows: 4rem 1fr 4rem;
-
-  .topContainer {
-    border-bottom: 1px solid #dee2e6;
-    grid-area: "topbar";
-
-    .closeButton {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      height: 2rem;
-      width: 2rem;
-      padding: 0;
-
-      svg {
-        width: 16px;
-      }
-    }
-
-    .surveyName {
-      text-align: center;
-      margin-top: 1rem;
-      margin-bottom: 0;
-    }
-  }
-
-  .SurveyResults {
-    grid-area: "content";
-    overflow-y: scroll;
-    padding: 0 1rem;
-    
-    .chart-container {
-      position: relative;
-      width: 100%;
-    }
-
-    .values {
-      display: grid;
-      grid-template-columns: minmax(50px, 1fr) min-content min-content min-content;
-      grid-column-gap: 1.5rem;
-      justify-content: space-around;
-
-      .labels {
-        p {
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
-        }
-        h4 {
-          color: #212529;
-        }
-      }
-    }
-  }
-
-  .botContainer {
-    grid-area: "botbar";
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    border-top: 1px solid #dee2e6;
-  }
-
-  .error {
+  border-radius: 5px;
+  
+  .subsidiaryWrapper {
+    height: 100%;
     width: 100%;
-    text-align: center;
+    display: grid;
+    grid-template-areas:
+      "topbar"
+      "content";
+    grid-template-rows: 4rem 1fr;
+    grid-template-columns: 100%;
+
+    .topContainer {
+      border-bottom: 1px solid #dee2e6;
+      grid-area: topbar;
+
+      .closeButton {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        height: 2rem;
+        width: 2rem;
+        padding: 0;
+
+        svg {
+          width: 16px;
+        }
+      }
+
+      .downloadButtons {
+        position: absolute;
+        display: flex;
+        top: 1rem;
+        right: 1rem;
+
+        .csvButton {
+          height: 2rem;
+          margin-right: 1rem;
+          padding: 0.2rem 0.4rem;
+        
+          &:hover {
+            cursor: pointer;
+          }
+        }
+
+        .pdfButton {
+          height: 2rem;
+          padding: 0.2rem 0.4rem;
+        }
+      }
+
+      .surveyName {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        margin-left: 4rem;
+        max-width: 80%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .SurveyResults {
+      grid-area: content;
+      overflow-y: scroll;
+      padding: 0 1rem;
+    
+      .chart-container {
+        position: relative;
+        width: 100%;
+      }
+
+      .values {
+        display: grid;
+        grid-template-columns: minmax(50px, 1fr) min-content min-content min-content;
+        grid-column-gap: 1.5rem;
+        justify-content: space-around;
+
+        .labels {
+          p {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+          }
+          h4 {
+            color: #212529;
+          }
+        }
+      }
+    }
+
+    .error {
+      width: 100%;
+      text-align: center;
+    }
   }
 }
 

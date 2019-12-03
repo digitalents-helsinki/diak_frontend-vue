@@ -16,6 +16,7 @@
                     v-model="surveyName"
                     v-bind:state="surveyNameState === null ? null : surveyName ? true : false"
                     type="text"
+                    maxlength="100"
                     name="forminputName"
                     v-bind:placeholder="$t('message.namePlaceholder')"
                 />
@@ -119,7 +120,7 @@
                     <div class="moreroundedButton">
                         <font-awesome-icon icon="users" class="iconmoreEmail"/>
                         <b-form-file v-model="groupInputFile" accept="text/plain;charset=UTF-8" :browse-text="$t('message.browseFiles')" class="btn moreEmail-button" :placeholder="$t('message.moreEmail')"></b-form-file>
-                        <button class="btn roundedButton"> ? </button>
+                        <button class="btn roundedButton" v-b-popover.focus="'Voit antaa vastaajat listana. Lista on yksinkertainen tekstitiedosto (.txt), jossa sähköpostisoitteet ovat peräkkäin yksi osoite per rivi.'" > ? </button>
                     </div>
                 </div>
                 <div class="emailContent">
@@ -127,7 +128,7 @@
                         <b-input-group class="writeinEmail">
                             <b-input v-model="email" type="email" v-bind:placeholder="$t('message.emailPlaceholder')"/>
                             <b-input-group-append>
-                                <b-button @click="addEmail" class="insertemailButton">{{ $t('message.insertmoreEmail') }}<font-awesome-icon icon="plus" class="moreemailPlus"/></b-button>
+                                <b-button @click="addEmail" :disabled="!email || !email.match(/.+@.+/)" class="insertemailButton">{{ $t('message.insertmoreEmail') }}<font-awesome-icon icon="plus" class="moreemailPlus"/></b-button>
                             </b-input-group-append>
                         </b-input-group>
                     </div>
@@ -164,7 +165,6 @@
 import axios from 'axios'
 import Datepicker from 'vuejs-datepicker'
 import { fi } from 'vuejs-datepicker/dist/locale'
-import store from '@/store'
 
 export default {
     name: 'admin-create',
@@ -259,7 +259,34 @@ export default {
             if (val !== null) {
                 const fileReader = new FileReader()
                 fileReader.onload = e => {
-                    this.$data.emails = [...new Set([...this.$data.emails, ...e.target.result.split(/\r?\n/).filter(email => email)])]
+                    const emails = [...this.$data.emails, ...e.target.result.split(/\r?\n/).filter(email => email)]
+                    
+                    let valid = true
+
+                    emails.forEach((email, index) => {
+                        if (!email.match(/.+@.+/)) {
+                            this.$bvToast.toast(`${email}`, {
+                                title: 'Epäkelpo sähköpostiosoite',
+                                toaster: 'b-toaster-bottom-right',
+                                variant: 'danger',
+                                noAutoHide: true
+                            })
+                            valid = false
+                        }
+                        emails.forEach((Email, Index) => {
+                            if (index !== Index && email === Email && email.match(/.+@.+/) && Email.match(/.+@.+/)) {
+                                this.$bvToast.toast(`${email} - ${Email}`, {
+                                    title: 'Sähköposteissa kaksoiskappaleet',
+                                    toaster: 'b-toaster-bottom-right',
+                                    variant: 'danger',
+                                    noAutoHide: true
+                                })
+                                valid = false
+                            }
+                        })
+                    })
+                    
+                    if (valid) this.$data.emails = emails
                     this.$data.groupInputFile = null
                 }
                 fileReader.readAsText(val)
@@ -328,7 +355,8 @@ export default {
             this.$data.questions.splice(index, 1)
         },
         addEmail() {
-            if (!this.$data.emails.includes(this.$data.email)) {
+            if (!this.$data.emails.some(email => email.toLowerCase() === this.$data.email.toLowerCase()) 
+            && this.$data.email.match(/.+@.+/)) {
                 this.$data.emails.push(this.$data.email)
                 this.$data.email = null
             }
@@ -344,11 +372,14 @@ export default {
             } else {
                 axios({
                     method: "POST",
-                    url: process.env.VUE_APP_BACKEND + "/survey/create",
+                    url: process.env.VUE_APP_BACKEND + "/admin/survey/create",
+                    headers: {
+                        'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+                    },
                     data: { 
                         to: this.$data.emails, 
                         id: this.$data.surveyName,
-                        ownerId: store.state.auth.userId,
+                        ownerId: this.$store.state.authentication.userId,
                         anon: this.$data.surveyAnon,
                         startDate: this.startDate,
                         endDate: this.endDate,
@@ -366,11 +397,13 @@ export default {
                     }
                 })
                 .then(res => {
-                    if (res.data.success) this.$data.created = true
-                    else {
-                        this.$root.$emit('bv::show::popover', 'sendSurveyButton')
-                        setTimeout(() => this.$root.$emit('bv::hide::popover', 'sendSurveyButton'), 5000)
-                    }
+                    if (res.status === 200) this.$data.created = true
+                }).catch(err => {
+                    this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+                        title: this.$t('message.errorToastTitle'),
+                        toaster: 'b-toaster-bottom-right',
+                        variant: 'danger'
+                    })
                 })
             }
         },
@@ -876,6 +909,7 @@ export default {
                     }
                         
                     .insertemailButton{
+                        background-color: #353535;
                         .moreemailPlus{
                             margin-left:1rem;
                         }
@@ -883,6 +917,9 @@ export default {
                 }
                 .emaillistDiv{
                     .emailList{
+                        max-height: 50vh;
+                        overflow-y: scroll;
+
                         li {
                             width: 350px;
                             margin-bottom: 1rem;
