@@ -20,39 +20,49 @@
       <div class="manageInstructions">
         <b-badge @click="showInstructions = !showInstructions" class="instructionsTitle">Info<font-awesome-icon :icon="showInstructions ? 'chevron-left' : 'chevron-right'"/></b-badge>
         <transition name="slider-width">
-          <div v-if="showInstructions" class="instructions-container">
-            <div class="instructiondiv">
-              <font-awesome-icon icon="chart-bar" style="color:#353535;"/><p>Kyselyn tulokset</p>
+          <div v-if="showInstructions" class="total-instructions-container">
+            <div class="action-instructions-container instructions-container">
+              <div class="instructiondiv">
+                <font-awesome-icon icon="chart-bar" style="color:#353535;"/><p>Kyselyn tulokset</p>
+              </div>
+              <div class="instructiondiv">
+                <font-awesome-icon icon="pencil-alt" style="color:#353535;"/><p>Muokkaa kyselyä</p>
+              </div>
+              <div class="instructiondiv">
+                <font-awesome-icon icon="redo" style="color:#353535;"/><p>Toista kysely</p>
+              </div>
+              <div class="instructiondiv">
+                <font-awesome-icon icon="folder-open" style="color:#353535;"/><p>Käytä pohjana</p>
+              </div>
+              <div class="instructiondiv">
+                <font-awesome-icon icon="folder" style="color:grey;"/><p>Arkistoi kysely</p>
+              </div>
+              <div class="instructiondiv">
+                <font-awesome-icon icon="times" style="color:#FF0000;"/><p>Poista kysely</p>
+              </div>
             </div>
-            <div class="instructiondiv">
-              <font-awesome-icon icon="pencil-alt" style="color:#353535;"/><p>Muokkaa kyselyä</p>
-            </div>
-            <div class="instructiondiv">
-              <font-awesome-icon icon="folder" style="color:grey;"/><p>Arkistoi kysely</p>
-            </div>
-            <div class="instructiondiv">
-              <font-awesome-icon icon="times" style="color:#FF0000;"/><p>Poista kysely</p>
-            </div>
-            <div class="instructiondiv">
-              <font-awesome-icon icon="user-slash" class="instruction-indicator-icon" /><p>Anonyymi</p>
-            </div>
-            <div class="instructiondiv">
-              <font-awesome-icon icon="user-check" class="instruction-indicator-icon" /><p>Autentikoitu</p>
-            </div>
-            <div class="instructiondiv">
-              <font-awesome-icon icon="circle" style="color: rgb(0, 194, 0);" class="instruction-indicator-icon-circle" /><p>Käynnissä</p>
-            </div>
-            <div class="instructiondiv">
-              <font-awesome-icon icon="circle" style="color: yellow;" class="instruction-indicator-icon-circle" /><p>Tuleva</p>
-            </div>
-            <div class="instructiondiv">
-              <font-awesome-icon icon="circle" style="color: orange;" class="instruction-indicator-icon-circle" /><p>Päättynyt</p>
-            </div>
-            <div class="instructiondiv">
-              <font-awesome-icon icon="circle" style="color: crimson;" class="instruction-indicator-icon-circle" /><p>Suljettu</p>
-            </div>
-            <div class="instructiondiv">
-              <font-awesome-icon icon="circle" style="color: grey;" class="instruction-indicator-icon-circle" /><p>Arkistoitu</p>
+            <div class="indicator-instructions-container instructions-container">
+              <div class="instructiondiv">
+                <font-awesome-icon icon="user-slash" class="instruction-indicator-icon" /><p>Anonyymi</p>
+              </div>
+              <div class="instructiondiv">
+                <font-awesome-icon icon="user-check" class="instruction-indicator-icon" /><p>Autentikoitu</p>
+              </div>
+              <div class="instructiondiv">
+                <font-awesome-icon icon="circle" style="color: rgb(0, 194, 0);" class="instruction-indicator-icon-circle" /><p>Käynnissä</p>
+              </div>
+              <div class="instructiondiv">
+                <font-awesome-icon icon="circle" style="color: yellow;" class="instruction-indicator-icon-circle" /><p>Tuleva</p>
+              </div>
+              <div class="instructiondiv">
+                <font-awesome-icon icon="circle" style="color: orange;" class="instruction-indicator-icon-circle" /><p>Päättynyt</p>
+              </div>
+              <div class="instructiondiv">
+                <font-awesome-icon icon="circle" style="color: crimson;" class="instruction-indicator-icon-circle" /><p>Suljettu</p>
+              </div>
+              <div class="instructiondiv">
+                <font-awesome-icon icon="circle" style="color: grey;" class="instruction-indicator-icon-circle" /><p>Arkistoitu</p>
+              </div>
             </div>
           </div>
         </transition>
@@ -111,7 +121,8 @@
             </div>
             <div v-else-if="field.colType === 'actions'" class="actionsCel">
               <button v-if="!data.item.archived" @click="modifySurvey(data.item.surveyId)" class="tableButton modifyButton"><font-awesome-icon icon="pencil-alt" class="tableButtonIcon" /></button>
-              <button v-if="!data.item.archived" @click="archiveSurvey(data.item.surveyId)" :disabled="data.item.archived" class="tableButton archiveButton"><font-awesome-icon icon='folder' class="tableButtonIcon"/></button>
+              <button v-if="!data.item.archived" @click="archiveSurvey(data.item.surveyId)" class="tableButton archiveButton"><font-awesome-icon icon='folder' class="tableButtonIcon"/></button>
+              <button v-else @click="reCreateSurvey(data.item.surveyId)" class="tableButton reCreateButton"><font-awesome-icon icon='folder-open' class="tableButtonIcon"/></button>
               <button @click="deleteSurvey(data.item.surveyId)" class="tableButton deleteButton"> <font-awesome-icon icon="times" class="tableButtonIcon"/></button>
             </div>
           </div>
@@ -160,7 +171,7 @@
             type="email"
           />
           <b-input-group-append>
-            <b-button @click="addRespondent" :disabled="!modify.currentRespondent || !modify.currentRespondent.match(/.+@.+/)" class="addRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
+            <b-button @click="addRespondent" :disabled="!emailIsValid" class="addRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
           </b-input-group-append>
         </b-input-group>
         <ul class="respondentList" v-if="modify.surveyRespondents.length">
@@ -268,7 +279,6 @@ export default {
             colType: 'actions'
           }
         ],
-        surveys: [],
         searchTerm: null,
         surveyResultsId: null,
         modify: {
@@ -295,13 +305,15 @@ export default {
         },
         display: "all",
         showTotalDetailed: false,
-        showInstructions: true,
-        loaded: false
+        showInstructions: true
     }
   },
   computed: {
+    surveys() {
+      return this.$store.state.admin.surveys
+    },
     computedSurveys() {
-      return this.$data.surveys.map(survey => {
+      return this.surveys.map(survey => {
         return {
           ...survey,
           open: 
@@ -370,23 +382,22 @@ export default {
           this.del.inputSurveyName = null
         }
       }
+    },
+    emailIsValid() {
+      if (this.modify.surveyId) {
+        return this.modify.currentRespondent &&
+          !this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.some(email => email.toLowerCase() === this.modify.currentRespondent.toLowerCase()) && 
+          !this.modify.surveyRespondents.some(email => email.toLowerCase() === this.modify.currentRespondent.toLowerCase()) &&
+          this.modify.currentRespondent &&
+          this.modify.currentRespondent.match(/.+@.+/)
+      } else {
+        return null
+      }
     }
   },
   methods: {
-    async getSurveys() {
-      const { data } = await axios({
-        method: 'GET', 
-        url: process.env.VUE_APP_BACKEND + "/admin/survey/all",
-        headers: {
-          'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
-        }
-      })
-      this.$data.surveys = data
-      this.$data.loaded = true
-    },
-    updateSurvey(updatedSurvey) {
-      const index = this.surveys.findIndex(survey => survey.surveyId === updatedSurvey.surveyId)
-      if (~index) this.surveys.splice(index, 1, updatedSurvey)
+    updateSurveys() {
+      this.$store.dispatch('admin/getSurveys')
     },
     deleteSurvey(surveyId) {
       if (!this.del.surveyId) {
@@ -407,8 +418,7 @@ export default {
           }
         }).then(res => {
           if (res.status === 204) {
-            const index = this.surveys.findIndex(survey => survey.surveyId === this.del.surveyId)
-            if (~index) this.surveys.splice(index, 1)
+            this.updateSurveys()
             this.$nextTick(() => this.$refs.deleteSurveyModal.hide())
           }
         }).catch(err => {
@@ -439,7 +449,7 @@ export default {
           }
         }).then(res => {
           if (res.status === 204) {
-            this.surveys.find(survey => survey.surveyId === this.archive.surveyId).archived = true
+            this.updateSurveys()
             this.$nextTick(() => this.$refs.archiveSurveyModal.hide())
           }
         }).catch(err => {
@@ -464,12 +474,9 @@ export default {
       }
     },
     addRespondent() {
-      if (!this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.some(email => email.toLowerCase() === this.modify.currentRespondent.toLowerCase()) && 
-          !this.modify.surveyRespondents.some(email => email.toLowerCase() === this.modify.currentRespondent.toLowerCase()) &&
-          this.modify.currentRespondent &&
-          this.modify.currentRespondent.match(/.+@.+/)) {
-            this.modify.surveyRespondents.push(this.modify.currentRespondent)
-            this.modify.currentRespondent = null
+      if (emailIsValid) {
+        this.modify.surveyRespondents.push(this.modify.currentRespondent)
+        this.modify.currentRespondent = null
       }
     },
     removeRespondent(index) {
@@ -493,7 +500,7 @@ export default {
         })
         .then(res => {
           if (res.status === 200) {
-            this.updateSurvey(res.data)
+            this.updateSurveys()
             this.$nextTick(() => this.$refs.modifySurveyModal.hide())
           }
         }).catch(err => {
@@ -504,6 +511,17 @@ export default {
           })
         })
       }
+    },
+    reCreateSurvey(surveyId) {
+      this.$store.dispatch('admin/reCreateSurvey', surveyId)
+        .then(() => this.$emit('changeActiveComponent', 'adminCreate'))
+        .catch(err => {
+          this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+            title: this.$t('message.errorToastTitle'),
+            toaster: 'b-toaster-bottom-right',
+            variant: 'danger'
+          })
+        })
     },
     openSurveyResults(surveyId) {
       if (this.surveyResultsId !== null && this.surveyResultsId !== surveyId) {
@@ -520,7 +538,7 @@ export default {
     }
   },
   created() {
-    this.getSurveys()
+    this.$store.dispatch('admin/getSurveys')
   }
 }  
 </script>
@@ -596,13 +614,17 @@ export default {
   .actionsCel {
     display: grid;
     justify-self: center;
-    width: 8rem;
     grid-auto-flow: column;
-    grid-column-gap: 0.5rem;
+    grid-column-gap: 0.75rem;
+    grid-auto-columns: 2rem;
     justify-items: end;
 
     .modifyButton {
       grid-column: 1 / 2;
+    }
+
+    .reCreateButton {
+      grid-column: 2 / 3;
     }
 
     .archiveButton {
@@ -813,45 +835,22 @@ export default {
         margin-left:1rem;
         height: 8rem;
 
-        .instructions-container {
+        .total-instructions-container {
           display: grid;
           grid-auto-flow: column;
           overflow: hidden;
-          grid-template-columns: repeat(3, max-content);
-          grid-template-rows: repeat(4, max-content);
+          grid-template-columns: repeat(2, 1fr);
           width: max-content;
         }
 
-        .active-instruction:before {
-          content: "\26AB";
-          margin-right: 0.5rem;
-          color: rgb(0, 194, 0);
+        .instructions-container {
+          display: grid;
+          grid-auto-flow: column;
+          grid-template-rows: repeat(4, 1fr);
+          grid-template-columns: repeat(2, 1fr);
+          overflow: hidden;
+          width: max-content;
         }
-
-        .prevented-instruction:before {
-          content: "\26AB";
-          margin-right: 0.5rem;
-          color: crimson;
-        }
-
-        .starting-instruction:before {
-          content: "\26AB";
-          margin-right: 0.5rem;
-          color: yellow;
-        }
-
-        .ended-instruction:before {
-          content: "\26AB";
-          margin-right: 0.5rem;
-          color: orange;
-        }
-
-        .archived-instruction:before {
-          content: "\26AB";
-          margin-right: 0.5rem;
-          color: grey;
-        }
-        
 
         .instructionsTitle {
           align-self: baseline;

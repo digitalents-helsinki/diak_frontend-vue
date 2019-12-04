@@ -18,11 +18,11 @@
         <div class="textIcons">
             <div class="icontextInquery">
                 <img src="../images/note_add_24px_outlined.svg" alt="" />
-                <button @click="activeComponent = 'adminCreate'" class="btn createSurveyopen" v-bind:class="classObjectcreate">{{ $t('message.surveyCreatebutton') }}</button>
+                <button @click="changeActiveComponent('adminCreate')" class="btn createSurveyopen" v-bind:class="classObjectcreate">{{ $t('message.surveyCreatebutton') }}</button>
             </div>
             <div class="icontextManage">
                 <img src="../images/scatter_plot_24px_outlined.svg" alt="" />
-                <button @click="activeComponent = 'adminManage'" class="btn manageSurveyopen" v-bind:class="classObjectmanage">{{ $t('message.manageSurveysbutton') }}</button>
+                <button @click="changeActiveComponent('adminManage')" class="btn manageSurveyopen" v-bind:class="classObjectmanage">{{ $t('message.manageSurveysbutton') }}</button>
             </div>
             <!--<div class="text-icons-content produce">
                 <div class="producediv"> </div>
@@ -31,8 +31,8 @@
             </div>-->
         </div>
     </div>
-    <admin-create v-if="activeComponent === 'adminCreate'"/>
-    <admin-manage v-if="activeComponent === 'adminManage'"/>
+    <admin-create v-if="activeComponent === 'adminCreate'" v-on:changeActiveComponent="changeActiveComponent($event)"/>
+    <admin-manage v-if="activeComponent === 'adminManage'" v-on:changeActiveComponent="changeActiveComponent($event)"/>
 </div>
 </template>
 <script>
@@ -62,6 +62,11 @@ export default {
                 'text-info': this.activeComponent === 'adminManage'
             }
         },
+    },
+    methods: {
+        changeActiveComponent(component) {
+            this.activeComponent = component
+        }
     }
 }
 </script>
@@ -69,6 +74,7 @@ export default {
 .adminPage{
     background-color:#F9F9FB;
     width:100%;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
     align-items:center;

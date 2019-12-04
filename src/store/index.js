@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import Cookies from 'js-cookie'
 import authentication from './modules/authentication'
+import admin from './modules/admin'
 import user from './modules/user'
 import questionnaire from './modules/questionnaire'
 
@@ -29,6 +30,7 @@ const vuexSession = new VuexPersistence({
 export default new Vuex.Store({
   modules: {
     authentication,
+    admin,
     user,
     questionnaire
   },
