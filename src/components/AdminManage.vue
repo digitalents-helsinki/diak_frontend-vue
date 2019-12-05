@@ -35,6 +35,9 @@
                 <font-awesome-icon icon="folder-open" style="color:#353535;"/><p>Käytä pohjana</p>
               </div>
               <div class="instructiondiv">
+                <font-awesome-icon icon="stamp" style="color:#353535;"/><p>Viimeistele kysely</p>
+              </div>
+              <div class="instructiondiv">
                 <font-awesome-icon icon="folder" style="color:grey;"/><p>Arkistoi kysely</p>
               </div>
               <div class="instructiondiv">
@@ -62,6 +65,9 @@
               </div>
               <div class="instructiondiv">
                 <font-awesome-icon icon="circle" style="color: grey;" class="instruction-indicator-icon-circle" /><p>Arkistoitu</p>
+              </div>              
+              <div class="instructiondiv">
+                <font-awesome-icon icon="circle" style="color: steelblue;" class="instruction-indicator-icon-circle" /><p>Keskeneräinen</p>
               </div>
             </div>
           </div>
@@ -95,12 +101,12 @@
           <div v-bind:key="field.key" class="surveyTableCel">
             <div v-if="field.colType === 'name'">
               <span v-if="data.item.name.length <= 20" class="surveyName">
-                <font-awesome-icon icon="circle" class="indicator-icon" :data-indicatorcolor="data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'"/>
+                <font-awesome-icon icon="circle" class="indicator-icon" :data-indicatorcolor="!data.item.final ? 'steelblue' : data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'"/>
                 <font-awesome-icon :icon="data.item.anon ? 'user-slash' : 'user-check'" class="indicator-icon"/>
                 {{data.item.name}}
               </span>
               <span v-else v-b-tooltip="data.item.name" tabindex="0" class="surveyName">
-                <font-awesome-icon icon="circle" class="indicator-icon" :data-indicatorcolor="data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'"/>
+                <font-awesome-icon icon="circle" class="indicator-icon" :data-indicatorcolor="!data.item.final ? 'steelblue' : data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'"/>
                 <font-awesome-icon :icon="data.item.anon ? 'user-slash' : 'user-check'" class="indicator-icon"/>
                 {{data.item.name.substring(0, 17) + '...'}}
               </span>
@@ -117,12 +123,13 @@
               <span>{{data.item.responses || 0}}/{{data.item.respondents_size}}</span>
             </div>
             <div v-else-if="field.colType === 'analyze'">
-              <button @click="openSurveyResults(data.item.surveyId)" class="tableButton"><font-awesome-icon icon="chart-bar" class="tableButtonIcon" /></button>
+              <button v-if="data.item.final" @click="openSurveyResults(data.item.surveyId)" class="tableButton"><font-awesome-icon icon="chart-bar" class="tableButtonIcon" /></button>
             </div>
             <div v-else-if="field.colType === 'actions'" class="actionsCel">
-              <button v-if="!data.item.archived" @click="modifySurvey(data.item.surveyId)" class="tableButton modifyButton"><font-awesome-icon icon="pencil-alt" class="tableButtonIcon" /></button>
-              <button v-if="!data.item.archived" @click="archiveSurvey(data.item.surveyId)" class="tableButton archiveButton"><font-awesome-icon icon='folder' class="tableButtonIcon"/></button>
-              <button v-else @click="reCreateSurvey(data.item.surveyId)" class="tableButton reCreateButton"><font-awesome-icon icon='folder-open' class="tableButtonIcon"/></button>
+              <button v-if="!data.item.archived && data.item.final" @click="modifySurvey(data.item.surveyId)" class="tableButton modifyButton"><font-awesome-icon icon="pencil-alt" class="tableButtonIcon" /></button>
+              <button v-if="!data.item.archived && data.item.final" @click="archiveSurvey(data.item.surveyId)" class="tableButton archiveButton"><font-awesome-icon icon='folder' class="tableButtonIcon"/></button>
+              <button v-else-if="data.item.final" @click="reCreateSurvey(data.item.surveyId)" class="tableButton reCreateButton"><font-awesome-icon icon='folder-open' class="tableButtonIcon"/></button>
+              <button v-else @click="finalizeSurvey(data.item.surveyId)" class="tableButton finalizeButton"><font-awesome-icon icon='stamp' class="tableButtonIcon"/></button>
               <button @click="deleteSurvey(data.item.surveyId)" class="tableButton deleteButton"> <font-awesome-icon icon="times" class="tableButtonIcon"/></button>
             </div>
           </div>
@@ -523,6 +530,17 @@ export default {
           })
         })
     },
+    finalizeSurvey(surveyId) {
+      this.$store.dispatch('admin/finalizeSurvey', surveyId)
+        .then(() => this.$emit('changeActiveComponent', 'adminFinalize'))
+        .catch(err => {
+          this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+            title: this.$t('message.errorToastTitle'),
+            toaster: 'b-toaster-bottom-right',
+            variant: 'danger'
+          })
+        })
+    },
     openSurveyResults(surveyId) {
       if (this.surveyResultsId !== null && this.surveyResultsId !== surveyId) {
         this.surveyResultsId = null
@@ -607,6 +625,10 @@ export default {
         &[data-indicatorcolor="grey"] {
           color: grey;
         }
+        
+        &[data-indicatorcolor="steelblue"] {
+          color: steelblue;
+        }
       }
     }
   }
@@ -624,6 +646,10 @@ export default {
     }
 
     .reCreateButton {
+      grid-column: 2 / 3;
+    }
+
+    .finalizeButton {
       grid-column: 2 / 3;
     }
 

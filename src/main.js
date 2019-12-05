@@ -8,7 +8,7 @@ import VueMoment from 'vue-moment'
 import moment from 'moment'
 import 'moment/locale/fi'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle, faRedo, faFolderOpen} from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle, faRedo, faFolderOpen, faStamp} from '@fortawesome/free-solid-svg-icons'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
 import { faPencilAlt} from '@fortawesome/free-solid-svg-icons'
@@ -57,6 +57,7 @@ library.add(faChevronLeft)
 library.add(faCircle)
 library.add(faRedo)
 library.add(faFolderOpen)
+library.add(faStamp)
 
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {

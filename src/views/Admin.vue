@@ -18,11 +18,11 @@
         <div class="textIcons">
             <div class="icontextInquery">
                 <img src="../images/note_add_24px_outlined.svg" alt="" />
-                <button @click="changeActiveComponent('adminCreate')" class="btn createSurveyopen" v-bind:class="classObjectcreate">{{ $t('message.surveyCreatebutton') }}</button>
+                <button @click="changeActiveComponent('adminCreate')" class="btn createSurveyopen" v-activeLink:adminCreate>{{ $t('message.surveyCreatebutton') }}</button>
             </div>
             <div class="icontextManage">
                 <img src="../images/scatter_plot_24px_outlined.svg" alt="" />
-                <button @click="changeActiveComponent('adminManage')" class="btn manageSurveyopen" v-bind:class="classObjectmanage">{{ $t('message.manageSurveysbutton') }}</button>
+                <button @click="changeActiveComponent('adminManage')" class="btn manageSurveyopen" v-activeLink:adminManage>{{ $t('message.manageSurveysbutton') }}</button>
             </div>
             <!--<div class="text-icons-content produce">
                 <div class="producediv"> </div>
@@ -31,8 +31,18 @@
             </div>-->
         </div>
     </div>
-    <admin-create v-if="activeComponent === 'adminCreate'" v-on:changeActiveComponent="changeActiveComponent($event)"/>
-    <admin-manage v-if="activeComponent === 'adminManage'" v-on:changeActiveComponent="changeActiveComponent($event)"/>
+    <component :is="activeComponent" v-on:changeActiveComponent="changeActiveComponent($event)"/>
+    <b-modal 
+        id="leaveModal"
+        @ok="navigateOutOfSurveyFinalization"
+        :title="$t('message.leaveSurvey')"
+    >
+        <template v-slot:modal-footer="{ ok, cancel }">
+            <b-button @click="cancel()">{{$t('message.modifySurveyCancel')}}</b-button>
+            <b-button @click="ok()" class="leaveModalButton">{{$t('message.leave')}}</b-button>
+        </template>
+        {{$t('message.leaveSurveyConfirmation')}}
+    </b-modal>
 </div>
 </template>
 <script>
@@ -43,34 +53,71 @@ export default {
     name: 'admin',
     data() {
         return {
-            activeComponent: 'adminManage'
+            activeComponent: 'adminManage',
+            cachedActiveComponent: null
         }
     },
     components: {
         AdminCreate,
         AdminManage
     },
-    computed: {
-        classObjectcreate: function () {
-            return {
-                'text-info': this.activeComponent === 'adminCreate'
-            }
-        },
-
-        classObjectmanage: function () {
-            return {
-                'text-info': this.activeComponent === 'adminManage'
-            }
-        },
-    },
     methods: {
         changeActiveComponent(component) {
-            this.activeComponent = component
+            if (component === 'adminFinalize') {
+                this.activeComponent = 'adminCreate'
+            } else if (this.$store.state.admin.finalizationSurveyId) {
+                this.cachedActiveComponent = component
+                this.$bvModal.show('leaveModal')
+            } else {
+                this.activeComponent = component
+            }
+        },
+        navigateOutOfSurveyFinalization() {
+            this.$store.commit('admin/setFinalizationSurveyId')
+            this.$store.commit('admin/setSurveyBeingCreated')
+            this.activeComponent = this.cachedActiveComponent
+        }
+    },
+    directives: {
+        activeLink: {
+            inserted(el, binding, vnode) {
+                if (vnode.context.activeComponent === binding.arg && !vnode.context.$store.state.admin.finalizationSurveyId) el.classList.add('active-link')
+            },
+            update(el, binding, vnode) {
+                if (vnode.context.activeComponent === binding.arg && !vnode.context.$store.state.admin.finalizationSurveyId) el.classList.add('active-link')
+                else el.classList.remove('active-link')
+            }
         }
     }
 }
 </script>
+<style lang="scss">
+.leaveModalButton {
+    background-color: #A1318A;
+    border-color: #A1318A;
+
+    &:hover {
+        background-color: darken(#A1318A, 5%);
+        border-color: #A1318A;
+    }
+
+    &:active {
+        background-color: darken(#A1318A, 10%) !important;
+        border-color: #A1318A !important;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(161, 49, 139, 0.5);
+    }
+
+}
+</style>
 <style lang="scss" scoped>
+
+.active-link {
+    color: #35CDE6 !important;
+}
+
 .adminPage{
     background-color:#F9F9FB;
     width:100%;
@@ -109,7 +156,7 @@ export default {
 
                 .adminnameemail{
                     margin-top:0.1rem;
-                    margi-right:0.1rem;
+                    margin-right:0.1rem;
 
                     .namelocation{
                         font-size:1.1rem;

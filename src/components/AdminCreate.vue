@@ -2,11 +2,22 @@
 <div class="rightsideCreate">
     <div class="createWrapper-before" v-if="!created">
         <div class="rightsideCreate-top">
-            <p>{{ $t('message.surveyCreate') }}</p> 
+            <p>{{ this.$store.state.admin.finalizationSurveyId ? $t('message.surveyFinalize') : $t('message.surveyCreate') }}</p> 
         </div>
         <div class="top-buttons">
-            <button class="btn savecontinueButton">{{ $t('message.saveContinue') }}</button>
-            <button class="btn discardButton">{{ $t('message.disCard') }}</button>
+            <button @click="sendSurvey({ final: false })" class="btn savecontinueButton">{{ $t('message.saveContinue') }}</button>
+            <button v-b-modal.discardModal class="btn discardButton">{{ $t('message.disCard') }}</button>
+            <b-modal 
+                id="discardModal"
+                @ok="$store.commit('admin/setSurveyBeingCreated')"
+                :title="$t('message.discardSurvey')"
+            >
+                <template v-slot:modal-footer="{ ok, cancel }">
+                    <b-button @click="cancel()">{{$t('message.modifySurveyCancel')}}</b-button>
+                    <b-button @click="ok()" class="discardModalButton">{{$t('message.discard')}}</b-button>
+                </template>
+                {{$t('message.discardSurveyConfirmation')}}
+            </b-modal>
         </div>
         <div class="adminForm">
             <div class="nameInputsection">
@@ -148,8 +159,8 @@
                     <b-textarea v-else v-bind:value="survey.message" @input="modifySurveyAttribute({ message: $event })" class="writeMessage" type="text" />
                 </div> 
                 <div class="bottom-buttons">
-                    <button class="btn savecontinueBottom">{{ $t('message.saveContinue') }}</button>
-                    <button id="sendSurveyButton" class="btn sendsurveyButton" @click="sendSurvey">{{ $t('message.sendSurvey') }}<font-awesome-icon icon="paper-plane" class="putMessageicon"/></button>
+                    <button @click="sendSurvey({ final: false })" class="btn savecontinueBottom">{{ $t('message.saveContinue') }}</button>
+                    <button id="sendSurveyButton" class="btn sendsurveyButton" @click="sendSurvey()">{{ $t('message.sendSurvey') }}<font-awesome-icon icon="paper-plane" class="putMessageicon"/></button>
                     <b-popover target="sendSurveyButton" triggers="manual" placement="top">
                         {{$t('message.sendSurveyError')}}
                     </b-popover>
@@ -290,19 +301,22 @@ export default {
         removeEmail(index) {
             this.$store.commit('admin/removeEmail', index)
         },
-        sendSurvey() {
+        sendSurvey({ final } = { final: true }) {
             if (this.survey.questions.length === 0 || this.survey.questions.some(question => !question.name && (!question.title || !question.description)) || !this.survey.name) {
                 if (!this.survey.name) this.surveyNameState = false
                 this.$root.$emit('bv::show::popover', 'sendSurveyButton')
                 setTimeout(() => this.$root.$emit('bv::hide::popover', 'sendSurveyButton'), 5000)
             } else {
+                const method = final ? "POST" : "PUT"
+                const url = final ? `${process.env.VUE_APP_BACKEND}/admin/survey/create` : `${process.env.VUE_APP_BACKEND}/admin/survey/save`
                 axios({
-                    method: "POST",
-                    url: process.env.VUE_APP_BACKEND + "/admin/survey/create",
+                    method,
+                    url,
                     headers: {
                         'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
                     },
-                    data: { 
+                    data: {
+                        surveyId: this.$store.state.admin.finalizationSurveyId,
                         to: this.survey.emails, 
                         id: this.survey.name,
                         anon: this.survey.anon,
@@ -323,6 +337,7 @@ export default {
                 .then(res => {
                     if (res.status === 200) {
                         this.created = true
+                        this.$store.commit('admin/setFinalizationSurveyId')
                         this.$store.commit('admin/setSurveyBeingCreated')
                     }
                 }).catch(err => {
@@ -392,9 +407,36 @@ export default {
                 }
             }
         }
+    },
+    beforeDestroy() {
+        if (this.$store.state.admin.finalizationSurveyId) {
+            this.$store.commit('admin/setFinalizationSurveyId')
+            this.$store.commit('admin/setSurveyBeingCreated')
+        }
     }
 }
 </script>
+<style lang="scss">
+.discardModalButton {
+    background-color: #A1318A;
+    border-color: #A1318A;
+
+    &:hover {
+        background-color: darken(#A1318A, 5%);
+        border-color: #A1318A;
+    }
+
+    &:active {
+        background-color: darken(#A1318A, 10%) !important;
+        border-color: #A1318A !important;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(161, 49, 139, 0.5);
+    }
+
+}
+</style>
 <style lang="scss" scoped>
 
 .sendSurveyPopover {
@@ -431,20 +473,36 @@ export default {
             background-color: #353535;
             color: #FFFFFF;
             border-radius: 6px;
-            box-shadow: 0 5px 5px gray;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
             width:18rem;
             height:auto;
             font-weight:bold;
+            
+            &:hover {
+                background-color: darken(#353535, 5%);
+            }
+
+            &:active, &:focus {
+                background-color: darken(#353535, 10%);
+            }
         }
         .discardButton{
             background-color: #A1318A;
             color: #FFFFFF;
             border-radius: 6px;
-            box-shadow: 0 5px 5px #787878;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
             width:10rem;
             height:auto;
             font-weight:bold;
             margin-left:1rem;
+
+            &:hover {
+                background-color: darken(#A1318A, 5%);
+            }
+
+            &:active, &:focus {
+                background-color: darken(#A1318A, 10%);
+            }
         }
     }
     
@@ -834,6 +892,7 @@ export default {
                         
                     .insertemailButton{
                         background-color: #353535;
+
                         .moreemailPlus{
                             margin-left:1rem;
                         }
@@ -898,24 +957,43 @@ export default {
             margin:0 5rem 8rem 5rem;
 
             .savecontinueBottom{
+                margin-right: 0.5rem;
                 background-color: #353535;
                 color: #ffffff;
                 border-radius: 5px;
-                box-shadow: 0 5px 5px gray;
+                box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
                 width:18rem;
                 height:auto;
                 padding:1rem 0;
                 font-weight:bold;
+
+                &:hover {
+                    background-color: darken(#353535, 5%);
+                }
+
+                &:active, &:focus {
+                    background-color: darken(#353535, 10%);
+                }
+
             }
             .sendsurveyButton{
+                margin-left: 0.5rem;
                 background-color:#350E7E;
                 color: #ffffff;
                 border-radius: 5px;
-                box-shadow: 0 5px 5px gray;
+                box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
                 width:16rem;
                 height:auto;
                 padding:1rem 0;
                 font-weight:bold;
+
+                &:hover {
+                    background-color: darken(#350E7E, 5%);
+                }
+
+                &:active, &:focus {
+                    background-color: darken(#350E7E, 10%);
+                }
 
                 .putMessageicon{
                     margin-left:1rem;

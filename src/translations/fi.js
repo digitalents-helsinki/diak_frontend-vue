@@ -188,6 +188,13 @@ export const fi = {
     instructionInfo:'Hei, täytäthän lyhyen tietolomakkeen ennenkuin jatkat eteenpäin.',
     anonymousUser:'Ikä',
     ageInfo:'Ikä vaaditaan',
-    errorToastTitle: 'Virhe'
+    errorToastTitle: 'Virhe',
+    surveyFinalize: 'Viimeistele kysely',
+    discardSurvey: 'Hylkää kysely',
+    discardSurveyConfirmation: 'Haluatko varmasti hylätä kyselyn? Hylkäämistä ei voi peruuttaa.',
+    discard: 'Hylkää',
+    leaveSurvey: 'Poistu kyselyn viimeistelystä',
+    leaveSurveyConfirmation: 'Menetät tallentamattomat muutoksesi.',
+    leave: 'Poistu'
   }
 }

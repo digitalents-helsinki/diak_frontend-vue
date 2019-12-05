@@ -17,7 +17,8 @@ export default {
         questionAnimationId: Math.random()
       })),
       emails: []
-    }
+    },
+    finalizationSurveyId: null
   },
   getters: {
     allDefaultQuestionsExistence(state) {
@@ -39,6 +40,9 @@ export default {
         questionAnimationId: Math.random()
       })) : survey.questions
       state.surveyBeingCreated.emails = typeof survey.emails === 'undefined' ? [] : survey.emails
+    },
+    setFinalizationSurveyId(state, surveyId = null) {
+      state.finalizationSurveyId = surveyId
     },
     modifySurveyAttribute(state, object) {
       Object.assign(state.surveyBeingCreated, object)
@@ -126,6 +130,10 @@ export default {
           survey.UserGroup.Users.reduce((arr, user) => [...arr, user.email], []),
       }
       commit('setSurveyBeingCreated', surveyFormData)
+    },
+    async finalizeSurvey({ commit, dispatch }, surveyId) {
+      dispatch('reCreateSurvey', surveyId)
+      commit('setFinalizationSurveyId', surveyId)
     },
     toggleDefaultQuestions({ state, getters, commit }) {
       if (getters.allDefaultQuestionsExistence) {
