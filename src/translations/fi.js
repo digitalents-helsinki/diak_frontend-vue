@@ -191,6 +191,7 @@ export const fi = {
     submitandcontinuebutton:'Tallenna ja jatka',
     recoveryEmail:'Sähköpostiosoite',
     recoveryInfo:'Recover your forgotten password through adding your email address in the input field',
-  check:'Palauta unohtunut salasana lisäämällä sähköpostiosoitteesi syöttökenttään'
+    recoveryText:'Recover your password',
+    recoverymessage:'Thank you, if you are registered than you will see an email in your provided email address'
   }
 }

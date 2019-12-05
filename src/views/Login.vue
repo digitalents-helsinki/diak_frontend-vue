@@ -119,7 +119,7 @@ export default {
         })
     },
     handlePasswordClick() {
-      this.$router.push({ name: 'password'})
+      this.$router.push({ name: 'recovery'})
     },
     handleRegisterClick() {
       this.$router.push({ name: 'registration'})

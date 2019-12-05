@@ -6,9 +6,11 @@ import Questionnaire from '@/views/Questionnaire.vue'
 import Admin from '@/views/Admin.vue'
 import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
-import Password from '@/views/Password.vue'
+import Recovery from '@/views/Recovery.vue'
+//import Password from '@/views/Password.vue'
 import User from '@/views/User.vue'
 import Supervisor from '@/views/Supervisor.vue'
+import Anonymous from '@/views/Anonymous.vue'
 
 Vue.use(Router)
 
@@ -77,6 +79,20 @@ export default new Router({
       }
     },
     {
+      path: '/anonymous',
+      name: 'anonymous',
+      component: Anonymous
+    },
+    {
+      path: '/recovery',
+      name: 'recovery',
+      component: Recovery,
+      props: true,
+      meta: {
+        quest: true
+      }
+    },
+    /*{
       path: '/password',
       name: 'password',
       component: Password,
@@ -84,7 +100,7 @@ export default new Router({
       meta: {
         quest: true
       }
-    },
+    }*/
     {
       path: '/questionnaire/testikysely',
       name: 'testsurvey',
