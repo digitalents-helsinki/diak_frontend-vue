@@ -188,6 +188,11 @@ export const fi = {
     instructionInfo:'Hei, täytäthän lyhyen tietolomakkeen ennenkuin jatkat eteenpäin.',
     anonymousUser:'Ikä',
     ageInfo:'Ikä vaaditaan',
-    errorToastTitle: 'Virhe'
+    errorToastTitle: 'Virhe',
+    submitandcontinuebutton:'Tallenna ja jatka',
+    recoveryEmail:'Sähköpostiosoite',
+    recoveryInfo:'Recover your forgotten password through adding your email address in the input field',
+    recoveryText:'Recover your password',
+    recoverymessage:'Thank you, if you are registered than you will see an email in your provided email address'
   }
 }
