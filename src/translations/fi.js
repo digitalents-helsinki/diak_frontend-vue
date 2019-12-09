@@ -195,6 +195,11 @@ export const fi = {
     discard: 'Hylkää',
     leaveSurvey: 'Poistu kyselyn viimeistelystä',
     leaveSurveyConfirmation: 'Menetät tallentamattomat muutoksesi.',
-    leave: 'Poistu'
+    leave: 'Poistu',
+    submitandcontinuebutton:'Tallenna ja jatka',
+    recoveryEmail:'Sähköpostiosoite',
+    recoveryInfo:'Recover your forgotten password through adding your email address in the input field',
+    recoveryText:'Recover your password',
+    recoverymessage:'Thank you, if you are registered than you will see an email in your provided email address'
   }
 }
