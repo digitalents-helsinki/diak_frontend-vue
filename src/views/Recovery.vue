@@ -18,7 +18,7 @@
             <b-button type="submit" @click.prevent="handleRecovery" class="btn recoveryButton">{{ $t('message.submitPassword') }}</b-button>
           </b-form>
         </div>
-        <p v-if="recoverymessage" class="enterEmail">{{ $t('message.recoverymessage') }}</p>
+        <p v-if="recoverymessage" class="submitMessage">{{ $t('message.recoverymessage') }}</p>
         <p v-if="recoveryinstruction" class="recoveryinfo">{{ $t('message.recoveryInfo') }}</p>
         <div class="backtologindiv"><p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p></div>
       </div>
@@ -55,7 +55,7 @@ export default {
         return
       }
       this.recoveryvalidation.emailpattern = null      
-      if (!this.recovery.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
+      if (!this.recovery.email.match(/.+@.+/)) {
         this.recoveryvalidation.emailpattern = false
         return
       }
@@ -68,8 +68,10 @@ export default {
             "Content-Type": "application/json"
           }
         }).then(res => {
-          this.recoveryinstruction=false;
-          this.recoverymessage=true;
+          if (res.status === 200) {
+            this.recoveryinstruction=false;
+            this.recoverymessage=true;
+          }
         })
   },
     handleLoginClick() {
@@ -127,6 +129,11 @@ export default {
     margin-top:1rem;
     margin-bottom:1rem;
     color:#FF0000;
+  }
+
+  .submitMessage {
+    font-size: 1rem;
+    padding: 1rem;
   }
 
   .recoveryinfo{

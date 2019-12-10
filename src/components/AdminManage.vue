@@ -393,7 +393,6 @@ export default {
     emailIsValid() {
       if (this.modify.surveyId) {
         return this.modify.currentRespondent &&
-          !this.surveys.find(survey => survey.surveyId === this.modify.surveyId).UserGroup.respondents.some(email => email.toLowerCase() === this.modify.currentRespondent.toLowerCase()) && 
           !this.modify.surveyRespondents.some(email => email.toLowerCase() === this.modify.currentRespondent.toLowerCase()) &&
           this.modify.currentRespondent &&
           this.modify.currentRespondent.match(/.+@.+/)
@@ -481,7 +480,7 @@ export default {
       }
     },
     addRespondent() {
-      if (emailIsValid) {
+      if (this.emailIsValid) {
         this.modify.surveyRespondents.push(this.modify.currentRespondent)
         this.modify.currentRespondent = null
       }

@@ -7,7 +7,7 @@ import Admin from '@/views/Admin.vue'
 import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import Recovery from '@/views/Recovery.vue'
-//import Password from '@/views/Password.vue'
+import Password from '@/views/Password.vue'
 import User from '@/views/User.vue'
 import Supervisor from '@/views/Supervisor.vue'
 import Anonymous from '@/views/Anonymous.vue'
@@ -95,15 +95,15 @@ const router = new Router({
         quest: true
       }
     },
-    /*{
-      path: '/password',
+    {
+      path: '/password/:jwt',
       name: 'password',
       component: Password,
       props: true,
       meta: {
         quest: true
       }
-    }*/
+    },
     {
       path: '/questionnaire/testikysely',
       name: 'testsurvey',
