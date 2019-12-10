@@ -121,8 +121,12 @@ const router = new Router({
           anonId: to.params.anonId,
           anon: true
         })
-        store.dispatch('questionnaire/fetchSurvey')
-        next()
+        if (from.name === 'anonymous') {
+          next()
+        } else {
+          store.dispatch('questionnaire/fetchSurvey')
+          next('/anonymous')
+        }
       }
     },
     {

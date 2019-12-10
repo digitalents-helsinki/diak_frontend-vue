@@ -30,10 +30,7 @@
         </b-form-group>
         <div id="submitForm">
           <p v-if="error">{{error}}</p>
-          <b-button @click.prevent="signOut" class="submitIncluded">
-            {{ 'Kirjaudu Ulos' }}
-          </b-button>
-          <b-button v-if="!this.$store.state.survey.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
+          <b-button v-if="!this.$store.state.questionnaire.meta.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.ProfilesubmitButton') }}
             <b-spinner v-if="infoSaved" class="saver" small/>
           </b-button>
@@ -81,13 +78,13 @@ export default {
       if (Object.values(this.infovalidation).every(value => value === null)) {
         axios({
           method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/anonuser/" + this.$store.state.auth.userId + "/info/update",
+          url: process.env.VUE_APP_BACKEND + "/anonuser/" + this.$store.state.questionnaire.meta.anonId + "/info/update",
           data: {
             anonymousinfo: this.anonymousinfo
           }
         }).then(res => {
           if (res.status === 200) {
-            if (this.$store.state.survey.surveyId) {
+            if (this.$store.state.questionnaire.meta.surveyId) {
               this.$emit('moveToQuestionnaire')
             } else {
               this.infoSaved = true

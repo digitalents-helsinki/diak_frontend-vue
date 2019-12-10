@@ -190,26 +190,20 @@ export default {
               return {
                 ...obj,
                 [question.name]: answer.value,
-                [question.name + '_desc']: answer.description,
-                postal_code: answer.User.postal_number,
-                age: answer.User.age,
-                name: answer.User.name,
-                gender: answer.User.gender
+                [question.name + '_desc']: answer.description
               }
             } else {
               return {
                 ...obj,
                 [question.name]: answer.value,
-                [question.name + '_desc']: answer.description,
-                age: answer.AnonUser.age,
-                gender: answer.AnonUser.gender
+                [question.name + '_desc']: answer.description
               }
             }
           }, {})
 
           return {
             ...questionData,
-            postal_code: user.postal_number,
+            postal_code: user.post_number,
             age: user.age,
             name: user.name,
             gender: user.gender,
