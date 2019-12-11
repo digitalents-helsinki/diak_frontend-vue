@@ -91,6 +91,7 @@
           <b-dropdown-item @click="toggleDisplay('starting')">{{$t('message.startingButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('ended')">{{$t('message.endedButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('closed')">{{$t('message.closedButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('inComplete')">{{$t('message.inCompleteButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('archived')">{{$t('message.archivedButton')}}</b-dropdown-item>
         </b-dropdown>
       </div>
@@ -330,7 +331,7 @@ export default {
           starting: survey.startDate !== null && Date.now() < new Date(survey.startDate).getTime(),
           ended: survey.endDate !== null && new Date(survey.endDate) < Date.now()
         }
-      }).sort((a, b) => a.archived - b.archived)
+      }).sort((a, b) => b.final - a.final).sort((a, b) => a.archived - b.archived)
     },
     filteredSurveys() {
       const surveysToBeFiltered = (() => {
@@ -338,16 +339,17 @@ export default {
         else return this.computedSurveys
       })()
 
-      const nonArchivedSurveys = surveysToBeFiltered.filter(obj => !obj.archived)
+      const filteredSurveys = surveysToBeFiltered.filter(obj => obj.final && !obj.archived)
 
       return {
         all: surveysToBeFiltered,
         anonymous: surveysToBeFiltered.filter(obj => obj.anon),
         authenticated: surveysToBeFiltered.filter(obj => !obj.anon),
-        active: nonArchivedSurveys.filter(obj => obj.open),
-        closed: nonArchivedSurveys.filter(obj => !obj.active),
-        starting: nonArchivedSurveys.filter(obj => obj.starting),
-        ended: nonArchivedSurveys.filter(obj => obj.ended),
+        active: filteredSurveys.filter(obj => obj.open),
+        closed: filteredSurveys.filter(obj => !obj.active),
+        starting: filteredSurveys.filter(obj => obj.starting),
+        ended: filteredSurveys.filter(obj => obj.ended),
+        inComplete: surveysToBeFiltered.filter(obj => !obj.final),
         archived: surveysToBeFiltered.filter(obj => obj.archived)
       }
     },
@@ -429,7 +431,7 @@ export default {
           }
         }).catch(err => {
           this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
-            title: this.$t('message.errorToastTitle'),
+            title: this.$t('message.genericError'),
             toaster: 'b-toaster-bottom-right',
             variant: 'danger'
           })
@@ -460,7 +462,7 @@ export default {
           }
         }).catch(err => {
           this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
-            title: this.$t('message.errorToastTitle'),
+            title: this.$t('message.genericError'),
             toaster: 'b-toaster-bottom-right',
             variant: 'danger'
           })
@@ -511,7 +513,7 @@ export default {
           }
         }).catch(err => {
           this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
-            title: this.$t('message.errorToastTitle'),
+            title: this.$t('message.genericError'),
             toaster: 'b-toaster-bottom-right',
             variant: 'danger'
           })
@@ -523,7 +525,7 @@ export default {
         .then(() => this.$emit('changeActiveComponent', 'adminCreate'))
         .catch(err => {
           this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
-            title: this.$t('message.errorToastTitle'),
+            title: this.$t('message.genericError'),
             toaster: 'b-toaster-bottom-right',
             variant: 'danger'
           })
@@ -534,7 +536,7 @@ export default {
         .then(() => this.$emit('changeActiveComponent', 'adminFinalize'))
         .catch(err => {
           this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
-            title: this.$t('message.errorToastTitle'),
+            title: this.$t('message.genericError'),
             toaster: 'b-toaster-bottom-right',
             variant: 'danger'
           })

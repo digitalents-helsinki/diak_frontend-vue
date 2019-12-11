@@ -100,6 +100,7 @@ export const fi = {
     closedButton: 'Suljetut kyselyt',
     startingButton: 'Tulevat kyselyt',
     endedButton: 'Päättyneet kyselyt',
+    inCompleteButton: 'Keskeneräiset kyselyt',
     archivedButton:'Arkistoidut kyselyt',
     loginText:'Kirjaudu sisään',
     usernamePlaceholder:'Sähköpostiosoite',
@@ -188,7 +189,8 @@ export const fi = {
     instructionInfo:'Hei, täytäthän lyhyen tietolomakkeen ennenkuin jatkat eteenpäin.',
     anonymousUser:'Ikä',
     ageInfo:'Ikä vaaditaan',
-    errorToastTitle: 'Virhe',
+    genericError: 'Virhe',
+    validationError: 'Validointivirhe',
     surveyFinalize: 'Viimeistele kysely',
     discardSurvey: 'Hylkää kysely',
     discardSurveyConfirmation: 'Haluatko varmasti hylätä kyselyn? Hylkäämistä ei voi peruuttaa.',
@@ -201,6 +203,8 @@ export const fi = {
     recoveryInfo: 'Palauta unohtunut salasanasi syöttämällä sähköpostiosoitteesi.',
     recoveryText: 'Palauta salasanasi',
     recoverymessage: 'Jos olet rekisteröitynyt, saat sähköpostiisi linkin, jonka kautta voit palauttaa salasanasi.',
-    changedPasswordMessage: 'Salasanasi on vaihdettu.'
+    changedPasswordMessage: 'Salasanasi on vaihdettu.',
+    alreadyRegistered: 'Sähköpostiosoite on jo käytössä: ',
+    emailValidationError: 'Sähköpostiosoitetta ei voitu vahvistaa.'
   }
 }

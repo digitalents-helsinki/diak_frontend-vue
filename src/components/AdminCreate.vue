@@ -341,8 +341,15 @@ export default {
                         this.$store.commit('admin/setSurveyBeingCreated')
                     }
                 }).catch(err => {
+                    const errorTitle = (() => {
+                        if (err.response.status === 422) {
+                            return this.$t('message.validationError')
+                        } else {
+                            return this.$t('message.genericError')
+                        }
+                    })()
                     this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
-                        title: this.$t('message.errorToastTitle'),
+                        title: errorTitle,
                         toaster: 'b-toaster-bottom-right',
                         variant: 'danger'
                     })

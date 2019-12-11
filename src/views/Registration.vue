@@ -38,6 +38,7 @@
           <b-button type="submit" @click.prevent="handleRegistration" class="btn registersubmitButton">{{ $t('message.submitRegister') }}</b-button>
         </b-form>
       </div>
+      <p v-if="error" class="registrationError">{{error}}</p>
       <p class="registerinfo">{{ $t('message.registrationInfo') }}</p>
       <p class="passwordinfo">{{ $t('message.minimumLength') }}</p>
       <div class="backtologindiv"><p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p></div>
@@ -73,7 +74,8 @@ export default {
           passwordlength: null
         },
         confirmpassword:null
-      }
+      },
+      error: null
     }
   },
   methods: {
@@ -120,6 +122,14 @@ export default {
         }).then(res => {
           if (res.status === 201) {
             this.$router.push({ name: 'login' })
+          }
+        }).catch(err => {
+          if (err.response) {
+            if (err.response.status === 409) {
+              this.error = this.$t('message.alreadyRegistered') + err.response.data.join('')
+            } else {
+              this.error = err.response.data
+            }
           }
         })
     },
@@ -182,6 +192,13 @@ export default {
             line-height:2;
             width:16rem;
           }
+        }
+
+        .registrationError {
+          font-size: 1rem;
+          color: red;
+          padding: 0.2rem 1rem 0 1rem;
+          margin: 0;
         }
 
         .registerinfo{
