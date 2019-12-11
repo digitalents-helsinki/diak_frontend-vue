@@ -56,7 +56,7 @@ export default {
       if (this.auth || (this.email && this.email.match(/.+@.+/))){
         axios({
           method: "POST",
-          url: `${process.env.VUE_APP_BACKEND }/${this.auth ? 'auth' : 'anon'}/emailresult`,
+          url: `${process.env.VUE_APP_BACKEND }/${this.auth ? 'auth' : 'anon'}/result/email`,
           headers: {
             'Authorization': `Bearer ${this.auth ? this.$store.state.authentication.accessToken : ''}`
           },

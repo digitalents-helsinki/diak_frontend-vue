@@ -36,7 +36,7 @@ export default {
     handleAdminAdd() {
       axios({
         method: "POST",
-        url: process.env.VUE_APP_BACKEND + "/admin/create",
+        url: process.env.VUE_APP_BACKEND + "/supervisor/admin/create",
         data: {
           username: this.$data.username,
           password: this.$data.password
@@ -48,7 +48,7 @@ export default {
     handleAdminRemove(id) {
       axios({
         method: "POST",
-        url: process.env.VUE_APP_BACKEND + "/admin/delete",
+        url: process.env.VUE_APP_BACKEND + "/supervisor/admin/delete",
         data: {
           id: id
         }
@@ -59,7 +59,7 @@ export default {
     getAdmins() {
       axios({
         method: 'GET',
-        url: `${process.env.VUE_APP_BACKEND}/admins`
+        url: `${process.env.VUE_APP_BACKEND}/supervisor/admin/all`
       }).then(result => {
         this.admins = result.data
       })
@@ -67,7 +67,7 @@ export default {
     handleLogin() {
       axios({
         method: 'POST',
-        url: `${process.env.VUE_APP_BACKEND}/supervisor/login`,
+        url: `${process.env.VUE_APP_BACKEND}/supervisor/authorize`,
         data: {
           username: this.$data.supervisor_username,
           password: this.$data.supervisor_password

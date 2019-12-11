@@ -36,7 +36,7 @@ export default {
     fetchUserInfo({ rootState, commit }) {
       axios({
         method: "GET",
-        url: process.env.VUE_APP_BACKEND + "/user/info",
+        url: process.env.VUE_APP_BACKEND + "/auth/user/info",
         headers: {
           'Authorization': `Bearer ${rootState.authentication.accessToken}`
         }

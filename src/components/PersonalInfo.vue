@@ -140,7 +140,7 @@ export default {
         try {
           axios({
             method: "POST",
-            url: process.env.VUE_APP_BACKEND + "/user/info/update",
+            url: process.env.VUE_APP_BACKEND + "/auth/user/info/update",
             headers: {
               'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
             },

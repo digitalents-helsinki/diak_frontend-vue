@@ -78,7 +78,7 @@ export default {
       if (Object.values(this.infovalidation).every(value => value === null)) {
         axios({
           method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/anonuser/" + this.$store.state.questionnaire.meta.anonId + "/info/update",
+          url: process.env.VUE_APP_BACKEND + "/anon/user/" + this.$store.state.questionnaire.meta.anonId + "/info/update",
           data: {
             anonymousinfo: this.anonymousinfo
           }
