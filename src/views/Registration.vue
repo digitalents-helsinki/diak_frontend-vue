@@ -6,31 +6,22 @@
       <div class="registrationForm">
         <b-form>
           <b-form-group id="namefield">
-            <b-form-input type="email" v-model="registration.email" :state="registervalidation.email" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')">
+            <b-form-input type="email" v-model="registration.email" :state="registervalidation.emailpattern" id="email" name="loginname" v-bind:placeholder="$t('message.registerUsername')">
             </b-form-input>
-            <b-form-invalid-feedback :state="registervalidation.email" class="emailFeedback">
-            {{ $t('message.emailInput') }}
-            </b-form-invalid-feedback>
             <b-form-invalid-feedback :state="registervalidation.emailpattern" class="emailFeedback">
-            {{ $t('message.patternInput') }}
+            {{ $t('message.emailInput') }}
             </b-form-invalid-feedback>
             </b-form-group>
             <b-form-group id="passwordfield">
-            <b-form-input type="password" id="password" v-model="registration.password" :state="registervalidation.password.required" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')">
+            <b-form-input type="password" id="password" v-model="registration.password" :state="registervalidation.passwordlength" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')">
             </b-form-input>
-            <b-form-invalid-feedback :state="registervalidation.password.required" class="passwordFeedback">
-            {{ $t('message.passwordInput') }}
-            </b-form-invalid-feedback>
-            <b-form-invalid-feedback :state="registervalidation.password.passwordlength" class="passwordFeedback">
+            <b-form-invalid-feedback :state="registervalidation.passwordlength" class="passwordFeedback">
             {{ $t('message.inputLength') }}
              </b-form-invalid-feedback>
           </b-form-group>
           <b-form-group id="retypefield">
-            <b-form-input type="password" id="confirmpassword" v-model="registration.retypepassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')">
+            <b-form-input type="password" id="confirmpassword" v-model="registration.retypepassword" :state="registervalidation.confirmpassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')">
             </b-form-input>
-            <b-form-invalid-feedback :state="registervalidation.retypepassword.required" class="passwordFeedback">
-            {{ $t('message.passwordInput') }}
-            </b-form-invalid-feedback>
             <b-form-invalid-feedback :state="registervalidation.confirmpassword" class="passwordFeedback">
             {{ $t('message.passwordconfirmInput') }}
              </b-form-invalid-feedback>
@@ -60,53 +51,30 @@ export default {
       registration: {
         email: null,
         password: null,
-        retypepassword:null
+        retypepassword: null
       },
       registervalidation: {
-        email: null,
-        emailpattern:null,
-        password: {
-          required: null,
-          passwordlength: null
-        },
-        retypepassword: {
-          required: null,
-          passwordlength: null
-        },
-        confirmpassword:null
+        emailpattern: null,
+        passwordlength: null,
+        confirmpassword: null
       },
       error: null
     }
   },
   methods: {
     handleRegistration() {
-      this.registervalidation.email = null
-      if (!this.registration.email) {
-        this.registervalidation.email = false
-        return
-      }
       this.registervalidation.emailpattern = null      
-      if (!this.registration.email.match(/.+@.+/)) {
+      if (!this.registration.email || !this.registration.email.match(/.+@.+/)) {
         this.registervalidation.emailpattern = false
         return
       }
-      this.registervalidation.password.required = null
-      if (!this.registration.password) {
-        this.registervalidation.password.required = false
-        return
-      }
-      this.registervalidation.password.passwordlength = null
-      if(this.registration.password.length < 8) {
-        this.registervalidation.password.passwordlength = false
-        return
-      }
-      this.registervalidation.retypepassword.required = null
-      if(!this.registration.retypepassword) {
-        this.registervalidation.retypepassword.required = false
+      this.registervalidation.passwordlength = null
+      if (!this.registration.password || this.registration.password.length < 8 || this.registration.password.length > 128) {
+        this.registervalidation.passwordlength = false
         return
       }
       this.registervalidation.confirmpassword = null
-      if(this.registration.password != this.registration.retypepassword) {
+      if (this.registration.password !== this.registration.retypepassword) {
         this.registervalidation.confirmpassword = false
         return
       }
@@ -127,6 +95,8 @@ export default {
           if (err.response) {
             if (err.response.status === 409) {
               this.error = this.$t('message.alreadyRegistered') + err.response.data.join('')
+            } else if (err.response.status === 422) {
+              this.error = this.$t('message.validationError') + ' ' + err.response.data
             } else {
               this.error = err.response.data
             }
