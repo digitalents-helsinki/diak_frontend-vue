@@ -9,7 +9,7 @@
           label-for="age"
         >
           <b-form-input id="age" @input="$emit('updateInfo', {age: $event})" :value="anonymousinfo.age" type="number" name="age" min="0" ></b-form-input>
-          <b-form-invalid-feedback :state="infovalidation.age" class="ageRequired">
+          <b-form-invalid-feedback :state="infovalidation.age !== false" class="ageRequired">
             {{ $t('message.ageInfo') }}
           </b-form-invalid-feedback>
         </b-form-group>
@@ -24,18 +24,18 @@
             @input="$emit('updateInfo', {gender: $event})"
             :value="anonymousinfo.gender" 
           ></b-form-select>
-          <b-form-invalid-feedback :state="infovalidation.gender" class="genderRequired">
+          <b-form-invalid-feedback :state="infovalidation.gender !== false" class="genderRequired">
             {{ $t('message.genderInfo') }}
           </b-form-invalid-feedback>
         </b-form-group>
         <div id="submitForm">
           <p v-if="error">{{error}}</p>
           <b-button v-if="!this.$store.state.questionnaire.meta.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
-            {{ $t('message.ProfilesubmitButton') }}
+            {{ $t('message.submitandcontinuebutton') }}
             <b-spinner v-if="infoSaved" class="saver" small/>
           </b-button>
           <b-button v-else type="submit" @click.prevent="postInfo" class="submitIncluded">
-            {{ 'Jatka' }}
+            {{ $t('message.submitandcontinuebutton') }}
           </b-button>
         </div>
       </b-form>

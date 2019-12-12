@@ -25,13 +25,13 @@
         </b-form-group>
         <b-form-group
           id="ageField"
-          v-bind:label="$t('message.userAge')"
-          label-for="birthday"
+          v-bind:label="$t('message.anonymousUser')"
+          label-for="ageInput"
         >
-          <Datepicker id="birthday" @input="$emit('updateInfo', {birthDate: $event})" :value="personalInfo.birthDate" :language="fi" :monday-first="true" initial-view="year" calendar-class="ageCalendar" v-bind:placeholder="$t('message.datePlaceholder')"></Datepicker>
-        <b-form-invalid-feedback :state="infovalidation.birthDate" class="birthDateRequired">
-            {{ $t('message.birthDateInfo') }}
-        </b-form-invalid-feedback>
+          <b-form-input id="ageInput" @input="$emit('updateInfo', {age: $event})" :value="personalInfo.age" type="number" name="ageInput" min="0" ></b-form-input>
+          <b-form-invalid-feedback :state="infovalidation.age" class="ageRequired">
+            {{ $t('message.ageInfo') }}
+          </b-form-invalid-feedback>
         </b-form-group>
         <b-form-group
           id="genderField"
@@ -77,8 +77,6 @@
 </template>
 <script>
 import axios from 'axios'
-import Datepicker from 'vuejs-datepicker'
-import { fi } from 'vuejs-datepicker/dist/locale'
 
 export default {
   name: 'PersonalInfo',
@@ -92,22 +90,15 @@ export default {
       required: true
     }
   },
-  components: {
-    Datepicker
-  },
   data() {
     return {
-      fi: fi,
-      months: {
-        fi: ['tammikuu', 'helmikuu', 'maaliskuu','huhtikuu', 'toukokuu', 'kesäkuu','heinäkuu', 'elokuu', 'syyskuu','lokakuu', 'marraskuu', 'joulukuu']
-      },
       gender: {
         fi: ['Mies', 'Nainen', 'Muu']
       },
       infovalidation: {
         name: null,
         postNumber: null,
-        birthDate: null,
+        age:null,
         gender: null,
         phoneNumber: null
       },
@@ -170,6 +161,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
 #instruction {
   font-size: 1.1rem;
   margin: 2rem auto 1rem auto;
@@ -184,10 +176,6 @@ export default {
   padding: 1rem 1rem 0 1rem;
   text-align: start;
 
-  & /deep/ .ageCalendar {
-    max-width: calc(100vw - 2rem);
-  }
-
   .nameRequired {
     font-size:1rem;
   }
@@ -196,11 +184,9 @@ export default {
     font-size:1rem;
   }
 
-  .birthDateRequired {
+  .ageRequired {
     font-size:1rem;
   }
-
-
   .genderRequired {
     font-size:1rem;
   }

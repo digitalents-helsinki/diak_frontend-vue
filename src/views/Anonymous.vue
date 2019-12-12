@@ -24,16 +24,17 @@ export default {
     return {
       pagenum: 0,
       isFirstTime: false,
-      anonymousinfo: {
-        age:null,
-        Gender:null,
-      },
       error: null
+    }
+  },
+  computed: {
+    anonymousinfo() {
+      return this.$store.state.user.anonUser.anonymousinfo
     }
   },
   methods: {
     updateInfo(object) {
-      Object.assign(this.anonymousinfo, object)
+      this.$store.commit('user/updateAnonUserPersonalInfo', object)
     },
     nextPage() {
       this.$data.pagenum++

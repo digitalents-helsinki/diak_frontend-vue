@@ -35,13 +35,15 @@ export default {
       user: null,
       surveys: null,
       pagenum: 0,
-      isFirstTime: false,
       error: null
     }
   },
   computed: {
     personalInfo() {
       return this.$store.state.user.authUser.personalInfo
+    },
+    isFirstTime() {
+      return this.$store.state.user.authUser.firstTime
     }
   },
   methods: {
