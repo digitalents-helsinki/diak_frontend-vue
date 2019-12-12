@@ -16,7 +16,7 @@
             </b-form-invalid-feedback>
             </b-form-group>
             <b-form-group id="passwordfield">
-            <b-form-input type="password" id="password" v-model="registration.password" :state="registervalidation.password" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')">
+            <b-form-input type="password" id="password" v-model="registration.password" :state="registervalidation.password.required" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')">
             </b-form-input>
             <b-form-invalid-feedback :state="registervalidation.password.required" class="passwordFeedback">
             {{ $t('message.passwordInput') }}
