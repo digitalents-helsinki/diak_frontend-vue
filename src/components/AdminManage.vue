@@ -478,7 +478,7 @@ export default {
         this.modify.surveyEndDate = survey.endDate
         this.modify.surveyActivity = survey.active
         if (!survey.anon) this.modify.surveyRespondents = survey.UserGroup.Users.reduce((arr, user) => [...arr, user.email], [])
-        else this.modify.surveyRespondents = survey.UserGroup.respondents
+        else this.modify.surveyRespondents = [...survey.UserGroup.respondents]
       }
     },
     addRespondent() {
