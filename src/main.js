@@ -7,6 +7,7 @@ import i18n from './translation'
 import VueMoment from 'vue-moment'
 import moment from 'moment'
 import 'moment/locale/fi'
+import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle, faRedo, faFolderOpen, faStamp} from '@fortawesome/free-solid-svg-icons'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
@@ -58,6 +59,18 @@ library.add(faCircle)
 library.add(faRedo)
 library.add(faFolderOpen)
 library.add(faStamp)
+
+axios.interceptors.response.use(res => res, err => {
+  // Auth failed because token expired or whatever, login again
+  if (err.response && err.response.status === 401) {
+    // eslint-disable-next-line no-console
+    console.error(err)
+    store.commit('logout')
+    router.push('/login')
+  } else {
+    return Promise.reject(err)
+  }
+})
 
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {
