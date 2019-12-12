@@ -203,6 +203,7 @@ export const fi = {
     recoverymessage: 'Jos olet rekisteröitynyt, saat sähköpostiisi linkin, jonka kautta voit palauttaa salasanasi.',
     changedPasswordMessage: 'Salasanasi on vaihdettu.',
     alreadyRegistered: 'Sähköpostiosoite on jo käytössä: ',
-    emailValidationError: 'Sähköpostiosoitetta ei voitu vahvistaa.'
+    emailValidationError: 'Sähköpostiosoitetta ei voitu vahvistaa.',
+    passwordInput: 'Salasana vaaditaan'
   }
 }

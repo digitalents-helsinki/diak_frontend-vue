@@ -6,19 +6,16 @@
         <div v-if="!submitted" class="passwordCredentials">
           <b-form>
             <b-form-group id="passwordtype">
-              <b-form-input type="password" id="password" v-model="password.enterpassword" :state="passwordvalidation.enterpassword.required" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
+              <b-form-input type="password" id="password" v-model="password.enterpassword" :state="passwordlength" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
               </b-form-input>
-              <b-form-invalid-feedback :state="passwordvalidation.enterpassword.required" class="passwordFeedback">
-                {{ $t('message.passwordInput') }}
-              </b-form-invalid-feedback>
-              <b-form-invalid-feedback :state="passwordvalidation.enterpassword.passwordlength" class="passwordFeedback">
+              <b-form-invalid-feedback :state="passwordlength" class="passwordFeedback">
                 {{ $t('message.minimumLength') }}
               </b-form-invalid-feedback>
             </b-form-group>
             <b-form-group id="passwordretype">
-              <b-form-input type="password" id="confirmpassword" v-model="password.reenterpassword" :state="passwordvalidation.reenterpassword.required" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')" required>
+              <b-form-input type="password" id="confirmpassword" v-model="password.reenterpassword" :state="confirm" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')" required>
               </b-form-input>
-              <b-form-invalid-feedback :state="passwordvalidation.reenterpassword.confirm" class="passwordFeedback">
+              <b-form-invalid-feedback :state="confirm" class="passwordFeedback">
                 {{ $t('message.passwordconfirmInput') }}
               </b-form-invalid-feedback>
             </b-form-group>
@@ -47,40 +44,21 @@ export default {
         enterpassword: null,
         reenterpassword: null
       },
-      passwordvalidation: {
-        enterpassword: {
-          required: null,
-          passwordlength: null
-        },
-        reenterpassword: {
-          required: null,
-          passwordlength: null
-        }
-      },
+      passwordlength: null,
       confirm: null,
       submitted: false
     }
   },
   methods: {
     handleSubmit() {
-      this.passwordvalidation.enterpassword.required = null
-      if (!this.password.enterpassword) {
-        this.passwordvalidation.enterpassword.required = false
-        return
-      }
-      this.passwordvalidation.enterpassword.passwordlength = null
+      this.passwordlength = null
       if (this.password.enterpassword.length < 8) {
-        this.passwordvalidation.enterpassword.passwordlength = false
+        this.passwordlength = false
         return
       }
-      this.passwordvalidation.reenterpassword.required = null
-      if (!this.password.reenterpassword) {
-        this.passwordvalidation.reenterpassword.required = false
-        return
-      }
-      this.passwordvalidation.confirm = null
+      this.confirm = null
       if (this.password.enterpassword !== this.password.reenterpassword) {
-        this.passwordvalidation.reenterpassword.required = false
+        this.confirm = false
         return
       }
 
