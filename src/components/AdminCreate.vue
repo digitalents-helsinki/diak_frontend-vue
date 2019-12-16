@@ -1,5 +1,5 @@
 <template>
-<div class="rightsideCreate">
+<div :class="created ? '' : 'rightsideCreate'">
     <div class="createWrapper-before" v-if="!created">
         <div class="rightsideCreate-top">
             <p>{{ this.$store.state.admin.finalizationSurveyId ? $t('message.surveyFinalize') : $t('message.surveyCreate') }}</p> 
@@ -169,7 +169,13 @@
         </div>
     </div>
     <div class="createWrapper-after" v-if="created">
-        <p>Kyselysi on luotu onnistuneesti</p>
+        <b-alert
+            show
+            variant="info"
+            class="m-2"
+        >
+            {{ created }}
+        </b-alert>
     </div>
 </div>
 </template>
@@ -182,7 +188,7 @@ export default {
     name: 'admin-create',
     data() {
         return {
-            created: false,
+            created: null,
             form: {
 
             },
@@ -336,7 +342,7 @@ export default {
                 })
                 .then(res => {
                     if (res.status === 200) {
-                        this.created = true
+                        this.created = final ? this.$t('message.surveyFinallyCreated') : this.$t('message.surveySaved')
                         this.$store.commit('admin/setFinalizationSurveyId')
                         this.$store.commit('admin/setSurveyBeingCreated')
                     }

@@ -204,6 +204,8 @@ export const fi = {
     changedPasswordMessage: 'Salasanasi on vaihdettu.',
     alreadyRegistered: 'Sähköpostiosoite on jo käytössä: ',
     emailValidationError: 'Sähköpostiosoitetta ei voitu vahvistaa.',
-    passwordInput: 'Salasana vaaditaan'
+    passwordInput: 'Salasana vaaditaan',
+    surveyFinallyCreated: "Kyselysi on luotu onnistuneesti.",
+    surveySaved: "Kyselysi on tallennettu onnistuneesti."
   }
 }
