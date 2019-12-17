@@ -60,6 +60,9 @@ library.add(faRedo)
 library.add(faFolderOpen)
 library.add(faStamp)
 
+axios.defaults.withCredentials = true
+axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data)
+
 axios.interceptors.response.use(res => res, err => {
   // Auth failed because token expired or whatever, login again
   if (err.response && err.response.status === 401) {

@@ -104,6 +104,7 @@ export default {
             }
           }
         ).catch(err => {
+          console.error(err)
           if (err.response.status === 403) this.loginvalidation.invalidcredentials = false
         })
       }
