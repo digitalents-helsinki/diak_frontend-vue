@@ -5,9 +5,9 @@
       <div v-for="(value, index) in results" v-bind:key="index">
         <span v-if="!value.custom" v-html="`${index + 1}. ${$t(`message.${value.name}_title`)}`"></span>
         <span v-else>{{`${index + 1}. ${value.custom.title}`}}</span>              
-        <span v-bind:class="{notanswered :value.val === null}">{{value.val !== null ? value.val : "Ei vastattu"}}</span>
+        <span v-bind:class="{notanswered :value.val === null}">{{value.val !== null ? value.val : $t('message.Unanswered')}}</span>
         <b-collapse id="collapse-reviewcontent" v-bind:visible="!!value.desc">
-          <p class="text-review">{{value.desc ? value.desc : "Ei vastattu" }}</p>
+          <p class="text-review">{{value.desc ? value.desc : $t('message.Unanswered')}}</p>
         </b-collapse>
       </div>
     </div>

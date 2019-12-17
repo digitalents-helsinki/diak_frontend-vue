@@ -157,7 +157,7 @@
         </div>
     </div>
     <div class="createWrapper-after" v-if="created">
-        <p>Kyselysi on luotu onnistuneesti</p>
+        <p>{{ $t('message.queryMessage') }}</p>
     </div>
 </div>
 </template>

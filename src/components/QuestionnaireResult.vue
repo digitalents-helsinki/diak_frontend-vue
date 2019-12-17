@@ -3,19 +3,19 @@
   <h2>{{$t('message.questionnaireComparisonTitle')}}</h2>
   <b-table small striped responsive :items="resultData"/>
   <div class="bottomDiv">
-    <label v-if="!auth && !emailSent">Voit lähettää vastauksesi sähköpostiisi</label>
-    <p v-else-if="emailSent">Tuloksesi on lähetetty sähköpostiisi</p>
-    <p class="error" v-if="this.error">{{"Sähköpostin lähettäminen epäonnistui: " + this.error}}</p>
+    <label v-if="!auth && !emailSent">{{$t('message.emailReply')}}</label>
+    <p v-else-if="emailSent">{{$t('message.emailResults')}}</p>
+    <p class="error" v-if="this.error">{{$t('message.emailFailed')+ this.error}}</p>
     <b-input-group v-if="!auth && !emailSent">
-      <b-input v-model="email" type="email" autocomplete="email" placeholder="Sähköpostiosoitteesi"/>
+      <b-input v-model="email" type="email" autocomplete="email" :placeholder="$t('message.yourEmail')"/>
       <b-input-group-append>
-        <b-button :disabled="!email || !email.match(/.+@.+/)" @click="sendEmail" variant="primary">Lähetä</b-button>
+        <b-button :disabled="!email || !email.match(/.+@.+/)" @click="sendEmail" variant="primary">{{$t('message.questionnaireSend')}}</b-button>
       </b-input-group-append>
     </b-input-group>
-    <b-button v-else-if="!emailSent" @click="sendEmail" variant="primary">Lähetä sähköpostiisi</b-button>
+    <b-button v-else-if="!emailSent" @click="sendEmail" variant="primary">{{$t('message.emailSend')}}</b-button>
   </div>
-  <b-button v-if="auth" class="logout" @click="signOut">Kirjaudu ulos</b-button>
-  <b-button v-else class="logout" @click="$router.push({ path: '/' })">Etusivulle</b-button>
+  <b-button v-if="auth" class="logout" @click="signOut">{{$t('message.questionnairelogout')}}</b-button>
+  <b-button v-else class="logout" @click="$router.push({ path: '/' })">{{$t('message.homePage')}}</b-button>
 </div>
 </template>
 <script>
