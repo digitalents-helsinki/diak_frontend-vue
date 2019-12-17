@@ -2,7 +2,7 @@
   <div class="mainWrapper">
     <div class="subsidiaryWrapper">
       <div class="topContainer">
-        <h4 class="surveyName">Tulokset: <i>{{surveyName}}</i></h4>
+        <h4 class="surveyName">{{$t('message.surveyResult')}}<i>{{surveyName}}</i></h4>
         <b-button @click="$emit('closeResults')" class="closeButton"><font-awesome-icon icon="times"></font-awesome-icon></b-button>
         <div class="downloadButtons"> 
           <downloadexcel
@@ -27,23 +27,23 @@
           <bar-chart :avgdata="avg_array" :dvddata="dvd_array" :names="valueFields"/>
         </div>
         <div class="text-center">
-          <p>Vastaajien lukumäärä: {{respondent_size}}</p>
+          <p>{{$t('message.surveyRespondents')}}{{respondent_size}}</p>
         </div>
         <div class="values">
           <div class="labels">
-            <h4>Kysymykset</h4>
+            <h4>{{$t('message.surveyQuestions')}}</h4>
             <p v-for="(value, index) in valueFields" v-bind:key="index">{{value}}</p>
           </div>
           <div class="averages">
-            <h4>Keskiarvot</h4>
+            <h4>{{$t('message.surveyAverages')}}</h4>
             <p v-for="(value, index) of avg_array" v-bind:key="index">{{typeof value === "number" ? value.toFixed(2) : value}}</p>
           </div>
           <div class="stds">
-            <h4>Keskihajonnat</h4>
+            <h4>{{$t('message.standardDeviations')}}</h4>
             <p v-for="(value, index) of dvd_array" v-bind:key="index">{{typeof value === "number" ? value.toFixed(2) : value}}</p>
           </div>
           <div class="ns">
-            <h4>Lukumäärä</h4>
+            <h4>{{$t('message.surveyNumber')}}</h4>
             <p v-for="(value, index) of n_array" v-bind:key="index">{{value}}</p>
           </div>
         </div>

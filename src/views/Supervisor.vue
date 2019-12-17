@@ -1,17 +1,17 @@
 <template>
 <div class="supervisorPage">
-  <p class="welcome">Tervetuloa</p>
+  <p class="welcome">{{ $t('message.supervisorWelcome') }}</p>
   <div v-if="!jwt" class="supervisorContent">
-    <label class="passwordLabel">Salasana: </label><input v-model="supervisor_password" type="password" />
-    <button @click.prevent="handleLogin" class="loginButton">Kirjaudu sisään</button>
+    <label class="passwordLabel">{{ $t('message.supervisorPassword') }}</label><input v-model="supervisor_password" type="password" />
+    <button @click.prevent="handleLogin" class="loginButton">{{ $t('message.supervisorLogin') }}</button>
   </div>
   <div v-if="jwt" class="createNew">
-    <h3 class="heading">Lisää uusi hallinnoija</h3>
+    <h3 class="heading">{{ $t('message.supervisorCreate') }}</h3>
     <label>Sähköposti: </label><input v-model="username" type="text" />
-    <label class="emailPassword">Salasana: </label><input v-model="password" type="password" />
-    <button @click.prevent="handleAdminAdd" class="createButton">Lisää</button>
+    <label class="emailPassword">{{ $t('message.supervisorPassword') }}</label><input v-model="password" type="password" />
+    <button @click.prevent="handleAdminAdd" class="createButton">{{ $t('message.supervisorMore') }}</button>
     <ul>
-      <li v-for="admin in admins" :key="admin.userId">{{admin.email}} <button @click.prevent="handleAdminRemove(admin.userId)">Poista</button></li>
+      <li v-for="admin in admins" :key="admin.userId">{{admin.email}} <button @click.prevent="handleAdminRemove(admin.userId)">{{ $t('message.deleteButton') }}</button></li>
     </ul>
   </div>
 </div>

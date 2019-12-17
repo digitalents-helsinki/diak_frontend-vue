@@ -4,7 +4,7 @@
       <div id="logodiv">
         <img :id="questionnaire ? 'logotopQuestionnaire' : 'logotop'" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" />
       </div>
-      <button v-if="questionnaire" @click="$emit('toggleModal', 'help')" class="btn buttonOhjeet">Ohjeet</button>
+      <button v-if="questionnaire" @click="$emit('toggleModal', 'help')" class="btn buttonOhjeet">{{$t('message.userInstructions')}}</button>
     </div>
     <div v-if="questionnaire" class="questionnaire-bottom">
       <span>{{ this.$store.state.questionnaire.meta.anon ? 'Anonyymi' : 'Autentikoitu'}} | {{this.$store.state.questionnaire.surveyData.name}}</span>

@@ -23,51 +23,51 @@
           <div v-if="showInstructions" class="total-instructions-container">
             <div class="action-instructions-container instructions-container">
               <div class="instructiondiv">
-                <font-awesome-icon icon="chart-bar" style="color:#353535;"/><p>Kyselyn tulokset</p>
+                <font-awesome-icon icon="chart-bar" style="color:#353535;"/><p>{{ $t('message.instructionResult') }}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="pencil-alt" style="color:#353535;"/><p>Muokkaa kyselyä</p>
+                <font-awesome-icon icon="pencil-alt" style="color:#353535;"/><p>{{ $t('message.instructionEdit') }}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="redo" style="color:#353535;"/><p>Toista kysely</p>
+                <font-awesome-icon icon="redo" style="color:#353535;"/><p>{{ $t('message.instructionRedo')}}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="folder-open" style="color:#353535;"/><p>Käytä pohjana</p>
+                <font-awesome-icon icon="folder-open" style="color:#353535;"/><p>{{ $t('message.instructionReCreate')}}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="stamp" style="color:#353535;"/><p>Viimeistele kysely</p>
+                <font-awesome-icon icon="stamp" style="color:#353535;"/><p>{{ $t('message.instructionFinalize') }}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="folder" style="color:grey;"/><p>Arkistoi kysely</p>
+                <font-awesome-icon icon="folder" style="color:grey;"/><p>{{ $t('message.instructionArchive') }}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="times" style="color:#FF0000;"/><p>Poista kysely</p>
+                <font-awesome-icon icon="times" style="color:#FF0000;"/><p>{{ $t('message.instructionDelete') }}</p>
               </div>
             </div>
             <div class="indicator-instructions-container instructions-container">
               <div class="instructiondiv">
-                <font-awesome-icon icon="user-slash" class="instruction-indicator-icon" /><p>Anonyymi</p>
+                <font-awesome-icon icon="user-slash" class="instruction-indicator-icon" /><p>{{ $t('message.instructionAnonymous') }}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="user-check" class="instruction-indicator-icon" /><p>Autentikoitu</p>
+                <font-awesome-icon icon="user-check" class="instruction-indicator-icon" /><p>{{ $t('message.instructionAuthenticated') }}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="circle" style="color: rgb(0, 194, 0);" class="instruction-indicator-icon-circle" /><p>Käynnissä</p>
+                <font-awesome-icon icon="circle" style="color: rgb(0, 194, 0);" class="instruction-indicator-icon-circle" /><p>{{ $t('message.instructionOngoing') }}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="circle" style="color: yellow;" class="instruction-indicator-icon-circle" /><p>Tuleva</p>
+                <font-awesome-icon icon="circle" style="color: yellow;" class="instruction-indicator-icon-circle" /><p>{{ $t('message.instructionUpcoming') }}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="circle" style="color: orange;" class="instruction-indicator-icon-circle" /><p>Päättynyt</p>
+                <font-awesome-icon icon="circle" style="color: orange;" class="instruction-indicator-icon-circle" /><p>{{ $t('message.instructionFinished') }}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="circle" style="color: crimson;" class="instruction-indicator-icon-circle" /><p>Suljettu</p>
+                <font-awesome-icon icon="circle" style="color: crimson;" class="instruction-indicator-icon-circle" /><p>{{ $t('message.instructionClosed') }}</p>
               </div>
               <div class="instructiondiv">
-                <font-awesome-icon icon="circle" style="color: grey;" class="instruction-indicator-icon-circle" /><p>Arkistoitu</p>
+                <font-awesome-icon icon="circle" style="color: grey;" class="instruction-indicator-icon-circle" /><p>{{ $t('message.instructionArchived') }}</p>
               </div>              
               <div class="instructiondiv">
-                <font-awesome-icon icon="circle" style="color: steelblue;" class="instruction-indicator-icon-circle" /><p>Keskeneräinen</p>
+                <font-awesome-icon icon="circle" style="color: steelblue;" class="instruction-indicator-icon-circle" /><p>{{ $t('message.instructionUnFinished') }}</p>
               </div>
             </div>
           </div>

@@ -38,7 +38,7 @@ export default {
         labels: this.names,
         datasets: [
           {
-            label: 'Vastaajaryhmän vastauksien keskiarvot ja keskihajonnat',
+            label: this.$t('message.barchartLabel'),
             data: this.avgdata,
             backgroundColor: 'lightgreen',
             borderColor: 'green',
