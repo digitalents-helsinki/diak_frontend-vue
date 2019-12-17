@@ -21,7 +21,7 @@
             </b-form-invalid-feedback>
             </b-form-group>
           <b-button type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
-        <b-form-invalid-feedback :state="loginvalidation.invalidcredentials" class="loginFeedback">
+            <b-form-invalid-feedback :state="loginvalidation.invalidcredentials" class="loginFeedback">
               {{ $t('message.invalidLogin') }}
             </b-form-invalid-feedback>
         </b-form>
@@ -63,14 +63,13 @@ export default {
         email: null,
         password: null,
         invalidcredentials: null
-      },
-      error: false
+      }
     }
   },
   methods: {
     handleLogin() {
       Object.keys(this.loginvalidation).forEach(key => this.loginvalidation[key] = null)
-      if (!this.login.email.match(/.+@.+/)) this.loginvalidation.email = false
+      if (!this.login.email || !this.login.email.match(/.+@.+/)) this.loginvalidation.email = false
       if (!this.login.password) this.loginvalidation.password = false
 
       const data = JSON.stringify({
@@ -84,7 +83,7 @@ export default {
               "Content-Type": "application/json"
             }
           }).then(res => {
-            if (res.data.success) {
+            if (res.status === 200) {
               if (res.data.role === 'admin') {
                 this.$store.commit('login', {
                   loggedIn: true,
@@ -102,12 +101,11 @@ export default {
                 })
                 this.$router.push({ path: '/user/' })
               }
-            } else { 
-              this.$data.error = true
-              this.loginvalidation.invalidcredentials = false
             }
           }
-        )
+        ).catch(err => {
+          if (err.response.status === 403) this.loginvalidation.invalidcredentials = false
+        })
       }
     }, 
     handleGSignIn() {
