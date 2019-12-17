@@ -231,7 +231,7 @@ export default {
                     emails.forEach((email, index) => {
                         if (!email.match(/.+@.+/)) {
                             this.$bvToast.toast(`${email}`, {
-                                title: 'Epäkelpo sähköpostiosoite',
+                                title: this.$t('message.invalidEmailToastTitle'),
                                 toaster: 'b-toaster-bottom-right',
                                 variant: 'danger',
                                 noAutoHide: true
@@ -241,7 +241,7 @@ export default {
                         emails.forEach((Email, Index) => {
                             if (index !== Index && email === Email && email.match(/.+@.+/) && Email.match(/.+@.+/)) {
                                 this.$bvToast.toast(`${email} - ${Email}`, {
-                                    title: 'Sähköposteissa kaksoiskappaleet',
+                                    title: this.$t('message.duplicateEmailToastTitle'),
                                     toaster: 'b-toaster-bottom-right',
                                     variant: 'danger',
                                     noAutoHide: true

@@ -250,6 +250,13 @@ export const fi = {
     supervisorEmail:'Sähköposti: ',
     supervisorMore:'Lisää',
     deleteButton:'Poista',
-    barchartLabel:'Vastaajaryhmän vastauksien keskiarvot ja keskihajonnat'
+    barchartLabel:'Vastaajaryhmän vastauksien keskiarvot ja keskihajonnat',
+    invalidEmailToastTitle: 'Epäkelpo sähköpostiosoite',
+    duplicateEmailToastTitle: 'Sähköposteissa kaksoiskappaleet',
+    instructionInformation: 'Info',
+    continue: 'Jatka',
+    fileNameResults: 'tulokset',
+    resultsFetchFailed: 'Tulosten hakeminen epäonnistui. Tarkista internetyhteytesi.',
+    displayingResultsFailedUnExpectedly: 'Tulosten näyttäminen epäonnistui tuntemattomasta syystä.'
   }
 }

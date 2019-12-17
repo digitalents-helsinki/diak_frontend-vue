@@ -18,7 +18,7 @@
         </transition>
       </div>
       <div class="manageInstructions">
-        <b-badge @click="showInstructions = !showInstructions" class="instructionsTitle">Info<font-awesome-icon :icon="showInstructions ? 'chevron-left' : 'chevron-right'"/></b-badge>
+        <b-badge @click="showInstructions = !showInstructions" class="instructionsTitle">{{ $t('message.instructionInformation') }}<font-awesome-icon :icon="showInstructions ? 'chevron-left' : 'chevron-right'"/></b-badge>
         <transition name="slider-width">
           <div v-if="showInstructions" class="total-instructions-container">
             <div class="action-instructions-container instructions-container">

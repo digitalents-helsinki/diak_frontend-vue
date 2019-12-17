@@ -61,14 +61,14 @@
         <div id="submitinfoForm">
           <p v-if="error">{{error}}</p>
           <b-button @click.prevent="signOut" class="submitIncluded">
-            {{ 'Kirjaudu Ulos' }}
+            {{ $t('message.logoutButtontranslate') }}
           </b-button>
           <b-button v-if="!this.$store.state.questionnaire.meta.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.ProfilesubmitButton') }}
             <b-spinner v-if="infoSaved" class="saver" small/>
           </b-button>
           <b-button v-else type="submit" @click.prevent="postInfo" class="submitIncluded">
-            {{ 'Jatka' }}
+            {{ $t('message.continue') }}
           </b-button>
         </div>
       </b-form>

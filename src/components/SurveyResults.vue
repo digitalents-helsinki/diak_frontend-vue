@@ -10,7 +10,7 @@
             :data="results"
             :fields="excel_fields"
             type="csv"
-            :name="`${surveyName}_${surveyId}_tulokset.xls`"
+            :name="`${surveyName}_${surveyId}_${$t('message.results')}.xls`"
           >
             CSV
           </downloadexcel>
@@ -52,7 +52,7 @@
         <b-spinner class="m-5"/>
       </div>
       <div class="error" v-if="loadingError || unknownError">
-        {{loadingError ? "Fetching survey results failed. Try checking your internet connection." : "Displaying survey results failed unexpectedly"}}
+        {{loadingError ? $t('message.resultsFetchFailed') : $t('message.displayingResultsFailedUnExpectedly')}}
       </div>
     </div>
   </div>
