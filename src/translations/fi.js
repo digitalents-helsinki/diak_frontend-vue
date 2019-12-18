@@ -257,6 +257,7 @@ export const fi = {
     continue: 'Jatka',
     fileNameResults: 'tulokset',
     resultsFetchFailed: 'Tulosten hakeminen epäonnistui. Tarkista internetyhteytesi.',
-    displayingResultsFailedUnExpectedly: 'Tulosten näyttäminen epäonnistui tuntemattomasta syystä.'
+    displayingResultsFailedUnExpectedly: 'Tulosten näyttäminen epäonnistui tuntemattomasta syystä.',
+    userDoesNotExist: 'Käyttäjää ei ole olemassa.'
   }
 }

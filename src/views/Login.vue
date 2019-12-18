@@ -24,6 +24,10 @@
             <b-form-invalid-feedback :state="loginvalidation.invalidcredentials" class="loginFeedback">
               {{ $t('message.invalidLogin') }}
             </b-form-invalid-feedback>
+            <b-form-invalid-feedback :state="loginvalidation.userDoesNotExist" class="loginFeedback">
+              {{ $t('message.userDoesNotExist') }}
+            </b-form-invalid-feedback>
+          <p class="error" v-if="error">{{ error }}</p>
         </b-form>
       </div>
         <div class="registerandPassword">
@@ -62,8 +66,10 @@ export default {
       loginvalidation: {
         email: null,
         password: null,
-        invalidcredentials: null
-      }
+        invalidcredentials: null,
+        userDoesNotExist: null
+      },
+      error: null
     }
   },
   methods: {
@@ -71,6 +77,7 @@ export default {
       Object.keys(this.loginvalidation).forEach(key => this.loginvalidation[key] = null)
       if (!this.login.email || !this.login.email.match(/.+@.+/)) this.loginvalidation.email = false
       if (!this.login.password) this.loginvalidation.password = false
+      this.error = null
 
       const data = JSON.stringify({
         email: this.login.email,
@@ -105,7 +112,9 @@ export default {
           }
         ).catch(err => {
           console.error(err)
-          if (err.response.status === 403) this.loginvalidation.invalidcredentials = false
+          if (err.response.status === 401) this.loginvalidation.invalidcredentials = false
+          else if (err.response.status === 404) this.loginvalidation.userDoesNotExist = false
+          else this.error = err
         })
       }
     }, 
@@ -182,6 +191,12 @@ export default {
             width:16rem;
             display: block;
             margin: 0 auto;
+          }
+
+          .error {
+            margin: 1rem 0 0 0;
+            font-size: 1rem;
+            color: red;
           }
         }
 

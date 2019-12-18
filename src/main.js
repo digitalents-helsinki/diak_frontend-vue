@@ -65,7 +65,7 @@ axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.head
 
 axios.interceptors.response.use(res => res, err => {
   // Auth failed because token expired or whatever, login again
-  if (err.response && err.response.status === 401) {
+  if (err.response && err.response.status === 401 && store.state.authentication.loggedIn) {
     // eslint-disable-next-line no-console
     console.error(err)
     store.commit('logout')
