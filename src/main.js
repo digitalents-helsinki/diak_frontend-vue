@@ -60,20 +60,30 @@ library.add(faRedo)
 library.add(faFolderOpen)
 library.add(faStamp)
 
-axios.defaults.withCredentials = true
-axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data)
-
 axios.interceptors.response.use(res => res, err => {
-  // Auth failed because token expired or whatever, login again
-  if (err.response && err.response.status === 401 && store.state.authentication.loggedIn) {
-    // eslint-disable-next-line no-console
-    console.error(err)
-    store.commit('logout')
-    router.push('/login')
+  if (err.response) {
+    switch(true) {
+      case err.response.config.url === process.env.VUE_APP_BACKEND + '/surf': // Try again if getting csrf token fails
+        // eslint-disable-next-line no-console
+        console.error(err)
+        setTimeout(() => axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data), 1000)
+        break
+      case err.response.status === 401 && store.state.authentication.loggedIn: // Auth failed because token expired or whatever, login again
+        // eslint-disable-next-line no-console
+        console.error(err)
+        store.commit('logout')
+        router.push('/login')
+        break
+      default:
+        return Promise.reject(err)
+    }
   } else {
     return Promise.reject(err)
   }
 })
+
+axios.defaults.withCredentials = true
+axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data)
 
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {

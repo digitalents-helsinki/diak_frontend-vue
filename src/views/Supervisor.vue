@@ -43,7 +43,11 @@ export default {
           password: this.$data.password
         }
       }).then(res => {
-        if (res.status === 200) this.getAdmins()
+        if (res.status === 200) {
+          this.getAdmins()
+          this.$data.username = null
+          this.$data.password = null
+        }
       })
     },
     handleAdminRemove(id) {
