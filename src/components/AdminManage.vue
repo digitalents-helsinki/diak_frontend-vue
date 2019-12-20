@@ -21,7 +21,7 @@
         <b-badge @click="showInstructions = !showInstructions" class="instructionsTitle">{{ $t('message.instructionInformation') }}<font-awesome-icon :icon="showInstructions ? 'chevron-left' : 'chevron-right'"/></b-badge>
         <transition name="slider-width">
           <div v-if="showInstructions" class="total-instructions-container">
-            <div class="action-instructions-container instructions-container">
+            <div class="action-instructions-container instructions-container instructionContainer">
               <div class="instructiondiv">
                 <font-awesome-icon icon="chart-bar" style="color:#353535;"/><p>{{ $t('message.instructionResult') }}</p>
               </div>
@@ -988,10 +988,20 @@ export default {
     justify-content: space-between;
   }
 }
+
 @media only screen and (max-width: 1400px) {
   .rightsideManage{
     width:100%;
     margin-bottom: 0;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width:900px){ 
+  .instructionContainer{
+    display:flex !important;
+    flex-direction:column !important;
+  }
+  .manageInstructions{
+    height: 11rem !important;
   }
 }
 </style>

@@ -5,15 +5,11 @@
             <div class="imagelocation">
                 <img class="logoPlace" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" >
             </div>
-            <!--<div class="nameemailLogout">-->
-                <div class="adminnameemail">
-                    <p class="namelocation"> {{ $t('message.adminName') }}</p>
-                    <p class="emaillocation"> {{ $t('message.adminEmail') }}</p>
-                </div>
-                <!--<div class="logoutDiv">
-                    <button class="btn logoutButton">{{ $t('message.logoutButtontranslate') }}</button>
-                </div>
-            </div>-->
+            <div class="dropdownmenu">
+                <b-dropdown id="" variant="light" text="Admin">
+                    <b-dropdown-item  @click.prevent="signOut">{{ $t('message.logoutButtontranslate') }}</b-dropdown-item>
+                </b-dropdown>
+            </div>
         </div>
         <div class="textIcons">
             <div class="icontextInquery">
@@ -24,11 +20,6 @@
                 <img src="../images/scatter_plot_24px_outlined.svg" alt="" />
                 <button @click="changeActiveComponent('adminManage')" class="btn manageSurveyopen" v-activeLink:adminManage>{{ $t('message.manageSurveysbutton') }}</button>
             </div>
-            <!--<div class="text-icons-content produce">
-                <div class="producediv"> </div>
-                <img src="../images/paste_24px_outlined.svg" alt="" />
-                <button class="btn produceReport-open">{{ $t('message.produceReportbutton') }}</button>
-            </div>-->
         </div>
     </div>
     <component :is="activeComponent" v-on:changeActiveComponent="changeActiveComponent($event)"/>
@@ -76,7 +67,11 @@ export default {
             this.$store.commit('admin/setFinalizationSurveyId')
             this.$store.commit('admin/setSurveyBeingCreated')
             this.activeComponent = this.cachedActiveComponent
-        }
+        },
+        signOut() {
+            this.$store.commit('logout')
+            this.$router.push({ path: '/' })
+        }   
     },
     directives: {
         activeLink: {
@@ -149,47 +144,12 @@ export default {
                     height:65px;
                     margin-top:0.1rem;
                 }
-            }   
-            /*.nameemailLogout{
-                display:flex;
-                flex-direction:row;*/
-
-                .adminnameemail{
-                    margin-top:0.1rem;
-                    margin-right:0.1rem;
-
-                    .namelocation{
-                        font-size:1.1rem;
-                        color:#FFFFFF;
-                        font-weight:bold;
-                    }
-
-                    .emaillocation{
-                        font-size:0.875rem;
-                        color:#FFFFFF;
-                        font-weight:bold;
-                    }
-                }
-
-                /*.logoutDiv{
-                    margin-top:1rem;
-                    margin-right:1rem;
-                    margin-left:1rem;
-                    
-                    .logoutButton{
-                        background-color: #A1318A;
-                        color: #FFFFFF;
-                        border-radius: 10px;
-                        box-shadow: 0 5px 5px gray;
-                        width:10rem;
-                        height:2.5rem;
-                        font-weight:bold;
-                        margin-left:0.2rem;
-                    }
-                }
-            }*/    
+            } 
+            .dropdownmenu{
+                margin-top:1rem;
+                margin-right:5rem;
+            }
         }
-
         .textIcons {
             background-color: #FFFFFF;
             display: flex;
@@ -260,25 +220,6 @@ export default {
                     }
                 }
             }
-                /*.produceReport-open {
-                    background-color: #353535;
-                    color: #FFFFFF;
-                    border-radius: 10px;
-                    box-shadow: 0 5px 5px gray;
-                    width:11rem;
-                    height:auto;
-                    font-weight:bold;
-                    margin-top:2.5rem;
-                    margin-right:0.1rem;
-                    margin-left:1rem;
-                }
-    
-                .producediv{
-                    width:1rem;
-                    height:2rem;
-                    margin-left:-1rem;
-                    margin-top:2.7rem; 
-                }*/
         }
     }
 }

@@ -6,6 +6,9 @@
     <button @click.prevent="handleLogin" class="loginButton">{{ $t('message.supervisorLogin') }}</button>
   </div>
   <div v-if="jwt" class="createNew">
+    <div class="logoutDiv">
+      <b-button variant="danger" @click.prevent="signOut">{{ $t('message.logoutButtontranslate') }}</b-button>
+    </div>
     <h3 class="heading">{{ $t('message.supervisorCreate') }}</h3>
     <label>Sähköposti: </label><input v-model="username" type="text" />
     <label class="emailPassword">{{ $t('message.supervisorPassword') }}</label><input v-model="password" type="password" />
@@ -84,7 +87,11 @@ export default {
           this.getAdmins()
         }
       })
-    }
+    },
+    signOut() {
+     this.$store.commit('logout')
+     this.$router.push({ path: '/' })
+    }  
   }
 }
 </script>
@@ -92,6 +99,7 @@ export default {
 li {
   list-style: none;
 }
+
 .supervisorPage{
   background-color:#FFFFFF;
   width:100%;
@@ -130,6 +138,14 @@ li {
     align-items:center;
     margin-top:1rem;
 
+    .logoutDiv{
+      margin-bottom:1rem;
+
+      .logoutButton{
+        margin-left:8rem;
+      }
+    }
+    
     .heading{
       font-size:1.1rem;
       font-weight:bold;
