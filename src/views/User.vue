@@ -16,7 +16,6 @@
     </LogoBox>
 </template>
 <script>
-import axios from 'axios'
 import LogoBox from '@/components/LogoBox.vue'
 import PersonalInfo from '../components/PersonalInfo.vue'
 import ConfidentialityNotice from '../components/ConfidentialityNotice.vue'

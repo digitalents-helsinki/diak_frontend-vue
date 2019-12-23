@@ -47,7 +47,7 @@
                 <font-awesome-icon icon="times" style="color:#FF0000;"/><p>{{ $t('message.instructionDelete') }}</p>
               </div>
             </div>
-            <div class="indicator-instructions-container instructions-container">
+            <div class="indicator-instructions-container instructions-container instructionContainer">
               <div class="instructiondiv">
                 <font-awesome-icon icon="user-slash" class="instruction-indicator-icon" /><p>{{ $t('message.instructionAnonymous') }}</p>
               </div>
@@ -1267,7 +1267,7 @@ export default {
     flex-direction:column !important;
   }
   .manageInstructions{
-    height: 11rem !important;
+    height: 15rem !important;
   }
 }
 </style>

@@ -6,13 +6,9 @@
   </div>
 </template>
 <script>
-import LogoBox from '@/components/LogoBox.vue'
 
 export default {
-  name: 'ConfidentialityNotice',
-  components: {
-    LogoBox
-  }
+  name: 'ConfidentialityNotice'
 }
 </script>
 <style lang="scss" scoped>

@@ -60,9 +60,7 @@
 <script>
 import axios from "axios";
 import BarChart from "../components/BarChart.vue";
-import ErrorBars from "chartjs-plugin-error-bars";
 import downloadexcel from "vue-json-excel";
-import Annotation from 'chartjs-plugin-annotation';
 import jsPDF from 'jspdf'
 
 export default {
@@ -138,7 +136,7 @@ export default {
           return res.data.Questions
             .find(question => question.name === value).Answers
             .filter(answer => answer.value !== null)
-            .reduce((acc, answer) => acc + 1, 0)
+            .reduce((acc) => acc + 1, 0)
         });
         this.excel_fields = this.values.reduce((obj, value, idx) => {
           if (!value.endsWith("_custom")) {

@@ -6,8 +6,8 @@
                 <img class="logoPlace" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" >
             </div>
             <div class="dropdownmenu">
-                <b-dropdown id="" variant="light" text="Admin">
-                    <b-dropdown-item  @click.prevent="signOut">{{ $t('message.logoutButtontranslate') }}</b-dropdown-item>
+                <b-dropdown right variant="light" text="Admin">
+                    <b-dropdown-item @click.prevent="signOut">{{ $t('message.logoutButtontranslate') }}</b-dropdown-item>
                 </b-dropdown>
             </div>
         </div>

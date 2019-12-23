@@ -38,7 +38,7 @@ export default {
   computed: {
     slide() {
       if (this.direction === "horizontal") return this.latestreferencenum < this.referencenum ? "forward" : "backward"
-      else if (this.direction === "vertical") return this.latestreferencenum < this.referencenum ? "upward" : "downward"
+      else return this.latestreferencenum < this.referencenum ? "upward" : "downward"
     }
   },
   methods: {

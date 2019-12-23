@@ -10,7 +10,6 @@
   </LogoBox>
 </template>
 <script>
-import axios from 'axios'
 import LogoBox from '@/components/LogoBox.vue'
 import AnonymousComponent from '../components/AnonymousInfo.vue'
 
