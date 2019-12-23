@@ -143,31 +143,31 @@ export default {
             return {
               ...obj,
               [`${idx + 1}: ` + this.$t(`message.${value}_title`)]: value,
-              [`${idx + 1}: ` + this.$t(`message.${value}_title`) + " teksti"]: `${value}_desc`
+              [`${idx + 1}: ` + this.$t(`message.${value}_title`) + ' ' + this.$t('message.text')]: `${value}_desc`
             }
           } else {
             return {
               ...obj,
               [`${idx + 1}: ` + res.data.Questions.find(question => question.name === value).title]: value,
-              [`${idx + 1}: ` + res.data.Questions.find(question => question.name === value).title + " teksti"]: `${value}_desc`
+              [`${idx + 1}: ` + res.data.Questions.find(question => question.name === value).title + ' ' + this.$t('message.text')]: `${value}_desc`
             }
           }
         }, {});
         if (res.data.anon) {
           this.excel_fields = {
-            vastausaika: 'answeredAt',
+            [this.$t('message.answeredAt')]: 'answeredAt',
             ...this.excel_fields,
-            ikä: 'age',
-            sukupuoli: 'gender'
+            [this.$t('message.age')]: 'age',
+            [this.$t('message.gender')]: 'gender'
           }
         } else {
           this.excel_fields = {
-            vastausaika: 'answeredAt',
+            [this.$t('message.answeredAt')]: 'answeredAt',
             ...this.excel_fields,
-            nimi: 'name',
-            postinumero: 'postal_code',
-            sukupuoli: 'gender',
-            ikä: 'age',
+            [this.$t('message.name')]: 'name',
+            [this.$t('message.postalCode')]: 'postal_code',
+            [this.$t('message.gender')]: 'gender',
+            [this.$t('message.age')]: 'age',
           }
         }
         
@@ -268,17 +268,17 @@ export default {
       const doc = new jsPDF('p','pt','a4')
       const docWidth = doc.internal.pageSize.width
       const imgHeight = docWidth * canvasRatio //make chart maintain aspect ratio
-      const chart = this.$el.querySelector('canvas').toDataURL('image/png')
+      const chart = canvas.toDataURL('image/png')
       doc.setFontSize(20)
-      doc.text(`Tulokset: ${this.surveyName}`, docWidth / 2, 30, 'center')
+      doc.text(`${this.$t('message.surveyResult')}${this.surveyName}`, docWidth / 2, 30, 'center')
       doc.addImage(chart, 'PNG', 10, 60, docWidth - 30, imgHeight - 30 * canvasRatio)
       doc.setFontSize(12)
-      doc.text(`Vastaajien lukumäärä: ${this.respondent_size}`, docWidth / 2, imgHeight + 90, 'center')
+      doc.text(`${this.$t('message.surveyRespondents')} ${this.respondent_size}`, docWidth / 2, imgHeight + 90, 'center')
       doc.setFontSize(16)
-      doc.text(20, imgHeight + 120, 'Kysymykset')
-      doc.text(docWidth / 4 + 20, imgHeight + 120, 'Keskiarvot')
-      doc.text(docWidth / 4 * 2 + 20, imgHeight + 120, 'Keskihajonnat')
-      doc.text(docWidth / 4 * 3 + 20, imgHeight + 120, 'Lukumäärä')
+      doc.text(20, imgHeight + 120, this.$t('message.surveyQuestions'))
+      doc.text(docWidth / 4 + 20, imgHeight + 120, this.$t('message.surveyAverages'))
+      doc.text(docWidth / 4 * 2 + 20, imgHeight + 120, this.$t('message.standardDeviations'))
+      doc.text(docWidth / 4 * 3 + 20, imgHeight + 120, this.$t('message.surveyNumber'))
       doc.setFontSize(12)
       for (let i = 0, j = 0; i < this.valueFields.length; i++, j++) { //loop through data arrays and add to pdf
         const y = (() => {

@@ -271,6 +271,12 @@ export const fi = {
     instructionFollowUps: 'Aiemmat kyselyt',
     deleteSurveyGroupDanger: 'Kaikki tämän kyselyryhmän kyselyt poistetaan!',
     archiveSurveyGroupWarning: 'Kaikki tämän kyselyryhmän kyselyt arkistoidaan!',
-    groupButton: 'Kyselyryhmät'
+    groupButton: 'Kyselyryhmät',
+    text: 'teksti',
+    answeredAt: 'vastausaika',
+    age: 'ikä',
+    gender: 'sukupuoli',
+    name: 'nimi',
+    postalCode: 'postinumero'
   }
 }
