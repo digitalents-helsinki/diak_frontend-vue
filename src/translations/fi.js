@@ -258,6 +258,19 @@ export const fi = {
     fileNameResults: 'tulokset',
     resultsFetchFailed: 'Tulosten hakeminen epäonnistui. Tarkista internetyhteytesi.',
     displayingResultsFailedUnExpectedly: 'Tulosten näyttäminen epäonnistui tuntemattomasta syystä.',
-    userDoesNotExist: 'Käyttäjää ei ole olemassa.'
+    userDoesNotExist: 'Käyttäjää ei ole olemassa.',
+    redoSurveyHeader: 'Toista kysely',
+    redoSurveyTitle: 'Kyselyn nimi:',
+    redoSurveyMessage: 'Kyselyn viesti:',
+    redoSurveyStartDate: 'Kyselyn alkamispäivämäärä:',
+    redoSurveyEndDate: 'Kyselyn päättymispäivämäärä:',
+    redoSurveyRespondents: 'Vastaanottajat:',
+    redoSurveyAddRespondent: 'Lisää vastaanottaja...',
+    redoSurveyCancel: 'Peruuta',
+    redoSurveySubmit: 'Lähetä',
+    instructionFollowUps: 'Aiemmat kyselyt',
+    deleteSurveyGroupDanger: 'Kaikki tämän kyselyryhmän kyselyt poistetaan!',
+    archiveSurveyGroupWarning: 'Kaikki tämän kyselyryhmän kyselyt arkistoidaan!',
+    groupButton: 'Kyselyryhmät'
   }
 }

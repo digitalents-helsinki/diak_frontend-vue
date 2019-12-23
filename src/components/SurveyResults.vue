@@ -10,7 +10,7 @@
             :data="results"
             :fields="excel_fields"
             type="csv"
-            :name="`${surveyName}_${surveyId}_${$t('message.results')}.xls`"
+            :name="`${surveyName}_${surveyId}_${$t('message.fileNameResults')}.xls`"
           >
             CSV
           </downloadexcel>

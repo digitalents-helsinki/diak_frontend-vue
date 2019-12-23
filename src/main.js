@@ -9,7 +9,7 @@ import moment from 'moment'
 import 'moment/locale/fi'
 import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle, faRedo, faFolderOpen, faStamp} from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle, faRedo, faFolderOpen, faStamp, faListOl} from '@fortawesome/free-solid-svg-icons'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
 import { faPencilAlt} from '@fortawesome/free-solid-svg-icons'
@@ -59,6 +59,7 @@ library.add(faCircle)
 library.add(faRedo)
 library.add(faFolderOpen)
 library.add(faStamp)
+library.add(faListOl)
 
 axios.interceptors.response.use(res => res, err => {
   if (err.response) {

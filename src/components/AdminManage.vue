@@ -26,6 +26,9 @@
                 <font-awesome-icon icon="chart-bar" style="color:#353535;"/><p>{{ $t('message.instructionResult') }}</p>
               </div>
               <div class="instructiondiv">
+                <font-awesome-icon icon="list-ol" style="color:#353535;"/><p>{{ $t('message.instructionFollowUps')}}</p>
+              </div>
+              <div class="instructiondiv">
                 <font-awesome-icon icon="pencil-alt" style="color:#353535;"/><p>{{ $t('message.instructionEdit') }}</p>
               </div>
               <div class="instructiondiv">
@@ -85,6 +88,7 @@
       <div class="buttonstotal">
         <b-dropdown id="dropdownleft" variant="secondary" :text="$t(`message.${display}Button`)" class="m-md-2 dropdownButtonsleft">
           <b-dropdown-item @click="toggleDisplay('all')">{{$t('message.allButton')}}</b-dropdown-item>
+          <b-dropdown-item @click="toggleDisplay('group')">{{$t('message.groupButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('anonymous')">{{$t('message.anonymousButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('authenticated')">{{$t('message.authenticatedButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('active')">{{$t('message.activeButton')}}</b-dropdown-item>
@@ -97,7 +101,7 @@
       </div>
     </div>
     <div class="tableDisplayfields">
-      <b-table hover responsive :items="filteredSurveys[this.display]" :fields="fields" head-variant="light" table-class="surveyTable shadow-sm">
+      <b-table hover :items="filteredSurveys[this.display]" :fields="fields" head-variant="light" table-class="surveyTable shadow-sm">
         <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
           <div v-bind:key="field.key" class="surveyTableCel">
             <div v-if="field.colType === 'name'">
@@ -123,17 +127,51 @@
             <div v-else-if="field.colType === 'respondentsSize'">
               <span>{{data.item.responses || 0}}/{{data.item.respondents_size}}</span>
             </div>
-            <div v-else-if="field.colType === 'analyze'">
-              <button v-if="data.item.final" @click="openSurveyResults(data.item.surveyId)" class="tableButton"><font-awesome-icon icon="chart-bar" class="tableButtonIcon" /></button>
-            </div>
             <div v-else-if="field.colType === 'actions'" class="actionsCel">
-              <button v-if="!data.item.archived && data.item.final" @click="modifySurvey(data.item.surveyId)" class="tableButton modifyButton"><font-awesome-icon icon="pencil-alt" class="tableButtonIcon" /></button>
+              <button v-if="data.item.final" @click="openSurveyResults(data.item.surveyId)" class="tableButton"><font-awesome-icon icon="chart-bar" class="tableButtonIcon" /></button>
+              <button v-if="data.item.final && data.item.Surveys" @click="toggleFollowUps(data.item.surveyId)" class="tableButton openFollowUpsButton"><font-awesome-icon icon="list-ol" class="tableButtonIcon" /></button>
+              <button v-if="!data.item.archived && data.item.final && !data.item.ended" @click="modifySurvey(data.item.surveyId)" class="tableButton modifyButton"><font-awesome-icon icon="pencil-alt" class="tableButtonIcon" /></button>
+              <button v-else-if="!data.item.archived && data.item.final" @click="redoSurvey(data.item.surveyId)" class="tableButton redoButton"><font-awesome-icon icon="redo" class="tableButtonIcon" /></button>
               <button v-if="!data.item.archived && data.item.final" @click="archiveSurvey(data.item.surveyId)" class="tableButton archiveButton"><font-awesome-icon icon='folder' class="tableButtonIcon"/></button>
               <button v-else-if="data.item.final" @click="reCreateSurvey(data.item.surveyId)" class="tableButton reCreateButton"><font-awesome-icon icon='folder-open' class="tableButtonIcon"/></button>
               <button v-else @click="finalizeSurvey(data.item.surveyId)" class="tableButton finalizeButton"><font-awesome-icon icon='stamp' class="tableButtonIcon"/></button>
               <button @click="deleteSurvey(data.item.surveyId)" class="tableButton deleteButton"> <font-awesome-icon icon="times" class="tableButtonIcon"/></button>
             </div>
           </div>
+        </template>
+        <template slot="row-details" slot-scope="data">
+          <b-table hover :items="data.item.Surveys" :fields="fields" head-variant="light" table-class="childSurveyTable">
+            <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
+              <div v-bind:key="field.key" class="surveyTableCel">
+                <div v-if="field.colType === 'name'">
+                  <span v-if="data.item.name.length <= 20" class="surveyName">
+                    <font-awesome-icon icon="circle" class="indicator-icon" :data-indicatorcolor="!data.item.final ? 'steelblue' : data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'"/>
+                    <font-awesome-icon :icon="data.item.anon ? 'user-slash' : 'user-check'" class="indicator-icon"/>
+                    {{data.item.name}}
+                  </span>
+                  <span v-else v-b-tooltip="data.item.name" tabindex="0" class="surveyName">
+                    <font-awesome-icon icon="circle" class="indicator-icon" :data-indicatorcolor="!data.item.final ? 'steelblue' : data.item.archived ? 'grey' : data.item.ended ? 'orange' : !data.item.active ? 'red' : data.item.starting ? 'yellow' : 'green'"/>
+                    <font-awesome-icon :icon="data.item.anon ? 'user-slash' : 'user-check'" class="indicator-icon"/>
+                    {{data.item.name.substring(0, 17) + '...'}}
+                  </span>
+                </div>
+                <div v-else-if="field.colType === 'startDate'">
+                  <span v-if="data.item.startDate">{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
+                  <span v-else>-</span>
+                </div>
+                <div v-else-if="field.colType === 'endDate'">
+                  <span v-if="data.item.endDate">{{data.item.endDate | moment('DD/MM/YYYY')}}</span>
+                  <span v-else>-</span>
+                </div>
+                <div v-else-if="field.colType === 'respondentsSize'">
+                  <span>{{data.item.responses || 0}}/{{data.item.respondents_size}}</span>
+                </div>
+                <div v-else-if="field.colType === 'actions'" class="actionsCel">
+                  <button @click="openSurveyResults(data.item.surveyId)" class="tableButton"><font-awesome-icon icon="chart-bar" class="tableButtonIcon" /></button>
+                </div>
+              </div>
+            </template>
+          </b-table>
         </template>
       </b-table>
     </div>
@@ -149,7 +187,6 @@
           :label="$t('message.modifySurveyTitle')"
         >
           <b-form-input
-            id="surveyNameInput"
             v-model="modify.surveyName"
             maxlength="100"
             required
@@ -179,14 +216,14 @@
             type="email"
           />
           <b-input-group-append>
-            <b-button @click="addRespondent" :disabled="!emailIsValid" class="addRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
+            <b-button @click="modifyAddRespondent" :disabled="!modifyEmailIsValid" class="modifyAddRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
           </b-input-group-append>
         </b-input-group>
         <ul class="respondentList" v-if="modify.surveyRespondents.length">
           <li v-for="(respondent, index) in modify.surveyRespondents" v-bind:key="index" :style="modify.surveyAnonymity ? 'padding-left: 0;' : 'padding-left: 1rem;'">
             <div class="respondentDiv">
               <p>{{respondent}}</p>
-              <font-awesome-icon v-if="!modify.surveyAnonymity" @click="removeRespondent(index)" icon="times"/>
+              <font-awesome-icon v-if="!modify.surveyAnonymity" @click="modifyRemoveRespondent(index)" icon="times"/>
             </div>
           </li>
         </ul>
@@ -198,6 +235,69 @@
       </template>
     </b-modal>
     <b-modal
+      id="redoSurveyModal"
+      :title="$t('message.redoSurveyHeader')"
+      ref="redoSurveyModal"
+      v-model="redoSurveyBoolean"
+      @ok="handleRedoSurveyModal"
+    >
+      <form>
+        <b-form-group
+          :label="$t('message.redoSurveyTitle')"
+        >
+          <b-form-input
+            v-model="redo.surveyName"
+            maxlength="100"
+            required
+          />
+        </b-form-group>
+        <b-form-group
+          :label="$t('message.redoSurveyMessage')"
+        >
+          <b-form-textarea
+            v-model="redo.surveyMessage"
+          />
+        </b-form-group>
+        <b-form-group
+          :label="$t('message.redoSurveyStartDate')"
+        >
+          <datepicker v-model="redo.surveyStartDate" :language="redo.fi" :monday-first="true" :disabled-dates="redo.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+        </b-form-group>
+        <b-form-group
+          :label="$t('message.redoSurveyEndDate')"
+        >
+          <datepicker v-model="redo.surveyEndDate" :language="redo.fi" :monday-first="true" :disabled-dates="redo.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+        </b-form-group>
+        <b-form-group
+          :label="$t('message.redoSurveyRespondents')"
+          style="margin-bottom: 0;"
+        >
+        <b-input-group>
+          <b-input
+            :placeholder="$t('message.redoSurveyAddRespondent')"
+            v-model="redo.currentRespondent"
+            type="email"
+          />
+          <b-input-group-append>
+            <b-button @click="redoAddRespondent" :disabled="!redoEmailIsValid" class="redoAddRespondentButton">{{$t('message.insertmoreEmail')}}<font-awesome-icon icon="plus"></font-awesome-icon></b-button>
+          </b-input-group-append>
+        </b-input-group>
+        <ul class="respondentList" v-if="redo.surveyRespondents.length">
+          <li v-for="(respondent, index) in redo.surveyRespondents" v-bind:key="index" style="padding-left: 1rem;">
+            <div class="respondentDiv">
+              <p>{{respondent}}</p>
+              <font-awesome-icon @click="redoRemoveRespondent(index)" icon="times"/>
+            </div>
+          </li>
+        </ul>
+        </b-form-group>
+      </form>
+      <template v-slot:modal-footer="{ ok, cancel }">
+        <b-button @click="cancel()">{{$t('message.redoSurveyCancel')}}</b-button>
+        <b-button @click="ok()" variant="primary" :disabled="!redo.surveyName">{{$t('message.redoSurveySubmit')}}</b-button>
+      </template>
+    </b-modal>
+    <b-modal
       :title="'Arkistoi kysely'"
       ref="archiveSurveyModal"
       v-model="archiveSurveyBoolean"
@@ -206,6 +306,7 @@
       <b-form-group :label="$t('message.archiveSurveyUndoText')">
         <b-input v-model="archive.inputSurveyName" :placeholder="$t('message.writeSurveyName')"/>
       </b-form-group>
+      <b-alert :show="archive.surveyGroupId" variant="warning">{{ $t('message.archiveSurveyGroupWarning') }}</b-alert>
       <template v-slot:modal-footer="{ ok, cancel }">
         <b-button @click="cancel()">{{$t('message.modifySurveyCancel')}}</b-button>
         <b-button @click="ok()" variant="primary" :disabled="archive.surveyName !== archive.inputSurveyName">{{$t('message.archiveSurveySubmit')}}</b-button>
@@ -220,6 +321,7 @@
       <b-form-group :label="$t('message.deleteSurveyUndoText')">
         <b-input v-model="del.inputSurveyName" :placeholder="$t('message.writeSurveyName')"/>
       </b-form-group>
+      <b-alert :show="del.surveyGroupId" variant="danger">{{ $t('message.deleteSurveyGroupDanger') }}</b-alert>
       <template v-slot:modal-footer="{ ok, cancel }">
         <b-button @click="cancel()">{{$t('message.modifySurveyCancel')}}</b-button>
         <b-button @click="ok()" variant="danger" :disabled="del.surveyName !== del.inputSurveyName">{{$t('message.deleteSurveySubmit')}}</b-button>
@@ -277,11 +379,6 @@ export default {
             colType: 'respondentsSize'
           },
           {
-            key: 'analyze',
-            label: 'Raportti',
-            colType: 'analyze'
-          },
-          {
             key: 'actions',
             label: 'Toiminnot',
             colType: 'actions'
@@ -301,17 +398,34 @@ export default {
             to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
           },
         },
+        redo: {
+          surveyId: null,
+          surveyName: null,
+          surveyMessage: null,
+          surveyAnonymity: null,
+          surveyStartDate: null,
+          surveyEndDate: null,
+          surveyRespondents: [],
+          currentRespondent: null,
+          fi: fi,
+          disabledDates: {
+            to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
+          }
+        },
         archive: {
           surveyId: null,
           surveyName: null,
-          inputSurveyName: null
+          inputSurveyName: null,
+          surveyGroupId: null
         },
         del: {
           surveyId: null,
           surveyName: null,
-          inputSurveyName: null
+          inputSurveyName: null,
+          surveyGroupId: null
         },
         display: "all",
+        showDetails: {},
         showTotalDetailed: false,
         showInstructions: true
     }
@@ -321,28 +435,58 @@ export default {
       return this.$store.state.admin.surveys
     },
     computedSurveys() {
-      return this.surveys.map(survey => {
-        return {
-          ...survey,
+      // Add bunch of information
+      const attachInfoToSurvey = survey => ({
+        ...survey,
           open: 
             (survey.startDate === null || new Date(survey.startDate).getTime() < Date.now()) &&
             (survey.endDate === null || Date.now() < new Date(survey.endDate).getTime()) &&
             survey.active && !survey.archived,
           starting: survey.startDate !== null && Date.now() < new Date(survey.startDate).getTime(),
           ended: survey.endDate !== null && new Date(survey.endDate) < Date.now()
+      })
+      return this.surveys.map(survey => attachInfoToSurvey(survey))
+    },
+    normalizedSurveys() {
+      // Group and attach a cover survey to surveygroup
+      let groupedSurveys = this.computedSurveys.map(obj => ({...obj})) // clone because weird things happen otherwise
+      const groupedIds = []
+      for (let i = 0; i < groupedSurveys.length; i++) {
+        const currentSurvey = groupedSurveys[i]
+        if (currentSurvey.surveyGroupId && !groupedIds.includes(currentSurvey.surveyGroupId)) {
+          currentSurvey.Surveys = groupedSurveys.filter(survey => survey.surveyGroupId === currentSurvey.surveyGroupId).map(obj => ({...obj}))
+          currentSurvey.Surveys.sort(({endDate: a}, {endDate: b}) => (b !== null ? b : -Infinity) - (a !== null ? a : -Infinity))
+          Object.assign(currentSurvey, currentSurvey.Surveys[currentSurvey.Surveys.length - 1])
+          groupedIds.push(currentSurvey.surveyGroupId)
         }
-      }).sort((a, b) => b.final - a.final).sort((a, b) => a.archived - b.archived)
+      }
+      groupedIds.forEach(id => groupedSurveys = groupedSurveys.filter(survey => survey.surveyGroupId !== id || survey.Surveys))
+
+      return groupedSurveys.map(survey => ({
+        ...survey,
+        _showDetails: this.showDetails[survey.surveyId]
+      }))
+    },
+    sortedSurveys() {
+      // sort such that incomplete surveys are closest to bottom and archived surveys second closest
+      return [...this.normalizedSurveys].sort((a, b) => b.final - a.final).sort((a, b) => a.archived - b.archived)
     },
     filteredSurveys() {
+      // Categorize
       const surveysToBeFiltered = (() => {
-        if (this.searchTerm) return this.computedSurveys.filter(obj => obj.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
-        else return this.computedSurveys
+        if (this.searchTerm) {
+          return this.sortedSurveys.filter(obj => obj.name.toLowerCase().includes(this.searchTerm.toLowerCase()) 
+            || (obj.Surveys && obj.Surveys.some(survey => survey.name.toLowerCase().includes(this.searchTerm.toLowerCase()))))
+        } else {
+          return this.sortedSurveys
+        }
       })()
 
       const filteredSurveys = surveysToBeFiltered.filter(obj => obj.final && !obj.archived)
 
       return {
         all: surveysToBeFiltered,
+        group: surveysToBeFiltered.filter(obj => obj.Surveys),
         anonymous: surveysToBeFiltered.filter(obj => obj.anon),
         authenticated: surveysToBeFiltered.filter(obj => !obj.anon),
         active: filteredSurveys.filter(obj => obj.open),
@@ -368,6 +512,22 @@ export default {
         }
       }
     },
+    redoSurveyBoolean: {
+      get: function() {
+        return !!this.redo.surveyId
+      },
+      set: function() {
+        if (this.redo.surveyId) {
+          this.redo.surveyId = null
+          this.redo.surveyName = null
+          this.redo.surveyMessage = null
+          this.redo.surveyStartDate = null
+          this.redo.surveyEndDate = null
+          this.redo.surveyRespondents = []
+          this.redo.currentRespondent = null
+        }
+      }
+    },
     archiveSurveyBoolean: {
       get: function() {
         return !!this.archive.surveyId
@@ -377,6 +537,7 @@ export default {
           this.archive.surveyId = null
           this.archive.surveyName = null
           this.archive.inputSurveyName = null
+          this.archive.surveyGroupId = null
         }
       }
     },
@@ -389,15 +550,26 @@ export default {
           this.del.surveyId = null
           this.del.surveyName = null,
           this.del.inputSurveyName = null
+          this.del.surveyGroupId = null
         }
       }
     },
-    emailIsValid() {
+    modifyEmailIsValid() {
       if (this.modify.surveyId) {
         return this.modify.currentRespondent &&
           !this.modify.surveyRespondents.some(email => email.toLowerCase() === this.modify.currentRespondent.toLowerCase()) &&
           this.modify.currentRespondent &&
           this.modify.currentRespondent.match(/.+@.+/)
+      } else {
+        return null
+      }
+    },
+    redoEmailIsValid() {
+      if (this.redo.surveyId) {
+        return this.redo.currentRespondent &&
+          !this.redo.surveyRespondents.some(email => email.toLowerCase() === this.redo.currentRespondent.toLowerCase()) &&
+          this.redo.currentRespondent &&
+          this.redo.currentRespondent.match(/.+@.+/)
       } else {
         return null
       }
@@ -409,18 +581,20 @@ export default {
     },
     deleteSurvey(surveyId) {
       if (!this.del.surveyId) {
-        const survey = this.surveys.find(survey => survey.surveyId === surveyId)
+        const survey = this.normalizedSurveys.find(survey => survey.surveyId === surveyId)
         this.del.surveyId = surveyId
         this.del.surveyName = survey.name
         this.del.inputSurveyName = null
+        this.del.surveyGroupId = survey.surveyGroupId
       }
     },
     handleDeleteSurveyModal(bvModalEvt) {
       bvModalEvt.preventDefault()
       if (this.del.surveyName === this.del.inputSurveyName) {
+        const url = this.del.surveyGroupId ? `/admin/surveygroup/${this.del.surveyGroupId}/delete` : `/admin/survey/${this.del.surveyId}/delete`
         axios({
           method: "DELETE",
-          url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.del.surveyId + "/delete",
+          url: process.env.VUE_APP_BACKEND + url,
           headers: {
             'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           }
@@ -440,18 +614,20 @@ export default {
     },
     archiveSurvey(surveyId) {
       if (!this.archive.surveyId) {
-        const survey = this.surveys.find(survey => survey.surveyId === surveyId)
+        const survey = this.normalizedSurveys.find(survey => survey.surveyId === surveyId)
         this.archive.surveyId = surveyId
         this.archive.surveyName = survey.name
         this.archive.inputSurveyName = null
+        this.archive.surveyGroupId = survey.surveyGroupId
       }
     },
     handleArchiveSurveyModal(bvModalEvt) {
       bvModalEvt.preventDefault()
       if (this.archive.surveyName === this.archive.inputSurveyName) {
+        const url = this.archive.surveyGroupId ? `/admin/surveygroup/${this.archive.surveyGroupId}/archive` : `/admin/survey/${this.archive.surveyId}/archive`
         axios({
           method: "PATCH",
-          url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.archive.surveyId + "/archive",
+          url: process.env.VUE_APP_BACKEND + url,
           headers: {
             'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           }
@@ -471,7 +647,7 @@ export default {
     },
     modifySurvey(surveyId) {
       if (!this.modify.surveyId) {
-        const survey = this.surveys.find(survey => survey.surveyId === surveyId)
+        const survey = this.normalizedSurveys.find(survey => survey.surveyId === surveyId)
         this.modify.surveyId = surveyId
         this.modify.surveyAnonymity = survey.anon
         this.modify.surveyName = survey.name
@@ -481,14 +657,23 @@ export default {
         else this.modify.surveyRespondents = [...survey.UserGroup.respondents]
       }
     },
-    addRespondent() {
-      if (this.emailIsValid) {
+    modifyAddRespondent() {
+      if (this.modifyEmailIsValid) {
         this.modify.surveyRespondents.push(this.modify.currentRespondent)
         this.modify.currentRespondent = null
       }
     },
-    removeRespondent(index) {
+    modifyRemoveRespondent(index) {
       this.modify.surveyRespondents.splice(index, 1)
+    },
+    redoAddRespondent() {
+      if (this.redoEmailIsValid) {
+        this.redo.surveyRespondents.push(this.redo.currentRespondent)
+        this.redo.currentRespondent = null
+      }
+    },
+    redoRemoveRespondent(index) {
+      this.redo.surveyRespondents.splice(index, 1)
     },
     handleModifySurveyModal(bvModalEvt) {
       bvModalEvt.preventDefault()
@@ -510,6 +695,48 @@ export default {
           if (res.status === 200) {
             this.updateSurveys()
             this.$nextTick(() => this.$refs.modifySurveyModal.hide())
+          }
+        }).catch(err => {
+          this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+            title: this.$t('message.genericError'),
+            toaster: 'b-toaster-bottom-right',
+            variant: 'danger'
+          })
+        })
+      }
+    },
+    redoSurvey(surveyId) {
+      if (!this.redo.surveyId) {
+        const survey = this.normalizedSurveys.find(survey => survey.surveyId === surveyId)
+        this.redo.surveyId = survey.surveyId
+        this.redo.surveyAnonymity = survey.anon
+        this.redo.surveyName = survey.name
+        this.redo.surveyActivity = survey.active
+        if (!survey.anon) this.redo.surveyRespondents = survey.UserGroup.Users.reduce((arr, user) => [...arr, user.email], [])
+        else this.redo.surveyRespondents = [...survey.UserGroup.respondents]
+      }
+    },
+    handleRedoSurveyModal(bvModalEvt) {
+      bvModalEvt.preventDefault()
+      if (this.redo.surveyId && this.redo.surveyName) {
+        axios({
+          method: "POST",
+          url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.redo.surveyId + "/redo",
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
+          },
+          data: {
+            name: this.redo.surveyName,
+            message: this.redo.surveyMessage,
+            startDate: this.redo.startDate,
+            endDate: this.redo.surveyEndDate,
+            to: this.redo.surveyRespondents
+          }
+        })
+        .then(res => {
+          if (res.status === 200) {
+            this.updateSurveys()
+            this.$nextTick(() => this.$refs.redoSurveyModal.hide())
           }
         }).catch(err => {
           this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
@@ -552,6 +779,10 @@ export default {
         this.surveyResultsId = null
       }
     },
+    toggleFollowUps(surveyId) {
+      if (this.showDetails[surveyId]) this.showDetails[surveyId] = false
+      else this.$set(this.showDetails, surveyId, true)
+    },
     toggleDisplay(category) {
       this.display = category
     }
@@ -579,6 +810,18 @@ export default {
 
     &[aria-sort="ascending"], &[aria-sort="descending"] {
       background-color: #666070;
+    }
+  }
+
+  .b-table-details {
+    td {
+      .childSurveyTable {
+        margin: 0;
+        
+        thead {
+          display: none;
+        }
+      }
     }
   }
 
@@ -642,25 +885,11 @@ export default {
     grid-auto-columns: 2rem;
     justify-items: end;
 
-    .modifyButton {
-      grid-column: 1 / 2;
-    }
-
-    .reCreateButton {
-      grid-column: 2 / 3;
-    }
-
-    .finalizeButton {
-      grid-column: 2 / 3;
-    }
-
     .archiveButton {
-      grid-column: 2 / 3;
       color: grey;
     }
 
     .deleteButton {
-      grid-column: 3 / 4;
       color: #FF0000;
     }
   }
@@ -693,7 +922,7 @@ export default {
 }
 
 #modifySurveyModal {
-  .addRespondentButton {
+  .modifyAddRespondentButton {
     margin-bottom: 1rem;
     display: flex;
     align-items: center;
@@ -705,6 +934,43 @@ export default {
 
   .respondentList {
     max-height: 38vh;
+    overflow-y: scroll;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 0.7rem 1rem 0 1rem;
+
+    li {
+      width: 100%;
+      list-style: none;
+
+      .respondentDiv {
+        display: flex;
+        position: relative;
+
+        svg {
+          position: absolute;
+          color: crimson;
+          margin-left: -1rem;
+          margin-top: 0.3rem;
+        }
+      }
+    }
+  }
+}
+
+#redoSurveyModal {
+  .redoAddRespondentButton {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-left: 0.5rem;
+    }
+  }
+
+  .respondentList {
+    max-height: 28vh;
     overflow-y: scroll;
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
