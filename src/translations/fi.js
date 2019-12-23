@@ -277,6 +277,7 @@ export const fi = {
     age: 'ikä',
     gender: 'sukupuoli',
     name: 'nimi',
-    postalCode: 'postinumero'
+    postalCode: 'postinumero',
+    errorPage: 'Jokin meni vikaan, uudelleenohjataan'
   }
 }

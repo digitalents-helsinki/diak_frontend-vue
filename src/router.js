@@ -11,6 +11,7 @@ import Password from '@/views/Password.vue'
 import User from '@/views/User.vue'
 import Supervisor from '@/views/Supervisor.vue'
 import Anonymous from '@/views/Anonymous.vue'
+import ErrorPage from '@/views/Error.vue'
 
 Vue.use(Router)
 
@@ -154,6 +155,11 @@ const router = new Router({
       name: 'admin',
       component: Admin,
       beforeEnter: adminGuard
+    },
+    {
+      path: '/error',
+      name: 'error',
+      component: ErrorPage
     }
   ]
 })
