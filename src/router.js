@@ -116,18 +116,23 @@ const router = new Router({
       name: 'questionnaire-anon',
       component: Questionnaire,
       props: true,
-      beforeEnter: (to, from, next) => {
-        store.commit('questionnaire/setSurveyMetaData', {
-          surveyId: to.params.surveyId,
-          anonId: to.params.anonId,
-          anon: true
-        })
+      beforeEnter: wrapAsync(async (to, from, next) => {
         if (from.name === 'anonymous') {
           next()
         } else {
-          next('/anonymous')
+          store.commit('questionnaire/setSurveyMetaData', {
+            surveyId: to.params.surveyId,
+            anonId: to.params.anonId,
+            anon: true
+          })
+          await store.dispatch('questionnaire/fetchSurvey')
+          if (store.state.questionnaire.surveyData.resultData) {
+            next()
+          } else {
+            next('/anonymous')
+          }
         }
-      }
+      })
     },
     {
       path: '/auth/questionnaire/:surveyId/:userId?',

@@ -11,9 +11,6 @@
               <b-form-invalid-feedback :state="recoveryvalidation.email" class="emailFeedback">
               {{ $t('message.emailInput') }}
               </b-form-invalid-feedback>
-              <b-form-invalid-feedback :state="recoveryvalidation.emailpattern" class="emailFeedback">
-              {{ $t('message.patternInput') }}
-              </b-form-invalid-feedback>
             </b-form-group>
             <b-button type="submit" @click.prevent="handleRecovery" class="btn recoveryButton">{{ $t('message.submitPassword') }}</b-button>
           </b-form>
@@ -40,8 +37,7 @@ export default {
         email: null
       },
       recoveryvalidation: {
-        email: null,
-        emailpattern:null
+        email: null
       },
       recoveryinstruction:true,
       recoverymessage:false
@@ -50,13 +46,8 @@ export default {
   methods: {
     handleRecovery() {
       this.recoveryvalidation.email = null
-      if (!this.recovery.email) {
-        this.recoveryvalidation.email = false
-        return
-      }
-      this.recoveryvalidation.emailpattern = null      
       if (!this.recovery.email.match(/.+@.+/)) {
-        this.recoveryvalidation.emailpattern = false
+        this.recoveryvalidation.email = false
         return
       }
       const data = JSON.stringify({
@@ -102,6 +93,12 @@ export default {
     flex-direction:column;
     width:100%;
     padding:1rem;
+
+    .error {
+      margin: 1rem 0 0 0;
+      font-size: 1rem;
+      color: red;
+    }
       
     .emailFeedback{
       font-size:1rem;

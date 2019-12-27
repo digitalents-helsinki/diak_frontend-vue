@@ -41,9 +41,6 @@ export default {
     moveToQuestionnaire() {
       this.$router.push({ path: `/anon/questionnaire/${this.$store.state.questionnaire.meta.surveyId}/${this.$store.state.questionnaire.meta.anonId}` })
     }
-  },
-  created() {
-    this.$store.dispatch('questionnaire/fetchSurvey')
   }
 }
 </script>
