@@ -30,10 +30,10 @@ export default {
     }
   },
   mutations: {
-    setSurveyMetaData(state, metaData) {
-      state.meta.surveyId = metaData.surveyId,
-      state.meta.anonId = metaData.anonId
-      state.meta.anon = metaData.anon
+    setSurveyMetaData(state, metaData = {}) {
+      state.meta.surveyId = metaData.surveyId || null,
+      state.meta.anonId = metaData.anonId || null
+      state.meta.anon = metaData.anon || null
     },
     setSurveyInfo(state, info) {
       state.surveyData.name = info.name

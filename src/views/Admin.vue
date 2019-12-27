@@ -7,6 +7,7 @@
             </div>
             <div class="dropdownmenu">
                 <b-dropdown right variant="light" text="Admin">
+                    <b-dropdown-item @click.prevent="$router.push({name: 'user'})">{{ $t('message.userInterFaceLink') }}</b-dropdown-item>
                     <b-dropdown-item @click.prevent="signOut">{{ $t('message.logoutButtontranslate') }}</b-dropdown-item>
                 </b-dropdown>
             </div>

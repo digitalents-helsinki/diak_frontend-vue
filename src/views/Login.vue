@@ -16,9 +16,9 @@
             <b-form-group class="passwordfield">
               <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" :state="loginvalidation.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')">
               </b-form-input>
-              <b-form-invalid-feedback :state="loginvalidation.password" class="passwordFeedback">
-              {{ $t('message.passwordInput') }}
-            </b-form-invalid-feedback>
+              <b-form-invalid-feedback :state="loginvalidation.passwordlength" class="passwordFeedback">
+                {{ $t('message.inputLength') }}
+              </b-form-invalid-feedback>
             </b-form-group>
           <b-button type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
             <b-form-invalid-feedback :state="loginvalidation.invalidcredentials" class="loginFeedback">
@@ -42,9 +42,6 @@
       </div>
     </template>
   </LogoBox>
-<!--<div class="login">
-  <button class="btn" @click="handleSignIn">Kirjaudu sisään</button>
-</div>-->
 </template>
 <script>
 import axios from 'axios'
@@ -65,7 +62,7 @@ export default {
       },
       loginvalidation: {
         email: null,
-        password: null,
+        passwordlength: null,
         invalidcredentials: null,
         userDoesNotExist: null
       },
@@ -76,7 +73,7 @@ export default {
     handleLogin() {
       Object.keys(this.loginvalidation).forEach(key => this.loginvalidation[key] = null)
       if (!this.login.email || !this.login.email.match(/.+@.+/)) this.loginvalidation.email = false
-      if (!this.login.password) this.loginvalidation.password = false
+      if (this.login.password.length < 8 || this.login.password.length > 128) this.loginvalidation.passwordlength = false
       this.error = null
 
       const data = JSON.stringify({
@@ -91,22 +88,16 @@ export default {
             }
           }).then(res => {
             if (res.status === 200) {
-              if (res.data.role === 'admin') {
-                this.$store.commit('login', {
-                  loggedIn: true,
-                  role: 'admin',
-                  accessToken: res.data.token,
-                  userId: res.data.userId
-                })
-                this.$router.push({ name: 'admin' })
+              this.$store.commit('login', {
+                loggedIn: true,
+                role: res.data.role,
+                accessToken: res.data.token,
+                userId: res.data.userId
+              })
+              if (this.$store.state.role === 'user') {
+                this.$router.push({ name: 'user' })
               } else {
-                this.$store.commit('login', {
-                  loggedIn: true,
-                  role: 'user',
-                  accessToken: res.data.token,
-                  userId: res.data.userId
-                })
-                this.$router.push({ path: '/user/' })
+                this.$router.push({ name: 'admin' })
               }
             }
           }

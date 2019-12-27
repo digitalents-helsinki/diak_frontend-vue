@@ -89,7 +89,6 @@ export const fi = {
     sendSurvey:'Lähetä kysely',
     sendSurveyError: 'Varmista täyttäneesi kaikki pakolliset kentät',
     queryMessage:'Kyselysi on luotu onnistuneesti',
-    //manageSurvey:'HALLINNOI KYSELYJÄ',
     dissatisfied:'erittäin tyytymätön',
     satisfied:'erittäin tyytyväinen',
     total:'Kyselyitä yhteensä',
@@ -278,6 +277,7 @@ export const fi = {
     gender: 'sukupuoli',
     name: 'nimi',
     postalCode: 'postinumero',
-    errorPage: 'Jokin meni vikaan, uudelleenohjataan'
+    errorPage: 'Jokin meni vikaan, uudelleenohjataan',
+    userInterFaceLink: 'Käyttäjänäkymä'
   }
 }

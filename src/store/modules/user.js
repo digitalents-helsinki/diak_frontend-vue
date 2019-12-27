@@ -10,7 +10,7 @@ export default {
       }
     },
     authUser: {
-      firstTime: null,
+      firstTime: false,
       personalInfo: {
         name: null,
         postNumber: null,
