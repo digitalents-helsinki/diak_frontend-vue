@@ -94,7 +94,7 @@ export default {
                 accessToken: res.data.token,
                 userId: res.data.userId
               })
-              if (this.$store.state.role === 'user') {
+              if (this.$store.state.authentication.role === 'user') {
                 this.$router.push({ name: 'user' })
               } else {
                 this.$router.push({ name: 'admin' })
