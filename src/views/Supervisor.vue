@@ -20,11 +20,45 @@
           <b-button variant="primary" @click.prevent="handleAdminAdd">{{ $t('message.supervisorMore') }}</b-button>
         </b-input-group-append>
       </b-input-group>
-      <ul>
+      <ul v-if="admins.length">
         <li v-for="admin in admins" :key="admin.userId">
           <b-card class="m-3">
             <p>{{admin.email}}</p>
-            <b-button variant="danger" size="sm" @click.prevent="handleAdminRemove(admin.userId)">{{ $t('message.deleteButton') }}</b-button>
+            <b-button variant="danger" size="sm" @click.prevent="handleAdminRemove(admin.userId)">{{ $t('message.removeAdminButton') }}</b-button>
+          </b-card>
+        </li>
+      </ul>
+    </div>
+    <div class="searchUser">
+      <h2 class="heading">{{ $t('message.supervisorSearchUser') }}</h2>
+      <b-input-group>
+        <b-input v-model="userSearchTerm" :placeholder="$t('message.supervisorSearchPlaceHolder')" type="email" />
+        <b-input-group-append>
+          <b-button variant="primary" @click.prevent="handleUserSearch">{{ $t('message.supervisorSearchButton') }}</b-button>
+        </b-input-group-append>
+      </b-input-group>
+      <ul v-if="users.length">
+        <li v-for="user in users" :key="user.userId">
+          <b-card class="m-3">
+            <p>{{user.email}}</p>
+            <p>{{user.name}}</p>
+            <b-button variant="danger" size="sm" @click.prevent="handleUserDelete(user.userId)">{{ $t('message.deleteUserButton') }}</b-button>
+          </b-card>
+        </li>
+      </ul>
+    </div>
+    <div class="deleteByEmail">
+      <h2 class="heading">{{ $t('message.supervisorDeleteByEmail') }}</h2>
+      <b-input-group>
+        <b-input v-model="deleteByEmail" :placeholder="$t('message.supervisorDeleteByEmailPlaceHolder')" type="email" />
+        <b-input-group-append>
+          <b-button variant="primary" @click.prevent="handleDeleteByEmail">{{ $t('message.supervisorDeleteByEmailButton') }}</b-button>
+        </b-input-group-append>
+      </b-input-group>
+      <ul v-if="deleteResponses.length">
+        <li v-for="(response, index) in deleteResponses" :key="index">
+          <b-card class="m-3">
+            <p>{{response}}</p>
           </b-card>
         </li>
       </ul>
@@ -44,8 +78,12 @@ export default {
       email: null,
       password: null,
       admins: [],
+      users: [],
+      deleteResponses: [],
       loggingIn: null,
-      loginError: null
+      loginError: null,
+      userSearchTerm: null,
+      deleteByEmail: null
     }
   },
   methods: {
@@ -88,9 +126,45 @@ export default {
         url: `${process.env.VUE_APP_BACKEND}/supervisor/admin/all`,
         headers: {
           'Authorization': `Bearer ${this.jwt}`
-        },
+        }
       }).then(res => {
         if (res.status === 200) this.admins = res.data
+      })
+    },
+    handleUserSearch() {
+      axios({
+        method: 'GET',
+        url: `${process.env.VUE_APP_BACKEND}/supervisor/user/search/${this.userSearchTerm}`,
+        headers: {
+          'Authorization': `Bearer ${this.jwt}`
+        }
+      }).then(res => {
+        if (res.status === 200) this.users = res.data
+      })
+    },
+    handleUserDelete(userId) {
+      axios({
+        method: 'DELETE',
+        url: `${process.env.VUE_APP_BACKEND}/supervisor/user/${userId}/delete`,
+        headers: {
+          'Authorization': `Bearer ${this.jwt}`
+        }
+      }).then(res => {
+        if (res.status === 204) this.users.splice(this.users.findIndex(user => user.userId === userId), 1)
+      })
+    },
+    handleDeleteByEmail() {
+      axios({
+        method: 'POST',
+        url: `${process.env.VUE_APP_BACKEND}/supervisor/deletebyemail`,
+        headers: {
+          'Authorization': `Bearer ${this.jwt}`
+        },
+        data: {
+          email: this.deleteByEmail
+        }
+      }).then(res => {
+        if (res.status === 200) this.deleteResponses.unshift(res.data) 
       })
     },
     handleLogin() {
@@ -120,7 +194,22 @@ export default {
 
 .supervisor-functions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 1rem;
+}
+
+
+ul {
+  margin: 0.5rem;
+  padding: 0;
+  max-height: 50vh;
+  overflow-y: scroll;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+
+  li {
+    list-style: none;
+  }
 }
 
 .supervisorPage{
@@ -163,24 +252,36 @@ export default {
       }
     }
   }
+
+  .heading{
+    font-size:1.1rem;
+    font-weight:bold;
+    color: #350E7E;
+    margin-bottom:1rem;
+  }
+
+  .deleteByEmail {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:1rem;
+    width: 100%;
+  }
+
+  .searchUser {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:1rem;
+    width: 100%;
+  }
+
   .createNew{
     display:flex;
     flex-direction:column;
     align-items:center;
     margin-top:1rem;
     width: 100%;
-    align-self: center;
-
-    ul {
-      margin: 0;
-      padding: 0;
-      max-height: 50vh;
-      overflow-y: scroll;
-      li {
-        list-style: none;
-        font-size: 1.2rem;
-      }
-    }
 
     .logoutDiv{
       margin-bottom:1rem;
@@ -189,13 +290,7 @@ export default {
         margin-left:8rem;
       }
     }
-    
-    .heading{
-      font-size:1.1rem;
-      font-weight:bold;
-      color: #350E7E;
-      margin-bottom:1rem;
-    }
+  
     .emailPassword{
       margin-top:1rem;
     }
