@@ -1,21 +1,34 @@
 <template>
 <div class="supervisorPage">
-  <p class="welcome">{{ $t('message.supervisorWelcome') }}</p>
+  <h1 v-if="jwt" class="welcome">{{ $t('message.supervisorWelcome') }}</h1>
   <div v-if="!jwt" class="supervisorContent">
-    <label class="passwordLabel">{{ $t('message.supervisorPassword') }}</label><input v-model="supervisor_password" type="password" />
-    <button @click.prevent="handleLogin" class="loginButton">{{ $t('message.supervisorLogin') }}</button>
+    <b-input-group v-if="!loggingIn" class="m-5">
+      <b-input v-model="supervisor_password" :placeholder="$t('message.supervisorPassword')" type="password" :state="loginError"/>
+      <b-input-group-append>
+        <b-button v-if="!loggingIn" @click.prevent="handleLogin" class="loginButton">{{ $t('message.supervisorLogin') }}</b-button>
+      </b-input-group-append>
+    </b-input-group>
+    <b-spinner v-else class="m-5" style="color: #350E7E"/>
+    <p v-if="loginError" class="text-danger">{{loginError}}</p>
   </div>
-  <div v-if="jwt" class="createNew">
-    <div class="logoutDiv">
-      <b-button variant="danger" @click.prevent="signOut">{{ $t('message.logoutButtontranslate') }}</b-button>
+  <div v-else class="supervisor-functions">
+    <div class="createNew">
+      <h2 class="heading">{{ $t('message.supervisorCreate') }}</h2>
+      <b-input-group>
+        <b-input v-model="email" :placeholder="$t('message.supervisorEmail')" type="email" />
+        <b-input-group-append>
+          <b-button variant="primary" @click.prevent="handleAdminAdd">{{ $t('message.supervisorMore') }}</b-button>
+        </b-input-group-append>
+      </b-input-group>
+      <ul>
+        <li v-for="admin in admins" :key="admin.userId">
+          <b-card class="m-3">
+            <p>{{admin.email}}</p>
+            <b-button variant="danger" size="sm" @click.prevent="handleAdminRemove(admin.userId)">{{ $t('message.deleteButton') }}</b-button>
+          </b-card>
+        </li>
+      </ul>
     </div>
-    <h3 class="heading">{{ $t('message.supervisorCreate') }}</h3>
-    <label>Sähköposti: </label><input v-model="username" type="text" />
-    <label class="emailPassword">{{ $t('message.supervisorPassword') }}</label><input v-model="password" type="password" />
-    <button @click.prevent="handleAdminAdd" class="createButton">{{ $t('message.supervisorMore') }}</button>
-    <ul>
-      <li v-for="admin in admins" :key="admin.userId">{{admin.email}} <button @click.prevent="handleAdminRemove(admin.userId)">{{ $t('message.deleteButton') }}</button></li>
-    </ul>
   </div>
 </div>
 </template>
@@ -28,9 +41,11 @@ export default {
     return {
       supervisor_password: null,
       jwt: null,
-      username: null,
+      email: null,
       password: null,
       admins: [],
+      loggingIn: null,
+      loginError: null
     }
   },
   methods: {
@@ -42,13 +57,13 @@ export default {
           'Authorization': `Bearer ${this.jwt}`
         },
         data: {
-          username: this.$data.username,
+          email: this.$data.email,
           password: this.$data.password
         }
       }).then(res => {
         if (res.status === 200) {
           this.getAdmins()
-          this.$data.username = null
+          this.$data.email = null
           this.$data.password = null
         }
       })
@@ -79,6 +94,8 @@ export default {
       })
     },
     handleLogin() {
+      this.loginError = null
+      this.loggingIn = true
       axios({
         method: 'POST',
         url: `${process.env.VUE_APP_BACKEND}/supervisor/login`,
@@ -90,7 +107,7 @@ export default {
           this.jwt = res.data.token
           this.getAdmins()
         }
-      })
+      }).catch(err => this.loginError = err.response.data).finally(() => this.loggingIn = false)
     },
     signOut() {
      this.$store.commit('logout')
@@ -100,8 +117,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-li {
-  list-style: none;
+
+.supervisor-functions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .supervisorPage{
@@ -115,10 +134,11 @@ li {
   font-style:normal;
 
   .welcome{
-    font-size:1.1rem;
+    font-size:1.4rem;
     font-weight:bold;
     color: #350E7E;
-    margin-top:5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 
   .supervisorContent{
@@ -133,7 +153,14 @@ li {
     .loginButton{
       background-color: #350E7E;
       color:#FFFFFF;
-      margin-top:1rem;
+
+      &:hover {
+        background-color: darken(#350E7E, 5%);
+      }
+
+      &:focus {
+        box-shadow:  0 0 0 0.2rem rgba(53, 14, 126, 0.5)
+      }
     }
   }
   .createNew{
@@ -141,6 +168,19 @@ li {
     flex-direction:column;
     align-items:center;
     margin-top:1rem;
+    width: 100%;
+    align-self: center;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      max-height: 50vh;
+      overflow-y: scroll;
+      li {
+        list-style: none;
+        font-size: 1.2rem;
+      }
+    }
 
     .logoutDiv{
       margin-bottom:1rem;

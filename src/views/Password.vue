@@ -49,6 +49,11 @@ export default {
       submitted: false
     }
   },
+  computed: {
+    decodedJWT() {
+      return JSON.parse(atob(this.$route.params.jwt.split('.')[1]))
+    }
+  },
   methods: {
     handleSubmit() {
       this.passwordlength = null
@@ -62,9 +67,11 @@ export default {
         return
       }
 
+      const url = this.$route.params.patchMatch === 'change' ? '/changepassword' : '/createpassword'
+
       axios({
         method: 'POST',
-        url: `${process.env.VUE_APP_BACKEND}/changepassword`,
+        url: process.env.VUE_APP_BACKEND + url,
         headers: {
           'Authorization': `Bearer ${this.$route.params.jwt}`
         },

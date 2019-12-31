@@ -97,7 +97,7 @@ const router = new Router({
       }
     },
     {
-      path: '/password/:jwt',
+      path: '/password/(change|create)/:jwt',
       name: 'password',
       component: Password,
       props: true,
