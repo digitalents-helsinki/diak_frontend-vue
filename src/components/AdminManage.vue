@@ -469,7 +469,10 @@ export default {
     },
     sortedSurveys() {
       // sort such that incomplete surveys are closest to bottom and archived surveys second closest
-      return [...this.normalizedSurveys].sort((a, b) => b.final - a.final).sort((a, b) => a.archived - b.archived)
+      return [...this.normalizedSurveys]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .sort((a, b) => b.final - a.final)
+        .sort((a, b) => a.archived - b.archived)
     },
     filteredSurveys() {
       // Categorize
