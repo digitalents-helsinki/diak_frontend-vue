@@ -17,7 +17,7 @@
       <b-input-group>
         <b-input v-model="email" :placeholder="$t('message.supervisorEmail')" type="email" />
         <b-input-group-append>
-          <b-button variant="primary" @click.prevent="handleAdminAdd">{{ $t('message.supervisorMore') }}</b-button>
+          <b-button variant="primary" @click.prevent="handleAdminAdd" :disabled="!email || !email.match(/.+@.+/)">{{ $t('message.supervisorMore') }}</b-button>
         </b-input-group-append>
       </b-input-group>
       <ul v-if="admins.length">
@@ -32,9 +32,9 @@
     <div class="searchUser">
       <h2 class="heading">{{ $t('message.supervisorSearchUser') }}</h2>
       <b-input-group>
-        <b-input v-model="userSearchTerm" :placeholder="$t('message.supervisorSearchPlaceHolder')" type="email" />
+        <b-input v-model="userSearchTerm" :placeholder="$t('message.supervisorSearchPlaceHolder')" type="search"/>
         <b-input-group-append>
-          <b-button variant="primary" @click.prevent="handleUserSearch">{{ $t('message.supervisorSearchButton') }}</b-button>
+          <b-button variant="primary" @click.prevent="handleUserSearch" :disabled="!userSearchTerm">{{ $t('message.supervisorSearchButton') }}</b-button>
         </b-input-group-append>
       </b-input-group>
       <ul v-if="users.length">
@@ -52,7 +52,7 @@
       <b-input-group>
         <b-input v-model="deleteByEmail" :placeholder="$t('message.supervisorDeleteByEmailPlaceHolder')" type="email" />
         <b-input-group-append>
-          <b-button variant="primary" @click.prevent="handleDeleteByEmail">{{ $t('message.supervisorDeleteByEmailButton') }}</b-button>
+          <b-button variant="primary" @click.prevent="handleDeleteByEmail" :disabled="!deleteByEmail || !deleteByEmail.match(/.+@.+/)">{{ $t('message.supervisorDeleteByEmailButton') }}</b-button>
         </b-input-group-append>
       </b-input-group>
       <ul v-if="deleteResponses.length">
@@ -67,7 +67,8 @@
 </div>
 </template>
 <script>
-import axios from 'axios'
+import { create } from 'axios'
+const axios = create()
 
 export default {
   name: 'supervisor',
@@ -76,7 +77,6 @@ export default {
       supervisor_password: null,
       jwt: null,
       email: null,
-      password: null,
       admins: [],
       users: [],
       deleteResponses: [],
@@ -104,6 +104,19 @@ export default {
           this.$data.email = null
           this.$data.password = null
         }
+      }).catch(err => {
+        const errorTitle = (() => {
+          if (err.response.status === 422) {
+              return this.$t('message.validationError')
+          } else {
+              return this.$t('message.genericError')
+          }
+        })()
+        this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+            title: errorTitle,
+            toaster: 'b-toaster-bottom-right',
+            variant: 'danger'
+        })
       })
     },
     handleAdminRemove(id) {
@@ -118,6 +131,12 @@ export default {
         }
       }).then(res => {
         if (res.status === 200) this.getAdmins()
+      }).catch(err => {
+        this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+          title: this.$t('message.genericError'),
+          toaster: 'b-toaster-bottom-right',
+          variant: 'danger'
+        })
       })
     },
     getAdmins() {
@@ -129,6 +148,12 @@ export default {
         }
       }).then(res => {
         if (res.status === 200) this.admins = res.data
+      }).catch(err => {
+        this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+          title: this.$t('message.genericError'),
+          toaster: 'b-toaster-bottom-right',
+          variant: 'danger'
+        })
       })
     },
     handleUserSearch() {
@@ -140,6 +165,12 @@ export default {
         }
       }).then(res => {
         if (res.status === 200) this.users = res.data
+      }).catch(err => {
+        this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+          title: this.$t('message.genericError'),
+          toaster: 'b-toaster-bottom-right',
+          variant: 'danger'
+        })
       })
     },
     handleUserDelete(userId) {
@@ -151,6 +182,12 @@ export default {
         }
       }).then(res => {
         if (res.status === 204) this.users.splice(this.users.findIndex(user => user.userId === userId), 1)
+      }).catch(err => {
+        this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+          title: this.$t('message.genericError'),
+          toaster: 'b-toaster-bottom-right',
+          variant: 'danger'
+        })
       })
     },
     handleDeleteByEmail() {
@@ -163,8 +200,14 @@ export default {
         data: {
           email: this.deleteByEmail
         }
-      }).then(res => {
-        if (res.status === 200) this.deleteResponses.unshift(res.data) 
+      }).then(({ status, data: { email, amount } }) => {
+        if (status === 200) this.deleteResponses.unshift(this.$t('message.deletedEmailFromResources', { email, amount })) 
+      }).catch(err => {
+        this.$bvToast.toast(`${err.response ? err.response.data : err.message}`, {
+          title: this.$t('message.genericError'),
+          toaster: 'b-toaster-bottom-right',
+          variant: 'danger'
+        })
       })
     },
     handleLogin() {
@@ -178,15 +221,37 @@ export default {
         }
       }).then(res => {
         if (res.status === 200) {
+          this.supervisor_password = null
           this.jwt = res.data.token
           this.getAdmins()
         }
       }).catch(err => this.loginError = err.response.data).finally(() => this.loggingIn = false)
-    },
-    signOut() {
-     this.$store.commit('logout')
-     this.$router.push({ path: '/' })
-    }  
+    }
+  },
+  created() {
+    this.$store.commit('logout')
+    axios.interceptors.response.use(res => res, err => {
+      if (err.response) {
+        switch(true) {
+          case err.response.config.url === process.env.VUE_APP_BACKEND + '/surf': // Try again if getting csrf token fails
+            // eslint-disable-next-line no-console
+            console.error(err)
+            setTimeout(() => axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data), 1000)
+            break
+          case err.response.status === 401: // Auth failed because token expired or whatever, login again
+            // eslint-disable-next-line no-console
+            console.error(err)
+            this.jwt = null
+            return Promise.reject(err)
+          default:
+            return Promise.reject(err)
+        }
+      } else {
+        return Promise.reject(err)
+      }
+    })
+    axios.defaults.withCredentials = true
+    axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data)
   }
 }
 </script>

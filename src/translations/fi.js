@@ -226,6 +226,7 @@ export const fi = {
     recoveryText: 'Palauta salasanasi',
     recoverymessage: 'Jos olet rekisteröitynyt, saat sähköpostiisi linkin, jonka kautta voit palauttaa salasanasi.',
     changedPasswordMessage: 'Salasanasi on vaihdettu.',
+    createdPasswordMessage: 'Salasanasi on asetettu.',
     alreadyRegistered: 'Sähköpostiosoite on jo käytössä: ',
     emailValidationError: 'Sähköpostiosoitetta ei voitu vahvistaa.',
     passwordInput: 'Salasana vaaditaan',
@@ -284,6 +285,7 @@ export const fi = {
     name: 'nimi',
     postalCode: 'postinumero',
     errorPage: 'Jokin meni vikaan, uudelleenohjataan',
-    userInterFaceLink: 'Käyttäjänäkymä'
+    userInterFaceLink: 'Käyttäjänäkymä',
+    deletedEmailFromResources: '{email} poistettiin {amount} resurssista.'
   }
 }

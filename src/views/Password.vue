@@ -22,7 +22,7 @@
             <b-button type="submit" @click.prevent="handleSubmit" class="recoveryButton">{{ $t('message.submitPassword') }}</b-button>
           </b-form>
         </div>
-        <p v-else class="info">{{ $t('message.changedPasswordMessage') }}</p>
+        <p v-else class="info">{{ this.$route.params.patchMatch === 'change' ? $t('message.changedPasswordMessage') : $t('message.createdPasswordMessage')}}</p>
         <p class="info">{{ $t('message.passwordInfo') }}</p>
         <div class="backtologindiv"><p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p></div>
       </div>
