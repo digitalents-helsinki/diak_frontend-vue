@@ -102,7 +102,7 @@
     </div>
     <div class="tableDisplayfields">
       <b-table hover :items="filteredSurveys[this.display]" :fields="fields" head-variant="light" table-class="surveyTable shadow-sm">
-        <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
+        <template v-for="field in fields" v-slot:[`cell(${field.key})`]="data">
           <div v-bind:key="field.key" class="surveyTableCel">
             <div v-if="field.colType === 'name'">
               <span v-if="data.item.name.length <= 20" class="surveyName">
@@ -141,7 +141,7 @@
         </template>
         <template slot="row-details" slot-scope="data">
           <b-table hover :items="data.item.Surveys" :fields="fields" head-variant="light" table-class="childSurveyTable">
-            <template v-for="(field, index) in fields" :slot="field.key" slot-scope="data">
+            <template v-for="field in fields" v-slot:[`cell(${field.key})`]="data">
               <div v-bind:key="field.key" class="surveyTableCel">
                 <div v-if="field.colType === 'name'">
                   <span v-if="data.item.name.length <= 20" class="surveyName">
