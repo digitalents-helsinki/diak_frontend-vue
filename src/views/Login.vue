@@ -14,13 +14,14 @@
             </b-form-invalid-feedback>
           </b-form-group>
             <b-form-group class="passwordfield">
-              <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" :state="loginvalidation.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')">
+              <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" :state="loginvalidation.passwordlength" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')">
               </b-form-input>
               <b-form-invalid-feedback :state="loginvalidation.passwordlength" class="passwordFeedback">
                 {{ $t('message.inputLength') }}
               </b-form-invalid-feedback>
             </b-form-group>
-          <b-button type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
+          <b-button v-if="!loggingIn" type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
+          <b-spinner style="color: #350E7E;" v-else />
             <b-form-invalid-feedback :state="loginvalidation.invalidcredentials" class="loginFeedback">
               {{ $t('message.invalidLogin') }}
             </b-form-invalid-feedback>
@@ -66,6 +67,7 @@ export default {
         invalidcredentials: null,
         userDoesNotExist: null
       },
+      loggingIn: null,
       error: null
     }
   },
@@ -73,7 +75,7 @@ export default {
     handleLogin() {
       Object.keys(this.loginvalidation).forEach(key => this.loginvalidation[key] = null)
       if (!this.login.email || !this.login.email.match(/.+@.+/)) this.loginvalidation.email = false
-      if (this.login.password.length < 8 || this.login.password.length > 128) this.loginvalidation.passwordlength = false
+      if (!this.login.password || this.login.password.length < 8 || this.login.password.length > 128) this.loginvalidation.passwordlength = false
       this.error = null
 
       const data = JSON.stringify({
@@ -82,6 +84,7 @@ export default {
       })
       
       if (Object.values(this.loginvalidation).every(value => value === null)) {
+        this.loggingIn = true
         axios.post(process.env.VUE_APP_BACKEND + "/signin", data, {
             headers: {
               "Content-Type": "application/json"
@@ -106,7 +109,7 @@ export default {
           if (err.response.status === 401) this.loginvalidation.invalidcredentials = false
           else if (err.response.status === 404) this.loginvalidation.userDoesNotExist = false
           else this.error = err
-        })
+        }).finally(() => this.loggingIn = null)
       }
     }, 
     handleGSignIn() {
