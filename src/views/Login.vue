@@ -108,6 +108,7 @@ export default {
           console.error(err)
           if (err.response.status === 401) this.loginvalidation.invalidcredentials = false
           else if (err.response.status === 404) this.loginvalidation.userDoesNotExist = false
+          else if (err.response.data) this.error = err.response.data
           else this.error = err
         }).finally(() => this.loggingIn = null)
       }
