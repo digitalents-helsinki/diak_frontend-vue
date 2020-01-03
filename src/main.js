@@ -7,6 +7,7 @@ import i18n from './translation'
 import VueMoment from 'vue-moment'
 import moment from 'moment'
 import 'moment/locale/fi'
+import 'moment/locale/se'
 import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle, faRedo, faFolderOpen, faStamp, faListOl} from '@fortawesome/free-solid-svg-icons'
@@ -97,6 +98,7 @@ Vue.use(GAuth, gauthOption)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 
+i18n.locale = (cookieMatch => cookieMatch ? cookieMatch[1] : 'fi')(document.cookie.match(/(?:^|;\s*)3X10D_LANGUAGE=([^;]*)/))
 moment.locale(i18n.locale)
 
 Vue.use(VueMoment, {
