@@ -118,6 +118,9 @@ const router = new Router({
       props: true,
       beforeEnter: wrapAsync(async (to, from, next) => {
         if (from.name === 'anonymous') {
+          if (!store.state.questionnaire.surveyData.questionData && !store.state.questionnaire.surveyData.resultData) {
+            await store.dispatch('questionnaire/fetchSurvey')
+          }
           next()
         } else {
           store.commit('questionnaire/setSurveyMetaData', {

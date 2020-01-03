@@ -98,7 +98,6 @@ Vue.use(GAuth, gauthOption)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 
-i18n.locale = (cookieMatch => cookieMatch ? cookieMatch[1] : 'fi')(document.cookie.match(/(?:^|;\s*)3X10D_LANGUAGE=([^;]*)/))
 moment.locale(i18n.locale)
 
 Vue.use(VueMoment, {

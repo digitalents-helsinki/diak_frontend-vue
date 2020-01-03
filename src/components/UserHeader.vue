@@ -7,7 +7,7 @@
       <button v-if="questionnaire" @click="$emit('toggleModal', 'help')" class="btn buttonOhjeet">{{$t('message.userInstructions')}}</button>
     </div>
     <div v-if="questionnaire" class="questionnaire-bottom">
-      <span>{{ this.$store.state.questionnaire.meta.anon ? 'Anonyymi' : 'Autentikoitu'}} | {{this.$store.state.questionnaire.surveyData.name}}</span>
+      <span>{{ this.$store.state.questionnaire.meta.anon ? $t('message.anonymous') : $t('message.authenticated')}} | {{this.$store.state.questionnaire.surveyData.name}}</span>
     </div>
   </div>
 </template>

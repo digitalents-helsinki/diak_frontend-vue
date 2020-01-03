@@ -9,11 +9,11 @@
         <font-awesome-icon @click="showTotalDetailed = !showTotalDetailed" :icon="showTotalDetailed ? 'chevron-left' : 'chevron-right'" class="chevron"/>
         <transition name="slider-width">
           <div v-if="showTotalDetailed" class="moreDetailsContainer">
-            <p class="totalParagraph">{{ `Käynnissä: ${filteredSurveys.active.length}` }}</p>
-            <p class="totalParagraph">{{ `Tulossa: ${filteredSurveys.starting.length}` }}</p>
-            <p class="totalParagraph">{{ `Päättynyt: ${filteredSurveys.ended.length}` }}</p>
-            <p class="totalParagraph">{{ `Suljettu: ${filteredSurveys.closed.length}` }}</p>
-            <p class="totalParagraph">{{ `Arkistoitu: ${filteredSurveys.archived.length}` }}</p>
+            <p class="totalParagraph">{{ `${this.$t('message.onGoing')}: ${filteredSurveys.active.length}` }}</p>
+            <p class="totalParagraph">{{ `${this.$t('message.coming')}: ${filteredSurveys.starting.length}` }}</p>
+            <p class="totalParagraph">{{ `${this.$t('message.ended')}: ${filteredSurveys.ended.length}` }}</p>
+            <p class="totalParagraph">{{ `${this.$t('message.closed')}: ${filteredSurveys.closed.length}` }}</p>
+            <p class="totalParagraph">{{ `${this.$t('message.archived')}: ${filteredSurveys.archived.length}` }}</p>
           </div>
         </transition>
       </div>
@@ -195,7 +195,7 @@
         <b-form-group
           :label="$t('message.modifySurveyEndDate')"
         >
-          <datepicker v-model="modify.surveyEndDate" :language="modify.fi" :monday-first="true" :disabled-dates="modify.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+          <datepicker v-model="modify.surveyEndDate" :language="modify[$i18n.locale]" :monday-first="true" :disabled-dates="modify.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
         </b-form-group>
         <b-form-group>
           <b-form-checkbox
@@ -261,12 +261,12 @@
         <b-form-group
           :label="$t('message.redoSurveyStartDate')"
         >
-          <datepicker v-model="redo.surveyStartDate" :language="redo.fi" :monday-first="true" :disabled-dates="redo.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+          <datepicker v-model="redo.surveyStartDate" :language="redo[$i18n.locale]" :monday-first="true" :disabled-dates="redo.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
         </b-form-group>
         <b-form-group
           :label="$t('message.redoSurveyEndDate')"
         >
-          <datepicker v-model="redo.surveyEndDate" :language="redo.fi" :monday-first="true" :disabled-dates="redo.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+          <datepicker v-model="redo.surveyEndDate" :language="redo[$i18n.locale]" :monday-first="true" :disabled-dates="redo.disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
         </b-form-group>
         <b-form-group
           :label="$t('message.redoSurveyRespondents')"
@@ -342,7 +342,7 @@
 </template>
 <script>
 import Datepicker from 'vuejs-datepicker'
-import { fi } from 'vuejs-datepicker/dist/locale'
+import { fi, sv, en } from 'vuejs-datepicker/dist/locale'
 import axios from 'axios'
 import SurveyResults from './SurveyResults'
 
@@ -357,30 +357,30 @@ export default {
         fields: [
           {
             key: 'name',
-            label: 'Kyselyn nimi',
+            label: this.$t('message.surveyTableName'),
             sortable: true,
             colType: 'name'
           },
           {
             key: 'startDate',
-            label: 'Voimassaolo alkaa',
+            label: this.$t('message.surveyTableStartDate'),
             sortable: true,
             colType: 'startDate'
           },
           {
             key: 'endDate',
-            label: 'Voimassaolo päättyy',
+            label: this.$t('message.surveyTableEndDate'),
             sortable: true,
             colType: 'endDate'
           },
           {
             key: 'respondents',
-            label: 'Vastanneita',
+            label: this.$t('message.surveyTableRespondents'),
             colType: 'respondentsSize'
           },
           {
             key: 'actions',
-            label: 'Toiminnot',
+            label: this.$t('message.surveyTableActions'),
             colType: 'actions'
           }
         ],
@@ -393,7 +393,9 @@ export default {
           surveyActivity: null,
           surveyRespondents: [],
           currentRespondent: null,
-          fi: fi,
+          fi,
+          sv,
+          en,
           disabledDates: {
             to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
           },
@@ -407,7 +409,9 @@ export default {
           surveyEndDate: null,
           surveyRespondents: [],
           currentRespondent: null,
-          fi: fi,
+          fi,
+          sv,
+          en,
           disabledDates: {
             to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
           }

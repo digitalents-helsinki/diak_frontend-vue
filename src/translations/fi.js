@@ -145,9 +145,9 @@ export const fi = {
     userEmailaddress:'Sähköpostiosoite',
     calanderPlaceholder:'Valitse päivämäärä',
     selectGender:'Valitse',
-    genderMale:'Mies',
-    genderFemale:'Nainen',
-    genderOther:'Muu',
+    genderMale: 'Mies',
+    genderFemale: 'Nainen',
+    genderOther: 'Muu',
     profileInstruction:'Kyselysi',
     finishedHeading:'Sinun vastatut kyselyt',
     ongoingHeading:'Sinun kysely kutsut',
@@ -286,6 +286,18 @@ export const fi = {
     postalCode: 'postinumero',
     errorPage: 'Jokin meni vikaan, uudelleenohjataan',
     userInterFaceLink: 'Käyttäjänäkymä',
-    deletedEmailFromResources: '{email} poistettiin {amount} resurssista.'
+    deletedEmailFromResources: '{email} poistettiin {amount} resurssista.',
+    surveyTableName: 'Kyselyn nimi',
+    surveyTableStartDate: 'Voimassaolo alkaa',
+    surveyTableEndDate: 'Voimassaolo päättyy',
+    surveyTableRespondents: 'Vastanneita',
+    surveyTableActions: 'Toiminnot',
+    onGoing: 'Käynnissä',
+    coming: 'Tulossa',
+    ended: 'Päättynyt',
+    closed: 'Suljettu',
+    archived: 'Arkistoitu',
+    anonymous: 'Anonyymi',
+    authenticated: 'Autentikoitu'
   }
 }

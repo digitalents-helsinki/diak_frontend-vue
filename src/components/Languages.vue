@@ -21,7 +21,7 @@ export default {
           value: 'fi', text: 'Suomi',
         },
         {
-          value: 'se', text: 'Svenska'
+          value: 'sv', text: 'Svenska'
         },
         {
           value: 'en', text: 'English'

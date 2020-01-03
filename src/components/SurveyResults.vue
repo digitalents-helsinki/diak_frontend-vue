@@ -94,7 +94,7 @@ export default {
   },
   computed: {
     valueFields() {
-      return Object.keys(this.excel_fields).filter(key => !key.endsWith('teksti') && !['postinumero', 'ikä', 'nimi', 'sukupuoli', 'vastausaika'].includes(key))
+      return Object.keys(this.excel_fields).filter(key => !key.endsWith(this.$t('message.text')) && ![this.$t('message.postalCode'), this.$t('message.age'), this.$t('message.name'), this.$t('message.gender'), this.$t('message.answeredAt')].includes(key))
     }
   },
   methods: {
@@ -204,7 +204,7 @@ export default {
             postal_code: user.post_number,
             age: user.age,
             name: user.name,
-            gender: user.gender,
+            gender: this.$t(`message.gender${user.gender}`),
             answeredAt: this.$moment(answeredAt).format('Do MMMM YYYY, kk:mm:ss')
           }
         });

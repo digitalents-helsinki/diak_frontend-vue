@@ -47,12 +47,12 @@
                 <p class="date-paragraph">{{ $t('message.dateParagraph') }}</p>
                 <div class="startdateOption">
                     <p> {{ $t('message.startDate') }}</p>
-                    <datepicker v-bind:value="survey.startDate" @input="modifySurveyAttribute({ startDate: $event })" :language="fi" :monday-first="true" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+                    <datepicker v-bind:value="survey.startDate" @input="modifySurveyAttribute({ startDate: $event })" :language="$data[$i18n.locale]" :monday-first="true" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
                     <div class="calendarIcon"><font-awesome-icon icon="calendar-alt"/></div>
                 </div>
                 <div class="enddateOption">
                     <p> {{ $t('message.endDate') }}</p>
-                    <datepicker v-bind:value="survey.endDate" @input="modifySurveyAttribute({ endDate: $event })" :language="fi" :monday-first="true" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
+                    <datepicker v-bind:value="survey.endDate" @input="modifySurveyAttribute({ endDate: $event })" :language="$data[$i18n.locale]" :monday-first="true" :disabled-dates="disabledDates" v-bind:placeholder="$t('message.datePlaceholder')"></datepicker>
                     <div class="calendarIcon"><font-awesome-icon icon="calendar-alt"/></div>
                 </div>
             </div>
@@ -182,7 +182,7 @@
 <script>
 import axios from 'axios'
 import Datepicker from 'vuejs-datepicker'
-import { fi } from 'vuejs-datepicker/dist/locale'
+import { fi, sv, en } from 'vuejs-datepicker/dist/locale'
 
 export default {
     name: 'admin-create',
@@ -195,7 +195,9 @@ export default {
             disabledDates: {
                 to: (d => new Date(d.setDate(d.getDate() - 1)))(new Date)
             },
-            fi: fi,
+            fi,
+            sv,
+            en,
             email: null,
             lastWrapperHeight: null,
             lastQuestionCardWidth: null,

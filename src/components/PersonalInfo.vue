@@ -40,7 +40,7 @@
         >
           <b-form-select
             id="genderEnter"
-            :options="gender.fi"
+            :options="gender"
             @input="$emit('updateInfo', {gender: $event})"
             :value="personalInfo.gender"
           ></b-form-select>
@@ -92,9 +92,20 @@ export default {
   },
   data() {
     return {
-      gender: {
-        fi: ['Mies', 'Nainen', 'Muu']
-      },
+      gender: [
+        {
+          value: 'Male',
+          text: this.$t('message.genderMale')
+        }, 
+        {
+          value: 'Female',
+          text: this.$t('message.genderFemale')
+        }, 
+        {
+          value: 'Other',
+          text: this.$t('message.genderOther')
+        }
+      ],
       infovalidation: {
         name: null,
         postNumber: null,
