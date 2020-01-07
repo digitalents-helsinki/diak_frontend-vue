@@ -67,7 +67,7 @@ export default {
         return
       }
 
-      const url = this.$route.params.patchMatch === 'change' ? '/changepassword' : '/createpassword'
+      const url = this.$route.params.pathMatch === 'change' ? '/changepassword' : '/createpassword'
 
       axios({
         method: 'POST',
