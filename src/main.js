@@ -89,9 +89,10 @@ axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.head
 
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {
-  clientId: process.env.VUE_APP_CLIENT_ID,
-  scope: 'profile email',
-  prompt: 'select_account'
+  clientId: process.env.VUE_APP_GOOGLE_CLIENT_ID,
+  scope: 'email',
+  prompt: 'select_account',
+  fetch_basic_profile: false
 }
 Vue.use(GAuth, gauthOption)
 
