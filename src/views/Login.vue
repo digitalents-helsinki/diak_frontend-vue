@@ -91,20 +91,8 @@ export default {
             }
           }).then(res => {
             if (res.status === 200) {
-              this.$store.commit('login', {
-                loggedIn: true,
-                role: res.data.role,
-                accessToken: res.data.token,
-                userId: res.data.userId,
-                email: res.data.email
-              })
-              this.$store.commit('user/setAuthUserPersonalInfo', {
-                name:res.data.name,
-                post_number:res.data.post_number,
-                phone_number:res.data.phone_number,
-                age:res.data.age,
-                gender:res.data.gender
-              })
+              this.$store.commit('login', res.data.authInfo)
+              this.$store.commit('user/setAuthUserPersonalInfo', res.data.personalInfo)
               if (this.$store.state.authentication.role === 'user') {
                 this.$router.push({ name: 'user' })
               } else {
@@ -135,20 +123,8 @@ export default {
       }
       loginWithGoogle().then(res => {
         if (res.status === 200) {
-          this.$store.commit('login', {
-            loggedIn: true,
-            role: res.data.role,
-            accessToken: res.data.token,
-            userId: res.data.userId,
-            email: res.data.email
-          })
-          this.$store.commit('user/setAuthUserPersonalInfo', {
-            name:res.data.name,
-            post_number:res.data.post_number,
-            phone_number:res.data.phone_number,
-            age:res.data.age,
-            gender:res.data.gender
-          })
+          this.$store.commit('login', res.data.authInfo)
+          this.$store.commit('user/setAuthUserPersonalInfo', res.data.personalInfo)
           if (this.$store.state.authentication.role === 'user') {
             this.$router.push({ name: 'user' })
           } else {
