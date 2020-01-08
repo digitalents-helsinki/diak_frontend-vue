@@ -6,7 +6,7 @@
                 <img class="logoPlace" src="../images/DIAK_3X10D_MUSTA_RGB.svg" alt="logo" >
             </div>
             <div class="dropdownmenu">
-                <b-dropdown right variant="light" text="Admin">
+                <b-dropdown right variant="light" :text="this.$store.state.user.authUser.personalInfo.name || this.$store.state.authentication.email">
                     <b-dropdown-item @click.prevent="$router.push({name: 'user'})">{{ $t('message.userInterFaceLink') }}</b-dropdown-item>
                     <b-dropdown-item @click.prevent="signOut">{{ $t('message.logoutButtontranslate') }}</b-dropdown-item>
                 </b-dropdown>

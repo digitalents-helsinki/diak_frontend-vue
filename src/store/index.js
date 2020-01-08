@@ -10,8 +10,8 @@ Vue.use(Vuex)
 
 const vuexSession = new VuexPersistence({
   storage: sessionStorage,
-  modules: ['authentication', 'questionnaire'],
-  filter: mutation => ['login', 'logout', 'questionnaire/setSurveyMetaData'].includes(mutation.type)
+  modules: ['authentication', 'user', 'questionnaire'],
+  filter: mutation => ['login', 'logout', 'user/setAuthUserPersonalInfo', 'questionnaire/setSurveyMetaData'].includes(mutation.type)
 })
 
 export default new Vuex.Store({
