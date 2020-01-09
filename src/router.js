@@ -27,7 +27,7 @@ function adminGuard(to, from, next) {
 }
 
 function loggedInGuard(to, from, next) {
-  if (!store.state.authentication.loggedIn) {
+  if (!store.state.authentication.accessToken) {
     next()
   } else {
     next('/user')
@@ -74,7 +74,7 @@ const router = new Router({
       name: 'user',
       component: User,
       beforeEnter: (to, from, next) => {
-        if (store.state.authentication.loggedIn) {
+        if (store.state.authentication.accessToken) {
           store.dispatch('user/fetchUserInfo')
           next()
         } else {
@@ -147,7 +147,7 @@ const router = new Router({
           surveyId: to.params.surveyId,
           anon: false
         })
-        if (store.state.authentication.loggedIn) {
+        if (store.state.authentication.accessToken) {
           if (from.name === 'user') {
             next()
           } else {
