@@ -70,7 +70,7 @@ axios.interceptors.response.use(res => res, err => {
         console.error(err)
         setTimeout(() => axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data), 1000)
         break
-      case err.response.status === 401 && store.state.authentication.accessToken: // Auth failed because token expired or whatever, login again
+      case store.state.authentication.accessToken && err.response.status === 401: // Auth failed because token expired or whatever, login again
         // eslint-disable-next-line no-console
         console.error(err)
         store.commit('logout')
