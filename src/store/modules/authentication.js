@@ -7,7 +7,7 @@ export default {
   },
   mutations: {
     login(state, authData) {
-      state.accessToken = authData.accessToken
+      state.accessToken = authData.token
       state.role = authData.role
       state.userId = authData.userId
       state.email=authData.email
