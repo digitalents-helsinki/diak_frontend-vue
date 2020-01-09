@@ -10,7 +10,6 @@ export default {
       }
     },
     authUser: {
-      firstTime: false,
       personalInfo: {
         name: null,
         postNumber: null,
@@ -20,10 +19,12 @@ export default {
       }
     }
   },
+  getters: {
+    authUserFirstTime(state) {
+      return Object.values(state.authUser.personalInfo).some(info => !info)
+    }
+  },
   mutations: {
-    setAuthUserFirstTime(state, boolean) {
-      state.authUser.firstTime = boolean
-    },
     setAuthUserPersonalInfo(state, personalInfo) {
       state.authUser.personalInfo.name = personalInfo.name
       state.authUser.personalInfo.postNumber = personalInfo.post_number
@@ -48,7 +49,6 @@ export default {
         }
       }).then(res => {
         if (res.status === 200) {
-          commit('setAuthUserFirstTime', !res.data.name)
           commit('setAuthUserPersonalInfo', res.data)
         }
       }).catch(err => {
