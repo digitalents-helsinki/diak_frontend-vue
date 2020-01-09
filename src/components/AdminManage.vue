@@ -79,19 +79,21 @@
     </div>
     <div class="tableandfilter">
       <div class="buttonstotal">
-        <b-dropdown id="dropdownleft" variant="secondary" :text="$t(`message.${display}Button`)" class="m-md-2 dropdownButtonsleft">
-          <b-dropdown-item @click="toggleDisplay('all')">{{$t('message.allButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('group')">{{$t('message.groupButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('anonymous')">{{$t('message.anonymousButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('authenticated')">{{$t('message.authenticatedButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('active')">{{$t('message.activeButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('starting')">{{$t('message.startingButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('ended')">{{$t('message.endedButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('closed')">{{$t('message.closedButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('inComplete')">{{$t('message.inCompleteButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('archived')">{{$t('message.archivedButton')}}</b-dropdown-item>
-        </b-dropdown>
         <b-input-group size="md" class="search-bar">
+          <b-input-group-prepend>
+            <b-dropdown id="dropdownleft" variant="secondary" :text="$t(`message.${display}Button`)" class="dropdownButtonsleft">
+              <b-dropdown-item @click="toggleDisplay('all')">{{$t('message.allButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('group')">{{$t('message.groupButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('anonymous')">{{$t('message.anonymousButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('authenticated')">{{$t('message.authenticatedButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('active')">{{$t('message.activeButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('starting')">{{$t('message.startingButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('ended')">{{$t('message.endedButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('closed')">{{$t('message.closedButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('inComplete')">{{$t('message.inCompleteButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('archived')">{{$t('message.archivedButton')}}</b-dropdown-item>
+            </b-dropdown>
+          </b-input-group-prepend>
           <b-input-group-prepend is-text>
             <font-awesome-icon icon="search" class="iconsearch"/>
           </b-input-group-prepend>
