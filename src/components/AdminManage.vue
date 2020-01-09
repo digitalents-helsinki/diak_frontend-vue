@@ -431,8 +431,8 @@ export default {
         },
         display: "all",
         showDetails: {},
-        showTotalDetailed: (cookieMatch => cookieMatch ? cookieMatch[1] == 'true' : true)(document.cookie.match(/(?:^|;\s*)3X10D_SHOW_TOTAL_DETAILED=([^;]*)/)),
-        showInstructions: (cookieMatch => cookieMatch ? cookieMatch[1] == 'true' : true)(document.cookie.match(/(?:^|;\s*)3X10D_SHOW_INSTRUCTIONS=([^;]*)/))
+        showTotalDetailed: (cookieMatch => cookieMatch ? cookieMatch[1] === 'true' : true)(document.cookie.match(/(?:^|;\s*)3X10D_SHOW_TOTAL_DETAILED=([^;]*)/)),
+        showInstructions: (cookieMatch => cookieMatch ? cookieMatch[1] === 'true' : true)(document.cookie.match(/(?:^|;\s*)3X10D_SHOW_INSTRUCTIONS=([^;]*)/))
     }
   },
   computed: {
