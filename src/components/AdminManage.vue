@@ -76,13 +76,6 @@
           </div>
         </transition>
       </div>
-      <div class="searchbar-div">
-        <p class="paragraphTop">{{ $t('message.searchParagraph') }}</p>
-        <b-input-group size="md" class="search-bar">
-          <span> <font-awesome-icon icon="search" class="iconsearch"/> </span>
-          <b-form-input v-model="searchTerm" v-bind:placeholder="$t('message.searchPlaceholder')"></b-form-input>
-        </b-input-group>
-      </div>
     </div>
     <div class="tableandfilter">
       <div class="buttonstotal">
@@ -98,10 +91,16 @@
           <b-dropdown-item @click="toggleDisplay('inComplete')">{{$t('message.inCompleteButton')}}</b-dropdown-item>
           <b-dropdown-item @click="toggleDisplay('archived')">{{$t('message.archivedButton')}}</b-dropdown-item>
         </b-dropdown>
+        <b-input-group size="md" class="search-bar">
+          <b-input-group-prepend is-text>
+            <font-awesome-icon icon="search" class="iconsearch"/>
+          </b-input-group-prepend>
+          <b-form-input v-model="searchTerm" v-bind:placeholder="$t('message.searchPlaceholder')"/>
+        </b-input-group>
       </div>
     </div>
     <div class="tableDisplayfields">
-      <b-table hover :items="filteredSurveys[this.display]" :fields="fields" head-variant="light" table-class="surveyTable shadow-sm">
+      <b-table hover :items="filteredSurveys[this.display]" :fields="fields" head-variant="light" table-class="surveyTable shadow-sm" show-empty>
         <template v-for="field in fields" v-slot:[`cell(${field.key})`]="data">
           <div v-bind:key="field.key" class="surveyTableCel">
             <div v-if="field.colType === 'name'">
@@ -1206,29 +1205,21 @@ export default {
         }
       }
 
-      .searchbar-div{
-        margin:1rem;
-        margin-left:1rem;
-
-        .paragraphTop{
-          font-size:1.6em;
-          font-weight:bold;
-        }
-        .search-bar{
-          width:50%;
-          
-          .iconsearch{
-            font-size:2rem;
-            color:#787878;
-            margin-right:1rem;
-          }
-        }
-      }
     }
     .tableandfilter{
       display:flex;
       flex-direction:column;
       padding:1rem;
+
+      .search-bar{
+        width:40%;
+        padding: 0.5rem;
+          
+        .iconsearch{
+          font-size:1.5rem;
+          color:#787878;
+        }
+      }
 
       .buttonstotal{
         display:flex;
