@@ -805,6 +805,11 @@ export default {
   background-color: white;
   color: #353535;
   text-align: center;
+  margin-bottom: 0;
+
+  @media only screen and (min-width: 1400px) {
+    border-radius: 0 0 15px 15px;
+  }
 
   td {
     vertical-align: middle;
@@ -1007,6 +1012,7 @@ export default {
     width:80%;
     margin: 1rem;
     box-shadow: 0 5px 5px #787878;
+    border-radius: 15px;
 
     .slider-width-enter, .slider-width-leave-to {
       max-width: 0;
@@ -1089,6 +1095,7 @@ export default {
         justify-content:center;
         align-items:center;
         padding-top:1.1rem;
+        border-radius: 15px 15px 0 0;
     }
 
     .totalinstructionsearch {
@@ -1266,6 +1273,11 @@ export default {
   .rightsideManage{
     width:100%;
     margin-bottom: 0;
+    border-radius: 0;
+
+    .rightsideManage-top {
+      border-radius: 0;
+    }
   }
 }
 @media only screen and (min-width: 768px) and (max-width:900px){ 

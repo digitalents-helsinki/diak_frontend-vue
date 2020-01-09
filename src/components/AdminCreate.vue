@@ -462,6 +462,7 @@ export default {
     width:80%;
     margin: 1rem;
     box-shadow: 0 5px 5px #787878;
+    border-radius: 15px;
 
     .rightsideCreate-top{
         background-color:#350E7E;
@@ -475,6 +476,7 @@ export default {
         align-items:center;
         padding-top:1.1rem;
         margin-bottom:0;
+        border-radius: 15px 15px 0 0;
     }
 
     .top-buttons{
@@ -1022,6 +1024,11 @@ export default {
     .rightsideCreate{
         width:100%;
         margin-bottom: 0;
+        border-radius: 0;
+
+        .rightsideCreate-top {
+            border-radius: 0;
+        }
     }
 }
 
