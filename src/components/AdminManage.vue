@@ -431,8 +431,8 @@ export default {
         },
         display: "all",
         showDetails: {},
-        showTotalDetailed: false,
-        showInstructions: true
+        showTotalDetailed: (cookieMatch => cookieMatch ? cookieMatch[1] == 'true' : true)(document.cookie.match(/(?:^|;\s*)3X10D_SHOW_TOTAL_DETAILED=([^;]*)/)),
+        showInstructions: (cookieMatch => cookieMatch ? cookieMatch[1] == 'true' : true)(document.cookie.match(/(?:^|;\s*)3X10D_SHOW_INSTRUCTIONS=([^;]*)/))
     }
   },
   computed: {
@@ -581,6 +581,15 @@ export default {
       } else {
         return null
       }
+    }
+  },
+  watch: {
+    showTotalDetailed(newVal) {
+      document.cookie = `3X10D_SHOW_TOTAL_DETAILED=${newVal}; expires=${(date => date.setDate(date.getDate() + 365*24*60*60*1000))(new Date)}; path=/`
+    },
+    showInstructions(newVal) {
+      document.cookie = `3X10D_SHOW_INSTRUCTIONS=${newVal}; expires=${(date => date.setDate(date.getDate() + 365*24*60*60*1000))(new Date)}; path=/`
+
     }
   },
   methods: {
