@@ -34,10 +34,6 @@ export default {
     updateAuthUserPersonalInfo(state, object) {
       Object.assign(state.authUser.personalInfo, object)
     },
-    setAnonUserPersonalInfo(state, anonymousinfo) {
-      state.anonUser.anonymousinfo.age = anonymousinfo.age
-      state.anonUser.anonymousinfo.gender = anonymousinfo.gender
-    },
     updateAnonUserPersonalInfo(state, object) {
       Object.assign(state.anonUser.anonymousinfo, object)
     },
@@ -59,19 +55,6 @@ export default {
         if (err.response) this.error = err.response.data
         throw err
       })
-    },
-    fetchAnonUserInfo({ rootState, commit }) {
-      axios({
-        method: "GET",
-        url: process.env.VUE_APP_BACKEND + "/anonuser/" + rootState.authentication.userId,
-      }).then(res => {
-        if (res.status === 200) {
-          commit('setAnonUserPersonalInfo', res.data)
-        }
-      }).catch(err => {
-        if (err.response) this.error = err.response.data
-        throw err
-      })
-    },
+    }
   }
 }
