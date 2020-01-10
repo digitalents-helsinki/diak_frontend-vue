@@ -37,7 +37,7 @@
         </div>
         <p class="otherWay">{{ $t('message.loginwithother') }}</p>
         <div class="loginOtherway">
-          <b-button class="loginFacebookButton"><font-awesome-icon :icon="['fab', 'facebook']" style="font-size:1.6rem; margin-right:0.6rem;"/>Facebook</b-button>
+          <b-button class="loginFacebookButton" @click="handleFBSignIn"><font-awesome-icon :icon="['fab', 'facebook']" style="font-size:1.6rem; margin-right:0.6rem;"/>Facebook</b-button>
           <b-button class="loginGoogleButton" @click="handleGSignIn"><font-awesome-icon :icon="['fab', 'google']" style="font-size:1.6rem; margin-right:0.6rem;"/>Google</b-button>
         </div>
       </div>
@@ -48,6 +48,7 @@
 import axios from 'axios'
 import LogoBox from '@/components/LogoBox.vue'
 import LangMenu from '@/components/Languages.vue'
+import initFacebookSdk from '@/initFacebookSdk.js'
 
 export default {
   name: 'login',
@@ -109,29 +110,22 @@ export default {
         }).finally(() => this.loggingIn = null)
       }
     }, 
-    handleGSignIn() {
-      this.loggingIn = true
-      const loginWithGoogle = async () => {
+    async handleGSignIn() {
+      try {
+        this.loggingIn = true
         const googleUser = window.gapi.auth2.getAuthInstance().isSignedIn.get() ? this.$gAuth.GoogleAuth.currentUser.get() : await this.$gAuth.signIn()
-        try {
-          const { id_token } = await googleUser.reloadAuthResponse()
-          return axios.post(process.env.VUE_APP_BACKEND + '/signin/google', { id_token })
-        } catch(err) {
-          this.$gAuth.signOut()
-          throw err
-        }
-      }
-      loginWithGoogle().then(res => {
-        if (res.status === 200) {
-          this.$store.commit('login', res.data.authInfo)
-          this.$store.commit('user/setAuthUserPersonalInfo', res.data.personalInfo)
+        const { id_token } = await googleUser.reloadAuthResponse()
+        const response = await axios.post(process.env.VUE_APP_BACKEND + '/signin/google', { id_token })
+        if (response.status === 200) {
+          this.$store.commit('login', response.data.authInfo)
+          this.$store.commit('user/setAuthUserPersonalInfo', response.data.personalInfo)
           if (this.$store.state.authentication.role === 'user') {
             this.$router.push({ name: 'user' })
           } else {
             this.$router.push({ name: 'admin' })
           }
         }
-      }).catch(err => {
+      } catch(err) {
         console.error(err)
         if (err.response) {
           if (err.response.status === 409) {
@@ -141,8 +135,26 @@ export default {
           } else {
             this.error = err.response.data
           }
+        } else {
+          this.$gAuth.signOut()
         }
-      }).finally(() => this.loggingIn = null)
+      } finally {
+        this.loggingIn = null
+      }
+    },
+    async handleFBSignIn() {
+      const FB = await initFacebookSdk()
+      FB.getLoginStatus(response => {
+        if (response.status === 'connected') {
+          axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken })
+        } else {
+          FB.login(response => {
+            if (response.status === 'connected') {
+              axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken })
+            }
+          }, { scope: 'email' })
+        }
+      })
     },
     handlePasswordClick() {
       this.$router.push({ name: 'recovery'})
