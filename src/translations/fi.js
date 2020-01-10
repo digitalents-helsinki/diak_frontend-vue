@@ -298,6 +298,8 @@ export const fi = {
     closed: 'Suljettu',
     archived: 'Arkistoitu',
     anonymous: 'Anonyymi',
-    authenticated: 'Autentikoitu'
+    authenticated: 'Autentikoitu',
+    txtFileInstruction: 'Voit antaa vastaajat listana. Lista on yksinkertainen tekstitiedosto (.txt), jossa sähköpostisoitteet ovat peräkkäin yksi osoite per rivi.',
+    warning: 'Varoitus'
   }
 }
