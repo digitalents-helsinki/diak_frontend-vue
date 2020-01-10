@@ -1223,7 +1223,7 @@ export default {
       padding:1rem;
 
       .search-bar{
-        width:40%;
+        width:50%;
         padding: 0.5rem;
           
         .iconsearch{

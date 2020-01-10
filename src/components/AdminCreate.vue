@@ -331,13 +331,12 @@ export default {
                         startDate: this.survey.startDate,
                         endDate: this.survey.endDate,
                         message: this.survey.message,
-                        questions: this.survey.questions.map((question, idx) => {
+                        questions: this.survey.questions.map(question => {
                             return {
                                 name: question.name,
                                 title: question.title,
                                 description: question.description,
-                                help: question.help,
-                                number: idx + 1
+                                help: question.help
                             }
                         })
                     }
