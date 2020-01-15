@@ -106,12 +106,6 @@ const router = new Router({
       }
     },
     {
-      path: '/questionnaire/testikysely',
-      name: 'testsurvey',
-      component: Questionnaire,
-      props: true
-    },
-    {
       path: '/anon/questionnaire/:surveyId/:anonId',
       name: 'questionnaire-anon',
       component: Questionnaire,
@@ -129,7 +123,7 @@ const router = new Router({
             anon: true
           })
           await store.dispatch('questionnaire/fetchSurvey')
-          if (store.state.questionnaire.surveyData.resultData) {
+          if (store.state.questionnaire.surveyData.resultData || store.state.questionnaire.error.message) {
             next()
           } else {
             next('/anonymous')
