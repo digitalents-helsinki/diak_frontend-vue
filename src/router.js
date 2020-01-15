@@ -162,6 +162,11 @@ const router = new Router({
       path: '/error',
       name: 'error',
       component: ErrorPage
+    },
+    {
+      path: '*',
+      name: '404',
+      component: ErrorPage
     }
   ]
 })
