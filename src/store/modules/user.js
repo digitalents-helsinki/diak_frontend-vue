@@ -4,45 +4,51 @@ export default {
   namespaced: true,
   state: {
     anonUser: {
-      
+      anonymousinfo: {
+        age:null,
+        gender:null,
+      }
     },
     authUser: {
-      firstTime: null,
       personalInfo: {
         name: null,
         postNumber: null,
-        birthDate: null,
+        age: null,
         gender: null,
         phoneNumber: null
       }
     }
   },
+  getters: {
+    authUserFirstTime(state) {
+      return Object.values(state.authUser.personalInfo).some(info => !info)
+    }
+  },
   mutations: {
-    setAuthUserFirstTime(state, boolean) {
-      state.authUser.firstTime = boolean
-    },
     setAuthUserPersonalInfo(state, personalInfo) {
       state.authUser.personalInfo.name = personalInfo.name
       state.authUser.personalInfo.postNumber = personalInfo.post_number
-      state.authUser.personalInfo.birthDate = personalInfo.birth_date
+      state.authUser.personalInfo.age = personalInfo.age
       state.authUser.personalInfo.gender = personalInfo.gender
       state.authUser.personalInfo.phoneNumber = personalInfo.phone_number
     },
     updateAuthUserPersonalInfo(state, object) {
       Object.assign(state.authUser.personalInfo, object)
-    }
+    },
+    updateAnonUserPersonalInfo(state, object) {
+      Object.assign(state.anonUser.anonymousinfo, object)
+    },
   },
   actions: {
     fetchUserInfo({ rootState, commit }) {
       axios({
         method: "GET",
-        url: process.env.VUE_APP_BACKEND + "/user/info",
+        url: process.env.VUE_APP_BACKEND + "/auth/user/info",
         headers: {
           'Authorization': `Bearer ${rootState.authentication.accessToken}`
         }
       }).then(res => {
         if (res.status === 200) {
-          commit('setAuthUserFirstTime', !res.data.name)
           commit('setAuthUserPersonalInfo', res.data)
         }
       }).catch(err => {

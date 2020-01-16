@@ -7,23 +7,28 @@
         <div class="loginForm">
         <b-form>
           <b-form-group class="loginfield">
-            <b-form-input type="email" autocomplete="email" id="email" v-model="login.email" :state="loginvalidation.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')">
+            <b-form-input type="email" autocomplete="email" id="email" v-model="login.email" :disabled="loggingIn" :state="loginvalidation.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')">
             </b-form-input>
             <b-form-invalid-feedback :state="loginvalidation.email" class="emailFeedback">
               {{ $t('message.emailInput') }}
             </b-form-invalid-feedback>
           </b-form-group>
             <b-form-group class="passwordfield">
-              <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" :state="loginvalidation.password" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')">
+              <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" :disabled="loggingIn" :state="loginvalidation.passwordlength" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')">
               </b-form-input>
-              <b-form-invalid-feedback :state="loginvalidation.password" class="passwordFeedback">
-              {{ $t('message.passwordInput') }}
-            </b-form-invalid-feedback>
+              <b-form-invalid-feedback :state="loginvalidation.passwordlength" class="passwordFeedback">
+                {{ $t('message.inputLength') }}
+              </b-form-invalid-feedback>
             </b-form-group>
-          <b-button type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
-        <b-form-invalid-feedback :state="loginvalidation.invalidcredentials" class="loginFeedback">
+          <b-button v-if="!loggingIn" type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
+          <b-spinner style="color: #350E7E;" v-else />
+            <b-form-invalid-feedback :state="loginvalidation.invalidcredentials" class="loginFeedback">
               {{ $t('message.invalidLogin') }}
             </b-form-invalid-feedback>
+            <b-form-invalid-feedback :state="loginvalidation.userDoesNotExist" class="loginFeedback">
+              {{ $t('message.userDoesNotExist') }}
+            </b-form-invalid-feedback>
+          <p class="error" v-if="error">{{ error }}</p>
         </b-form>
       </div>
         <div class="registerandPassword">
@@ -38,14 +43,11 @@
       </div>
     </template>
   </LogoBox>
-<!--<div class="login">
-  <button class="btn" @click="handleSignIn">Kirjaudu sisään</button>
-</div>-->
 </template>
 <script>
 import axios from 'axios'
 import LogoBox from '@/components/LogoBox.vue'
-import LangMenu from '@/components/Languages.vue';
+import LangMenu from '@/components/Languages.vue'
 
 export default {
   name: 'login',
@@ -61,17 +63,20 @@ export default {
       },
       loginvalidation: {
         email: null,
-        password: null,
-        invalidcredentials: null
+        passwordlength: null,
+        invalidcredentials: null,
+        userDoesNotExist: null
       },
-      error: false
+      loggingIn: null,
+      error: null
     }
   },
   methods: {
     handleLogin() {
       Object.keys(this.loginvalidation).forEach(key => this.loginvalidation[key] = null)
-      if (!this.login.email.match(/.+@.+/)) this.loginvalidation.email = false
-      if (!this.login.password) this.loginvalidation.password = false
+      if (!this.login.email || !this.login.email.match(/.+@.+/)) this.loginvalidation.email = false
+      if (!this.login.password || this.login.password.length < 8 || this.login.password.length > 128) this.loginvalidation.passwordlength = false
+      this.error = null
 
       const data = JSON.stringify({
         email: this.login.email,
@@ -79,44 +84,65 @@ export default {
       })
       
       if (Object.values(this.loginvalidation).every(value => value === null)) {
+        this.loggingIn = true
         axios.post(process.env.VUE_APP_BACKEND + "/signin", data, {
             headers: {
               "Content-Type": "application/json"
             }
           }).then(res => {
-            if (res.data.success) {
-              if (res.data.role === 'admin') {
-                this.$store.commit('login', {
-                  loggedIn: true,
-                  role: 'admin',
-                  accessToken: res.data.token,
-                  userId: res.data.userId
-                })
-                this.$router.push({ name: 'admin' })
+            if (res.status === 200) {
+              this.$store.commit('login', res.data.authInfo)
+              this.$store.commit('user/setAuthUserPersonalInfo', res.data.personalInfo)
+              if (this.$store.state.authentication.role === 'user') {
+                this.$router.push({ name: 'user' })
               } else {
-                this.$store.commit('login', {
-                  loggedIn: true,
-                  role: 'user',
-                  accessToken: res.data.token,
-                  userId: res.data.userId
-                })
-                this.$router.push({ path: '/user/' })
+                this.$router.push({ name: 'admin' })
               }
-            } else { 
-              this.$data.error = true
-              this.loginvalidation.invalidcredentials = false
             }
           }
-        )
+        ).catch(err => {
+          console.error(err)
+          if (err.response.status === 401) this.loginvalidation.invalidcredentials = false
+          else if (err.response.status === 404) this.loginvalidation.userDoesNotExist = false
+          else if (err.response.data) this.error = err.response.data
+          else this.error = err
+        }).finally(() => this.loggingIn = null)
       }
     }, 
     handleGSignIn() {
-      this.$gAuth
-        .signIn()
-        .then(gUser => {
-          //store.state.authentication.loggedIn = true
-          this.$router.push({ name: 'user' })
-        })
+      this.loggingIn = true
+      const loginWithGoogle = async () => {
+        const googleUser = window.gapi.auth2.getAuthInstance().isSignedIn.get() ? this.$gAuth.GoogleAuth.currentUser.get() : await this.$gAuth.signIn()
+        try {
+          const { id_token } = await googleUser.reloadAuthResponse()
+          return axios.post(process.env.VUE_APP_BACKEND + '/signin/google', { id_token })
+        } catch(err) {
+          this.$gAuth.signOut()
+          throw err
+        }
+      }
+      loginWithGoogle().then(res => {
+        if (res.status === 200) {
+          this.$store.commit('login', res.data.authInfo)
+          this.$store.commit('user/setAuthUserPersonalInfo', res.data.personalInfo)
+          if (this.$store.state.authentication.role === 'user') {
+            this.$router.push({ name: 'user' })
+          } else {
+            this.$router.push({ name: 'admin' })
+          }
+        }
+      }).catch(err => {
+        console.error(err)
+        if (err.response) {
+          if (err.response.status === 409) {
+            this.error = this.$t('message.alreadyRegistered') + err.response.data.join('')
+          } else if (err.response.status === 422) {
+            this.error = this.$t('message.validationError') + ' ' + err.response.data
+          } else {
+            this.error = err.response.data
+          }
+        }
+      }).finally(() => this.loggingIn = null)
     },
     handlePasswordClick() {
       this.$router.push({ name: 'recovery'})
@@ -183,6 +209,12 @@ export default {
             width:16rem;
             display: block;
             margin: 0 auto;
+          }
+
+          .error {
+            margin: 1rem 0 0 0;
+            font-size: 1rem;
+            color: red;
           }
         }
 

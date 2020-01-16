@@ -28,7 +28,7 @@
             max="10"
             v-bind:value="question.val"
             @click="!(question.val === null) || $emit('update:question', ['val', Number($event.target.value)])"
-            @update="$emit('update:question', ['val', $event])"
+            @change="$emit('update:question', ['val', $event])"
           />
           <!-- Clickhandler above allows you to select 5 as a value straight away without firing extra events -->
           <label for="range" class="mobilerangeLabel" @click.prevent>
@@ -337,7 +337,7 @@ export default {
   }
 
   .textareaWordCount{
-    margin-top:1.1rem !important;
+    margin-top:1.3rem !important;
   }
 
   .page-number{

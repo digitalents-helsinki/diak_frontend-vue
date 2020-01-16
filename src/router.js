@@ -1,16 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/Home.vue'
 import store from '@/store/index'
 import Questionnaire from '@/views/Questionnaire.vue'
 import Admin from '@/views/Admin.vue'
 import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import Recovery from '@/views/Recovery.vue'
-//import Password from '@/views/Password.vue'
+import Password from '@/views/Password.vue'
 import User from '@/views/User.vue'
 import Supervisor from '@/views/Supervisor.vue'
 import Anonymous from '@/views/Anonymous.vue'
+import ErrorPage from '@/views/Error.vue'
 
 Vue.use(Router)
 
@@ -26,7 +26,7 @@ function adminGuard(to, from, next) {
 }
 
 function loggedInGuard(to, from, next) {
-  if (!store.state.authentication.loggedIn) {
+  if (!store.state.authentication.accessToken) {
     next()
   } else {
     next('/user')
@@ -38,19 +38,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
-      meta: {
-        quest: true
-      }
-    },
-    {
-      path: '/supervisor',
-      name: 'supervisor',
-      component: Supervisor
-    },
-    {
-      path: '/login',
+      alias: '/login',
       name: 'login',
       component: Login,
       props: true,
@@ -58,6 +46,11 @@ const router = new Router({
         quest: true
       },
       beforeEnter: loggedInGuard
+    },
+    {
+      path: '/supervisor',
+      name: 'supervisor',
+      component: Supervisor
     },
     {
       path: '/registration',
@@ -73,7 +66,7 @@ const router = new Router({
       name: 'user',
       component: User,
       beforeEnter: (to, from, next) => {
-        if (store.state.authentication.loggedIn) {
+        if (store.state.authentication.accessToken) {
           store.dispatch('user/fetchUserInfo')
           next()
         } else {
@@ -95,35 +88,40 @@ const router = new Router({
         quest: true
       }
     },
-    /*{
-      path: '/password',
+    {
+      path: '/password/(change|create)/:jwt',
       name: 'password',
       component: Password,
       props: true,
       meta: {
         quest: true
       }
-    }*/
-    {
-      path: '/questionnaire/testikysely',
-      name: 'testsurvey',
-      component: Questionnaire,
-      props: true
     },
     {
       path: '/anon/questionnaire/:surveyId/:anonId',
       name: 'questionnaire-anon',
       component: Questionnaire,
       props: true,
-      beforeEnter: (to, from, next) => {
-        store.commit('questionnaire/setSurveyMetaData', {
-          surveyId: to.params.surveyId,
-          anonId: to.params.anonId,
-          anon: true
-        })
-        store.dispatch('questionnaire/fetchSurvey')
-        next()
-      }
+      beforeEnter: wrapAsync(async (to, from, next) => {
+        if (from.name === 'anonymous') {
+          if (!store.state.questionnaire.surveyData.questionData && !store.state.questionnaire.surveyData.resultData) {
+            await store.dispatch('questionnaire/fetchSurvey')
+          }
+          next()
+        } else {
+          store.commit('questionnaire/setSurveyMetaData', {
+            surveyId: to.params.surveyId,
+            anonId: to.params.anonId,
+            anon: true
+          })
+          await store.dispatch('questionnaire/fetchSurvey')
+          if (store.state.questionnaire.surveyData.resultData || store.state.questionnaire.error.message) {
+            next()
+          } else {
+            next('/anonymous')
+          }
+        }
+      })
     },
     {
       path: '/auth/questionnaire/:surveyId/:userId?',
@@ -135,7 +133,7 @@ const router = new Router({
           surveyId: to.params.surveyId,
           anon: false
         })
-        if (store.state.authentication.loggedIn) {
+        if (store.state.authentication.accessToken) {
           if (from.name === 'user') {
             next()
           } else {
@@ -151,6 +149,16 @@ const router = new Router({
       name: 'admin',
       component: Admin,
       beforeEnter: adminGuard
+    },
+    {
+      path: '/error',
+      name: 'error',
+      component: ErrorPage
+    },
+    {
+      path: '*',
+      name: '404',
+      component: ErrorPage
     }
   ]
 })

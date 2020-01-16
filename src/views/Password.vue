@@ -2,26 +2,28 @@
   <LogoBox size="small">
     <template v-slot:content>
       <div class="passwordContent">
-        <p class="passwordMessage">{{ $t('message.passwordText') }}</p>
-        <div class="passwordCredentials">
+        <p v-if="!submitted" class="passwordMessage">{{ $t('message.passwordText') }}</p>
+        <div v-if="!submitted" class="passwordCredentials">
           <b-form>
             <b-form-group id="passwordtype">
-              <b-form-input type="password" id="password" v-model="password.enterpassword" :state="passwordvalidation.enterpassword" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
+              <b-form-input type="password" id="password" v-model="password.enterpassword" :state="passwordlength" name="loginpassword" v-bind:placeholder="$t('message.registerPassword')" required>
               </b-form-input>
-              <b-form-invalid-feedback :state="passwordvalidation.enterpassword" class="passwordFeedback">
-              {{ $t('message.passwordInput') }}
-            </b-form-invalid-feedback>
+              <b-form-invalid-feedback :state="passwordlength" class="passwordFeedback">
+                {{ $t('message.minimumLength') }}
+              </b-form-invalid-feedback>
             </b-form-group>
             <b-form-group id="passwordretype">
-              <b-form-input type="password" id="confirmpassword" v-model="password.reenterpassword" :state="passwordvalidation.reenterpassword" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')" required>
+              <b-form-input type="password" id="confirmpassword" v-model="password.reenterpassword" :state="confirm" name="confirmloginpassword" v-bind:placeholder="$t('message.confirmPassword')" required>
               </b-form-input>
-              <b-form-invalid-feedback :state="passwordvalidation.reenterpassword" class="passwordFeedback">
-              {{ $t('message.passwordInput') }}
-            </b-form-invalid-feedback>
+              <b-form-invalid-feedback :state="confirm" class="passwordFeedback">
+                {{ $t('message.passwordconfirmInput') }}
+              </b-form-invalid-feedback>
             </b-form-group>
-            <b-button type="submit" @click.prevent="handleLogin" class="recoveryButton">{{ $t('message.submitPassword') }}</b-button>
+            <p v-if="error" class="error">{{ error }}</p>
+            <b-button type="submit" @click.prevent="handleSubmit" class="recoveryButton">{{ $t('message.submitPassword') }}</b-button>
           </b-form>
         </div>
+        <p v-else class="info">{{ $route.params.patchMatch === 'change' ? $t('message.changedPasswordMessage') : $t('message.createdPasswordMessage')}}</p>
         <p class="info">{{ $t('message.passwordInfo') }}</p>
         <div class="backtologindiv"><p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p></div>
       </div>
@@ -43,46 +45,49 @@ export default {
         enterpassword: null,
         reenterpassword: null
       },
-      passwordvalidation: {
-        enterpassword: {
-          required: null,
-          passwordlength: null
-        },
-        reenterpassword: {
-          required: null,
-          passwordlength: null
-        }
-      },
-      confirm: null
+      passwordlength: null,
+      confirm: null,
+      submitted: false,
+      error: null
+    }
+  },
+  computed: {
+    decodedJWT() {
+      return JSON.parse(atob(this.$route.params.jwt.split('.')[1]))
     }
   },
   methods: {
-    handleSignIn() {
-      this.passwordvalidation.enterpassword.required = null
-      if (!this.password.enterpassword) {
-        this.registervalidation.enterpassword.required = false
+    handleSubmit() {
+      this.passwordlength = null
+      if (this.password.enterpassword.length < 8) {
+        this.passwordlength = false
         return
       }
-      this.passwordvalidation.enterpassword.passwordlength = null
-      if(this.password.enterpassword.length < 8) {
-        this.registervalidation.enterpassword.passwordlength = false
+      this.confirm = null
+      if (this.password.enterpassword !== this.password.reenterpassword) {
+        this.confirm = false
         return
       }
-      this.passwordvalidation.reenterpassword.required = null
-      if (!this.password.reenterpassword) {
-        this.registervalidation.reenterpassword.required = false
-        return
-      }
-      this.passwordvalidation.confirm = null
-      if(this.registration.enterpassword != this.registration.reenterpassword) {
-        this.passwordvalidation.reenterpassword.required = false
-        return
-      }
-      this.$gAuth
-        .signIn()
-        .then(gUser => {
-          this.$router.push({ name: 'questionnaire', params: { user: gUser.w3.ig}})
-        })
+
+      const url = this.$route.params.pathMatch === 'change' ? '/changepassword' : '/createpassword'
+
+      axios({
+        method: 'POST',
+        url: process.env.VUE_APP_BACKEND + url,
+        headers: {
+          'Authorization': `Bearer ${this.$route.params.jwt}`
+        },
+        data: {
+          password: this.password.enterpassword
+        }
+      }).then(res => {
+        if (res.status === 200) {
+          this.submitted = true
+        } 
+      }).catch(err => {
+        if (err.response) this.error = err.response.data
+        else this.error = err
+      })
     },
     handleLoginClick() {
       this.$router.push({ name: 'login'})
@@ -92,6 +97,10 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+
+.passwordFeedback {
+  font-size: 1rem;
+}
 
 .passwordContent{
   display: flex;
@@ -113,6 +122,12 @@ export default {
     flex-direction:column;
     width:100%;
     padding:1rem;
+
+    .error {
+      color: red;
+      font-size: 1.25rem;
+      margin-top: -0.5rem;
+    }
 
     .recoveryButton{
       background-color: #350E7E;

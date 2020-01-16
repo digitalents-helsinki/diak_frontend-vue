@@ -30,10 +30,10 @@ export default {
     }
   },
   mutations: {
-    setSurveyMetaData(state, metaData) {
-      state.meta.surveyId = metaData.surveyId,
-      state.meta.anonId = metaData.anonId
-      state.meta.anon = metaData.anon
+    setSurveyMetaData(state, metaData = {}) {
+      state.meta.surveyId = metaData.surveyId || null,
+      state.meta.anonId = metaData.anonId || null
+      state.meta.anon = metaData.anon || null
     },
     setSurveyInfo(state, info) {
       state.surveyData.name = info.name
@@ -104,64 +104,68 @@ export default {
   },
   actions: {
     async fetchSurvey({ state, rootState, commit }) {
-      if (!state.meta.surveyId) return
-      if (state.meta.anon && !state.meta.anonId) return
-      if (!state.meta.anon && !rootState.authentication.accessToken) return
-
-      const {
-        config: {
-          url: requestURL
-        },
-        request: {
-          responseURL
-        },
-        data: { 
-          Survey, 
-          savedAnswers, 
-          Result, 
-          Averages
+      try {
+        if (!state.meta.surveyId) return
+        if (state.meta.anon && !state.meta.anonId) return
+        if (!state.meta.anon && !rootState.authentication.accessToken) return
+  
+        const {
+          config: {
+            url: requestURL
+          },
+          request: {
+            responseURL
+          },
+          data: { 
+            Survey, 
+            savedAnswers, 
+            Result, 
+            Averages
+          }
+        } = await axios({
+          method: 'GET',
+          url: process.env.VUE_APP_BACKEND + `/${state.meta.anon ? 'anon' : 'auth'}/survey/${state.meta.surveyId}/${state.meta.anon ? state.meta.anonId : ''}`,
+          headers: {
+            'Authorization': `Bearer ${state.meta.anon ? "" : rootState.authentication.accessToken}`
+          }
+        })
+  
+        if (responseURL !== requestURL) { //check for result redirect
+          commit('setSurveyInfo', {
+            name: Result.name,
+            message: Result.message
+          })
+  
+          commit('setSurveyResultData', { Result, Averages })
+        } else {
+          commit('setSurveyInfo', {
+            name: Survey.name,
+            message: Survey.message
+          })
+  
+          commit('setSurveyQuestionData', { Survey, savedAnswers })
         }
-      } = await axios({
-        method: 'GET',
-        url: process.env.VUE_APP_BACKEND + `/${state.meta.anon ? 'anon' : 'auth'}/survey/${state.meta.surveyId}/${state.meta.anon ? state.meta.anonId : ''}`,
-        headers: {
-          'Authorization': `Bearer ${state.meta.anon ? "" : rootState.authentication.accessToken}`
-        }
-      }).catch(err => {
+      } catch(err) {
+        console.error(err)
         commit('setError', err)
-        throw err
-      })
-
-      if (responseURL !== requestURL) { //check for result redirect
-        commit('setSurveyInfo', {
-          name: Result.name,
-          message: Result.message
-        })
-
-        commit('setSurveyResultData', { Result, Averages })
-      } else {
-        commit('setSurveyInfo', {
-          name: Survey.name,
-          message: Survey.message
-        })
-
-        commit('setSurveyQuestionData', { Survey, savedAnswers })
       }
 
     },
     async fetchResult({ state, rootState, commit }) {
-      const { data } = await axios({
-        method: 'GET', 
-        url: `${process.env.VUE_APP_BACKEND}/${state.meta.anon ?  'anon': 'auth'}/result/${state.meta.surveyId}/${state.meta.anon ? state.meta.anonId : ''}`,
-        headers: {
-          'Authorization': `Bearer ${rootState.authentication.accessToken}`
-        }
-      }).catch(err => {
+      try {
+        const { data } = await axios({
+          method: 'GET', 
+          url: `${process.env.VUE_APP_BACKEND}/${state.meta.anon ?  'anon': 'auth'}/result/${state.meta.surveyId}/${state.meta.anon ? state.meta.anonId : ''}`,
+          headers: {
+            'Authorization': `Bearer ${rootState.authentication.accessToken}`
+          }
+        })
+  
+        commit('setSurveyResultData', data)
+      } catch(err) {
+        console.error(err)
         commit('setError', err)
-        throw err
-      })
-
-      commit('setSurveyResultData', data)
+      }
     }
   }
 }

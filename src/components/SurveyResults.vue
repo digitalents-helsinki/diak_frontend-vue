@@ -10,7 +10,7 @@
             :data="results"
             :fields="excel_fields"
             type="csv"
-            :name="`${surveyName}_${surveyId}_tulokset.xls`"
+            :name="`${surveyName}_${surveyId}_${$t('message.fileNameResults')}.xls`"
           >
             CSV
           </downloadexcel>
@@ -52,7 +52,7 @@
         <b-spinner class="m-5"/>
       </div>
       <div class="error" v-if="loadingError || unknownError">
-        {{loadingError ? "Fetching survey results failed. Try checking your internet connection." : "Displaying survey results failed unexpectedly"}}
+        {{loadingError ? $t('message.resultsFetchFailed') : $t('message.displayingResultsFailedUnExpectedly')}}
       </div>
     </div>
   </div>
@@ -60,9 +60,7 @@
 <script>
 import axios from "axios";
 import BarChart from "../components/BarChart.vue";
-import ErrorBars from "chartjs-plugin-error-bars";
 import downloadexcel from "vue-json-excel";
-import Annotation from 'chartjs-plugin-annotation';
 import jsPDF from 'jspdf'
 
 export default {
@@ -96,7 +94,7 @@ export default {
   },
   computed: {
     valueFields() {
-      return Object.keys(this.excel_fields).filter(key => !key.endsWith('teksti') && !['postinumero', 'ikä', 'nimi', 'sukupuoli', 'vastausaika'].includes(key))
+      return Object.keys(this.excel_fields).filter(key => !key.endsWith(this.$t('message.text')) && ![this.$t('message.postalCode'), this.$t('message.age'), this.$t('message.name'), this.$t('message.gender'), this.$t('message.answeredAt')].includes(key))
     }
   },
   methods: {
@@ -138,38 +136,38 @@ export default {
           return res.data.Questions
             .find(question => question.name === value).Answers
             .filter(answer => answer.value !== null)
-            .reduce((acc, answer) => acc + 1, 0)
+            .reduce((acc) => acc + 1, 0)
         });
         this.excel_fields = this.values.reduce((obj, value, idx) => {
           if (!value.endsWith("_custom")) {
             return {
               ...obj,
               [`${idx + 1}: ` + this.$t(`message.${value}_title`)]: value,
-              [`${idx + 1}: ` + this.$t(`message.${value}_title`) + " teksti"]: `${value}_desc`
+              [`${idx + 1}: ` + this.$t(`message.${value}_title`) + ' ' + this.$t('message.text')]: `${value}_desc`
             }
           } else {
             return {
               ...obj,
               [`${idx + 1}: ` + res.data.Questions.find(question => question.name === value).title]: value,
-              [`${idx + 1}: ` + res.data.Questions.find(question => question.name === value).title + " teksti"]: `${value}_desc`
+              [`${idx + 1}: ` + res.data.Questions.find(question => question.name === value).title + ' ' + this.$t('message.text')]: `${value}_desc`
             }
           }
         }, {});
         if (res.data.anon) {
           this.excel_fields = {
-            vastausaika: 'answeredAt',
+            [this.$t('message.answeredAt')]: 'answeredAt',
             ...this.excel_fields,
-            ikä: 'age',
-            sukupuoli: 'gender'
+            [this.$t('message.age')]: 'age',
+            [this.$t('message.gender')]: 'gender'
           }
         } else {
           this.excel_fields = {
-            vastausaika: 'answeredAt',
+            [this.$t('message.answeredAt')]: 'answeredAt',
             ...this.excel_fields,
-            nimi: 'name',
-            postinumero: 'postal_code',
-            sukupuoli: 'gender',
-            ikä: 'age',
+            [this.$t('message.name')]: 'name',
+            [this.$t('message.postalCode')]: 'postal_code',
+            [this.$t('message.gender')]: 'gender',
+            [this.$t('message.age')]: 'age',
           }
         }
         
@@ -190,29 +188,23 @@ export default {
               return {
                 ...obj,
                 [question.name]: answer.value,
-                [question.name + '_desc']: answer.description,
-                postal_code: answer.User.postal_number,
-                age: answer.User.age,
-                name: answer.User.name,
-                gender: answer.User.gender
+                [question.name + '_desc']: answer.description
               }
             } else {
               return {
                 ...obj,
                 [question.name]: answer.value,
-                [question.name + '_desc']: answer.description,
-                age: answer.AnonUser.age,
-                gender: answer.AnonUser.gender
+                [question.name + '_desc']: answer.description
               }
             }
           }, {})
 
           return {
             ...questionData,
-            postal_code: user.postal_number,
+            postal_code: user.post_number,
             age: user.age,
             name: user.name,
-            gender: user.gender,
+            gender: this.$t(`message.gender${user.gender}`),
             answeredAt: this.$moment(answeredAt).format('Do MMMM YYYY, kk:mm:ss')
           }
         });
@@ -276,17 +268,17 @@ export default {
       const doc = new jsPDF('p','pt','a4')
       const docWidth = doc.internal.pageSize.width
       const imgHeight = docWidth * canvasRatio //make chart maintain aspect ratio
-      const chart = this.$el.querySelector('canvas').toDataURL('image/png')
+      const chart = canvas.toDataURL('image/png')
       doc.setFontSize(20)
-      doc.text(`Tulokset: ${this.surveyName}`, docWidth / 2, 30, 'center')
+      doc.text(`${this.$t('message.surveyResult')}${this.surveyName}`, docWidth / 2, 30, 'center')
       doc.addImage(chart, 'PNG', 10, 60, docWidth - 30, imgHeight - 30 * canvasRatio)
       doc.setFontSize(12)
-      doc.text(`Vastaajien lukumäärä: ${this.respondent_size}`, docWidth / 2, imgHeight + 90, 'center')
+      doc.text(`${this.$t('message.surveyRespondents')} ${this.respondent_size}`, docWidth / 2, imgHeight + 90, 'center')
       doc.setFontSize(16)
-      doc.text(20, imgHeight + 120, 'Kysymykset')
-      doc.text(docWidth / 4 + 20, imgHeight + 120, 'Keskiarvot')
-      doc.text(docWidth / 4 * 2 + 20, imgHeight + 120, 'Keskihajonnat')
-      doc.text(docWidth / 4 * 3 + 20, imgHeight + 120, 'Lukumäärä')
+      doc.text(20, imgHeight + 120, this.$t('message.surveyQuestions'))
+      doc.text(docWidth / 4 + 20, imgHeight + 120, this.$t('message.surveyAverages'))
+      doc.text(docWidth / 4 * 2 + 20, imgHeight + 120, this.$t('message.standardDeviations'))
+      doc.text(docWidth / 4 * 3 + 20, imgHeight + 120, this.$t('message.surveyNumber'))
       doc.setFontSize(12)
       for (let i = 0, j = 0; i < this.valueFields.length; i++, j++) { //loop through data arrays and add to pdf
         const y = (() => {

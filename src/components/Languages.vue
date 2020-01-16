@@ -1,26 +1,40 @@
 <template>
-    <div class="differentlanguages">
-        <div class="iconLang">
-            <img src="../images/language-icon.svg" alt="" style="width:60px; height:28px; margin-top:0.3rem;"/>
-        </div>
-        <div class="dropdownforLang">
-            <b-form-select v-model="selectedLang" :options="langOption"></b-form-select>
-        </div> 
+  <div class="differentlanguages">
+    <div class="iconLang">
+      <img src="../images/language-icon.svg" alt="" style="width:60px; height:28px; margin-top:0.3rem;"/>
     </div>
+    <div class="dropdownforLang">
+      <b-form-select v-model="selectedLang" :options="langOptions"></b-form-select>
+    </div> 
+  </div>
 </template>
 <script>
-import axios from 'axios'
 
 export default {
   name: 'Languages',
-  
   data() {
     return {
       error: false,
-      selectedLang:'Suomi',
-      langOption: ['Suomi','Swedish','English']
+      selectedLang: this.$i18n.locale,
+      langOptions: [
+        {
+          value: 'fi', text: 'Suomi',
+        },
+        {
+          value: 'sv', text: 'Svenska'
+        },
+        {
+          value: 'en', text: 'English'
+        }
+      ]
     }
   },
+  watch: {
+    selectedLang(newVal) {
+      this.$i18n.locale = newVal
+      document.cookie = `3X10D_LANGUAGE=${newVal}; expires=${(date => date.setDate(date.getDate() + 365*24*60*60*1000))(new Date)}; path=/`
+    }
+  }
 }
 
 </script>

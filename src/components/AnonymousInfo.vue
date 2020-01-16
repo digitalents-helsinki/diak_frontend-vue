@@ -9,7 +9,7 @@
           label-for="age"
         >
           <b-form-input id="age" @input="$emit('updateInfo', {age: $event})" :value="anonymousinfo.age" type="number" name="age" min="0" ></b-form-input>
-          <b-form-invalid-feedback :state="infovalidation.age" class="ageRequired">
+          <b-form-invalid-feedback :state="infovalidation.age !== false" class="ageRequired">
             {{ $t('message.ageInfo') }}
           </b-form-invalid-feedback>
         </b-form-group>
@@ -20,25 +20,22 @@
         >
           <b-form-select
             id="gender"
-            :options="gender.fi"
+            :options="gender"
             @input="$emit('updateInfo', {gender: $event})"
             :value="anonymousinfo.gender" 
           ></b-form-select>
-          <b-form-invalid-feedback :state="infovalidation.gender" class="genderRequired">
+          <b-form-invalid-feedback :state="infovalidation.gender !== false" class="genderRequired">
             {{ $t('message.genderInfo') }}
           </b-form-invalid-feedback>
         </b-form-group>
         <div id="submitForm">
           <p v-if="error">{{error}}</p>
-          <b-button @click.prevent="signOut" class="submitIncluded">
-            {{ 'Kirjaudu Ulos' }}
-          </b-button>
-          <b-button v-if="!this.$store.state.survey.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
-            {{ $t('message.ProfilesubmitButton') }}
+          <b-button v-if="!this.$store.state.questionnaire.meta.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
+            {{ $t('message.submitandcontinuebutton') }}
             <b-spinner v-if="infoSaved" class="saver" small/>
           </b-button>
           <b-button v-else type="submit" @click.prevent="postInfo" class="submitIncluded">
-            {{ 'Jatka' }}
+            {{ $t('message.submitandcontinuebutton') }}
           </b-button>
         </div>
       </b-form>
@@ -58,9 +55,20 @@ export default {
   },
   data() {
     return {
-      gender: {
-        fi: ['Mies', 'Nainen', 'Muu']
-      },
+      gender: [
+        {
+          value: 'Male',
+          text: this.$t('message.genderMale')
+        }, 
+        {
+          value: 'Female',
+          text: this.$t('message.genderFemale')
+        }, 
+        {
+          value: 'Other',
+          text: this.$t('message.genderOther')
+        }
+      ],
       infovalidation: {
         age: null,
         gender: null,
@@ -81,13 +89,13 @@ export default {
       if (Object.values(this.infovalidation).every(value => value === null)) {
         axios({
           method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/anonuser/" + this.$store.state.auth.userId + "/info/update",
+          url: process.env.VUE_APP_BACKEND + "/anon/user/" + this.$store.state.questionnaire.meta.anonId + "/info/update",
           data: {
             anonymousinfo: this.anonymousinfo
           }
         }).then(res => {
           if (res.status === 200) {
-            if (this.$store.state.survey.surveyId) {
+            if (this.$store.state.questionnaire.meta.surveyId) {
               this.$emit('moveToQuestionnaire')
             } else {
               this.infoSaved = true

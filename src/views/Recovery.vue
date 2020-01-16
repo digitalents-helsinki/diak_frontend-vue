@@ -11,14 +11,11 @@
               <b-form-invalid-feedback :state="recoveryvalidation.email" class="emailFeedback">
               {{ $t('message.emailInput') }}
               </b-form-invalid-feedback>
-              <b-form-invalid-feedback :state="recoveryvalidation.emailpattern" class="emailFeedback">
-              {{ $t('message.patternInput') }}
-              </b-form-invalid-feedback>
             </b-form-group>
             <b-button type="submit" @click.prevent="handleRecovery" class="btn recoveryButton">{{ $t('message.submitPassword') }}</b-button>
           </b-form>
         </div>
-        <p v-if="recoverymessage" class="enterEmail">{{ $t('message.recoverymessage') }}</p>
+        <p v-if="recoverymessage" class="submitMessage">{{ $t('message.recoverymessage') }}</p>
         <p v-if="recoveryinstruction" class="recoveryinfo">{{ $t('message.recoveryInfo') }}</p>
         <div class="backtologindiv"><p class="backtologinPage" @click="handleLoginClick">{{ $t('message.gettologinPage') }}</p></div>
       </div>
@@ -40,8 +37,7 @@ export default {
         email: null
       },
       recoveryvalidation: {
-        email: null,
-        emailpattern:null
+        email: null
       },
       recoveryinstruction:true,
       recoverymessage:false
@@ -50,13 +46,8 @@ export default {
   methods: {
     handleRecovery() {
       this.recoveryvalidation.email = null
-      if (!this.recovery.email) {
+      if (!this.recovery.email.match(/.+@.+/)) {
         this.recoveryvalidation.email = false
-        return
-      }
-      this.recoveryvalidation.emailpattern = null      
-      if (!this.recovery.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
-        this.recoveryvalidation.emailpattern = false
         return
       }
       const data = JSON.stringify({
@@ -68,8 +59,10 @@ export default {
             "Content-Type": "application/json"
           }
         }).then(res => {
-          this.recoveryinstruction=false;
-          this.recoverymessage=true;
+          if (res.status === 200) {
+            this.recoveryinstruction=false;
+            this.recoverymessage=true;
+          }
         })
   },
     handleLoginClick() {
@@ -100,6 +93,12 @@ export default {
     flex-direction:column;
     width:100%;
     padding:1rem;
+
+    .error {
+      margin: 1rem 0 0 0;
+      font-size: 1rem;
+      color: red;
+    }
       
     .emailFeedback{
       font-size:1rem;
@@ -127,6 +126,11 @@ export default {
     margin-top:1rem;
     margin-bottom:1rem;
     color:#FF0000;
+  }
+
+  .submitMessage {
+    font-size: 1rem;
+    padding: 1rem;
   }
 
   .recoveryinfo{
