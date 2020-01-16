@@ -26,7 +26,7 @@ function adminGuard(to, from, next) {
 }
 
 function loggedInGuard(to, from, next) {
-  if (!store.state.authentication.loggedIn) {
+  if (!store.state.authentication.accessToken) {
     next()
   } else {
     next('/user')
@@ -66,7 +66,7 @@ const router = new Router({
       name: 'user',
       component: User,
       beforeEnter: (to, from, next) => {
-        if (store.state.authentication.loggedIn) {
+        if (store.state.authentication.accessToken) {
           store.dispatch('user/fetchUserInfo')
           next()
         } else {
@@ -98,12 +98,6 @@ const router = new Router({
       }
     },
     {
-      path: '/questionnaire/testikysely',
-      name: 'testsurvey',
-      component: Questionnaire,
-      props: true
-    },
-    {
       path: '/anon/questionnaire/:surveyId/:anonId',
       name: 'questionnaire-anon',
       component: Questionnaire,
@@ -121,7 +115,7 @@ const router = new Router({
             anon: true
           })
           await store.dispatch('questionnaire/fetchSurvey')
-          if (store.state.questionnaire.surveyData.resultData) {
+          if (store.state.questionnaire.surveyData.resultData || store.state.questionnaire.error.message) {
             next()
           } else {
             next('/anonymous')
@@ -139,7 +133,7 @@ const router = new Router({
           surveyId: to.params.surveyId,
           anon: false
         })
-        if (store.state.authentication.loggedIn) {
+        if (store.state.authentication.accessToken) {
           if (from.name === 'user') {
             next()
           } else {
@@ -159,6 +153,11 @@ const router = new Router({
     {
       path: '/error',
       name: 'error',
+      component: ErrorPage
+    },
+    {
+      path: '*',
+      name: '404',
       component: ErrorPage
     }
   ]

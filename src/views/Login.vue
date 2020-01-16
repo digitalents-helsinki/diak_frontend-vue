@@ -7,14 +7,14 @@
         <div class="loginForm">
         <b-form>
           <b-form-group class="loginfield">
-            <b-form-input type="email" autocomplete="email" id="email" v-model="login.email" :state="loginvalidation.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')">
+            <b-form-input type="email" autocomplete="email" id="email" v-model="login.email" :disabled="loggingIn" :state="loginvalidation.email" name="loginname" v-bind:placeholder="$t('message.usernamePlaceholder')">
             </b-form-input>
             <b-form-invalid-feedback :state="loginvalidation.email" class="emailFeedback">
               {{ $t('message.emailInput') }}
             </b-form-invalid-feedback>
           </b-form-group>
             <b-form-group class="passwordfield">
-              <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" :state="loginvalidation.passwordlength" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')">
+              <b-form-input type="password" autocomplete="current-password" id="password" v-model="login.password" :disabled="loggingIn" :state="loginvalidation.passwordlength" name="loginpassword" v-bind:placeholder="$t('message.passwordPlaceholder')">
               </b-form-input>
               <b-form-invalid-feedback :state="loginvalidation.passwordlength" class="passwordFeedback">
                 {{ $t('message.inputLength') }}
@@ -47,7 +47,7 @@
 <script>
 import axios from 'axios'
 import LogoBox from '@/components/LogoBox.vue'
-import LangMenu from '@/components/Languages.vue';
+import LangMenu from '@/components/Languages.vue'
 
 export default {
   name: 'login',
@@ -91,20 +91,8 @@ export default {
             }
           }).then(res => {
             if (res.status === 200) {
-              this.$store.commit('login', {
-                loggedIn: true,
-                role: res.data.role,
-                accessToken: res.data.token,
-                userId: res.data.userId,
-                email: res.data.email
-              })
-              this.$store.commit('user/setAuthUserPersonalInfo', {
-                name:res.data.name,
-                post_number:res.data.post_number,
-                phone_number:res.data.phone_number,
-                age:res.data.age,
-                gender:res.data.gender
-              })
+              this.$store.commit('login', res.data.authInfo)
+              this.$store.commit('user/setAuthUserPersonalInfo', res.data.personalInfo)
               if (this.$store.state.authentication.role === 'user') {
                 this.$router.push({ name: 'user' })
               } else {
@@ -122,12 +110,39 @@ export default {
       }
     }, 
     handleGSignIn() {
-      this.$gAuth
-        .signIn()
-        .then(gUser => {
-          //store.state.authentication.loggedIn = true
-          this.$router.push({ name: 'user' })
-        })
+      this.loggingIn = true
+      const loginWithGoogle = async () => {
+        const googleUser = window.gapi.auth2.getAuthInstance().isSignedIn.get() ? this.$gAuth.GoogleAuth.currentUser.get() : await this.$gAuth.signIn()
+        try {
+          const { id_token } = await googleUser.reloadAuthResponse()
+          return axios.post(process.env.VUE_APP_BACKEND + '/signin/google', { id_token })
+        } catch(err) {
+          this.$gAuth.signOut()
+          throw err
+        }
+      }
+      loginWithGoogle().then(res => {
+        if (res.status === 200) {
+          this.$store.commit('login', res.data.authInfo)
+          this.$store.commit('user/setAuthUserPersonalInfo', res.data.personalInfo)
+          if (this.$store.state.authentication.role === 'user') {
+            this.$router.push({ name: 'user' })
+          } else {
+            this.$router.push({ name: 'admin' })
+          }
+        }
+      }).catch(err => {
+        console.error(err)
+        if (err.response) {
+          if (err.response.status === 409) {
+            this.error = this.$t('message.alreadyRegistered') + err.response.data.join('')
+          } else if (err.response.status === 422) {
+            this.error = this.$t('message.validationError') + ' ' + err.response.data
+          } else {
+            this.error = err.response.data
+          }
+        }
+      }).finally(() => this.loggingIn = null)
     },
     handlePasswordClick() {
       this.$router.push({ name: 'recovery'})

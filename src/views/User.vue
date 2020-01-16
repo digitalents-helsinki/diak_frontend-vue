@@ -42,7 +42,7 @@ export default {
       return this.$store.state.user.authUser.personalInfo
     },
     isFirstTime() {
-      return this.$store.state.user.authUser.firstTime
+      return this.$store.getters['user/authUserFirstTime']
     }
   },
   methods: {

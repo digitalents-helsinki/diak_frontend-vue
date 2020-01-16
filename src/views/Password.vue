@@ -19,6 +19,7 @@
                 {{ $t('message.passwordconfirmInput') }}
               </b-form-invalid-feedback>
             </b-form-group>
+            <p v-if="error" class="error">{{ error }}</p>
             <b-button type="submit" @click.prevent="handleSubmit" class="recoveryButton">{{ $t('message.submitPassword') }}</b-button>
           </b-form>
         </div>
@@ -46,7 +47,8 @@ export default {
       },
       passwordlength: null,
       confirm: null,
-      submitted: false
+      submitted: false,
+      error: null
     }
   },
   computed: {
@@ -82,6 +84,9 @@ export default {
         if (res.status === 200) {
           this.submitted = true
         } 
+      }).catch(err => {
+        if (err.response) this.error = err.response.data
+        else this.error = err
       })
     },
     handleLoginClick() {
@@ -117,6 +122,12 @@ export default {
     flex-direction:column;
     width:100%;
     padding:1rem;
+
+    .error {
+      color: red;
+      font-size: 1.25rem;
+      margin-top: -0.5rem;
+    }
 
     .recoveryButton{
       background-color: #350E7E;

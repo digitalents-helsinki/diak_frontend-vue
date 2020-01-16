@@ -5,7 +5,7 @@
             <p>{{ this.$store.state.admin.finalizationSurveyId ? $t('message.surveyFinalize') : $t('message.surveyCreate') }}</p> 
         </div>
         <div class="top-buttons">
-            <button @click="sendSurvey({ final: false })" class="btn savecontinueButton">{{ $t('message.saveContinue') }}</button>
+            <button @click="sendSurvey({ final: false })" class="btn savecontinueButton" :disabled="sending">{{ $t('message.saveContinue') }}</button>
             <button v-b-modal.discardModal class="btn discardButton">{{ $t('message.disCard') }}</button>
             <b-modal 
                 id="discardModal"
@@ -132,7 +132,7 @@
                     <div class="moreroundedButton">
                         <font-awesome-icon icon="users" class="iconmoreEmail"/>
                         <b-form-file v-model="groupInputFile" accept="text/plain;charset=UTF-8" :browse-text="$t('message.browseFiles')" class="btn moreEmail-button" :placeholder="$t('message.moreEmail')"></b-form-file>
-                        <button class="btn roundedButton" v-b-popover.focus="'Voit antaa vastaajat listana. Lista on yksinkertainen tekstitiedosto (.txt), jossa sähköpostisoitteet ovat peräkkäin yksi osoite per rivi.'" > ? </button>
+                        <button class="btn roundedButton" v-b-popover.focus="$t('message.txtFileInstruction')" > ? </button>
                     </div>
                 </div>
                 <div class="emailContent">
@@ -159,11 +159,8 @@
                     <b-textarea v-else v-bind:value="survey.message" @input="modifySurveyAttribute({ message: $event })" class="writeMessage" type="text" />
                 </div> 
                 <div class="bottom-buttons">
-                    <button @click="sendSurvey({ final: false })" class="btn savecontinueBottom">{{ $t('message.saveContinue') }}</button>
-                    <button id="sendSurveyButton" class="btn sendsurveyButton" @click="sendSurvey()">{{ $t('message.sendSurvey') }}<font-awesome-icon icon="paper-plane" class="putMessageicon"/></button>
-                    <b-popover target="sendSurveyButton" triggers="manual" placement="top">
-                        {{$t('message.sendSurveyError')}}
-                    </b-popover>
+                    <button @click="sendSurvey({ final: false })" class="btn savecontinueBottom" :disabled="sending">{{ $t('message.saveContinue') }}</button>
+                    <button id="sendSurveyButton" class="btn sendsurveyButton" @click="sendSurvey()" :disabled="sending">{{ $t('message.sendSurvey') }}<font-awesome-icon icon="paper-plane" class="putMessageicon"/></button>
                 </div>
             </div>
         </div>
@@ -204,7 +201,8 @@ export default {
             editIndex: null,
             surveyNameState: null,
             messageVisible: false,
-            groupInputFile: null
+            groupInputFile: null,
+            sending: false
         }
     },
     components: {
@@ -312,9 +310,13 @@ export default {
         sendSurvey({ final } = { final: true }) {
             if (this.survey.questions.length === 0 || this.survey.questions.some(question => !question.name && (!question.title || !question.description)) || !this.survey.name) {
                 if (!this.survey.name) this.surveyNameState = false
-                this.$root.$emit('bv::show::popover', 'sendSurveyButton')
-                setTimeout(() => this.$root.$emit('bv::hide::popover', 'sendSurveyButton'), 5000)
+                this.$bvToast.toast(this.$t('message.sendSurveyError'), {
+                    title: this.$t('message.warning'),
+                    toaster: 'b-toaster-bottom-right',
+                    variant: 'warning'
+                })
             } else {
+                this.sending = true
                 const method = final ? "POST" : "PUT"
                 const url = final ? `${process.env.VUE_APP_BACKEND}/admin/survey/create` : `${process.env.VUE_APP_BACKEND}/admin/survey/save`
                 axios({
@@ -331,13 +333,12 @@ export default {
                         startDate: this.survey.startDate,
                         endDate: this.survey.endDate,
                         message: this.survey.message,
-                        questions: this.survey.questions.map((question, idx) => {
+                        questions: this.survey.questions.map(question => {
                             return {
                                 name: question.name,
                                 title: question.title,
                                 description: question.description,
-                                help: question.help,
-                                number: idx + 1
+                                help: question.help
                             }
                         })
                     }
@@ -361,7 +362,7 @@ export default {
                         toaster: 'b-toaster-bottom-right',
                         variant: 'danger'
                     })
-                })
+                }).finally(() => this.sending = false)
             }
         },
         showMessage() {
@@ -462,6 +463,7 @@ export default {
     width:80%;
     margin: 1rem;
     box-shadow: 0 5px 5px #787878;
+    border-radius: 15px;
 
     .rightsideCreate-top{
         background-color:#350E7E;
@@ -475,6 +477,7 @@ export default {
         align-items:center;
         padding-top:1.1rem;
         margin-bottom:0;
+        border-radius: 15px 15px 0 0;
     }
 
     .top-buttons{
@@ -1022,6 +1025,11 @@ export default {
     .rightsideCreate{
         width:100%;
         margin-bottom: 0;
+        border-radius: 0;
+
+        .rightsideCreate-top {
+            border-radius: 0;
+        }
     }
 }
 

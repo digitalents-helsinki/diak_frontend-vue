@@ -76,32 +76,33 @@
           </div>
         </transition>
       </div>
-      <div class="searchbar-div">
-        <p class="paragraphTop">{{ $t('message.searchParagraph') }}</p>
-        <b-input-group size="md" class="search-bar">
-          <span> <font-awesome-icon icon="search" class="iconsearch"/> </span>
-          <b-form-input v-model="searchTerm" v-bind:placeholder="$t('message.searchPlaceholder')"></b-form-input>
-        </b-input-group>
-      </div>
     </div>
     <div class="tableandfilter">
       <div class="buttonstotal">
-        <b-dropdown id="dropdownleft" variant="secondary" :text="$t(`message.${display}Button`)" class="m-md-2 dropdownButtonsleft">
-          <b-dropdown-item @click="toggleDisplay('all')">{{$t('message.allButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('group')">{{$t('message.groupButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('anonymous')">{{$t('message.anonymousButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('authenticated')">{{$t('message.authenticatedButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('active')">{{$t('message.activeButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('starting')">{{$t('message.startingButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('ended')">{{$t('message.endedButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('closed')">{{$t('message.closedButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('inComplete')">{{$t('message.inCompleteButton')}}</b-dropdown-item>
-          <b-dropdown-item @click="toggleDisplay('archived')">{{$t('message.archivedButton')}}</b-dropdown-item>
-        </b-dropdown>
+        <b-input-group size="md" class="search-bar">
+          <b-input-group-prepend>
+            <b-dropdown id="dropdownleft" variant="secondary" :text="$t(`message.${display}Button`)" class="dropdownButtonsleft">
+              <b-dropdown-item @click="toggleDisplay('all')">{{$t('message.allButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('group')">{{$t('message.groupButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('anonymous')">{{$t('message.anonymousButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('authenticated')">{{$t('message.authenticatedButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('active')">{{$t('message.activeButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('starting')">{{$t('message.startingButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('ended')">{{$t('message.endedButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('closed')">{{$t('message.closedButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('inComplete')">{{$t('message.inCompleteButton')}}</b-dropdown-item>
+              <b-dropdown-item @click="toggleDisplay('archived')">{{$t('message.archivedButton')}}</b-dropdown-item>
+            </b-dropdown>
+          </b-input-group-prepend>
+          <b-input-group-prepend is-text>
+            <font-awesome-icon icon="search" class="iconsearch"/>
+          </b-input-group-prepend>
+          <b-form-input v-model="searchTerm" v-bind:placeholder="$t('message.searchPlaceholder')"/>
+        </b-input-group>
       </div>
     </div>
     <div class="tableDisplayfields">
-      <b-table hover :items="filteredSurveys[this.display]" :fields="fields" head-variant="light" table-class="surveyTable shadow-sm">
+      <b-table hover :items="filteredSurveys[this.display]" :fields="fields" head-variant="light" table-class="surveyTable shadow-sm" show-empty>
         <template v-for="field in fields" v-slot:[`cell(${field.key})`]="data">
           <div v-bind:key="field.key" class="surveyTableCel">
             <div v-if="field.colType === 'name'">
@@ -430,8 +431,8 @@ export default {
         },
         display: "all",
         showDetails: {},
-        showTotalDetailed: false,
-        showInstructions: true
+        showTotalDetailed: (cookieMatch => cookieMatch ? cookieMatch[1] === 'true' : true)(document.cookie.match(/(?:^|;\s*)3X10D_SHOW_TOTAL_DETAILED=([^;]*)/)),
+        showInstructions: (cookieMatch => cookieMatch ? cookieMatch[1] === 'true' : true)(document.cookie.match(/(?:^|;\s*)3X10D_SHOW_INSTRUCTIONS=([^;]*)/))
     }
   },
   computed: {
@@ -459,7 +460,7 @@ export default {
         const currentSurvey = groupedSurveys[i]
         if (currentSurvey.surveyGroupId && !groupedIds.includes(currentSurvey.surveyGroupId)) {
           currentSurvey.Surveys = groupedSurveys.filter(survey => survey.surveyGroupId === currentSurvey.surveyGroupId).map(obj => ({...obj}))
-          currentSurvey.Surveys.sort(({endDate: a}, {endDate: b}) => (b !== null ? b : -Infinity) - (a !== null ? a : -Infinity))
+          currentSurvey.Surveys.sort(({createdAt: a}, {createdAt: b}) => new Date(a).getTime() - new Date(b).getTime())
           Object.assign(currentSurvey, currentSurvey.Surveys[currentSurvey.Surveys.length - 1])
           groupedIds.push(currentSurvey.surveyGroupId)
         }
@@ -580,6 +581,15 @@ export default {
       } else {
         return null
       }
+    }
+  },
+  watch: {
+    showTotalDetailed(newVal) {
+      document.cookie = `3X10D_SHOW_TOTAL_DETAILED=${newVal}; expires=${(date => date.setDate(date.getDate() + 365*24*60*60*1000))(new Date)}; path=/`
+    },
+    showInstructions(newVal) {
+      document.cookie = `3X10D_SHOW_INSTRUCTIONS=${newVal}; expires=${(date => date.setDate(date.getDate() + 365*24*60*60*1000))(new Date)}; path=/`
+
     }
   },
   methods: {
@@ -805,6 +815,11 @@ export default {
   background-color: white;
   color: #353535;
   text-align: center;
+  margin-bottom: 0;
+
+  @media only screen and (min-width: 1400px) {
+    border-radius: 0 0 15px 15px;
+  }
 
   td {
     vertical-align: middle;
@@ -1007,6 +1022,7 @@ export default {
     width:80%;
     margin: 1rem;
     box-shadow: 0 5px 5px #787878;
+    border-radius: 15px;
 
     .slider-width-enter, .slider-width-leave-to {
       max-width: 0;
@@ -1089,6 +1105,7 @@ export default {
         justify-content:center;
         align-items:center;
         padding-top:1.1rem;
+        border-radius: 15px 15px 0 0;
     }
 
     .totalinstructionsearch {
@@ -1199,29 +1216,21 @@ export default {
         }
       }
 
-      .searchbar-div{
-        margin:1rem;
-        margin-left:1rem;
-
-        .paragraphTop{
-          font-size:1.6em;
-          font-weight:bold;
-        }
-        .search-bar{
-          width:50%;
-          
-          .iconsearch{
-            font-size:2rem;
-            color:#787878;
-            margin-right:1rem;
-          }
-        }
-      }
     }
     .tableandfilter{
       display:flex;
       flex-direction:column;
       padding:1rem;
+
+      .search-bar{
+        width:50%;
+        padding: 0.5rem;
+          
+        .iconsearch{
+          font-size:1.5rem;
+          color:#787878;
+        }
+      }
 
       .buttonstotal{
         display:flex;
@@ -1266,6 +1275,11 @@ export default {
   .rightsideManage{
     width:100%;
     margin-bottom: 0;
+    border-radius: 0;
+
+    .rightsideManage-top {
+      border-radius: 0;
+    }
   }
 }
 @media only screen and (min-width: 768px) and (max-width:900px){ 

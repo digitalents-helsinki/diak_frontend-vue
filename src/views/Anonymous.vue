@@ -22,7 +22,6 @@ export default {
    data() {
     return {
       pagenum: 0,
-      isFirstTime: false,
       error: null
     }
   },

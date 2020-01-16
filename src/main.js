@@ -70,7 +70,7 @@ axios.interceptors.response.use(res => res, err => {
         console.error(err)
         setTimeout(() => axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data), 1000)
         break
-      case err.response.status === 401 && store.state.authentication.loggedIn: // Auth failed because token expired or whatever, login again
+      case store.state.authentication.accessToken && err.response.status === 401: // Auth failed because token expired or whatever, login again
         // eslint-disable-next-line no-console
         console.error(err)
         store.commit('logout')
@@ -89,9 +89,10 @@ axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.head
 
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {
-  clientId: process.env.VUE_APP_CLIENT_ID,
-  scope: 'profile email',
-  prompt: 'select_account'
+  clientId: process.env.VUE_APP_GOOGLE_CLIENT_ID,
+  scope: 'email',
+  prompt: 'select_account',
+  fetch_basic_profile: false
 }
 Vue.use(GAuth, gauthOption)
 
