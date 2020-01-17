@@ -1,16 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store/index'
-import Questionnaire from '@/views/Questionnaire.vue'
-import Admin from '@/views/Admin.vue'
 import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import Recovery from '@/views/Recovery.vue'
 import Password from '@/views/Password.vue'
-import User from '@/views/User.vue'
-import Supervisor from '@/views/Supervisor.vue'
-import Anonymous from '@/views/Anonymous.vue'
 import ErrorPage from '@/views/Error.vue'
+import Questionnaire from '@/views/Questionnaire.vue'
+import User from '@/views/User.vue'
+import Anonymous from '@/views/Anonymous.vue'
+const Admin = () => import('@/views/Admin.vue')
+const Supervisor = () => import('@/views/Supervisor.vue')
 
 Vue.use(Router)
 
