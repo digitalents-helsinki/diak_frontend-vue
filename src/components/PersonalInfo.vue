@@ -28,7 +28,7 @@
           v-bind:label="$t('message.anonymousUser')"
           label-for="ageInput"
         >
-          <b-form-input id="ageInput" @input="$emit('updateInfo', {age: $event})" :value="personalInfo.age" type="number" name="ageInput" min="0" ></b-form-input>
+          <b-form-input id="ageInput" @input="$emit('updateInfo', {age: $event < 200 ? $event : 200})" :value="personalInfo.age" type="number" name="ageInput" min="0" max="200" ></b-form-input>
           <b-form-invalid-feedback :state="infovalidation.age" class="ageRequired">
             {{ $t('message.ageInfo') }}
           </b-form-invalid-feedback>
