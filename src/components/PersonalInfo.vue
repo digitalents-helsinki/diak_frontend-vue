@@ -63,13 +63,13 @@
           <b-button @click.prevent="signOut" class="submitIncluded">
             {{ $t('message.logoutButtontranslate') }}
           </b-button>
-          <b-button v-if="!this.$store.state.questionnaire.meta.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
+          <b-button v-if="!this.$store.state.questionnaire.meta.surveyId && !infoSaved" type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.ProfilesubmitButton') }}
-            <b-spinner v-if="infoSaved" class="saver" small/>
           </b-button>
-          <b-button v-else type="submit" @click.prevent="postInfo" class="submitIncluded">
+          <b-button v-else-if="!infoSaved" type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.continue') }}
           </b-button>
+          <b-spinner v-else style="color: #350E7E; margin: 0.5rem;"/>
         </div>
       </b-form>
     </div>
@@ -160,7 +160,7 @@ export default {
             if (err.response) this.error = err.response.data
             throw err
         } finally {
-          setTimeout(() => this.infoSaved = false, 1000)
+          this.infoSaved = false
         }
       }
     },
@@ -227,12 +227,6 @@ export default {
       padding: 0.5rem 2rem;
       font-size: 1rem;
       margin-bottom: 1rem;
-      
-      .saver {
-        position: absolute;
-        right: 0.75rem;
-        top: 1rem;
-      }
     }
   }
 }
