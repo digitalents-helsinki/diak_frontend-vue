@@ -165,7 +165,7 @@ export default {
       }
     },
     signOut() {
-      this.$store.commit('logout')
+      this.$store.dispatch('logout')
       this.$router.push({ path: '/' })
     }
   }

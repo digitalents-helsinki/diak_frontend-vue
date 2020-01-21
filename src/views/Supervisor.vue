@@ -229,7 +229,7 @@ export default {
     }
   },
   created() {
-    this.$store.commit('logout')
+    this.$store.dispatch('logout')
     axios.interceptors.response.use(res => res, err => {
       if (err.response) {
         switch(true) {
