@@ -8,7 +8,7 @@
           v-bind:label="$t('message.anonymousUser')"
           label-for="age"
         >
-          <b-form-input id="age" @input="$emit('updateInfo', {age: $event})" :value="anonymousinfo.age" type="number" name="age" min="0" ></b-form-input>
+          <b-form-input id="age" @input="$emit('updateInfo', {age: $event < 200 ? $event : 200})" :value="anonymousinfo.age" type="number" name="age" min="0" max="200"></b-form-input>
           <b-form-invalid-feedback :state="infovalidation.age !== false" class="ageRequired">
             {{ $t('message.ageInfo') }}
           </b-form-invalid-feedback>
@@ -30,10 +30,7 @@
         </b-form-group>
         <div id="submitForm">
           <p v-if="error">{{error}}</p>
-          <b-button v-if="!this.$store.state.questionnaire.meta.surveyId" type="submit" @click.prevent="postInfo" class="submitIncluded">
-            {{ $t('message.submitandcontinuebutton') }}
-            <b-spinner v-if="infoSaved" class="saver" small/>
-          </b-button>
+          <b-spinner v-if="infoSaved" style="color: #350E7E; margin: 1rem 0;"/>
           <b-button v-else type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.submitandcontinuebutton') }}
           </b-button>
@@ -87,6 +84,8 @@ export default {
         }
       })
       if (Object.values(this.infovalidation).every(value => value === null)) {
+        this.infoSaved = true
+
         axios({
           method: "POST",
           url: process.env.VUE_APP_BACKEND + "/anon/user/" + this.$store.state.questionnaire.meta.anonId + "/info/update",
@@ -97,14 +96,13 @@ export default {
           if (res.status === 200) {
             if (this.$store.state.questionnaire.meta.surveyId) {
               this.$emit('moveToQuestionnaire')
-            } else {
-              this.infoSaved = true
-              setTimeout(() => this.infoSaved = false, 1000)
             }
           }
         }).catch(err => {
           if (err.response) this.error = err.response.data
           throw err
+        }).finally(() => {
+          this.infoSaved = false
         })
       }
     },
@@ -159,12 +157,6 @@ export default {
       padding: 0.5rem 2rem;
       font-size: 1rem;
       margin-bottom: 1rem;
-      
-      .saver {
-        position: absolute;
-        right: 0.75rem;
-        top: 1rem;
-      }
     }
   }
 }

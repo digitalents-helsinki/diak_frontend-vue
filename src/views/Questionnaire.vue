@@ -11,9 +11,7 @@
         v-on:toggleModal="toggleModal"
       />
       <div class="questionnaire container text-center shadow-lg">
-        <div class="loader-spinner-container" v-if="questionnum !== null && !currentQuestionData && questionnum < navigationData.questionamount || resultSending">
-          <b-spinner label="Loading..." />
-        </div>
+        <b-spinner v-if="resultSending || (questionnum !== null && !currentQuestionData && questionnum < navigationData.questionamount)" label="Loading..." style="color: #350E7E;" class="m-5"/>
         <form v-if="!resultSending">
           <transition name="fade" mode="out-in">
             <Question
@@ -31,6 +29,7 @@
             />
             <Result
               v-else-if="this.$store.state.questionnaire.surveyData.resultData"
+              v-bind:resultSending="resultSending"
             />
           </transition>
         </form>
@@ -104,15 +103,6 @@ export default {
     }
   },
   methods: {
-    async testQuestionnaire() {
-
-      //FOR TESTING
-      if (this.$route.name === "testsurvey") {
-        const params = await axios.post(process.env.VUE_APP_BACKEND + "/testsurvey/")
-        if (params.status === 200) this.$router.push({ path: `/anon/questionnaire/${params.data.surveyId}/${params.data.anonId}` })
-      }
-      //
-    },
     saveQuestions() {
       this.resultSending = true
       const isAnon = this.$route.name === 'questionnaire-anon'
@@ -167,11 +157,6 @@ export default {
       this.$store.commit('logout')
       this.$router.push({ path: "/" });
     }
-  },
-  created() {
-    //FOR TESTING
-    this.testQuestionnaire()
-    //
   }
 };
 </script>

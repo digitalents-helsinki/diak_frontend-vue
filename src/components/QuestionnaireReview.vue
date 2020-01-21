@@ -3,7 +3,7 @@
     <h3>{{ $t(`message.reviewHeading`) }}</h3>
     <div class="results">
       <div v-for="(value, index) in results" v-bind:key="index">
-        <span v-if="!value.custom" v-html="`${index + 1}. ${$t(`message.${value.name}_title`)}`"></span>
+        <span v-if="!value.custom">{{ `${index + 1}. ${$t(`message.${value.name}_title`)}` }}</span>
         <span v-else>{{`${index + 1}. ${value.custom.title}`}}</span>              
         <span v-bind:class="{notanswered :value.val === null}">{{value.val !== null ? value.val : $t('message.Unanswered')}}</span>
         <b-collapse id="collapse-reviewcontent" v-bind:visible="!!value.desc">
@@ -17,7 +17,7 @@
         class="btn return-button" 
         @click.prevent="$emit('update:navigation', 'subtract')"
       >{{ $t('message.return')}}</button>
-    <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
+      <button @click.prevent="$emit('toggleModal', 'cancel')" class="btn cancel-button">{{ $t('message.cancel')}}</button>
     </div>
   </div>
 </template>

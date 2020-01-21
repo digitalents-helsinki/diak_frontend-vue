@@ -15,7 +15,8 @@ export default {
   },
   data() {
     return {
-      dots: '.'
+      dots: '.',
+      timeOutId: null
     }
   },
   methods: {
@@ -30,7 +31,10 @@ export default {
   },
   created() {
     this.dotDotDot()
-    setTimeout(() => this.$router.push('/'), 3000)
+    this.timeOutId = setTimeout(() => this.$router.push('/'), 3000)
+  },
+  destroyed() {
+    clearTimeout(this.timeOutId)
   }
 }
 </script>

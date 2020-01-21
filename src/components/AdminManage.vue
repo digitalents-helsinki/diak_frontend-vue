@@ -460,7 +460,7 @@ export default {
         const currentSurvey = groupedSurveys[i]
         if (currentSurvey.surveyGroupId && !groupedIds.includes(currentSurvey.surveyGroupId)) {
           currentSurvey.Surveys = groupedSurveys.filter(survey => survey.surveyGroupId === currentSurvey.surveyGroupId).map(obj => ({...obj}))
-          currentSurvey.Surveys.sort(({endDate: a}, {endDate: b}) => (b !== null ? b : -Infinity) - (a !== null ? a : -Infinity))
+          currentSurvey.Surveys.sort(({createdAt: a}, {createdAt: b}) => new Date(a).getTime() - new Date(b).getTime())
           Object.assign(currentSurvey, currentSurvey.Surveys[currentSurvey.Surveys.length - 1])
           groupedIds.push(currentSurvey.surveyGroupId)
         }

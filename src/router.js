@@ -1,17 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/Home.vue'
 import store from '@/store/index'
-import Questionnaire from '@/views/Questionnaire.vue'
-import Admin from '@/views/Admin.vue'
 import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import Recovery from '@/views/Recovery.vue'
 import Password from '@/views/Password.vue'
-import User from '@/views/User.vue'
-import Supervisor from '@/views/Supervisor.vue'
-import Anonymous from '@/views/Anonymous.vue'
 import ErrorPage from '@/views/Error.vue'
+import Questionnaire from '@/views/Questionnaire.vue'
+import User from '@/views/User.vue'
+import Anonymous from '@/views/Anonymous.vue'
+const Admin = () => import('@/views/Admin.vue')
+const Supervisor = () => import('@/views/Supervisor.vue')
 
 Vue.use(Router)
 
@@ -39,19 +38,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
-      meta: {
-        quest: true
-      }
-    },
-    {
-      path: '/supervisor',
-      name: 'supervisor',
-      component: Supervisor
-    },
-    {
-      path: '/login',
+      alias: '/login',
       name: 'login',
       component: Login,
       props: true,
@@ -59,6 +46,11 @@ const router = new Router({
         quest: true
       },
       beforeEnter: loggedInGuard
+    },
+    {
+      path: '/supervisor',
+      name: 'supervisor',
+      component: Supervisor
     },
     {
       path: '/registration',
@@ -106,12 +98,6 @@ const router = new Router({
       }
     },
     {
-      path: '/questionnaire/testikysely',
-      name: 'testsurvey',
-      component: Questionnaire,
-      props: true
-    },
-    {
       path: '/anon/questionnaire/:surveyId/:anonId',
       name: 'questionnaire-anon',
       component: Questionnaire,
@@ -129,7 +115,7 @@ const router = new Router({
             anon: true
           })
           await store.dispatch('questionnaire/fetchSurvey')
-          if (store.state.questionnaire.surveyData.resultData) {
+          if (store.state.questionnaire.surveyData.resultData || store.state.questionnaire.error.message) {
             next()
           } else {
             next('/anonymous')
@@ -167,6 +153,11 @@ const router = new Router({
     {
       path: '/error',
       name: 'error',
+      component: ErrorPage
+    },
+    {
+      path: '*',
+      name: '404',
       component: ErrorPage
     }
   ]
