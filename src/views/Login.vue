@@ -37,8 +37,8 @@
         </div>
         <p class="otherWay">{{ $t('message.loginwithother') }}</p>
         <div class="loginOtherway">
-          <b-button class="loginFacebookButton" @click="handleFBSignIn"><font-awesome-icon :icon="['fab', 'facebook']" style="font-size:1.6rem; margin-right:0.6rem;"/>Facebook</b-button>
-          <b-button class="loginGoogleButton" @click="handleGSignIn"><font-awesome-icon :icon="['fab', 'google']" style="font-size:1.6rem; margin-right:0.6rem;"/>Google</b-button>
+          <b-button class="loginFacebookButton" @click="handleFBSignIn">Facebook</b-button>
+          <b-button class="loginGoogleButton" @click="handleGSignIn"><img src="../images/btn_google_dark_focus_ios.svg"/>Google</b-button>
         </div>
       </div>
     </template>
@@ -258,29 +258,34 @@ export default {
         .loginOtherway{
           display:flex;
           flex-direction:row;
-          justify-content:space-around;
+          justify-content: space-evenly;
           margin-bottom:2rem;
 
         .loginFacebookButton{
-            background-color: #3b5998;
+            background-color: #4267B2;
             color: #FFFFFF;
             font-size: 1rem;
             font-weight:bold;
-            padding:0.6rem 1rem;
+            padding: 8px 20px;
             border: none;
             border-radius: 5px;
             box-shadow: 0 5px 5px gray;
           }
 
           .loginGoogleButton{
-            background-color: #F4B400;
+            background-color: #4285F4;
             color: #FFFFFF;
             font-size: 1rem;
             font-weight:bold;
-            padding:0.6rem 1.1rem;
             border: none;
             border-radius: 5px;
+            padding: 8px 32px 8px 8px;
             box-shadow: 0 5px 5px gray;
+
+            img {
+              margin-right: 24px;
+              user-select: none;
+            }
           }
         }
       }
