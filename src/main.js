@@ -96,6 +96,9 @@ const gauthOption = {
 }
 Vue.use(GAuth, gauthOption)
 
+import initFacebookSdk from './initFacebookSdk.js'
+initFacebookSdk()
+
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 

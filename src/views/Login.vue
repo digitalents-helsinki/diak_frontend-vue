@@ -143,18 +143,46 @@ export default {
       }
     },
     async handleFBSignIn() {
-      const FB = await initFacebookSdk()
-      FB.getLoginStatus(response => {
-        if (response.status === 'connected') {
-          axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken })
-        } else {
-          FB.login(response => {
-            if (response.status === 'connected') {
-              axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken })
-            }
-          }, { scope: 'email' })
+      try {
+        this.loggingIn = true
+        let loginEndPointCallPromise
+        window.FB.getLoginStatus(response => {
+          if (response.status === 'connected') {
+            loginEndPointCallPromise = axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken })
+          } else {
+            window.FB.login(response => {
+              if (response.status === 'connected') {
+                loginEndPointCallPromise = axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken })
+              }
+            }, { scope: 'email' })
+          }
+        })
+        const { response } = await loginEndPointCallPromise
+        if (response.status === 200) {
+          this.$store.commit('login', response.data.authInfo)
+          this.$store.commit('user/setAuthUserPersonalInfo', response.data.personalInfo)
+          if (this.$store.state.authentication.role === 'user') {
+            this.$router.push({ name: 'user' })
+          } else {
+            this.$router.push({ name: 'admin' })
+          }
         }
-      })
+      } catch(err) {
+        console.error(err)
+        if (err.response) {
+          if (err.response.status === 409) {
+            this.error = this.$t('message.alreadyRegistered') + err.response.data.join('')
+          } else if (err.response.status === 422) {
+            this.error = this.$t('message.validationError') + ' ' + err.response.data
+          } else {
+            this.error = err.response.data
+          }
+        } else {
+          this.FB.logout()
+        }
+      } finally {
+        this.loggingIn = false
+      }
     },
     handlePasswordClick() {
       this.$router.push({ name: 'recovery'})

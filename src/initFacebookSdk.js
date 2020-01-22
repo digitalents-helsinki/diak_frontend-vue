@@ -2,8 +2,8 @@ export default function() {
   window.fbAsyncInit = () => {
     window.FB.init({
       appId: process.env.VUE_APP_FACEBOOK_APP_ID,
+      status: true,
       autoLogAppEvents: true,
-      xfbml: true,
       version: 'v5.0'
     })
   }
@@ -16,11 +16,4 @@ export default function() {
     js.src = "https://connect.facebook.net/en_US/sdk.js"
     fjs.parentNode.insertBefore(js, fjs)
   })(document, 'script', 'facebook-jssdk')
-
-  return new Promise(resolve => {
-    (function waitForFB() {
-      if (window.FB) resolve(window.FB)
-      else setTimeout(waitForFB)
-    })()
-  })
 }

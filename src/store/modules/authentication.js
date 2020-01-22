@@ -26,6 +26,11 @@ export default {
       if (gAuthInstance && gAuthInstance.isSignedIn.get()) {
         gAuthInstance.signOut()
       }
+      let facebookLoginStatus
+      window.FB.getLoginStatus(({ status }) => facebookLoginStatus = status)
+      if (facebookLoginStatus) {
+        window.FB.logout()
+      }
     }
   }
 }
