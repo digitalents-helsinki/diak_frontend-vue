@@ -48,7 +48,6 @@
 import axios from 'axios'
 import LogoBox from '@/components/LogoBox.vue'
 import LangMenu from '@/components/Languages.vue'
-import initFacebookSdk from '@/initFacebookSdk.js'
 
 export default {
   name: 'login',
@@ -145,28 +144,37 @@ export default {
     async handleFBSignIn() {
       try {
         this.loggingIn = true
-        let loginEndPointCallPromise
-        window.FB.getLoginStatus(response => {
+        this.$fb.getLoginStatus(response => {
           if (response.status === 'connected') {
-            loginEndPointCallPromise = axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken })
+            axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken }).then(response => {
+              if (response.status === 200) {
+                this.$store.commit('login', response.data.authInfo)
+                this.$store.commit('user/setAuthUserPersonalInfo', response.data.personalInfo)
+                if (this.$store.state.authentication.role === 'user') {
+                  this.$router.push({ name: 'user' })
+                } else {
+                  this.$router.push({ name: 'admin' })
+                }
+              }
+            })
           } else {
-            window.FB.login(response => {
+            this.$fb.login(response => {
               if (response.status === 'connected') {
-                loginEndPointCallPromise = axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken })
+                axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken }).then(response => {
+                  if (response.status === 200) {
+                    this.$store.commit('login', response.data.authInfo)
+                    this.$store.commit('user/setAuthUserPersonalInfo', response.data.personalInfo)
+                    if (this.$store.state.authentication.role === 'user') {
+                      this.$router.push({ name: 'user' })
+                    } else {
+                      this.$router.push({ name: 'admin' })
+                    }
+                  }
+                })
               }
             }, { scope: 'email' })
           }
-        })
-        const { response } = await loginEndPointCallPromise
-        if (response.status === 200) {
-          this.$store.commit('login', response.data.authInfo)
-          this.$store.commit('user/setAuthUserPersonalInfo', response.data.personalInfo)
-          if (this.$store.state.authentication.role === 'user') {
-            this.$router.push({ name: 'user' })
-          } else {
-            this.$router.push({ name: 'admin' })
-          }
-        }
+        }, true)
       } catch(err) {
         console.error(err)
         if (err.response) {
@@ -178,7 +186,7 @@ export default {
             this.error = err.response.data
           }
         } else {
-          this.FB.logout()
+          this.$fb.logout()
         }
       } finally {
         this.loggingIn = false

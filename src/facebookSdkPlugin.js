@@ -1,11 +1,6 @@
-export default function() {
+export default function(Vue, options) {
   window.fbAsyncInit = () => {
-    window.FB.init({
-      appId: process.env.VUE_APP_FACEBOOK_APP_ID,
-      status: true,
-      autoLogAppEvents: true,
-      version: 'v5.0'
-    })
+    window.FB.init(options)
   }
   
   ((d, s, id) => {
@@ -16,4 +11,10 @@ export default function() {
     js.src = "https://connect.facebook.net/en_US/sdk.js"
     fjs.parentNode.insertBefore(js, fjs)
   })(document, 'script', 'facebook-jssdk')
+
+  Object.defineProperties(Vue.prototype, {
+    $fb: {
+      get: () => window.FB
+    }
+  })
 }
