@@ -745,7 +745,7 @@ export default {
           data: {
             name: this.redo.surveyName,
             message: this.redo.surveyMessage,
-            startDate: this.redo.startDate,
+            startDate: this.redo.surveyStartDate,
             endDate: this.redo.surveyEndDate,
             to: this.redo.surveyRespondents
           }
