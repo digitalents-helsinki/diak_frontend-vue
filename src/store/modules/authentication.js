@@ -22,13 +22,11 @@ export default {
   actions: {
     logout({ commit }) {
       commit('logout')
-      
+
       const gAuthInstance = window.gapi ? window.gapi.auth2 ? window.gapi.auth2.getAuthInstance() : null : null
       if (gAuthInstance && gAuthInstance.isSignedIn.get()) gAuthInstance.signOut()
 
-      let facebookLoginStatus = null
-      if (window.FB) window.FB.getLoginStatus(({ status }) => facebookLoginStatus = status)
-      if (facebookLoginStatus) window.FB.logout()
+      if (window.FB) window.FB.getLoginStatus(({ status }) => !status || window.FB.logout())
     }
   }
 }
