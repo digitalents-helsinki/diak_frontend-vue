@@ -18,5 +18,19 @@ export default {
       state.userId = null
       state.email = null
     }
+  },
+  actions: {
+    logout({ commit }) {
+      commit('logout')
+      const gAuthInstance = window.gapi ? window.gapi.auth2 ? window.gapi.auth2.getAuthInstance() : null : null
+      if (gAuthInstance && gAuthInstance.isSignedIn.get()) {
+        gAuthInstance.signOut()
+      }
+      let facebookLoginStatus
+      window.FB.getLoginStatus(({ status }) => facebookLoginStatus = status)
+      if (facebookLoginStatus) {
+        window.FB.logout()
+      }
+    }
   }
 }

@@ -21,7 +21,7 @@ export default {
       }
     }
   },
-  created: function() {
+  created() {
     window.addEventListener('resize', () => {
       this.$data.vh = window.innerHeight * 0.01
     })

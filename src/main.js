@@ -9,58 +9,16 @@ import moment from 'moment'
 import 'moment/locale/fi'
 import 'moment/locale/se'
 import axios from 'axios'
+import gapi from './gapiPlugin'
+import facebookSdk from './facebookSdkPlugin'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle, faRedo, faFolderOpen, faStamp, faListOl} from '@fortawesome/free-solid-svg-icons'
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
-import { faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
-import { faPencilAlt} from '@fortawesome/free-solid-svg-icons'
-import { faPlus} from '@fortawesome/free-solid-svg-icons'
-import { faUsers} from '@fortawesome/free-solid-svg-icons'
-import { faPaperclip} from '@fortawesome/free-solid-svg-icons'
-import { faPaperPlane} from '@fortawesome/free-solid-svg-icons'
-import { faSearch} from '@fortawesome/free-solid-svg-icons'
-import { faFolder} from '@fortawesome/free-solid-svg-icons'
-import { faTimes} from '@fortawesome/free-solid-svg-icons'
-import { faGoogle} from '@fortawesome/free-brands-svg-icons'
-import { faFacebook} from '@fortawesome/free-brands-svg-icons'
-import { faThumbsUp} from '@fortawesome/free-solid-svg-icons'
-import { faThumbsDown} from '@fortawesome/free-solid-svg-icons'
-import { faArrowRight} from '@fortawesome/free-solid-svg-icons'
+import { faAngleDown, faCalendarAlt, faPencilAlt, faPlus, faUsers, faPaperclip, faPaperPlane, faSearch, faFolder, faTimes, faThumbsUp, faThumbsDown, faArrowRight, faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle, faRedo, faFolderOpen, faStamp, faListOl } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 
-library.add(faTimesCircle)
-library.add(faAngleDown)
-library.add(faCalendarAlt)
-library.add(faPencilAlt)
-library.add(faPlus)
-library.add(faUsers)
-library.add(faPaperclip)
-library.add(faPaperPlane)
-library.add(faSearch)
-library.add(faFolder)
-library.add(faTimes)
-library.add(faGoogle)
-library.add(faFacebook)
-library.add(faThumbsUp)
-library.add(faThumbsDown)
-library.add(faArrowRight)
-library.add(faSave)
-library.add(faKey)
-library.add(faArrowUp)
-library.add(faArrowDown)
-library.add(faChartBar)
-library.add(faUserSlash)
-library.add(faUserCheck)
-library.add(faChevronRight)
-library.add(faChevronLeft)
-library.add(faCircle)
-library.add(faRedo)
-library.add(faFolderOpen)
-library.add(faStamp)
-library.add(faListOl)
+library.add(faAngleDown, faCalendarAlt, faPencilAlt, faPlus, faUsers, faPaperclip, faPaperPlane, faSearch, faFolder, faTimes, faThumbsUp, faThumbsDown, faArrowRight, faTimesCircle, faSave, faKey, faArrowUp, faArrowDown, faChartBar, faUserSlash, faUserCheck, faChevronRight, faChevronLeft, faCircle, faRedo, faFolderOpen, faStamp, faListOl)
 
 axios.interceptors.response.use(res => res, err => {
   if (err.response) {
@@ -87,14 +45,18 @@ axios.interceptors.response.use(res => res, err => {
 axios.defaults.withCredentials = true
 axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data)
 
-import GAuth from 'vue-google-oauth2'
-const gauthOption = {
+Vue.use(gapi, {
   clientId: process.env.VUE_APP_GOOGLE_CLIENT_ID,
-  scope: 'email',
-  prompt: 'select_account',
+  scope: 'openid email',
   fetch_basic_profile: false
-}
-Vue.use(GAuth, gauthOption)
+})
+
+Vue.use(facebookSdk, {
+  appId: process.env.VUE_APP_FACEBOOK_APP_ID,
+  status: true,
+  autoLogAppEvents: true,
+  version: 'v5.0'
+})
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false

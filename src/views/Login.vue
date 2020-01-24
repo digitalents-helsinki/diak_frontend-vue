@@ -37,8 +37,8 @@
         </div>
         <p class="otherWay">{{ $t('message.loginwithother') }}</p>
         <div class="loginOtherway">
-          <b-button class="loginFacebookButton"><font-awesome-icon :icon="['fab', 'facebook']" style="font-size:1.6rem; margin-right:0.6rem;"/>Facebook</b-button>
-          <b-button class="loginGoogleButton" @click="handleGSignIn"><font-awesome-icon :icon="['fab', 'google']" style="font-size:1.6rem; margin-right:0.6rem;"/>Google</b-button>
+          <b-button class="loginFacebookButton" @click="handleFBSignIn">Facebook</b-button>
+          <b-button class="loginGoogleButton" @click="handleGSignIn"><img src="../images/btn_google_dark_focus_ios.svg"/>Google</b-button>
         </div>
       </div>
     </template>
@@ -109,29 +109,23 @@ export default {
         }).finally(() => this.loggingIn = null)
       }
     }, 
-    handleGSignIn() {
-      this.loggingIn = true
-      const loginWithGoogle = async () => {
-        const googleUser = window.gapi.auth2.getAuthInstance().isSignedIn.get() ? this.$gAuth.GoogleAuth.currentUser.get() : await this.$gAuth.signIn()
-        try {
-          const { id_token } = await googleUser.reloadAuthResponse()
-          return axios.post(process.env.VUE_APP_BACKEND + '/signin/google', { id_token })
-        } catch(err) {
-          this.$gAuth.signOut()
-          throw err
-        }
-      }
-      loginWithGoogle().then(res => {
-        if (res.status === 200) {
-          this.$store.commit('login', res.data.authInfo)
-          this.$store.commit('user/setAuthUserPersonalInfo', res.data.personalInfo)
+    async handleGSignIn() {
+      try {
+        this.loggingIn = true
+        const gAuthInstance = this.$gapi.auth2.getAuthInstance()
+        const googleUser = gAuthInstance.isSignedIn.get() ? gAuthInstance.currentUser.get() : await gAuthInstance.signIn({ prompt: 'select_account' })
+        const { id_token } = await googleUser.reloadAuthResponse()
+        const response = await axios.post(process.env.VUE_APP_BACKEND + '/signin/google', { id_token })
+        if (response.status === 200) {
+          this.$store.commit('login', response.data.authInfo)
+          this.$store.commit('user/setAuthUserPersonalInfo', response.data.personalInfo)
           if (this.$store.state.authentication.role === 'user') {
             this.$router.push({ name: 'user' })
           } else {
             this.$router.push({ name: 'admin' })
           }
         }
-      }).catch(err => {
+      } catch(err) {
         console.error(err)
         if (err.response) {
           if (err.response.status === 409) {
@@ -141,8 +135,63 @@ export default {
           } else {
             this.error = err.response.data
           }
+        } else {
+          this.$gapi.auth2.getAuthInstance().signOut()
         }
-      }).finally(() => this.loggingIn = null)
+      } finally {
+        this.loggingIn = null
+      }
+    },
+    async handleFBSignIn() {
+      try {
+        this.loggingIn = true
+        this.$fb.getLoginStatus(response => {
+          if (response.status === 'connected') {
+            axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken }).then(response => {
+              if (response.status === 200) {
+                this.$store.commit('login', response.data.authInfo)
+                this.$store.commit('user/setAuthUserPersonalInfo', response.data.personalInfo)
+                if (this.$store.state.authentication.role === 'user') {
+                  this.$router.push({ name: 'user' })
+                } else {
+                  this.$router.push({ name: 'admin' })
+                }
+              }
+            })
+          } else {
+            this.$fb.login(response => {
+              if (response.status === 'connected') {
+                axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken }).then(response => {
+                  if (response.status === 200) {
+                    this.$store.commit('login', response.data.authInfo)
+                    this.$store.commit('user/setAuthUserPersonalInfo', response.data.personalInfo)
+                    if (this.$store.state.authentication.role === 'user') {
+                      this.$router.push({ name: 'user' })
+                    } else {
+                      this.$router.push({ name: 'admin' })
+                    }
+                  }
+                })
+              }
+            }, { scope: 'email' })
+          }
+        }, true)
+      } catch(err) {
+        console.error(err)
+        if (err.response) {
+          if (err.response.status === 409) {
+            this.error = this.$t('message.alreadyRegistered') + err.response.data.join('')
+          } else if (err.response.status === 422) {
+            this.error = this.$t('message.validationError') + ' ' + err.response.data
+          } else {
+            this.error = err.response.data
+          }
+        } else {
+          this.$fb.logout()
+        }
+      } finally {
+        this.loggingIn = false
+      }
     },
     handlePasswordClick() {
       this.$router.push({ name: 'recovery'})
@@ -246,29 +295,34 @@ export default {
         .loginOtherway{
           display:flex;
           flex-direction:row;
-          justify-content:space-around;
+          justify-content: space-evenly;
           margin-bottom:2rem;
 
         .loginFacebookButton{
-            background-color: #3b5998;
+            background-color: #4267B2;
             color: #FFFFFF;
             font-size: 1rem;
             font-weight:bold;
-            padding:0.6rem 1rem;
+            padding: 8px 20px;
             border: none;
             border-radius: 5px;
             box-shadow: 0 5px 5px gray;
           }
 
           .loginGoogleButton{
-            background-color: #F4B400;
+            background-color: #4285F4;
             color: #FFFFFF;
             font-size: 1rem;
             font-weight:bold;
-            padding:0.6rem 1.1rem;
             border: none;
             border-radius: 5px;
+            padding: 8px 32px 8px 8px;
             box-shadow: 0 5px 5px gray;
+
+            img {
+              margin-right: 24px;
+              user-select: none;
+            }
           }
         }
       }

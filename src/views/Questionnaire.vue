@@ -154,7 +154,7 @@ export default {
       else this.modal_visible = null
     },
     moveHome() {
-      this.$store.commit('logout')
+      this.$store.dispatch('logout')
       this.$router.push({ path: "/" });
     }
   }
