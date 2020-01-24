@@ -112,7 +112,8 @@ export default {
     async handleGSignIn() {
       try {
         this.loggingIn = true
-        const googleUser = window.gapi.auth2.getAuthInstance().isSignedIn.get() ? this.$gAuth.GoogleAuth.currentUser.get() : await this.$gAuth.signIn()
+        const gAuthInstance = this.$gapi.auth2.getAuthInstance()
+        const googleUser = gAuthInstance.isSignedIn.get() ? gAuthInstance.currentUser.get() : await gAuthInstance.signIn({ prompt: 'select_account' })
         const { id_token } = await googleUser.reloadAuthResponse()
         const response = await axios.post(process.env.VUE_APP_BACKEND + '/signin/google', { id_token })
         if (response.status === 200) {
@@ -135,7 +136,7 @@ export default {
             this.error = err.response.data
           }
         } else {
-          this.$gAuth.signOut()
+          this.$gapi.auth2.getAuthInstance().signOut()
         }
       } finally {
         this.loggingIn = null
