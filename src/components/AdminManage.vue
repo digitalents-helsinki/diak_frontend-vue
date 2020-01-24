@@ -232,7 +232,7 @@
       </form>
       <template v-slot:modal-footer="{ ok, cancel }">
         <b-button @click="cancel()">{{$t('message.modifySurveyCancel')}}</b-button>
-        <b-button @click="ok()" variant="primary" :disabled="!modify.surveyName">{{$t('message.modifySurveySubmit')}}</b-button>
+        <b-button @click="ok()" variant="primary" :disabled="!modify.surveyName || modalSubmitted">{{$t('message.modifySurveySubmit')}}</b-button>
       </template>
     </b-modal>
     <b-modal
@@ -295,7 +295,7 @@
       </form>
       <template v-slot:modal-footer="{ ok, cancel }">
         <b-button @click="cancel()">{{$t('message.redoSurveyCancel')}}</b-button>
-        <b-button @click="ok()" variant="primary" :disabled="!redo.surveyName">{{$t('message.redoSurveySubmit')}}</b-button>
+        <b-button @click="ok()" variant="primary" :disabled="!redo.surveyName || modalSubmitted">{{$t('message.redoSurveySubmit')}}</b-button>
       </template>
     </b-modal>
     <b-modal
@@ -310,7 +310,7 @@
       <b-alert :show="archive.surveyGroupId" variant="warning">{{ $t('message.archiveSurveyGroupWarning') }}</b-alert>
       <template v-slot:modal-footer="{ ok, cancel }">
         <b-button @click="cancel()">{{$t('message.modifySurveyCancel')}}</b-button>
-        <b-button @click="ok()" variant="primary" :disabled="archive.surveyName !== archive.inputSurveyName">{{$t('message.archiveSurveySubmit')}}</b-button>
+        <b-button @click="ok()" variant="primary" :disabled="(archive.surveyName !== archive.inputSurveyName) || modalSubmitted">{{$t('message.archiveSurveySubmit')}}</b-button>
       </template>
     </b-modal>
     <b-modal
@@ -325,7 +325,7 @@
       <b-alert :show="del.surveyGroupId" variant="danger">{{ $t('message.deleteSurveyGroupDanger') }}</b-alert>
       <template v-slot:modal-footer="{ ok, cancel }">
         <b-button @click="cancel()">{{$t('message.modifySurveyCancel')}}</b-button>
-        <b-button @click="ok()" variant="danger" :disabled="del.surveyName !== del.inputSurveyName">{{$t('message.deleteSurveySubmit')}}</b-button>
+        <b-button @click="ok()" variant="danger" :disabled="(del.surveyName !== del.inputSurveyName) || modalSubmitted">{{$t('message.deleteSurveySubmit')}}</b-button>
       </template>
     </b-modal>
     <transition name="slide" mode="in-out">
@@ -430,6 +430,7 @@ export default {
           surveyGroupId: null
         },
         display: "all",
+        modalSubmitted: false,
         showDetails: {},
         showTotalDetailed: (cookieMatch => cookieMatch ? cookieMatch[1] === 'true' : true)(document.cookie.match(/(?:^|;\s*)3X10D_SHOW_TOTAL_DETAILED=([^;]*)/)),
         showInstructions: (cookieMatch => cookieMatch ? cookieMatch[1] === 'true' : true)(document.cookie.match(/(?:^|;\s*)3X10D_SHOW_INSTRUCTIONS=([^;]*)/))
@@ -609,6 +610,7 @@ export default {
       bvModalEvt.preventDefault()
       if (this.del.surveyName === this.del.inputSurveyName) {
         const url = this.del.surveyGroupId ? `/admin/surveygroup/${this.del.surveyGroupId}/delete` : `/admin/survey/${this.del.surveyId}/delete`
+        this.modalSubmitted = true
         axios({
           method: "DELETE",
           url: process.env.VUE_APP_BACKEND + url,
@@ -626,7 +628,7 @@ export default {
             toaster: 'b-toaster-bottom-right',
             variant: 'danger'
           })
-        })
+        }).finally(() => this.modalSubmitted = false)
       }
     },
     archiveSurvey(surveyId) {
@@ -642,6 +644,7 @@ export default {
       bvModalEvt.preventDefault()
       if (this.archive.surveyName === this.archive.inputSurveyName) {
         const url = this.archive.surveyGroupId ? `/admin/surveygroup/${this.archive.surveyGroupId}/archive` : `/admin/survey/${this.archive.surveyId}/archive`
+        this.modalSubmitted = true
         axios({
           method: "PATCH",
           url: process.env.VUE_APP_BACKEND + url,
@@ -659,7 +662,7 @@ export default {
             toaster: 'b-toaster-bottom-right',
             variant: 'danger'
           })
-        })
+        }).finally(() => this.modalSubmitted = false)
       }
     },
     modifySurvey(surveyId) {
@@ -695,6 +698,7 @@ export default {
     handleModifySurveyModal(bvModalEvt) {
       bvModalEvt.preventDefault()
       if (this.modify.surveyId && this.modify.surveyName) {
+        this.modalSubmitted = true
         axios({
           method: "PATCH",
           url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.modify.surveyId + "/update",
@@ -719,7 +723,7 @@ export default {
             toaster: 'b-toaster-bottom-right',
             variant: 'danger'
           })
-        })
+        }).finally(() => this.modalSubmitted = false)
       }
     },
     redoSurvey(surveyId) {
@@ -736,6 +740,7 @@ export default {
     handleRedoSurveyModal(bvModalEvt) {
       bvModalEvt.preventDefault()
       if (this.redo.surveyId && this.redo.surveyName) {
+        this.modalSubmitted = true
         axios({
           method: "POST",
           url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.redo.surveyId + "/redo",
@@ -761,7 +766,7 @@ export default {
             toaster: 'b-toaster-bottom-right',
             variant: 'danger'
           })
-        })
+        }).finally(() => this.modalSubmitted = false)
       }
     },
     reCreateSurvey(surveyId) {
