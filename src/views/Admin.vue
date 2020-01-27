@@ -210,6 +210,7 @@ export default {
                     height:2.5rem;
                     font-weight:bold;
                     margin-left:0.2rem;
+                    white-space: nowrap;
 
                     &:hover {
                         background-color: darken(#353535, 5%);
