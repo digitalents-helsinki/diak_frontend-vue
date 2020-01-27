@@ -26,7 +26,7 @@ export default {
       const gAuthInstance = window.gapi ? window.gapi.auth2 ? window.gapi.auth2.getAuthInstance() : null : null
       if (gAuthInstance && gAuthInstance.isSignedIn.get()) gAuthInstance.signOut()
 
-      if (window.FB) window.FB.getLoginStatus(({ status }) => !status || window.FB.logout())
+      if (window.FB) window.FB.getLoginStatus(({ status }) => !(status === 'connected') || window.FB.logout())
     }
   }
 }
