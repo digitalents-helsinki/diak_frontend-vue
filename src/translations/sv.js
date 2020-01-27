@@ -235,7 +235,7 @@ export const sv = {
     errorToastTitle: "Upp",
     confidentialityHeading: "Sekretessmeddelande",
     confidentialityAccept: "Acceptera",
-    surveyResult: "Resultat:",
+    surveyResult: "Resultat: ",
     surveyRespondents: "Antal svarande:",
     surveyQuestions: "Frågor",
     surveyAverages: "Medel",
