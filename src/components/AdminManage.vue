@@ -118,11 +118,11 @@
               </span>
             </div>
             <div v-else-if="field.colType === 'startDate'">
-              <span v-if="data.item.startDate">{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
+              <span v-if="data.item.startDate">{{ $moment.utc(data.item.startDate).format('DD/MM/YYYY') }}</span>
               <span v-else>-</span>
             </div>
             <div v-else-if="field.colType === 'endDate'">
-              <span v-if="data.item.endDate">{{data.item.endDate | moment('DD/MM/YYYY')}}</span>
+              <span v-if="data.item.endDate">{{ $moment.utc(data.item.endDate).format('DD/MM/YYYY') }}</span>
               <span v-else>-</span>
             </div>
             <div v-else-if="field.colType === 'respondentsSize'">
@@ -157,11 +157,11 @@
                   </span>
                 </div>
                 <div v-else-if="field.colType === 'startDate'">
-                  <span v-if="data.item.startDate">{{data.item.startDate | moment('DD/MM/YYYY')}}</span>
+                  <span v-if="data.item.startDate">{{ $moment.utc(data.item.startDate).format('DD/MM/YYYY') }}</span>
                   <span v-else>-</span>
                 </div>
                 <div v-else-if="field.colType === 'endDate'">
-                  <span v-if="data.item.endDate">{{data.item.endDate | moment('DD/MM/YYYY')}}</span>
+                  <span v-if="data.item.endDate">{{ $moment.utc(data.item.endDate).format('DD/MM/YYYY') }}</span>
                   <span v-else>-</span>
                 </div>
                 <div v-else-if="field.colType === 'respondentsSize'">
