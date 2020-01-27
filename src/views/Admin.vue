@@ -176,10 +176,10 @@ export default {
                     color: #FFFFFF;
                     border-radius: 10px;
                     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
-                    width:11.5rem;
                     height:2.5rem;
                     font-weight:bold;
                     margin-left:0.2rem;
+                    white-space: nowrap;
 
                     &:hover {
                         background-color: darken(#353535, 5%);
@@ -207,7 +207,6 @@ export default {
                     color: #FFFFFF;
                     border-radius: 10px;
                     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
-                    width:11.5rem;
                     height:2.5rem;
                     font-weight:bold;
                     margin-left:0.2rem;
