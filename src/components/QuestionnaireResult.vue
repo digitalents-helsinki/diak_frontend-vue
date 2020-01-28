@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       email: null,
-      emailSending: true,
+      emailSending: false,
       emailSent: false,
       error: null
     }

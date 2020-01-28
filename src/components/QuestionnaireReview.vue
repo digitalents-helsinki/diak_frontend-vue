@@ -12,7 +12,8 @@
       </div>
     </div>
     <div class="review-buttons">
-      <button class="btn send-button" @click.prevent="$emit('saveQuestions')">{{ $t('message.send')}}</button>
+      <b-spinner v-if="resultSending" style="color: #350E7E; margin: 0.5rem 2rem;"/>
+      <button v-else class="btn send-button" @click.prevent="$emit('saveQuestions')">{{ $t('message.send')}}</button>
       <button
         class="btn return-button" 
         @click.prevent="$emit('update:navigation', 'subtract')"
@@ -52,6 +53,10 @@ export default {
         if (typeof prop.questionamount !== "number") return false
         return true
       }
+    },
+    resultSending: {
+      type: Boolean,
+      required: true
     }
   }
 };

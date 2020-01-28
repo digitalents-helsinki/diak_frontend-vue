@@ -69,7 +69,7 @@
           <b-button v-else-if="!infoSaved" type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.continue') }}
           </b-button>
-          <b-spinner v-else style="color: #350E7E; margin: 0.5rem;"/>
+          <b-spinner v-else style="color: #350E7E; margin: 0.5rem 1rem;"/>
         </div>
       </b-form>
     </div>

@@ -11,8 +11,8 @@
         v-on:toggleModal="toggleModal"
       />
       <div class="questionnaire container text-center shadow-lg">
-        <b-spinner v-if="resultSending || (questionnum !== null && !currentQuestionData && questionnum < navigationData.questionamount)" label="Loading..." style="color: #350E7E;" class="m-5"/>
-        <form v-if="!resultSending">
+        <b-spinner v-if="questionnum !== null && !currentQuestionData && questionnum < navigationData.questionamount" label="Loading..." style="color: #350E7E;" class="m-5"/>
+        <form v-else>
           <transition name="fade" mode="out-in">
             <Question
               v-if="currentQuestionData"
@@ -21,9 +21,10 @@
               v-on:toggleModal="toggleModal"
             />
             <Review 
-              v-else-if="navigationData.questionamount <= questionnum && !this.$store.state.questionnaire.surveyData.resultData"
+              v-else-if="navigationData.questionamount <= questionnum && !this.$store.state.questionnaire.surveyData.resultData && !fetchingResult"
               v-bind:results="questionData"
               v-bind:navigation.sync="navigationData"
+              v-bind:resultSending="resultSending"
               v-on:saveQuestions="saveQuestions"
               v-on:toggleModal="toggleModal"
             />
@@ -66,7 +67,8 @@ export default {
     return {
       questionnum: null,
       modal_visible: null,
-      resultSending: false
+      resultSending: false,
+      fetchingResult: false
     };
   },
   computed: {
@@ -104,10 +106,10 @@ export default {
   },
   methods: {
     async saveQuestions() {
-      this.resultSending = true
       const isAnon = this.$route.name === 'questionnaire-anon'
       const post = isAnon ? "/anon/result/create" : "/auth/result/create"
       try {
+        this.resultSending = true
         const res = await axios({
           method: "POST",
           url: process.env.VUE_APP_BACKEND + post,
@@ -121,6 +123,7 @@ export default {
           }
         })
         if (res.data.status === "ok") {
+          this.fetchingResult = true
           this.$store.dispatch('questionnaire/fetchResult')
         }
       } catch(err) {
