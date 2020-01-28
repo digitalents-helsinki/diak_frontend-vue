@@ -129,7 +129,7 @@ export default {
     }
   },
   methods: {
-    postInfo() {
+    async postInfo() {
       Object.keys(this.infovalidation).forEach(key => {
         if (this.personalInfo[key]) {
           this.infovalidation[key] = null
@@ -140,7 +140,7 @@ export default {
       if (Object.values(this.infovalidation).every(value => value === null)) {
         this.infoSaved = true
         try {
-          axios({
+          const res = await axios({
             method: "POST",
             url: process.env.VUE_APP_BACKEND + "/auth/user/info/update",
             headers: {
@@ -149,13 +149,12 @@ export default {
             data: {
               personalInfo: this.personalInfo
             }
-          }).then(res => {
-            if (res.status === 200) {
-              if (this.$store.state.questionnaire.meta.surveyId) {
-                this.$emit('moveToQuestionnaire')
-              }
-            }
           })
+          if (res.status === 200) {
+            if (this.$store.state.questionnaire.meta.surveyId) {
+              this.$emit('moveToQuestionnaire')
+            }
+          }
         } catch(err) {
             if (err.response) this.error = err.response.data
             throw err

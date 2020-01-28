@@ -75,7 +75,7 @@ export default {
     }
   },
   methods: {
-    postInfo() {
+    async postInfo() {
       Object.keys(this.infovalidation).forEach(key => {
         if (this.anonymousinfo[key]) {
           this.infovalidation[key] = null
@@ -84,26 +84,26 @@ export default {
         }
       })
       if (Object.values(this.infovalidation).every(value => value === null)) {
-        this.infoSaved = true
-
-        axios({
-          method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/anon/user/" + this.$store.state.questionnaire.meta.anonId + "/info/update",
-          data: {
-            anonymousinfo: this.anonymousinfo
-          }
-        }).then(res => {
+        try {
+          this.infoSaved = true
+          const res = await axios({
+            method: "POST",
+            url: process.env.VUE_APP_BACKEND + "/anon/user/" + this.$store.state.questionnaire.meta.anonId + "/info/update",
+            data: {
+              anonymousinfo: this.anonymousinfo
+            }
+          })
           if (res.status === 200) {
             if (this.$store.state.questionnaire.meta.surveyId) {
               this.$emit('moveToQuestionnaire')
             }
           }
-        }).catch(err => {
+        } catch(err) {
           if (err.response) this.error = err.response.data
           throw err
-        }).finally(() => {
+        } finally {
           this.infoSaved = false
-        })
+        }
       }
     },
     signOut() {

@@ -103,12 +103,12 @@ export default {
     }
   },
   methods: {
-    saveQuestions() {
+    async saveQuestions() {
       this.resultSending = true
       const isAnon = this.$route.name === 'questionnaire-anon'
       const post = isAnon ? "/anon/result/create" : "/auth/result/create"
       try {
-        axios({
+        const res = await axios({
           method: "POST",
           url: process.env.VUE_APP_BACKEND + post,
           headers: {
@@ -119,11 +119,10 @@ export default {
             surveyId: this.$route.params.surveyId,
             answers: [...this.questionData]
           }
-        }).then(res => {
-          if (res.data.status === "ok") {
-            this.$store.dispatch('questionnaire/fetchResult')
-          }
         })
+        if (res.data.status === "ok") {
+          this.$store.dispatch('questionnaire/fetchResult')
+        }
       } catch(err) {
         throw err
       } finally {

@@ -6,7 +6,8 @@
     <label v-if="!auth && !emailSent">{{$t('message.emailReply')}}</label>
     <p v-else-if="emailSent">{{$t('message.emailResults')}}</p>
     <p class="error" v-if="this.error">{{$t('message.emailFailed')+ this.error}}</p>
-    <b-input-group v-if="!auth && !emailSent">
+    <b-spinner v-if="emailSending" style="color: #350E7E; margin: 0.5rem;" />
+    <b-input-group v-else-if="!auth && !emailSent">
       <b-input v-model="email" type="email" autocomplete="email" :placeholder="$t('message.yourEmail')"/>
       <b-input-group-append>
         <b-button :disabled="!email || !email.match(/.+@.+/)" @click="sendEmail" variant="primary">{{$t('message.questionnaireSend')}}</b-button>
@@ -26,6 +27,7 @@ export default {
   data() {
     return {
       email: null,
+      emailSending: true,
       emailSent: false,
       error: null
     }
@@ -52,25 +54,29 @@ export default {
     }
   },
   methods: {
-    sendEmail() {
-      if (this.auth || (this.email && this.email.match(/.+@.+/))){
-        axios({
-          method: "POST",
-          url: `${process.env.VUE_APP_BACKEND }/${this.auth ? 'auth' : 'anon'}/result/email`,
-          headers: {
-            'Authorization': `Bearer ${this.auth ? this.$store.state.authentication.accessToken : ''}`
-          },
-          data: {
-            anonId: this.$route.params.anonId,
-            surveyId: this.$route.params.surveyId,
-            email: this.email
-          }
-        }).then(res => {
+    async sendEmail() {
+      try {
+        if (this.auth || (this.email && this.email.match(/.+@.+/))){
+          this.emailSending = true
+          const res = await axios({
+            method: "POST",
+            url: `${process.env.VUE_APP_BACKEND }/${this.auth ? 'auth' : 'anon'}/result/email`,
+            headers: {
+              'Authorization': `Bearer ${this.auth ? this.$store.state.authentication.accessToken : ''}`
+            },
+            data: {
+              anonId: this.$route.params.anonId,
+              surveyId: this.$route.params.surveyId,
+              email: this.email
+            }
+          })
           if (res.status === 200) this.emailSent = true
-        }).catch(err => {
-          this.error = err.response.data
-          throw err
-        })
+        }
+      } catch(err) {
+        this.error = err.response.data
+        throw err
+      } finally {
+        this.emailSending = false
       }
     },
     signOut() {

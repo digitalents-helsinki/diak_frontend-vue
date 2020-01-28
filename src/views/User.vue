@@ -30,6 +30,7 @@ export default {
   data() {
     return {
       isLogged: false,
+      isFirstTime: this.$store.getters['user/authUserFirstTime'],
       hasInfo: false,
       user: null,
       surveys: null,
@@ -40,9 +41,6 @@ export default {
   computed: {
     personalInfo() {
       return this.$store.state.user.authUser.personalInfo
-    },
-    isFirstTime() {
-      return this.$store.getters['user/authUserFirstTime']
     }
   },
   methods: {
