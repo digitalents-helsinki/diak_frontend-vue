@@ -76,8 +76,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
-
 export default {
   name: 'PersonalInfo',
   props: {
@@ -140,9 +138,9 @@ export default {
       if (Object.values(this.infovalidation).every(value => value === null)) {
         this.infoSaved = true
         try {
-          const res = await axios({
+          const res = await this.$axios({
             method: "POST",
-            url: process.env.VUE_APP_BACKEND + "/auth/user/info/update",
+            url: "/auth/user/info/update",
             headers: {
               'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
             },

@@ -177,7 +177,6 @@
 </div>
 </template>
 <script>
-import axios from 'axios'
 import Datepicker from 'vuejs-datepicker'
 import { fi, sv, en } from 'vuejs-datepicker/dist/locale'
 
@@ -318,8 +317,8 @@ export default {
             } else {
                 this.sending = true
                 const method = final ? "POST" : "PUT"
-                const url = final ? `${process.env.VUE_APP_BACKEND}/admin/survey/create` : `${process.env.VUE_APP_BACKEND}/admin/survey/save`
-                axios({
+                const url = final ? '/admin/survey/create' : '/admin/survey/save'
+                this.$axios({
                     method,
                     url,
                     headers: {

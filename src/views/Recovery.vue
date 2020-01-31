@@ -23,7 +23,6 @@
   </LogoBox>
 </template>
 <script>
-import axios from 'axios'
 import LogoBox from '@/components/LogoBox.vue'
 
 export default {
@@ -53,8 +52,8 @@ export default {
       const data = JSON.stringify({
         email: this.recovery.email
       })
-      axios
-        .post(process.env.VUE_APP_BACKEND + "/recover", data, {
+      this.$axios
+        .post("/recover", data, {
           headers: {
             "Content-Type": "application/json"
           }

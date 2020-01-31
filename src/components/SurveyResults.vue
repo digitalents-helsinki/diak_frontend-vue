@@ -58,7 +58,6 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import BarChart from "../components/BarChart.vue";
 import downloadexcel from "vue-json-excel";
 import jsPDF from 'jspdf'
@@ -100,9 +99,9 @@ export default {
   methods: {
     async getResults() {
       try {
-        const res = await axios({
+        const res = await this.$axios({
           method: 'GET', 
-          url: process.env.VUE_APP_BACKEND + "/admin/results/" + this.surveyId,
+          url: "/admin/results/" + this.surveyId,
           headers: {
             'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           }
@@ -242,23 +241,6 @@ export default {
 
       const stdDev = Math.sqrt(avgSquareDiff);
       return stdDev;
-    },
-    postLogin() {
-      const data = JSON.stringify({
-        user: this.login.user,
-        pass: this.login.pass
-      });
-      axios
-        .post(process.env.VUE_APP_BACKEND + "/login", data, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          this.login_token = res.data.token;
-          axios.defaults.headers.common["authorization"] = this.login_token;
-          this.getResults();
-        });
     },
     downloadPdf() {
       const canvas = this.$el.querySelector('canvas') //get chart

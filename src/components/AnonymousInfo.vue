@@ -40,8 +40,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
-
 export default {
   name: 'AnonymousInfo',
   props: {
@@ -86,9 +84,9 @@ export default {
       if (Object.values(this.infovalidation).every(value => value === null)) {
         try {
           this.infoSaved = true
-          const res = await axios({
+          const res = await this.$axios({
             method: "POST",
-            url: process.env.VUE_APP_BACKEND + "/anon/user/" + this.$store.state.questionnaire.meta.anonId + "/info/update",
+            url: "/anon/user/" + this.$store.state.questionnaire.meta.anonId + "/info/update",
             data: {
               anonymousinfo: this.anonymousinfo
             }

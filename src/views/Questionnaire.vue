@@ -44,7 +44,6 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import Introduction from '@/components/QuestionnaireIntroduction.vue'
 import Header from '@/components/UserHeader.vue';
 import Question from "@/components/QuestionnaireQuestion.vue";
@@ -110,9 +109,9 @@ export default {
       const post = isAnon ? "/anon/result/create" : "/auth/result/create"
       try {
         this.resultSending = true
-        const res = await axios({
+        const res = await this.$axios({
           method: "POST",
-          url: process.env.VUE_APP_BACKEND + post,
+          url: post,
           headers: {
             'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           },
@@ -134,9 +133,9 @@ export default {
     },
     saveUnfinishedAnswers() {
       const post = this.$route.name === 'questionnaire-anon' ? "/anon/result/save": "/auth/result/save"
-      axios({
+      this.$axios({
         method: "POST",
-        url: process.env.VUE_APP_BACKEND + post,
+        url: post,
         headers: {
           'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
         },

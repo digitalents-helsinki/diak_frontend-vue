@@ -68,7 +68,10 @@
 </template>
 <script>
 import { create } from 'axios'
-const axios = create()
+const axios = create({
+  baseURL: process.env.VUE_APP_BACKEND,
+  withCredentials: true
+})
 
 export default {
   name: 'supervisor',
@@ -90,7 +93,7 @@ export default {
     handleAdminAdd() {
       axios({
         method: "POST",
-        url: process.env.VUE_APP_BACKEND + "/supervisor/admin/create",
+        url: "/supervisor/admin/create",
         headers: {
           'Authorization': `Bearer ${this.jwt}`
         },
@@ -122,7 +125,7 @@ export default {
     handleAdminRemove(id) {
       axios({
         method: "POST",
-        url: process.env.VUE_APP_BACKEND + "/supervisor/admin/delete",
+        url: "/supervisor/admin/delete",
         headers: {
           'Authorization': `Bearer ${this.jwt}`
         },
@@ -142,7 +145,7 @@ export default {
     getAdmins() {
       axios({
         method: 'GET',
-        url: `${process.env.VUE_APP_BACKEND}/supervisor/admin/all`,
+        url: '/supervisor/admin/all',
         headers: {
           'Authorization': `Bearer ${this.jwt}`
         }
@@ -159,7 +162,7 @@ export default {
     handleUserSearch() {
       axios({
         method: 'GET',
-        url: `${process.env.VUE_APP_BACKEND}/supervisor/user/search/${this.userSearchTerm}`,
+        url: `/supervisor/user/search/${this.userSearchTerm}`,
         headers: {
           'Authorization': `Bearer ${this.jwt}`
         }
@@ -176,7 +179,7 @@ export default {
     handleUserDelete(userId) {
       axios({
         method: 'DELETE',
-        url: `${process.env.VUE_APP_BACKEND}/supervisor/user/${userId}/delete`,
+        url: `/supervisor/user/${userId}/delete`,
         headers: {
           'Authorization': `Bearer ${this.jwt}`
         }
@@ -193,7 +196,7 @@ export default {
     handleDeleteByEmail() {
       axios({
         method: 'POST',
-        url: `${process.env.VUE_APP_BACKEND}/supervisor/deletebyemail`,
+        url: `/supervisor/deletebyemail`,
         headers: {
           'Authorization': `Bearer ${this.jwt}`
         },
@@ -215,7 +218,7 @@ export default {
       this.loggingIn = true
       axios({
         method: 'POST',
-        url: `${process.env.VUE_APP_BACKEND}/supervisor/login`,
+        url: `/supervisor/login`,
         data: {
           password: this.$data.supervisor_password
         }
@@ -233,10 +236,10 @@ export default {
     axios.interceptors.response.use(res => res, err => {
       if (err.response) {
         switch(true) {
-          case err.response.config.url === process.env.VUE_APP_BACKEND + '/surf': // Try again if getting csrf token fails
+          case err.response.config.url === '/surf': // Try again if getting csrf token fails
             // eslint-disable-next-line no-console
             console.error(err)
-            setTimeout(() => axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data), 1000)
+            setTimeout(() => axios.get('/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data), 1000)
             break
           case err.response.status === 401: // Auth failed because token expired or whatever, login again
             // eslint-disable-next-line no-console
@@ -250,8 +253,7 @@ export default {
         return Promise.reject(err)
       }
     })
-    axios.defaults.withCredentials = true
-    axios.get(process.env.VUE_APP_BACKEND + '/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data)
+    axios.get('/surf').then(res => axios.defaults.headers.common['CSRF-Token'] = res.data)
   }
 }
 </script>

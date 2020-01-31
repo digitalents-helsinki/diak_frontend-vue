@@ -20,8 +20,6 @@
 </div>
 </template>
 <script>
-import axios from 'axios'
-
 export default {
   name: 'results',
   data() {
@@ -58,9 +56,9 @@ export default {
       try {
         if (this.auth || (this.email && this.email.match(/.+@.+/))){
           this.emailSending = true
-          const res = await axios({
+          const res = await this.$axios({
             method: "POST",
-            url: `${process.env.VUE_APP_BACKEND }/${this.auth ? 'auth' : 'anon'}/result/email`,
+            url: `/${this.auth ? 'auth' : 'anon'}/result/email`,
             headers: {
               'Authorization': `Bearer ${this.auth ? this.$store.state.authentication.accessToken : ''}`
             },

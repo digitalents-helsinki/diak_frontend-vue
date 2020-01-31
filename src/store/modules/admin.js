@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../axiosInstance'
 import i18n from '../../translation'
 import defaultQuestions from '../../defaultQuestions'
 
@@ -94,7 +94,7 @@ export default {
     async getSurveys({ rootState, commit }) {
       const { data } = await axios({
         method: 'GET', 
-        url: process.env.VUE_APP_BACKEND + "/admin/survey/all",
+        url: "/admin/survey/all",
         headers: {
           'Authorization': `Bearer ${rootState.authentication.accessToken}`
         }
@@ -104,7 +104,7 @@ export default {
     getSurvey({ rootState }, surveyId) {
       return axios({
         method: 'GET',
-        url: `${process.env.VUE_APP_BACKEND}/admin/survey/${surveyId}`,
+        url: `/admin/survey/${surveyId}`,
         headers: {
           'Authorization': `Bearer ${rootState.authentication.accessToken}`
         }

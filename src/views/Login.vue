@@ -45,7 +45,6 @@
   </LogoBox>
 </template>
 <script>
-import axios from 'axios'
 import LogoBox from '@/components/LogoBox.vue'
 import LangMenu from '@/components/Languages.vue'
 
@@ -77,19 +76,13 @@ export default {
       if (!this.login.email || !this.login.email.match(/.+@.+/)) this.loginvalidation.email = false
       if (!this.login.password || this.login.password.length < 8 || this.login.password.length > 128) this.loginvalidation.passwordlength = false
       this.error = null
-
-      const data = JSON.stringify({
-        email: this.login.email,
-        password: this.login.password
-      })
       
       if (Object.values(this.loginvalidation).every(value => value === null)) {
         this.loggingIn = true
-        axios.post(process.env.VUE_APP_BACKEND + "/signin", data, {
-            headers: {
-              "Content-Type": "application/json"
-            }
-          }).then(res => {
+        this.$axios.post("/signin", {
+          email: this.login.email,
+          password: this.login.password
+        }).then(res => {
             if (res.status === 200) {
               this.$store.commit('login', res.data.authInfo)
               this.$store.commit('user/setAuthUserPersonalInfo', res.data.personalInfo)
@@ -115,7 +108,7 @@ export default {
         const gAuthInstance = this.$gapi.auth2.getAuthInstance()
         const googleUser = gAuthInstance.isSignedIn.get() ? gAuthInstance.currentUser.get() : await gAuthInstance.signIn({ prompt: 'select_account' })
         const { id_token } = await googleUser.reloadAuthResponse()
-        const response = await axios.post(process.env.VUE_APP_BACKEND + '/signin/google', { id_token })
+        const response = await this.$axios.post('/signin/google', { id_token })
         if (response.status === 200) {
           this.$store.commit('login', response.data.authInfo)
           this.$store.commit('user/setAuthUserPersonalInfo', response.data.personalInfo)
@@ -147,7 +140,7 @@ export default {
         this.loggingIn = true
         this.$fb.getLoginStatus(response => {
           if (response.status === 'connected') {
-            axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken }).then(response => {
+            this.$axios.post('/signin/facebook', { accessToken: response.authResponse.accessToken }).then(response => {
               if (response.status === 200) {
                 this.$store.commit('login', response.data.authInfo)
                 this.$store.commit('user/setAuthUserPersonalInfo', response.data.personalInfo)
@@ -161,7 +154,7 @@ export default {
           } else {
             this.$fb.login(response => {
               if (response.status === 'connected') {
-                axios.post(process.env.VUE_APP_BACKEND + '/signin/facebook', { accessToken: response.authResponse.accessToken }).then(response => {
+                this.$axios.post('/signin/facebook', { accessToken: response.authResponse.accessToken }).then(response => {
                   if (response.status === 200) {
                     this.$store.commit('login', response.data.authInfo)
                     this.$store.commit('user/setAuthUserPersonalInfo', response.data.personalInfo)

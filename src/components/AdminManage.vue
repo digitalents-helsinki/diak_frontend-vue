@@ -344,7 +344,6 @@
 <script>
 import Datepicker from 'vuejs-datepicker'
 import { fi, sv, en } from 'vuejs-datepicker/dist/locale'
-import axios from 'axios'
 import SurveyResults from './SurveyResults'
 
 export default {
@@ -611,9 +610,9 @@ export default {
       if (this.del.surveyName === this.del.inputSurveyName) {
         const url = this.del.surveyGroupId ? `/admin/surveygroup/${this.del.surveyGroupId}/delete` : `/admin/survey/${this.del.surveyId}/delete`
         this.modalSubmitted = true
-        axios({
+        this.$axios({
           method: "DELETE",
-          url: process.env.VUE_APP_BACKEND + url,
+          url: url,
           headers: {
             'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           }
@@ -645,9 +644,9 @@ export default {
       if (this.archive.surveyName === this.archive.inputSurveyName) {
         const url = this.archive.surveyGroupId ? `/admin/surveygroup/${this.archive.surveyGroupId}/archive` : `/admin/survey/${this.archive.surveyId}/archive`
         this.modalSubmitted = true
-        axios({
+        this.$axios({
           method: "PATCH",
-          url: process.env.VUE_APP_BACKEND + url,
+          url: url,
           headers: {
             'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           }
@@ -699,7 +698,7 @@ export default {
       bvModalEvt.preventDefault()
       if (this.modify.surveyId && this.modify.surveyName) {
         this.modalSubmitted = true
-        axios({
+        this.$axios({
           method: "PATCH",
           url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.modify.surveyId + "/update",
           headers: {
@@ -741,9 +740,9 @@ export default {
       bvModalEvt.preventDefault()
       if (this.redo.surveyId && this.redo.surveyName) {
         this.modalSubmitted = true
-        axios({
+        this.$axios({
           method: "POST",
-          url: process.env.VUE_APP_BACKEND + "/admin/survey/" + this.redo.surveyId + "/redo",
+          url: "/admin/survey/" + this.redo.surveyId + "/redo",
           headers: {
             'Authorization': `Bearer ${this.$store.state.authentication.accessToken}`
           },

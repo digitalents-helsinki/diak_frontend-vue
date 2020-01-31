@@ -38,7 +38,6 @@
 </LogoBox>
 </template>
 <script>
-import axios from 'axios'
 import LogoBox from '@/components/LogoBox.vue'
 
 export default {
@@ -82,8 +81,8 @@ export default {
         email: this.registration.email,
         password: this.registration.password
       })
-      axios
-        .post(process.env.VUE_APP_BACKEND + "/signup", data, {
+      this.$axios
+        .post("/signup", data, {
           headers: {
             "Content-Type": "application/json"
           }

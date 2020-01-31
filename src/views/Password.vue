@@ -31,7 +31,6 @@
   </LogoBox>
 </template>
 <script>
-import axios from 'axios'
 import LogoBox from '@/components/LogoBox.vue'
 
 export default {
@@ -71,9 +70,9 @@ export default {
 
       const url = this.$route.params.pathMatch === 'change' ? '/changepassword' : '/createpassword'
 
-      axios({
+      this.$axios({
         method: 'POST',
-        url: process.env.VUE_APP_BACKEND + url,
+        url: url,
         headers: {
           'Authorization': `Bearer ${this.$route.params.jwt}`
         },

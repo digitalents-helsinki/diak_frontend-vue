@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../axiosInstance'
 
 export default {
   namespaced: true,
@@ -124,7 +124,7 @@ export default {
           }
         } = await axios({
           method: 'GET',
-          url: process.env.VUE_APP_BACKEND + `/${state.meta.anon ? 'anon' : 'auth'}/survey/${state.meta.surveyId}/${state.meta.anon ? state.meta.anonId : ''}`,
+          url: `/${state.meta.anon ? 'anon' : 'auth'}/survey/${state.meta.surveyId}/${state.meta.anon ? state.meta.anonId : ''}`,
           headers: {
             'Authorization': `Bearer ${state.meta.anon ? "" : rootState.authentication.accessToken}`
           }
@@ -155,7 +155,7 @@ export default {
       try {
         const { data } = await axios({
           method: 'GET', 
-          url: `${process.env.VUE_APP_BACKEND}/${state.meta.anon ?  'anon': 'auth'}/result/${state.meta.surveyId}/${state.meta.anon ? state.meta.anonId : ''}`,
+          url: `/${state.meta.anon ?  'anon': 'auth'}/result/${state.meta.surveyId}/${state.meta.anon ? state.meta.anonId : ''}`,
           headers: {
             'Authorization': `Bearer ${rootState.authentication.accessToken}`
           }

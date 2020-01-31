@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../axiosInstance'
 
 export default {
   namespaced: true,
@@ -43,7 +43,7 @@ export default {
     fetchUserInfo({ rootState, commit }) {
       axios({
         method: "GET",
-        url: process.env.VUE_APP_BACKEND + "/auth/user/info",
+        url: "/auth/user/info",
         headers: {
           'Authorization': `Bearer ${rootState.authentication.accessToken}`
         }
