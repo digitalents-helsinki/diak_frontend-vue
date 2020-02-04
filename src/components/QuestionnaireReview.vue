@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="review-buttons">
-      <b-spinner v-if="resultSending" style="color: #350E7E; margin: 0.5rem 2rem;"/>
+      <b-spinner v-if="resultSending" style="color: #350E7E; margin: 2.075rem;"/>
       <button v-else class="btn send-button" @click.prevent="$emit('saveQuestions')">{{ $t('message.send')}}</button>
       <button
         class="btn return-button" 

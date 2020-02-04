@@ -3,10 +3,10 @@
   <h2>{{$t('message.questionnaireComparisonTitle')}}</h2>
   <b-table small striped responsive :items="resultData"/>
   <div class="bottomDiv">
-    <label v-if="!auth && !emailSent">{{$t('message.emailReply')}}</label>
+    <label v-if="!auth && !emailSent && !emailSending">{{$t('message.emailReply')}}</label>
     <p v-else-if="emailSent">{{$t('message.emailResults')}}</p>
     <p class="error" v-if="this.error">{{$t('message.emailFailed')+ this.error}}</p>
-    <b-spinner v-if="emailSending" style="color: #350E7E; margin: 0.5rem;" />
+    <b-spinner v-if="emailSending" :style="`color: #350E7E; margin: ${auth ? '0.11' : '1.1'}rem;`" />
     <b-input-group v-else-if="!auth && !emailSent">
       <b-input v-model="email" type="email" autocomplete="email" :placeholder="$t('message.yourEmail')"/>
       <b-input-group-append>

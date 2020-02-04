@@ -21,7 +21,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
           <b-button v-if="!loggingIn" type="submit" @click.prevent="handleLogin" class="loginsubmitButton">{{ $t('message.formsubmitButton') }}</b-button>
-          <b-spinner style="color: #350E7E;" v-else />
+          <b-spinner v-else style="color: #350E7E; margin: 0.40rem;" />
             <b-form-invalid-feedback :state="loginvalidation.invalidcredentials" class="loginFeedback">
               {{ $t('message.invalidLogin') }}
             </b-form-invalid-feedback>

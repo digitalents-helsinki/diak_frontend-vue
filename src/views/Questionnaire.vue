@@ -86,7 +86,8 @@ export default {
         //set correct questiondata property in store
         const [ key, value ] = keyValueArr
         if (this.questionData[this.questionnum].propertyIsEnumerable(key)) {
-          this.$store.commit('questionnaire/answerQuestion', [key, value, this.questionnum])
+          const val = value === null ? value : Number(value)
+          this.$store.commit('questionnaire/answerQuestion', [key, val, this.questionnum])
         }
       }
     },

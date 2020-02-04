@@ -69,7 +69,7 @@
           <b-button v-else-if="!infoSaved" type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.continue') }}
           </b-button>
-          <b-spinner v-else style="color: #350E7E; margin: 0.5rem 1rem;"/>
+          <b-spinner v-else class="spinner"/>
         </div>
       </b-form>
     </div>
@@ -210,6 +210,17 @@ export default {
 
     @media screen and (min-width: 768px) {
       flex-direction: row;
+    }
+
+    .spinner {
+      margin: 1.05rem;
+      color: #350E7E;
+      margin: 0.575rem 2.3rem 0 2.3rem;
+
+      @media screen and (max-width: 768px) {
+        margin-bottom: 1.55rem;
+        align-self: center;
+      }
     }
 
     .submitIncluded {

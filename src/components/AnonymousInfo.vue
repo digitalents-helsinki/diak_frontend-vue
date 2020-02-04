@@ -30,7 +30,7 @@
         </b-form-group>
         <div id="submitForm">
           <p v-if="error">{{error}}</p>
-          <b-spinner v-if="infoSaved" style="color: #350E7E; margin: 1rem 0;"/>
+          <b-spinner v-if="infoSaved" style="color: #350E7E; margin: 1.05rem;"/>
           <b-button v-else type="submit" @click.prevent="postInfo" class="submitIncluded">
             {{ $t('message.submitandcontinuebutton') }}
           </b-button>
@@ -136,12 +136,8 @@ export default {
 
   #submitForm {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: row;
     justify-content: space-evenly;
-
-    @media screen and (min-width: 768px) {
-      flex-direction: row;
-    }
 
     .submitIncluded {
       position: relative;
