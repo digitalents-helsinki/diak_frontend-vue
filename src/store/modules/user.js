@@ -21,7 +21,8 @@ export default {
   },
   getters: {
     authUserFirstTime(state) {
-      return Object.values(state.authUser.personalInfo).some(info => !info)
+      //return Object.values(state.authUser.personalInfo).some(info => !info)
+      return false // a text doesn't exist for the page this controls
     }
   },
   mutations: {
